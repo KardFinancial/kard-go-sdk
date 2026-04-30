@@ -6,7 +6,7 @@ import (
 	context "context"
 	os "os"
 
-	kardgosdk "github.com/KardFinancial/kard-go-sdk"
+	kard "github.com/KardFinancial/kard-go-sdk"
 	core "github.com/KardFinancial/kard-go-sdk/core"
 	internal "github.com/KardFinancial/kard-go-sdk/internal"
 	option "github.com/KardFinancial/kard-go-sdk/option"
@@ -42,9 +42,9 @@ func NewClient(options *core.RequestOptions) *Client {
 
 func (c *Client) GetToken(
 	ctx context.Context,
-	request *kardgosdk.GetTokenRequest,
+	request *kard.GetTokenRequest,
 	opts ...option.RequestOption,
-) (*kardgosdk.TokenResponse, error) {
+) (*kard.TokenResponse, error) {
 	response, err := c.WithRawResponse.GetToken(
 		ctx,
 		request,

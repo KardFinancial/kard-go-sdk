@@ -6,7 +6,7 @@ import (
 	context "context"
 	http "net/http"
 
-	kardgosdk "github.com/KardFinancial/kard-go-sdk"
+	kard "github.com/KardFinancial/kard-go-sdk"
 	core "github.com/KardFinancial/kard-go-sdk/core"
 	internal "github.com/KardFinancial/kard-go-sdk/internal"
 	option "github.com/KardFinancial/kard-go-sdk/option"
@@ -34,7 +34,7 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 func (r *RawClient) Get(
 	ctx context.Context,
 	opts ...option.RequestOption,
-) (*core.Response[*kardgosdk.ExternalOrganizationResponse], error) {
+) (*core.Response[*kard.ExternalOrganizationResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -46,7 +46,7 @@ func (r *RawClient) Get(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *kardgosdk.ExternalOrganizationResponse
+	var response *kard.ExternalOrganizationResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -58,13 +58,13 @@ func (r *RawClient) Get(
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
 			Response:        &response,
-			ErrorDecoder:    internal.NewErrorDecoder(kardgosdk.ErrorCodes),
+			ErrorDecoder:    internal.NewErrorDecoder(kard.ErrorCodes),
 		},
 	)
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*kardgosdk.ExternalOrganizationResponse]{
+	return &core.Response[*kard.ExternalOrganizationResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

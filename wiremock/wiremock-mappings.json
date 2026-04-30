@@ -1,0 +1,1247 @@
+{
+  "mappings": [
+    {
+      "id": "47755835-b4ad-4028-876f-1bad2d4ef576",
+      "name": "getToken - default",
+      "request": {
+        "urlPathTemplate": "/v2/auth/token",
+        "method": "POST"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"access_token\": \"access_token\",\n  \"expires_in\": 1,\n  \"token_type\": \"token_type\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "47755835-b4ad-4028-876f-1bad2d4ef576",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "cf68cfa6-c8d2-481d-b557-885466bfbe23",
+      "name": "Get Files - default",
+      "request": {
+        "urlPathTemplate": "/v2/issuers/{organizationId}/files/metadata",
+        "method": "GET",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "organization-123"
+          }
+        },
+        "queryParameters": {
+          "page[size]": {
+            "equalTo": "5"
+          },
+          "filter[dateFrom]": {
+            "equalTo": "2025-02-20T21:56:23Z"
+          },
+          "filter[dateTo]": {
+            "equalTo": "2025-03-20T21:56:23Z"
+          },
+          "filter[fileType]": {
+            "equalTo": "earnedRewardApprovedDailyReconciliationFile"
+          },
+          "sort": {
+            "equalTo": "-sentDate"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"data\": [\n    {\n      \"type\": \"earnedRewardApprovedDailyReconciliationFile\",\n      \"attributes\": {\n        \"fileName\": \"test-file-10.jsonl\",\n        \"sentAt\": \"2025-03-09T21:56:23Z\",\n        \"lastModified\": \"2025-03-19T21:56:23Z\",\n        \"downloadUrl\": \"https://default-bucket.s3.us-east-1.amazonaws.com/test-file-10.jsonl?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Checksum-Mode=ENABLED&X-Amz-Credential=test%2F20250320%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20250320T172109Z&X-Amz-Expires=1800&X-Amz-SignedHeaders=host&x-id=GetObject&X-Amz-Signature=c2a7dc6d14d0465b9ba9c24d47574a6bbcfa57856529319f25424c6bb1cf5204\"\n      },\n      \"id\": \"67db3d87cb70469be876c852049\"\n    }\n  ],\n  \"links\": {\n    \"self\": \"/v2/files/issuers/0004321/metadata?page%5Bafter%5D=MjAyNS0wMy0xMFQyMTo1NjoyMy40OTY4ODda&page%5Bsize%5D=5&sort%5Bsent_at%5D=DESC\",\n    \"prev\": \"/v2/files/issuers/0004321/metadata?page%5Bbefore%5D=MjAyNS0wMy0wOVQyMTo1NjoyMy40OTY4ODda&page%5Bsize%5D=5&sort%5Bsent_at%5D=DESC\",\n    \"next\": \"/v2/files/issuers/0004321/metadata?page%5Bafter%5D=MjAyNS0wMy0wNVQyMTo1NjoyMy40OTY4ODda&page%5Bsize%5D=5&sort%5Bsent_at%5D=DESC\"\n  },\n  \"meta\": {\n    \"pageSize\": 5,\n    \"hasNextPage\": true\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "cf68cfa6-c8d2-481d-b557-885466bfbe23",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "d21819ce-23ac-4736-85aa-d095a06fe10a",
+      "name": "Get Subscriptions - default",
+      "request": {
+        "urlPathTemplate": "/v2/issuers/{organizationId}/subscriptions",
+        "method": "GET",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "organization-123"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"data\": [\n    {\n      \"type\": \"subscription\",\n      \"id\": \"0193i257-014e-7dd2-9455-fb964d9c85cr\",\n      \"attributes\": {\n        \"eventName\": \"earnedRewardApproved\",\n        \"webhookUrl\": \"https://webhookUrl.com/post\",\n        \"enabled\": true\n      }\n    }\n  ]\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "d21819ce-23ac-4736-85aa-d095a06fe10a",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "b8369d6c-13c2-43fd-ae0e-a7b329fb3ec8",
+      "name": "Create Subscription - default",
+      "request": {
+        "urlPathTemplate": "/v2/issuers/{organizationId}/subscriptions",
+        "method": "POST",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "organization-123"
+          }
+        }
+      },
+      "response": {
+        "status": 201,
+        "body": "{\n  \"data\": [\n    {\n      \"type\": \"subscription\",\n      \"id\": \"0193i257-014e-7dd2-9455-fb964d9c85cr\",\n      \"attributes\": {\n        \"eventName\": \"earnedRewardApproved\",\n        \"webhookUrl\": \"https://webhookUrl.com/post\",\n        \"enabled\": true\n      }\n    }\n  ]\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "b8369d6c-13c2-43fd-ae0e-a7b329fb3ec8",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "fdf342eb-71c3-459d-89be-0e35f0c5271b",
+      "name": "Update Subscription - default",
+      "request": {
+        "urlPathTemplate": "/v2/issuers/{organizationId}/subscriptions/{subscriptionId}",
+        "method": "PATCH",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "organization-123"
+          },
+          "subscriptionId": {
+            "equalTo": "subscription-123"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"data\": {\n    \"type\": \"subscription\",\n    \"id\": \"0193i257-014e-7dd2-9455-fb964d9c85cr\",\n    \"attributes\": {\n      \"eventName\": \"earnedRewardApproved\",\n      \"webhookUrl\": \"https://webhookUrl.com/post\",\n      \"enabled\": true\n    }\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "fdf342eb-71c3-459d-89be-0e35f0c5271b",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "8194a005-0ac3-47e9-bb1e-4bca4ee8e605",
+      "name": "get - default",
+      "request": {
+        "urlPathTemplate": "/v2/issuer",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"type\": \"organization\",\n  \"id\": \"id\",\n  \"attributes\": {\n    \"name\": \"name\",\n    \"enrolledRewards\": [\n      \"CARDLINKED\",\n      \"CARDLINKED\"\n    ],\n    \"cardNetworks\": [\n      \"VISA\",\n      \"VISA\"\n    ],\n    \"bins\": [\n      \"bins\",\n      \"bins\"\n    ],\n    \"affiliateCommissionSplit\": 1.1,\n    \"cardlinkedCommissionSplit\": 1.1,\n    \"cardlinkedUserCommissionSplit\": 1.1\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "8194a005-0ac3-47e9-bb1e-4bca4ee8e605",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      },
+      "postServeActions": []
+    },
+    {
+      "id": "39150de8-38f5-4361-b961-c6eb4cc24379",
+      "name": "list - default",
+      "request": {
+        "urlPathTemplate": "/v2/issuers/{organizationId}/children",
+        "method": "GET",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "organizationId"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"data\": [\n    {\n      \"type\": \"organization\",\n      \"id\": \"id\",\n      \"attributes\": {\n        \"name\": \"name\",\n        \"externalId\": \"externalId\",\n        \"bins\": [\n          \"bins\",\n          \"bins\"\n        ]\n      }\n    },\n    {\n      \"type\": \"organization\",\n      \"id\": \"id\",\n      \"attributes\": {\n        \"name\": \"name\",\n        \"externalId\": \"externalId\",\n        \"bins\": [\n          \"bins\",\n          \"bins\"\n        ]\n      }\n    }\n  ],\n  \"links\": {\n    \"self\": \"self\",\n    \"prev\": \"prev\",\n    \"next\": \"next\"\n  },\n  \"meta\": {\n    \"pageSize\": 1,\n    \"hasNextPage\": true\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "39150de8-38f5-4361-b961-c6eb4cc24379",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "465d40d6-7663-4667-bc60-e5fd13eb4f53",
+      "name": "create - default",
+      "request": {
+        "urlPathTemplate": "/v2/issuers/{organizationId}/children",
+        "method": "POST",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "organizationId"
+          }
+        }
+      },
+      "response": {
+        "status": 201,
+        "body": "{\n  \"type\": \"organization\",\n  \"id\": \"id\",\n  \"attributes\": {\n    \"name\": \"name\",\n    \"externalId\": \"externalId\",\n    \"bins\": [\n      \"bins\",\n      \"bins\"\n    ]\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "465d40d6-7663-4667-bc60-e5fd13eb4f53",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "21e8ab05-4240-456c-b1ad-da3a463fe22b",
+      "name": "get - default",
+      "request": {
+        "urlPathTemplate": "/v2/issuers/{organizationId}/children/{childId}",
+        "method": "GET",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "organizationId"
+          },
+          "childId": {
+            "equalTo": "childId"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"type\": \"organization\",\n  \"id\": \"id\",\n  \"attributes\": {\n    \"name\": \"name\",\n    \"externalId\": \"externalId\",\n    \"bins\": [\n      \"bins\",\n      \"bins\"\n    ]\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "21e8ab05-4240-456c-b1ad-da3a463fe22b",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "90a82cc2-d1e2-4a81-a494-ed8ed7b763ae",
+      "name": "update - default",
+      "request": {
+        "urlPathTemplate": "/v2/issuers/{organizationId}/children/{childId}",
+        "method": "PATCH",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "organizationId"
+          },
+          "childId": {
+            "equalTo": "childId"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"type\": \"organization\",\n  \"id\": \"id\",\n  \"attributes\": {\n    \"name\": \"name\",\n    \"externalId\": \"externalId\",\n    \"bins\": [\n      \"bins\",\n      \"bins\"\n    ]\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "90a82cc2-d1e2-4a81-a494-ed8ed7b763ae",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "d77a7687-bf8c-48a2-b065-f12fe99504f9",
+      "name": "delete - default",
+      "request": {
+        "urlPathTemplate": "/v2/issuers/{organizationId}/children/{childId}",
+        "method": "DELETE",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "organizationId"
+          },
+          "childId": {
+            "equalTo": "childId"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"data\": {\n    \"type\": \"type\",\n    \"id\": \"id\",\n    \"attributes\": {}\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "d77a7687-bf8c-48a2-b065-f12fe99504f9",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "165c918b-6831-464d-a508-c1c8959fcee4",
+      "name": "create - Create Main Page Placement",
+      "request": {
+        "urlPathTemplate": "/v2/issuers/{organizationId}/placements",
+        "method": "POST",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "org-123"
+          }
+        }
+      },
+      "response": {
+        "status": 201,
+        "body": "{\n  \"type\": \"placementMainPage\",\n  \"id\": \"01961e5a-b74c-7d42-8456-d3a1f2c90e71\",\n  \"attributes\": {\n    \"name\": \"Homepage Banner\",\n    \"organizationId\": \"org-123\",\n    \"availableSlots\": 5,\n    \"createdAt\": \"2026-04-15T12:00:00Z\",\n    \"lastModified\": \"2026-04-15T12:00:00Z\"\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "165c918b-6831-464d-a508-c1c8959fcee4",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "f04656ac-1342-4812-8836-334458e4264c",
+      "name": "list - default",
+      "request": {
+        "urlPathTemplate": "/v2/issuers/{organizationId}/placements",
+        "method": "GET",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "organizationId"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"data\": [\n    {\n      \"type\": \"placementMainPage\",\n      \"id\": \"id\",\n      \"attributes\": {\n        \"name\": \"name\",\n        \"organizationId\": \"organizationId\",\n        \"availableSlots\": 1,\n        \"createdAt\": \"2024-01-15T09:30:00Z\",\n        \"lastModified\": \"2024-01-15T09:30:00Z\"\n      }\n    },\n    {\n      \"type\": \"placementMainPage\",\n      \"id\": \"id\",\n      \"attributes\": {\n        \"name\": \"name\",\n        \"organizationId\": \"organizationId\",\n        \"availableSlots\": 1,\n        \"createdAt\": \"2024-01-15T09:30:00Z\",\n        \"lastModified\": \"2024-01-15T09:30:00Z\"\n      }\n    }\n  ],\n  \"links\": {\n    \"self\": \"self\",\n    \"prev\": \"prev\",\n    \"next\": \"next\"\n  },\n  \"meta\": {\n    \"pageSize\": 1,\n    \"hasNextPage\": true\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "f04656ac-1342-4812-8836-334458e4264c",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "7fb8055c-ca12-4942-91e8-3efc2bf543f5",
+      "name": "get - default",
+      "request": {
+        "urlPathTemplate": "/v2/issuers/{organizationId}/placements/{placementId}",
+        "method": "GET",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "organizationId"
+          },
+          "placementId": {
+            "equalTo": "placementId"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"type\": \"placementMainPage\",\n  \"id\": \"id\",\n  \"attributes\": {\n    \"name\": \"name\",\n    \"organizationId\": \"organizationId\",\n    \"availableSlots\": 1,\n    \"createdAt\": \"2024-01-15T09:30:00Z\",\n    \"lastModified\": \"2024-01-15T09:30:00Z\"\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "7fb8055c-ca12-4942-91e8-3efc2bf543f5",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "96b22b4e-fe18-45c5-89ea-395bb85ea3f2",
+      "name": "update - default",
+      "request": {
+        "urlPathTemplate": "/v2/issuers/{organizationId}/placements/{placementId}",
+        "method": "PUT",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "organizationId"
+          },
+          "placementId": {
+            "equalTo": "placementId"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"type\": \"placementMainPage\",\n  \"id\": \"id\",\n  \"attributes\": {\n    \"name\": \"name\",\n    \"organizationId\": \"organizationId\",\n    \"availableSlots\": 1,\n    \"createdAt\": \"2024-01-15T09:30:00Z\",\n    \"lastModified\": \"2024-01-15T09:30:00Z\"\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "96b22b4e-fe18-45c5-89ea-395bb85ea3f2",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "61d3ca10-aefe-4a3d-bfc3-4309670fb884",
+      "name": "delete - default",
+      "request": {
+        "urlPathTemplate": "/v2/issuers/{organizationId}/placements/{placementId}",
+        "method": "DELETE",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "organizationId"
+          },
+          "placementId": {
+            "equalTo": "placementId"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"data\": {\n    \"type\": \"type\",\n    \"id\": \"id\",\n    \"attributes\": {}\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "61d3ca10-aefe-4a3d-bfc3-4309670fb884",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "cf4da570-fea5-45e5-bc78-6fbc2dfb061c",
+      "name": "ping - default",
+      "request": {
+        "urlPathTemplate": "/v2/ping",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"message\": \"Ping successful\",\n  \"status\": \"OK\",\n  \"timestamp\": \"02/Oct/2025:17:52:43 +0000\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "cf4da570-fea5-45e5-bc78-6fbc2dfb061c",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      },
+      "postServeActions": []
+    },
+    {
+      "id": "8be77123-5c89-4c6b-9ad4-7bbe81b11a30",
+      "name": "Create Incoming Transactions - Transaction",
+      "request": {
+        "urlPathTemplate": "/v2/issuers/{organizationId}/transactions",
+        "method": "POST",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "organization-123"
+          }
+        }
+      },
+      "response": {
+        "status": 202,
+        "body": "{\n  \"data\": {\n    \"type\": \"job\",\n    \"id\": \"c94a93a7-beb9-4e58-960c-2c812f849398\",\n    \"attributes\": {\n      \"status\": \"queued\",\n      \"message\": \"Incoming Transactions event successfully queued for processing\"\n    }\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "8be77123-5c89-4c6b-9ad4-7bbe81b11a30",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "5c8ead2c-920d-4f52-b0fc-d5461001733e",
+      "name": "Flag Fraudulent Transactions - Fraudulent Transaction",
+      "request": {
+        "urlPathTemplate": "/v2/issuers/{organizationId}/fraud",
+        "method": "POST",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "organization-123"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"data\": [\n    {\n      \"type\": \"fraudulentTransaction\",\n      \"id\": \"myTxnId123\",\n      \"attributes\": {\n        \"userId\": \"user123\"\n      }\n    }\n  ]\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "5c8ead2c-920d-4f52-b0fc-d5461001733e",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "a39fa4d2-a321-4e72-bbac-45ccfa4bf7c5",
+      "name": "createAudits - Create Audit Request",
+      "request": {
+        "urlPathTemplate": "/v2/issuers/{organizationId}/users/{userId}/audits",
+        "method": "POST",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "organization-123"
+          },
+          "userId": {
+            "equalTo": "user-123"
+          }
+        }
+      },
+      "response": {
+        "status": 201,
+        "body": "{\n  \"data\": [\n    {\n      \"type\": \"audit\",\n      \"id\": \"d80a6f28-1b24-4d65-9e42-e1cf3379bc98\",\n      \"attributes\": {\n        \"transactionId\": \"issuerTransaction123\"\n      }\n    }\n  ]\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "a39fa4d2-a321-4e72-bbac-45ccfa4bf7c5",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "17747af4-fc46-4397-9311-f231db29f2ba",
+      "name": "Create Bulk Transactions Upload URL - Bulk Transactions Upload URL",
+      "request": {
+        "urlPathTemplate": "/v2/issuers/{organizationId}/transactions/uploads",
+        "method": "POST",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "organization-123"
+          }
+        }
+      },
+      "response": {
+        "status": 201,
+        "body": "{\n  \"data\": [\n    {\n      \"type\": \"incomingTransactionsFile\",\n      \"id\": \"2NxKz7TYmqVH8UrjGP1xK3hF2gs\",\n      \"attributes\": {\n        \"url\": \"https://s3.amazonaws.com/bucket/key1?X-Amz-Algorithm=...\",\n        \"expiresIn\": 900\n      }\n    },\n    {\n      \"type\": \"incomingTransactionsFile\",\n      \"id\": \"3PqLa8UZnrWI9VskHQ2yL4iG3ht\",\n      \"attributes\": {\n        \"url\": \"https://s3.amazonaws.com/bucket/key2?X-Amz-Algorithm=...\",\n        \"expiresIn\": 900\n      }\n    }\n  ]\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "17747af4-fc46-4397-9311-f231db29f2ba",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "cd28dd81-d5bb-4737-bb26-888f2a060222",
+      "name": "GetEarnedRewards - Get Earned Rewards",
+      "request": {
+        "urlPathTemplate": "/v2/issuers/{organizationId}/users/{userId}/earned-rewards",
+        "method": "GET",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "org-123"
+          },
+          "userId": {
+            "equalTo": "user-456"
+          }
+        },
+        "queryParameters": {
+          "page[size]": {
+            "equalTo": "10"
+          },
+          "filter[status]": {
+            "equalTo": "APPROVED"
+          },
+          "include": {
+            "equalTo": "merchant,offer"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"data\": [\n    {\n      \"type\": \"approvedTransaction\",\n      \"id\": \"fcabf024-3870-41f3-9fbd-b43ea85a3d19\",\n      \"attributes\": {\n        \"status\": \"APPROVED\",\n        \"transactionId\": \"TXN-20241001-F21-127964\",\n        \"transactionAmountInCents\": 12796,\n        \"transactionTimestamp\": \"2024-10-01T01:36:57Z\"\n      },\n      \"relationships\": {\n        \"user\": {\n          \"data\": {\n            \"type\": \"user\",\n            \"id\": \"8c52423a-c319-44ee-8fc7-508e97b43892\"\n          }\n        },\n        \"merchant\": {\n          \"data\": {\n            \"type\": \"merchant\",\n            \"id\": \"633ed2ab30dcb60009dd5699\"\n          }\n        },\n        \"offer\": {\n          \"data\": {\n            \"type\": \"offer\",\n            \"id\": \"OFF-F21-INSTORE-2024Q4-001\"\n          }\n        }\n      }\n    },\n    {\n      \"type\": \"rewardedTransaction\",\n      \"id\": \"7bcbdb95-f3a5-4f56-a9be-4c25f313eb0a\",\n      \"attributes\": {\n        \"status\": \"SETTLED\",\n        \"transactionId\": \"TXN-20240928-TGT-778813\",\n        \"transactionAmountInCents\": 8800,\n        \"transactionTimestamp\": \"2024-09-28T14:11:22Z\",\n        \"paidToIssuer\": \"PAID_IN_FULL\",\n        \"payoutTimestamp\": \"2024-09-29T10:15:00Z\",\n        \"commissionEarned\": {\n          \"user\": {\n            \"type\": \"cents\",\n            \"value\": 220\n          }\n        }\n      },\n      \"relationships\": {\n        \"user\": {\n          \"data\": {\n            \"type\": \"user\",\n            \"id\": \"8c52423a-c319-44ee-8fc7-508e97b43892\"\n          }\n        },\n        \"merchant\": {\n          \"data\": {\n            \"type\": \"merchant\",\n            \"id\": \"5f3e2d1c40abc50008cc4821\"\n          }\n        },\n        \"offer\": {\n          \"data\": {\n            \"type\": \"offer\",\n            \"id\": \"OFF-TGT-ONLINE-2024Q4-002\"\n          }\n        }\n      }\n    }\n  ],\n  \"links\": {\n    \"self\": \"/v2/issuers/org-123/users/user-456/earned-rewards?page[size]=10\",\n    \"next\": \"/v2/issuers/org-123/users/user-456/earned-rewards?page[size]=10&page[after]=eyJpZCI6ImZjYWJmMDI0LTM4NzAtNDFmMy05ZmJkLWI0M2VhODVhM2QxOSIsInRzIjoiMjAyNC0xMC0wMVQwMTozNjo1N1oifQ==\"\n  },\n  \"meta\": {\n    \"lifetimeRewardsInCents\": 540\n  },\n  \"included\": [\n    {\n      \"type\": \"merchant\",\n      \"id\": \"633ed2ab30dcb60009dd5699\",\n      \"attributes\": {\n        \"name\": \"Forever 21\",\n        \"assets\": [\n          {\n            \"type\": \"IMG_VIEW\",\n            \"url\": \"https://attribution.getkard.com/public/logos/forever21.jpg?subtype=IMG_VIEW&offerId=OFF-F21-INSTORE-2024Q4-001&token=signed-token\",\n            \"alt\": \"Forever 21 Logo Image\"\n          },\n          {\n            \"type\": \"BANNER_VIEW\",\n            \"url\": \"https://attribution.getkard.com/public/banners/forever21.jpg?subtype=BANNER_VIEW&offerId=OFF-F21-INSTORE-2024Q4-001&token=signed-token\",\n            \"alt\": \"Forever 21 Banner Image\"\n          }\n        ]\n      }\n    },\n    {\n      \"type\": \"merchant\",\n      \"id\": \"5f3e2d1c40abc50008cc4821\",\n      \"attributes\": {\n        \"name\": \"Target\",\n        \"assets\": [\n          {\n            \"type\": \"IMG_VIEW\",\n            \"url\": \"https://attribution.getkard.com/public/logos/target.jpg?subtype=IMG_VIEW&offerId=OFF-TGT-ONLINE-2024Q4-002&token=signed-token\",\n            \"alt\": \"Target Logo Image\"\n          }\n        ]\n      }\n    },\n    {\n      \"type\": \"offer\",\n      \"id\": \"OFF-F21-INSTORE-2024Q4-001\",\n      \"attributes\": {\n        \"purchaseChannel\": [\n          \"INSTORE\"\n        ]\n      }\n    },\n    {\n      \"type\": \"offer\",\n      \"id\": \"OFF-TGT-ONLINE-2024Q4-002\",\n      \"attributes\": {\n        \"purchaseChannel\": [\n          \"ONLINE\"\n        ]\n      }\n    }\n  ]\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "cd28dd81-d5bb-4737-bb26-888f2a060222",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "edfe614f-c8ab-4225-845c-9d21e105a3bd",
+      "name": "Create Users - default",
+      "request": {
+        "urlPathTemplate": "/v2/issuers/{organizationId}/users",
+        "method": "POST",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "organization-123"
+          }
+        }
+      },
+      "response": {
+        "status": 201,
+        "body": "{\n  \"data\": [\n    {\n      \"type\": \"user\",\n      \"id\": \"1234567890\",\n      \"attributes\": {\n        \"zipCode\": \"11238\",\n        \"enrolledRewards\": [\n          \"CARDLINKED\"\n        ],\n        \"email\": \"user@example.com\",\n        \"hashedEmail\": \"a94a8fe5ccb19ba61c4c0873d391e987982fbbd3e2d8a5b76e45a1d4c4e2e3a1\",\n        \"phoneNumber\": \"+14155552671\",\n        \"birthYear\": \"1990\",\n        \"historicalTransactionsSent\": true\n      }\n    }\n  ]\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "edfe614f-c8ab-4225-845c-9d21e105a3bd",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "74e75a63-5a4f-400a-ad3a-f6dc0cd39677",
+      "name": "Update User - default",
+      "request": {
+        "urlPathTemplate": "/v2/issuers/{organizationId}/users/{userId}",
+        "method": "PUT",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "organization-123"
+          },
+          "userId": {
+            "equalTo": "user-123"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"data\": {\n    \"type\": \"user\",\n    \"id\": \"1234567890\",\n    \"attributes\": {\n      \"zipCode\": \"11238\",\n      \"enrolledRewards\": [\n        \"CARDLINKED\"\n      ],\n      \"email\": \"user@example.com\",\n      \"hashedEmail\": \"a94a8fe5ccb19ba61c4c0873d391e987982fbbd3e2d8a5b76e45a1d4c4e2e3a1\",\n      \"phoneNumber\": \"+14155552671\",\n      \"birthYear\": \"1990\",\n      \"historicalTransactionsSent\": true\n    }\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "74e75a63-5a4f-400a-ad3a-f6dc0cd39677",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "0f9f2a46-8757-4731-85cb-6c80ca8095de",
+      "name": "Delete User - default",
+      "request": {
+        "urlPathTemplate": "/v2/issuers/{organizationId}/users/{userId}",
+        "method": "DELETE",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "organization-123"
+          },
+          "userId": {
+            "equalTo": "user-123"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"data\": {\n    \"type\": \"user\",\n    \"id\": \"1234567890\",\n    \"attributes\": {}\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "0f9f2a46-8757-4731-85cb-6c80ca8095de",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "3f958b84-fce2-44a0-a1ea-43d0101a1816",
+      "name": "Get User By ID - default",
+      "request": {
+        "urlPathTemplate": "/v2/issuers/{organizationId}/users/{userId}",
+        "method": "GET",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "organization-123"
+          },
+          "userId": {
+            "equalTo": "user-123"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"data\": {\n    \"type\": \"user\",\n    \"id\": \"1234567890\",\n    \"attributes\": {\n      \"zipCode\": \"11238\",\n      \"enrolledRewards\": [\n        \"CARDLINKED\"\n      ],\n      \"email\": \"user@example.com\",\n      \"hashedEmail\": \"a94a8fe5ccb19ba61c4c0873d391e987982fbbd3e2d8a5b76e45a1d4c4e2e3a1\",\n      \"phoneNumber\": \"+14155552671\",\n      \"birthYear\": \"1990\",\n      \"historicalTransactionsSent\": true\n    }\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "3f958b84-fce2-44a0-a1ea-43d0101a1816",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "b09f8049-b39b-41da-982d-94ded88cd61d",
+      "name": "Create Attribution Events - default",
+      "request": {
+        "urlPathTemplate": "/v2/issuers/{organizationId}/users/{userId}/attributions",
+        "method": "POST",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "organization-123"
+          },
+          "userId": {
+            "equalTo": "user-123"
+          }
+        }
+      },
+      "response": {
+        "status": 202,
+        "body": "{\n  \"data\": {\n    \"type\": \"job\",\n    \"id\": \"c94a93a7-beb9-4e58-960c-2c812f849398\",\n    \"attributes\": {\n      \"status\": \"queued\",\n      \"message\": \"Attribution events are queued for processing\"\n    }\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "b09f8049-b39b-41da-982d-94ded88cd61d",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "c4268fec-5175-4688-ad32-964d3be84815",
+      "name": "Activate Offer - default",
+      "request": {
+        "urlPathTemplate": "/v2/issuers/{organizationId}/users/{userId}/offers/{offerId}/activate",
+        "method": "POST",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "organization-123"
+          },
+          "userId": {
+            "equalTo": "user-123"
+          },
+          "offerId": {
+            "equalTo": "offer-456"
+          }
+        }
+      },
+      "response": {
+        "status": 201,
+        "body": "{\n  \"data\": {\n    \"type\": \"offerAttribution\",\n    \"id\": \"c94a93a7-beb9-4e58-960c-2c812f849398\",\n    \"attributes\": {\n      \"entityId\": \"offer-456\",\n      \"eventCode\": \"ACTIVATE\",\n      \"medium\": \"CTA\",\n      \"eventDate\": \"2025-01-01T00:00:00Z\"\n    }\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "c4268fec-5175-4688-ad32-964d3be84815",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "9c6bf286-38f6-47ad-a3f7-c6ac06c2d8e3",
+      "name": "Boost Offer - default",
+      "request": {
+        "urlPathTemplate": "/v2/issuers/{organizationId}/users/{userId}/offers/{offerId}/boost",
+        "method": "POST",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "organization-123"
+          },
+          "userId": {
+            "equalTo": "user-123"
+          },
+          "offerId": {
+            "equalTo": "offer-456"
+          }
+        }
+      },
+      "response": {
+        "status": 201,
+        "body": "{\n  \"data\": {\n    \"type\": \"offerAttribution\",\n    \"id\": \"c94a93a7-beb9-4e58-960c-2c812f849398\",\n    \"attributes\": {\n      \"entityId\": \"offer-456\",\n      \"eventCode\": \"BOOST\",\n      \"medium\": \"CTA\",\n      \"eventDate\": \"2025-01-01T00:00:00Z\"\n    }\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "9c6bf286-38f6-47ad-a3f7-c6ac06c2d8e3",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "1d2f34d1-2936-42c0-b976-f4438e821a42",
+      "name": "Get WebView Token - default",
+      "request": {
+        "urlPathTemplate": "/v2/auth/issuers/{organizationId}/users/{userId}/token",
+        "method": "POST",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "organization-123"
+          },
+          "userId": {
+            "equalTo": "user-123"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"access_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\",\n  \"expires_in\": 3600,\n  \"token_type\": \"Bearer\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "1d2f34d1-2936-42c0-b976-f4438e821a42",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "16fc2885-1b07-43ee-aeab-7ead5dcf9f79",
+      "name": "Get Offers By User - default",
+      "request": {
+        "urlPathTemplate": "/v2/issuers/{organizationId}/users/{userId}/offers",
+        "method": "GET",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "organization-123"
+          },
+          "userId": {
+            "equalTo": "user-123"
+          }
+        },
+        "queryParameters": {
+          "page[size]": {
+            "equalTo": "1"
+          },
+          "filter[isTargeted]": {
+            "equalTo": "true"
+          },
+          "sort": {
+            "equalTo": "-startDate"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"data\": [\n    {\n      \"type\": \"standardOffer\",\n      \"id\": \"5e27318c9b346f00087fbb5c\",\n      \"attributes\": {\n        \"name\": \"Worlds Greatest Chicken\",\n        \"terms\": \"Worlds Greatest Chicken offers are only available within US Locations.\",\n        \"purchaseChannel\": [\n          \"INSTORE\"\n        ],\n        \"userReward\": {\n          \"type\": \"PERCENT\",\n          \"value\": 5.7\n        },\n        \"startDate\": \"2024-11-17T05:00:00Z\",\n        \"expirationDate\": \"2025-03-17T05:00:00Z\",\n        \"minRewardAmount\": {\n          \"type\": \"CENTS\",\n          \"value\": 500\n        },\n        \"maxRewardAmount\": {\n          \"type\": \"CENTS\",\n          \"value\": 2000\n        },\n        \"minTransactionAmount\": {\n          \"type\": \"CENTS\",\n          \"value\": 500\n        },\n        \"maxTransactionAmount\": {\n          \"type\": \"CENTS\",\n          \"value\": 10000\n        },\n        \"maxRedemptions\": 1,\n        \"isTargeted\": true,\n        \"assets\": [\n          {\n            \"url\": \"http://attribution.getkard.com/logos/breakfastbunny_logo.png?subtype=IMG_VIEW&offerId=629fc220b7a4290009a188ec&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZWZlcnJpbmdQYXJ0bmVyVXNlcklkIjoiNDM4MTAzIiwiaXNzdWVySWQiOiIwMDAwNDMyMSIsInR5cGUiOiJPRkZFUiIsInBheWxvYWQiOnsiand0VGltZXN0YW1wIjoiMjAyNi0wNC0yMyJ9fQ.4f9QmoGpgXVIXu9Tq8XFVcx7Rz0jptsYNYpmaIBszyc&state=eyJyYW5rIjoxLCJmaWx0ZXJzIjpbXX0%3D\",\n            \"alt\": \"\",\n            \"type\": \"IMG_VIEW\"\n          },\n          {\n            \"url\": \"https://attribution.getkard.com/public/banners/breakfast-bunny-banner.jpg?subtype=BANNER_VIEW&offerId=629fc220b7a4290009a188ec&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZWZlcnJpbmdQYXJ0bmVyVXNlcklkIjoiNDM4MTAzIiwiaXNzdWVySWQiOiIwMDAwNDMyMSIsInR5cGUiOiJPRkZFUiIsInBheWxvYWQiOnsiand0VGltZXN0YW1wIjoiMjAyNi0wNC0yMyJ9fQ.4f9QmoGpgXVIXu9Tq8XFVcx7Rz0jptsYNYpmaIBszyc&state=eyJyYW5rIjoxLCJmaWx0ZXJzIjpbXX0%3D\",\n            \"alt\": \"\",\n            \"type\": \"BANNER_VIEW\"\n          }\n        ],\n        \"websiteUrl\": \"http://worldsgreatestchickent.test.com\",\n        \"description\": \"Worlds Greatest Chicken brings you the tastiest crispy, double fried spicy chicken in the world.\"\n      },\n      \"relationships\": {\n        \"category\": {\n          \"data\": [\n            {\n              \"type\": \"category\",\n              \"id\": \"65920081b524d126068de24a\"\n            },\n            {\n              \"type\": \"category\",\n              \"id\": \"65920081b524d126068de24c\"\n            }\n          ]\n        }\n      }\n    }\n  ],\n  \"included\": [\n    {\n      \"type\": \"category\",\n      \"id\": \"65920081b524d126068de24a\",\n      \"attributes\": {\n        \"name\": \"Food & Beverage\"\n      }\n    },\n    {\n      \"type\": \"category\",\n      \"id\": \"65920081b524d126068de24c\",\n      \"attributes\": {\n        \"name\": \"Department Stores\"\n      }\n    }\n  ],\n  \"links\": {\n    \"self\": \"/v2/issuers/{organizationId}/users/{userId}/offers?page[size]=1?sort=-startDate\",\n    \"prev\": null,\n    \"next\": \"/v2/issuers/{organizationId}/users/{userId}/offers?page[after]=NDMyNzQyODI3OTQw&page[size]=1?&sort=-startDate\"\n  },\n  \"meta\": {\n    \"availableCategories\": [\n      {\n        \"type\": \"category\",\n        \"id\": \"65920081b524d126068de24a\",\n        \"attributes\": {\n          \"name\": \"Food & Beverage\"\n        }\n      },\n      {\n        \"type\": \"category\",\n        \"id\": \"65920081b524d126068de24c\",\n        \"attributes\": {\n          \"name\": \"Department Stores\"\n        }\n      }\n    ]\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "16fc2885-1b07-43ee-aeab-7ead5dcf9f79",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "93fa077c-4773-4f31-9223-86b5e5842c49",
+      "name": "Get Offers By Placement - default",
+      "request": {
+        "urlPathTemplate": "/v2/issuers/{organizationId}/users/{userId}/placements/{placementId}/offers",
+        "method": "GET",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "organizationId"
+          },
+          "userId": {
+            "equalTo": "userId"
+          },
+          "placementId": {
+            "equalTo": "placementId"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"data\": [\n    {\n      \"type\": \"standardOffer\",\n      \"relationships\": {\n        \"category\": {\n          \"data\": [\n            {\n              \"id\": \"id\",\n              \"type\": \"category\"\n            },\n            {\n              \"id\": \"id\",\n              \"type\": \"category\"\n            }\n          ]\n        }\n      },\n      \"id\": \"id\",\n      \"attributes\": {\n        \"terms\": \"terms\",\n        \"maxRedemptions\": 1,\n        \"name\": \"name\",\n        \"purchaseChannel\": [\n          \"INSTORE\",\n          \"INSTORE\"\n        ],\n        \"userReward\": {\n          \"type\": \"FLAT\",\n          \"value\": 1.1\n        },\n        \"assets\": [\n          {\n            \"type\": \"type\",\n            \"url\": \"url\",\n            \"alt\": \"alt\"\n          },\n          {\n            \"type\": \"type\",\n            \"url\": \"url\",\n            \"alt\": \"alt\"\n          }\n        ],\n        \"startDate\": \"2024-01-15T09:30:00Z\",\n        \"expirationDate\": \"2024-01-15T09:30:00Z\",\n        \"isTargeted\": true,\n        \"minTransactionAmount\": {\n          \"type\": \"CENTS\",\n          \"value\": 1\n        },\n        \"maxTransactionAmount\": {\n          \"type\": \"CENTS\",\n          \"value\": 1\n        },\n        \"minRewardAmount\": {\n          \"type\": \"CENTS\",\n          \"value\": 1\n        },\n        \"maxRewardAmount\": {\n          \"type\": \"CENTS\",\n          \"value\": 1\n        },\n        \"websiteUrl\": \"websiteUrl\",\n        \"description\": \"description\",\n        \"components\": {\n          \"shortDescription\": \"shortDescription\",\n          \"longDescription\": \"longDescription\",\n          \"baseReward\": \"baseReward\",\n          \"boostedReward\": \"boostedReward\",\n          \"cta\": {\n            \"buttonText\": \"buttonText\",\n            \"buttonStyle\": \"PRIMARY\",\n            \"action\": {\n              \"url\": \"url\",\n              \"method\": \"method\"\n            },\n            \"startIcon\": \"startIcon\"\n          },\n          \"tags\": [\n            \"tags\",\n            \"tags\"\n          ],\n          \"detailTags\": [\n            \"detailTags\",\n            \"detailTags\"\n          ],\n          \"logoFlare\": {\n            \"borderColor\": \"PRIMARY\",\n            \"badge\": {\n              \"icon\": \"icon\",\n              \"position\": \"TOP_RIGHT\"\n            }\n          },\n          \"progressBar\": {\n            \"total\": 1,\n            \"currentProgress\": 1,\n            \"label\": \"label\",\n            \"segmented\": true,\n            \"labels\": {\n              \"details\": {},\n              \"default\": {}\n            }\n          }\n        }\n      }\n    },\n    {\n      \"type\": \"standardOffer\",\n      \"relationships\": {\n        \"category\": {\n          \"data\": [\n            {\n              \"id\": \"id\",\n              \"type\": \"category\"\n            },\n            {\n              \"id\": \"id\",\n              \"type\": \"category\"\n            }\n          ]\n        }\n      },\n      \"id\": \"id\",\n      \"attributes\": {\n        \"terms\": \"terms\",\n        \"maxRedemptions\": 1,\n        \"name\": \"name\",\n        \"purchaseChannel\": [\n          \"INSTORE\",\n          \"INSTORE\"\n        ],\n        \"userReward\": {\n          \"type\": \"FLAT\",\n          \"value\": 1.1\n        },\n        \"assets\": [\n          {\n            \"type\": \"type\",\n            \"url\": \"url\",\n            \"alt\": \"alt\"\n          },\n          {\n            \"type\": \"type\",\n            \"url\": \"url\",\n            \"alt\": \"alt\"\n          }\n        ],\n        \"startDate\": \"2024-01-15T09:30:00Z\",\n        \"expirationDate\": \"2024-01-15T09:30:00Z\",\n        \"isTargeted\": true,\n        \"minTransactionAmount\": {\n          \"type\": \"CENTS\",\n          \"value\": 1\n        },\n        \"maxTransactionAmount\": {\n          \"type\": \"CENTS\",\n          \"value\": 1\n        },\n        \"minRewardAmount\": {\n          \"type\": \"CENTS\",\n          \"value\": 1\n        },\n        \"maxRewardAmount\": {\n          \"type\": \"CENTS\",\n          \"value\": 1\n        },\n        \"websiteUrl\": \"websiteUrl\",\n        \"description\": \"description\",\n        \"components\": {\n          \"shortDescription\": \"shortDescription\",\n          \"longDescription\": \"longDescription\",\n          \"baseReward\": \"baseReward\",\n          \"boostedReward\": \"boostedReward\",\n          \"cta\": {\n            \"buttonText\": \"buttonText\",\n            \"buttonStyle\": \"PRIMARY\",\n            \"action\": {\n              \"url\": \"url\",\n              \"method\": \"method\"\n            },\n            \"startIcon\": \"startIcon\"\n          },\n          \"tags\": [\n            \"tags\",\n            \"tags\"\n          ],\n          \"detailTags\": [\n            \"detailTags\",\n            \"detailTags\"\n          ],\n          \"logoFlare\": {\n            \"borderColor\": \"PRIMARY\",\n            \"badge\": {\n              \"icon\": \"icon\",\n              \"position\": \"TOP_RIGHT\"\n            }\n          },\n          \"progressBar\": {\n            \"total\": 1,\n            \"currentProgress\": 1,\n            \"label\": \"label\",\n            \"segmented\": true,\n            \"labels\": {\n              \"details\": {},\n              \"default\": {}\n            }\n          }\n        }\n      }\n    }\n  ],\n  \"links\": {\n    \"self\": \"self\",\n    \"prev\": \"prev\",\n    \"next\": \"next\"\n  },\n  \"included\": [\n    {\n      \"attributes\": {\n        \"name\": \"Arts & Entertainment\"\n      },\n      \"id\": \"id\",\n      \"type\": \"category\"\n    },\n    {\n      \"attributes\": {\n        \"name\": \"Arts & Entertainment\"\n      },\n      \"id\": \"id\",\n      \"type\": \"category\"\n    }\n  ],\n  \"meta\": {\n    \"availableCategories\": [\n      {\n        \"attributes\": {\n          \"name\": \"Arts & Entertainment\"\n        },\n        \"id\": \"id\",\n        \"type\": \"category\"\n      },\n      {\n        \"attributes\": {\n          \"name\": \"Arts & Entertainment\"\n        },\n        \"id\": \"id\",\n        \"type\": \"category\"\n      }\n    ]\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "93fa077c-4773-4f31-9223-86b5e5842c49",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "16b24c72-1e7d-4e5d-8c6f-2d85b5f5cde5",
+      "name": "Get Locations By User - default",
+      "request": {
+        "urlPathTemplate": "/v2/issuers/{organizationId}/users/{userId}/locations",
+        "method": "GET",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "organization-123"
+          },
+          "userId": {
+            "equalTo": "user-123"
+          }
+        },
+        "queryParameters": {
+          "page[size]": {
+            "equalTo": "1"
+          },
+          "filter[latitude]": {
+            "equalTo": "39.9419429"
+          },
+          "filter[longitude]": {
+            "equalTo": "-75.1446869"
+          },
+          "filter[radius]": {
+            "equalTo": "10"
+          },
+          "include": {
+            "equalTo": "offers,categories"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"data\": [\n    {\n      \"type\": \"location\",\n      \"id\": \"5e27318c9b346f00087fba8l\",\n      \"attributes\": {\n        \"name\": \"Worlds Greatest Chicken\",\n        \"address\": {\n          \"street\": \"120 Main St\",\n          \"city\": \"Philadelphia\",\n          \"state\": \"PA\",\n          \"zipCode\": \"19147\"\n        },\n        \"coordinates\": {\n          \"longitude\": -75.1446869,\n          \"latitude\": 39.9419429\n        },\n        \"phone\": \"+1 (123) 555-8880\",\n        \"operationHours\": {\n          \"periods\": [\n            {\n              \"close\": {\n                \"day\": 1,\n                \"time\": \"1700\"\n              },\n              \"open\": {\n                \"day\": 1,\n                \"time\": \"0900\"\n              }\n            },\n            {\n              \"close\": {\n                \"day\": 2,\n                \"time\": \"1700\"\n              },\n              \"open\": {\n                \"day\": 2,\n                \"time\": \"0900\"\n              }\n            },\n            {\n              \"close\": {\n                \"day\": 3,\n                \"time\": \"1700\"\n              },\n              \"open\": {\n                \"day\": 3,\n                \"time\": \"0900\"\n              }\n            },\n            {\n              \"close\": {\n                \"day\": 4,\n                \"time\": \"1700\"\n              },\n              \"open\": {\n                \"day\": 4,\n                \"time\": \"0900\"\n              }\n            },\n            {\n              \"close\": {\n                \"day\": 5,\n                \"time\": \"1700\"\n              },\n              \"open\": {\n                \"day\": 5,\n                \"time\": \"0900\"\n              }\n            }\n          ],\n          \"weekdayText\": [\n            \"Monday: 9:00 AM – 5:00 PM\",\n            \"Tuesday: 9:00 AM – 5:00 PM\",\n            \"Wednesday: 9:00 AM – 5:00 PM\",\n            \"Thursday: 9:00 AM – 5:00 PM\",\n            \"Friday: 9:00 AM – 5:00 PM\",\n            \"Saturday: Closed\",\n            \"Sunday: Closed\"\n          ]\n        }\n      },\n      \"relationships\": {\n        \"offers\": {\n          \"data\": [\n            {\n              \"type\": \"standardOffer\",\n              \"id\": \"5e27318c9b346f00087fbb5b\"\n            }\n          ]\n        },\n        \"category\": {\n          \"data\": [\n            {\n              \"type\": \"category\",\n              \"id\": \"65920081b524d126068de24a\"\n            }\n          ]\n        }\n      }\n    }\n  ],\n  \"included\": [\n    {\n      \"type\": \"category\",\n      \"id\": \"65920081b524d126068de24a\",\n      \"attributes\": {\n        \"name\": \"Food & Beverage\"\n      }\n    },\n    {\n      \"type\": \"standardOffer\",\n      \"id\": \"5e27318c9b346f00087fbb5c\",\n      \"attributes\": {\n        \"name\": \"Worlds Greatest Chicken\",\n        \"terms\": \"Worlds Greatest Chicken offers are only available within US Locations.\",\n        \"purchaseChannel\": [\n          \"INSTORE\"\n        ],\n        \"userReward\": {\n          \"type\": \"PERCENT\",\n          \"value\": 5.7\n        },\n        \"startDate\": \"2022-01-01T05:00:00Z\",\n        \"expirationDate\": \"2022-01-01T05:00:00Z\",\n        \"minRewardAmount\": {\n          \"type\": \"CENTS\",\n          \"value\": 500\n        },\n        \"maxRewardAmount\": {\n          \"type\": \"CENTS\",\n          \"value\": 2000\n        },\n        \"minTransactionAmount\": {\n          \"type\": \"CENTS\",\n          \"value\": 500\n        },\n        \"maxTransactionAmount\": {\n          \"type\": \"CENTS\",\n          \"value\": 2000\n        },\n        \"maxRedemptions\": 1,\n        \"isTargeted\": true,\n        \"assets\": [\n          {\n            \"url\": \"http://attribution.getkard.com/logos/breakfastbunny_logo.png?subtype=IMG_VIEW&offerId=629fc220b7a4290009a188ec&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZWZlcnJpbmdQYXJ0bmVyVXNlcklkIjoiNDM4MTAzIiwiaXNzdWVySWQiOiIwMDAwNDMyMSIsInR5cGUiOiJPRkZFUiIsInBheWxvYWQiOnsiand0VGltZXN0YW1wIjoiMjAyNi0wNC0yMyJ9fQ.4f9QmoGpgXVIXu9Tq8XFVcx7Rz0jptsYNYpmaIBszyc&state=eyJyYW5rIjoxLCJmaWx0ZXJzIjpbXX0%3D\",\n            \"alt\": \"\",\n            \"type\": \"IMG_VIEW\"\n          },\n          {\n            \"url\": \"https://attribution.getkard.com/public/banners/breakfast-bunny-banner.jpg?subtype=BANNER_VIEW&offerId=629fc220b7a4290009a188ec&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZWZlcnJpbmdQYXJ0bmVyVXNlcklkIjoiNDM4MTAzIiwiaXNzdWVySWQiOiIwMDAwNDMyMSIsInR5cGUiOiJPRkZFUiIsInBheWxvYWQiOnsiand0VGltZXN0YW1wIjoiMjAyNi0wNC0yMyJ9fQ.4f9QmoGpgXVIXu9Tq8XFVcx7Rz0jptsYNYpmaIBszyc&state=eyJyYW5rIjoxLCJmaWx0ZXJzIjpbXX0%3D\",\n            \"alt\": \"\",\n            \"type\": \"BANNER_VIEW\"\n          }\n        ],\n        \"websiteUrl\": \"http://worldsgreatestchickent.test.com\",\n        \"description\": \"Worlds Greatest Chicken brings you the tastiest crispy, double fried spicy chicken in the world.\"\n      }\n    }\n  ],\n  \"links\": {\n    \"self\": \"/v2/issuers/{organizationId}/users/{userId}/locations?page[size]=1&filter[latitude]=39.9419429&filter[longitude]=-75.1446869&filter[radius]=10&include=offers,categories\",\n    \"prev\": null,\n    \"next\": \"/v2/issuers/{organizationId}/users/{userId}/locations?page[after]=NDMyNzQyODI3OTQw&page[size]=1&filter[latitude]=39.9419429&filter[longitude]=-75.1446869&filter[radius]=10&include=offers,categories\"\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "16b24c72-1e7d-4e5d-8c6f-2d85b5f5cde5",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "6ef4ed62-7dc9-4199-b748-941c6d52d468",
+      "name": "Create Upload - default",
+      "request": {
+        "urlPathTemplate": "/v2/issuers/{organizationId}/users/{userId}/uploads",
+        "method": "POST",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "organization-123"
+          },
+          "userId": {
+            "equalTo": "user-123"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"data\": {\n    \"type\": \"historicalTransactionStart\",\n    \"id\": \"7e382223-b9a5-4825-91fb-436c8957a2e7\",\n    \"attributes\": {}\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "6ef4ed62-7dc9-4199-b748-941c6d52d468",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "0a9a1541-609b-4514-8bbc-9957b6d1a481",
+      "name": "Add Upload Part - default",
+      "request": {
+        "urlPathTemplate": "/v2/issuers/{organizationId}/users/{userId}/uploads/{uploadId}/parts",
+        "method": "PUT",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "organization-123"
+          },
+          "userId": {
+            "equalTo": "user-123"
+          },
+          "uploadId": {
+            "equalTo": "upload-123"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"data\": [\n    {\n      \"type\": \"historicalTransaction\",\n      \"id\": \"txnId123\",\n      \"attributes\": {}\n    }\n  ]\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "0a9a1541-609b-4514-8bbc-9957b6d1a481",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "2d6e3283-028f-4a12-8837-ac9dd48258c0",
+      "name": "Update Upload - default",
+      "request": {
+        "urlPathTemplate": "/v2/issuers/{organizationId}/users/{userId}/uploads/{uploadId}",
+        "method": "PUT",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "organization-123"
+          },
+          "userId": {
+            "equalTo": "user-123"
+          },
+          "uploadId": {
+            "equalTo": "upload-123"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"data\": {\n    \"type\": \"historicalTransactionComplete\",\n    \"id\": \"7e382223-b9a5-4825-91fb-436c8957a2e7\",\n    \"attributes\": {}\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "2d6e3283-028f-4a12-8837-ac9dd48258c0",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    }
+  ],
+  "meta": {
+    "total": 36
+  }
+}

@@ -6,7 +6,7 @@ import (
 	context "context"
 	http "net/http"
 
-	kardgosdk "github.com/KardFinancial/kard-go-sdk"
+	kard "github.com/KardFinancial/kard-go-sdk"
 	core "github.com/KardFinancial/kard-go-sdk/core"
 	internal "github.com/KardFinancial/kard-go-sdk/internal"
 	option "github.com/KardFinancial/kard-go-sdk/option"
@@ -34,8 +34,8 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 
 func (r *RawClient) GetWebViewToken(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
-	userID kardgosdk.UserID,
+	organizationId kard.OrganizationId,
+	userId kard.UserId,
 	opts ...option.RequestOption,
 ) (*core.Response[*users.WebViewTokenResponse], error) {
 	options := core.NewRequestOptions(opts...)
@@ -46,8 +46,8 @@ func (r *RawClient) GetWebViewToken(
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/auth/issuers/%v/users/%v/token",
-		organizationID,
-		userID,
+		organizationId,
+		userId,
 	)
 	headers := internal.MergeHeaders(
 		r.options.ToHeader(),

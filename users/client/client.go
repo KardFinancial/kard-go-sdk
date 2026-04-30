@@ -6,7 +6,7 @@ import (
 	context "context"
 	os "os"
 
-	kardgosdk "github.com/KardFinancial/kard-go-sdk"
+	kard "github.com/KardFinancial/kard-go-sdk"
 	core "github.com/KardFinancial/kard-go-sdk/core"
 	internal "github.com/KardFinancial/kard-go-sdk/internal"
 	option "github.com/KardFinancial/kard-go-sdk/option"
@@ -58,13 +58,13 @@ func NewClient(options *core.RequestOptions) *Client {
 // <b>Note:</b> `Maximum of 100 users can be created per request`.
 func (c *Client) Create(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
-	request *kardgosdk.CreateUsersObject,
+	organizationId kard.OrganizationId,
+	request *kard.CreateUsersObject,
 	opts ...option.RequestOption,
-) (*kardgosdk.CreateUsersObject, error) {
+) (*kard.CreateUsersObject, error) {
 	response, err := c.WithRawResponse.Create(
 		ctx,
-		organizationID,
+		organizationId,
 		request,
 		opts...,
 	)
@@ -79,15 +79,15 @@ func (c *Client) Create(
 // <b>Required scopes:</b> `user:update`
 func (c *Client) Update(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
-	userID kardgosdk.UserID,
-	request *kardgosdk.UpdateUserObject,
+	organizationId kard.OrganizationId,
+	userId kard.UserId,
+	request *kard.UpdateUserObject,
 	opts ...option.RequestOption,
-) (*kardgosdk.UserResponseObject, error) {
+) (*kard.UserResponseObject, error) {
 	response, err := c.WithRawResponse.Update(
 		ctx,
-		organizationID,
-		userID,
+		organizationId,
+		userId,
 		request,
 		opts...,
 	)
@@ -102,14 +102,14 @@ func (c *Client) Update(
 // <b>Required scopes:</b> `user:delete`
 func (c *Client) Delete(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
-	userID kardgosdk.UserID,
+	organizationId kard.OrganizationId,
+	userId kard.UserId,
 	opts ...option.RequestOption,
-) (*kardgosdk.DeleteUserResponseObject, error) {
+) (*kard.DeleteUserResponseObject, error) {
 	response, err := c.WithRawResponse.Delete(
 		ctx,
-		organizationID,
-		userID,
+		organizationId,
+		userId,
 		opts...,
 	)
 	if err != nil {
@@ -123,14 +123,14 @@ func (c *Client) Delete(
 // <b>Required scopes:</b>&nbsp;&nbsp;`user:read`
 func (c *Client) Get(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
-	userID kardgosdk.UserID,
+	organizationId kard.OrganizationId,
+	userId kard.UserId,
 	opts ...option.RequestOption,
-) (*kardgosdk.UserResponseObject, error) {
+) (*kard.UserResponseObject, error) {
 	response, err := c.WithRawResponse.Get(
 		ctx,
-		organizationID,
-		userID,
+		organizationId,
+		userId,
 		opts...,
 	)
 	if err != nil {

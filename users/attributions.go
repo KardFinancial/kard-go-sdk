@@ -266,14 +266,14 @@ func (a *ActivateOfferResponse) String() string {
 }
 
 var (
-	activateOfferResponseAttributesFieldEntityID  = big.NewInt(1 << 0)
+	activateOfferResponseAttributesFieldEntityId  = big.NewInt(1 << 0)
 	activateOfferResponseAttributesFieldEventCode = big.NewInt(1 << 1)
 	activateOfferResponseAttributesFieldMedium    = big.NewInt(1 << 2)
 	activateOfferResponseAttributesFieldEventDate = big.NewInt(1 << 3)
 )
 
 type ActivateOfferResponseAttributes struct {
-	EntityID  string    `json:"entityId" url:"entityId"`
+	EntityId  string    `json:"entityId" url:"entityId"`
 	EventCode string    `json:"eventCode" url:"eventCode"`
 	Medium    string    `json:"medium" url:"medium"`
 	EventDate time.Time `json:"eventDate" url:"eventDate"`
@@ -285,11 +285,11 @@ type ActivateOfferResponseAttributes struct {
 	rawJSON         json.RawMessage
 }
 
-func (a *ActivateOfferResponseAttributes) GetEntityID() string {
+func (a *ActivateOfferResponseAttributes) GetEntityId() string {
 	if a == nil {
 		return ""
 	}
-	return a.EntityID
+	return a.EntityId
 }
 
 func (a *ActivateOfferResponseAttributes) GetEventCode() string {
@@ -327,11 +327,11 @@ func (a *ActivateOfferResponseAttributes) require(field *big.Int) {
 	a.explicitFields.Or(a.explicitFields, field)
 }
 
-// SetEntityID sets the EntityID field and marks it as non-optional;
+// SetEntityId sets the EntityId field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (a *ActivateOfferResponseAttributes) SetEntityID(entityID string) {
-	a.EntityID = entityID
-	a.require(activateOfferResponseAttributesFieldEntityID)
+func (a *ActivateOfferResponseAttributes) SetEntityId(entityId string) {
+	a.EntityId = entityId
+	a.require(activateOfferResponseAttributesFieldEntityId)
 }
 
 // SetEventCode sets the EventCode field and marks it as non-optional;
@@ -407,13 +407,13 @@ func (a *ActivateOfferResponseAttributes) String() string {
 
 var (
 	activateOfferResponseDataFieldType       = big.NewInt(1 << 0)
-	activateOfferResponseDataFieldID         = big.NewInt(1 << 1)
+	activateOfferResponseDataFieldId         = big.NewInt(1 << 1)
 	activateOfferResponseDataFieldAttributes = big.NewInt(1 << 2)
 )
 
 type ActivateOfferResponseData struct {
 	Type       string                           `json:"type" url:"type"`
-	ID         string                           `json:"id" url:"id"`
+	Id         string                           `json:"id" url:"id"`
 	Attributes *ActivateOfferResponseAttributes `json:"attributes" url:"attributes"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
@@ -430,11 +430,11 @@ func (a *ActivateOfferResponseData) GetType() string {
 	return a.Type
 }
 
-func (a *ActivateOfferResponseData) GetID() string {
+func (a *ActivateOfferResponseData) GetId() string {
 	if a == nil {
 		return ""
 	}
-	return a.ID
+	return a.Id
 }
 
 func (a *ActivateOfferResponseData) GetAttributes() *ActivateOfferResponseAttributes {
@@ -465,11 +465,11 @@ func (a *ActivateOfferResponseData) SetType(type_ string) {
 	a.require(activateOfferResponseDataFieldType)
 }
 
-// SetID sets the ID field and marks it as non-optional;
+// SetId sets the Id field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (a *ActivateOfferResponseData) SetID(id string) {
-	a.ID = id
-	a.require(activateOfferResponseDataFieldID)
+func (a *ActivateOfferResponseData) SetId(id string) {
+	a.Id = id
+	a.require(activateOfferResponseDataFieldId)
 }
 
 // SetAttributes sets the Attributes field and marks it as non-optional;
@@ -906,14 +906,14 @@ func (b *BoostOfferResponse) String() string {
 }
 
 var (
-	boostOfferResponseAttributesFieldEntityID  = big.NewInt(1 << 0)
+	boostOfferResponseAttributesFieldEntityId  = big.NewInt(1 << 0)
 	boostOfferResponseAttributesFieldEventCode = big.NewInt(1 << 1)
 	boostOfferResponseAttributesFieldMedium    = big.NewInt(1 << 2)
 	boostOfferResponseAttributesFieldEventDate = big.NewInt(1 << 3)
 )
 
 type BoostOfferResponseAttributes struct {
-	EntityID  string    `json:"entityId" url:"entityId"`
+	EntityId  string    `json:"entityId" url:"entityId"`
 	EventCode string    `json:"eventCode" url:"eventCode"`
 	Medium    string    `json:"medium" url:"medium"`
 	EventDate time.Time `json:"eventDate" url:"eventDate"`
@@ -925,11 +925,11 @@ type BoostOfferResponseAttributes struct {
 	rawJSON         json.RawMessage
 }
 
-func (b *BoostOfferResponseAttributes) GetEntityID() string {
+func (b *BoostOfferResponseAttributes) GetEntityId() string {
 	if b == nil {
 		return ""
 	}
-	return b.EntityID
+	return b.EntityId
 }
 
 func (b *BoostOfferResponseAttributes) GetEventCode() string {
@@ -967,11 +967,11 @@ func (b *BoostOfferResponseAttributes) require(field *big.Int) {
 	b.explicitFields.Or(b.explicitFields, field)
 }
 
-// SetEntityID sets the EntityID field and marks it as non-optional;
+// SetEntityId sets the EntityId field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (b *BoostOfferResponseAttributes) SetEntityID(entityID string) {
-	b.EntityID = entityID
-	b.require(boostOfferResponseAttributesFieldEntityID)
+func (b *BoostOfferResponseAttributes) SetEntityId(entityId string) {
+	b.EntityId = entityId
+	b.require(boostOfferResponseAttributesFieldEntityId)
 }
 
 // SetEventCode sets the EventCode field and marks it as non-optional;
@@ -1047,13 +1047,13 @@ func (b *BoostOfferResponseAttributes) String() string {
 
 var (
 	boostOfferResponseDataFieldType       = big.NewInt(1 << 0)
-	boostOfferResponseDataFieldID         = big.NewInt(1 << 1)
+	boostOfferResponseDataFieldId         = big.NewInt(1 << 1)
 	boostOfferResponseDataFieldAttributes = big.NewInt(1 << 2)
 )
 
 type BoostOfferResponseData struct {
 	Type       string                        `json:"type" url:"type"`
-	ID         string                        `json:"id" url:"id"`
+	Id         string                        `json:"id" url:"id"`
 	Attributes *BoostOfferResponseAttributes `json:"attributes" url:"attributes"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
@@ -1070,11 +1070,11 @@ func (b *BoostOfferResponseData) GetType() string {
 	return b.Type
 }
 
-func (b *BoostOfferResponseData) GetID() string {
+func (b *BoostOfferResponseData) GetId() string {
 	if b == nil {
 		return ""
 	}
-	return b.ID
+	return b.Id
 }
 
 func (b *BoostOfferResponseData) GetAttributes() *BoostOfferResponseAttributes {
@@ -1105,11 +1105,11 @@ func (b *BoostOfferResponseData) SetType(type_ string) {
 	b.require(boostOfferResponseDataFieldType)
 }
 
-// SetID sets the ID field and marks it as non-optional;
+// SetId sets the Id field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (b *BoostOfferResponseData) SetID(id string) {
-	b.ID = id
-	b.require(boostOfferResponseDataFieldID)
+func (b *BoostOfferResponseData) SetId(id string) {
+	b.Id = id
+	b.require(boostOfferResponseDataFieldId)
 }
 
 // SetAttributes sets the Attributes field and marks it as non-optional;
@@ -1480,7 +1480,7 @@ func (e EventCode) Ptr() *EventCode {
 }
 
 var (
-	notificationAttributionAttributesFieldEntityID  = big.NewInt(1 << 0)
+	notificationAttributionAttributesFieldEntityId  = big.NewInt(1 << 0)
 	notificationAttributionAttributesFieldEventCode = big.NewInt(1 << 1)
 	notificationAttributionAttributesFieldMedium    = big.NewInt(1 << 2)
 	notificationAttributionAttributesFieldEventDate = big.NewInt(1 << 3)
@@ -1489,7 +1489,7 @@ var (
 
 type NotificationAttributionAttributes struct {
 	// The notification ID
-	EntityID  string             `json:"entityId" url:"entityId"`
+	EntityId  string             `json:"entityId" url:"entityId"`
 	EventCode EventCode          `json:"eventCode" url:"eventCode"`
 	Medium    NotificationMedium `json:"medium" url:"medium"`
 	// The timestamp of the attribution event.
@@ -1505,11 +1505,11 @@ type NotificationAttributionAttributes struct {
 	rawJSON         json.RawMessage
 }
 
-func (n *NotificationAttributionAttributes) GetEntityID() string {
+func (n *NotificationAttributionAttributes) GetEntityId() string {
 	if n == nil {
 		return ""
 	}
-	return n.EntityID
+	return n.EntityId
 }
 
 func (n *NotificationAttributionAttributes) GetEventCode() EventCode {
@@ -1554,11 +1554,11 @@ func (n *NotificationAttributionAttributes) require(field *big.Int) {
 	n.explicitFields.Or(n.explicitFields, field)
 }
 
-// SetEntityID sets the EntityID field and marks it as non-optional;
+// SetEntityId sets the EntityId field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (n *NotificationAttributionAttributes) SetEntityID(entityID string) {
-	n.EntityID = entityID
-	n.require(notificationAttributionAttributesFieldEntityID)
+func (n *NotificationAttributionAttributes) SetEntityId(entityId string) {
+	n.EntityId = entityId
+	n.require(notificationAttributionAttributesFieldEntityId)
 }
 
 // SetEventCode sets the EventCode field and marks it as non-optional;
@@ -1744,7 +1744,7 @@ func (n NotificationMedium) Ptr() *NotificationMedium {
 }
 
 var (
-	offerAttributionAttributesFieldEntityID  = big.NewInt(1 << 0)
+	offerAttributionAttributesFieldEntityId  = big.NewInt(1 << 0)
 	offerAttributionAttributesFieldEventCode = big.NewInt(1 << 1)
 	offerAttributionAttributesFieldMedium    = big.NewInt(1 << 2)
 	offerAttributionAttributesFieldEventDate = big.NewInt(1 << 3)
@@ -1753,7 +1753,7 @@ var (
 
 type OfferAttributionAttributes struct {
 	// The offer ID
-	EntityID  string      `json:"entityId" url:"entityId"`
+	EntityId  string      `json:"entityId" url:"entityId"`
 	EventCode EventCode   `json:"eventCode" url:"eventCode"`
 	Medium    OfferMedium `json:"medium" url:"medium"`
 	// The timestamp of the attribution event.
@@ -1769,11 +1769,11 @@ type OfferAttributionAttributes struct {
 	rawJSON         json.RawMessage
 }
 
-func (o *OfferAttributionAttributes) GetEntityID() string {
+func (o *OfferAttributionAttributes) GetEntityId() string {
 	if o == nil {
 		return ""
 	}
-	return o.EntityID
+	return o.EntityId
 }
 
 func (o *OfferAttributionAttributes) GetEventCode() EventCode {
@@ -1818,11 +1818,11 @@ func (o *OfferAttributionAttributes) require(field *big.Int) {
 	o.explicitFields.Or(o.explicitFields, field)
 }
 
-// SetEntityID sets the EntityID field and marks it as non-optional;
+// SetEntityId sets the EntityId field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (o *OfferAttributionAttributes) SetEntityID(entityID string) {
-	o.EntityID = entityID
-	o.require(offerAttributionAttributesFieldEntityID)
+func (o *OfferAttributionAttributes) SetEntityId(entityId string) {
+	o.EntityId = entityId
+	o.require(offerAttributionAttributesFieldEntityId)
 }
 
 // SetEventCode sets the EventCode field and marks it as non-optional;

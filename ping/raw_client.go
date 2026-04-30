@@ -6,7 +6,7 @@ import (
 	context "context"
 	http "net/http"
 
-	kardgosdk "github.com/KardFinancial/kard-go-sdk"
+	kard "github.com/KardFinancial/kard-go-sdk"
 	core "github.com/KardFinancial/kard-go-sdk/core"
 	internal "github.com/KardFinancial/kard-go-sdk/internal"
 	option "github.com/KardFinancial/kard-go-sdk/option"
@@ -34,7 +34,7 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 func (r *RawClient) Ping(
 	ctx context.Context,
 	opts ...option.RequestOption,
-) (*core.Response[*kardgosdk.PingResponseObject], error) {
+) (*core.Response[*kard.PingResponseObject], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -46,7 +46,7 @@ func (r *RawClient) Ping(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *kardgosdk.PingResponseObject
+	var response *kard.PingResponseObject
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -58,13 +58,13 @@ func (r *RawClient) Ping(
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
 			Response:        &response,
-			ErrorDecoder:    internal.NewErrorDecoder(kardgosdk.ErrorCodes),
+			ErrorDecoder:    internal.NewErrorDecoder(kard.ErrorCodes),
 		},
 	)
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*kardgosdk.PingResponseObject]{
+	return &core.Response[*kard.PingResponseObject]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

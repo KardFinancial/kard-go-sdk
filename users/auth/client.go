@@ -6,7 +6,7 @@ import (
 	context "context"
 	os "os"
 
-	kardgosdk "github.com/KardFinancial/kard-go-sdk"
+	kard "github.com/KardFinancial/kard-go-sdk"
 	core "github.com/KardFinancial/kard-go-sdk/core"
 	internal "github.com/KardFinancial/kard-go-sdk/internal"
 	option "github.com/KardFinancial/kard-go-sdk/option"
@@ -44,14 +44,14 @@ func NewClient(options *core.RequestOptions) *Client {
 // Retrieves an OAuth token for webview authentication.
 func (c *Client) GetWebViewToken(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
-	userID kardgosdk.UserID,
+	organizationId kard.OrganizationId,
+	userId kard.UserId,
 	opts ...option.RequestOption,
 ) (*users.WebViewTokenResponse, error) {
 	response, err := c.WithRawResponse.GetWebViewToken(
 		ctx,
-		organizationID,
-		userID,
+		organizationId,
+		userId,
 		opts...,
 	)
 	if err != nil {

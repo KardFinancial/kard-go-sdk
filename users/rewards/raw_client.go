@@ -6,7 +6,7 @@ import (
 	context "context"
 	http "net/http"
 
-	kardgosdk "github.com/KardFinancial/kard-go-sdk"
+	kard "github.com/KardFinancial/kard-go-sdk"
 	core "github.com/KardFinancial/kard-go-sdk/core"
 	internal "github.com/KardFinancial/kard-go-sdk/internal"
 	option "github.com/KardFinancial/kard-go-sdk/option"
@@ -34,8 +34,8 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 
 func (r *RawClient) Offers(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
-	userID kardgosdk.UserID,
+	organizationId kard.OrganizationId,
+	userId kard.UserId,
 	request *users.GetOffersByUserRequest,
 	opts ...option.RequestOption,
 ) (*core.Response[*users.OffersResponseObject], error) {
@@ -47,8 +47,8 @@ func (r *RawClient) Offers(
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/issuers/%v/users/%v/offers",
-		organizationID,
-		userID,
+		organizationId,
+		userId,
 	)
 	queryParams, err := internal.QueryValues(request)
 	if err != nil {
@@ -88,9 +88,9 @@ func (r *RawClient) Offers(
 
 func (r *RawClient) PlacementOffers(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
-	userID kardgosdk.UserID,
-	placementID string,
+	organizationId kard.OrganizationId,
+	userId kard.UserId,
+	placementId string,
 	request *users.GetOffersByPlacementRequest,
 	opts ...option.RequestOption,
 ) (*core.Response[*users.OffersResponseObject], error) {
@@ -102,9 +102,9 @@ func (r *RawClient) PlacementOffers(
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/issuers/%v/users/%v/placements/%v/offers",
-		organizationID,
-		userID,
-		placementID,
+		organizationId,
+		userId,
+		placementId,
 	)
 	queryParams, err := internal.QueryValues(request)
 	if err != nil {
@@ -144,8 +144,8 @@ func (r *RawClient) PlacementOffers(
 
 func (r *RawClient) Locations(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
-	userID kardgosdk.UserID,
+	organizationId kard.OrganizationId,
+	userId kard.UserId,
 	request *users.GetLocationsByUserRequest,
 	opts ...option.RequestOption,
 ) (*core.Response[*users.LocationsResponseObject], error) {
@@ -157,8 +157,8 @@ func (r *RawClient) Locations(
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/issuers/%v/users/%v/locations",
-		organizationID,
-		userID,
+		organizationId,
+		userId,
 	)
 	queryParams, err := internal.QueryValues(request)
 	if err != nil {

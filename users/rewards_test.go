@@ -1341,11 +1341,11 @@ func TestSettersAsset(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
-	t.Run("SetURL", func(t *testing.T) {
+	t.Run("SetUrl", func(t *testing.T) {
 		obj := &Asset{}
-		var fernTestValueURL string
-		obj.SetURL(fernTestValueURL)
-		assert.Equal(t, fernTestValueURL, obj.URL)
+		var fernTestValueUrl string
+		obj.SetUrl(fernTestValueUrl)
+		assert.Equal(t, fernTestValueUrl, obj.Url)
 		assert.NotNil(t, obj.explicitFields)
 	})
 
@@ -1383,18 +1383,18 @@ func TestGettersAsset(t *testing.T) {
 		_ = obj.GetType() // Should return zero value
 	})
 
-	t.Run("GetURL", func(t *testing.T) {
+	t.Run("GetUrl", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &Asset{}
 		var expected string
-		obj.URL = expected
+		obj.Url = expected
 
 		// Act & Assert
-		assert.Equal(t, expected, obj.GetURL(), "getter should return the property value")
+		assert.Equal(t, expected, obj.GetUrl(), "getter should return the property value")
 	})
 
-	t.Run("GetURL_NilReceiver", func(t *testing.T) {
+	t.Run("GetUrl_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *Asset
 		// Should not panic - getters should handle nil receiver gracefully
@@ -1403,7 +1403,7 @@ func TestGettersAsset(t *testing.T) {
 				t.Errorf("Getter panicked on nil receiver: %v", r)
 			}
 		}()
-		_ = obj.GetURL() // Should return zero value
+		_ = obj.GetUrl() // Should return zero value
 	})
 
 	t.Run("GetAlt", func(t *testing.T) {
@@ -1463,14 +1463,14 @@ func TestSettersMarkExplicitAsset(t *testing.T) {
 		// It verifies that setting a field via setter allows successful JSON round-trip
 	})
 
-	t.Run("SetURL_MarksExplicit", func(t *testing.T) {
+	t.Run("SetUrl_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &Asset{}
-		var fernTestValueURL string
+		var fernTestValueUrl string
 
 		// Act
-		obj.SetURL(fernTestValueURL)
+		obj.SetUrl(fernTestValueUrl)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -1528,29 +1528,29 @@ func TestSettersMarkExplicitAsset(t *testing.T) {
 }
 
 func TestSettersCategoryData(t *testing.T) {
-	t.Run("SetID", func(t *testing.T) {
+	t.Run("SetId", func(t *testing.T) {
 		obj := &CategoryData{}
-		var fernTestValueID string
-		obj.SetID(fernTestValueID)
-		assert.Equal(t, fernTestValueID, obj.ID)
+		var fernTestValueId string
+		obj.SetId(fernTestValueId)
+		assert.Equal(t, fernTestValueId, obj.Id)
 		assert.NotNil(t, obj.explicitFields)
 	})
 
 }
 
 func TestGettersCategoryData(t *testing.T) {
-	t.Run("GetID", func(t *testing.T) {
+	t.Run("GetId", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &CategoryData{}
 		var expected string
-		obj.ID = expected
+		obj.Id = expected
 
 		// Act & Assert
-		assert.Equal(t, expected, obj.GetID(), "getter should return the property value")
+		assert.Equal(t, expected, obj.GetId(), "getter should return the property value")
 	})
 
-	t.Run("GetID_NilReceiver", func(t *testing.T) {
+	t.Run("GetId_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *CategoryData
 		// Should not panic - getters should handle nil receiver gracefully
@@ -1559,20 +1559,20 @@ func TestGettersCategoryData(t *testing.T) {
 				t.Errorf("Getter panicked on nil receiver: %v", r)
 			}
 		}()
-		_ = obj.GetID() // Should return zero value
+		_ = obj.GetId() // Should return zero value
 	})
 
 }
 
 func TestSettersMarkExplicitCategoryData(t *testing.T) {
-	t.Run("SetID_MarksExplicit", func(t *testing.T) {
+	t.Run("SetId_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &CategoryData{}
-		var fernTestValueID string
+		var fernTestValueId string
 
 		// Act
-		obj.SetID(fernTestValueID)
+		obj.SetId(fernTestValueId)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -1670,29 +1670,29 @@ func TestSettersMarkExplicitCategoryFields(t *testing.T) {
 }
 
 func TestSettersCategoryIdentifier(t *testing.T) {
-	t.Run("SetID", func(t *testing.T) {
+	t.Run("SetId", func(t *testing.T) {
 		obj := &CategoryIdentifier{}
-		var fernTestValueID string
-		obj.SetID(fernTestValueID)
-		assert.Equal(t, fernTestValueID, obj.ID)
+		var fernTestValueId string
+		obj.SetId(fernTestValueId)
+		assert.Equal(t, fernTestValueId, obj.Id)
 		assert.NotNil(t, obj.explicitFields)
 	})
 
 }
 
 func TestGettersCategoryIdentifier(t *testing.T) {
-	t.Run("GetID", func(t *testing.T) {
+	t.Run("GetId", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &CategoryIdentifier{}
 		var expected string
-		obj.ID = expected
+		obj.Id = expected
 
 		// Act & Assert
-		assert.Equal(t, expected, obj.GetID(), "getter should return the property value")
+		assert.Equal(t, expected, obj.GetId(), "getter should return the property value")
 	})
 
-	t.Run("GetID_NilReceiver", func(t *testing.T) {
+	t.Run("GetId_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *CategoryIdentifier
 		// Should not panic - getters should handle nil receiver gracefully
@@ -1701,20 +1701,20 @@ func TestGettersCategoryIdentifier(t *testing.T) {
 				t.Errorf("Getter panicked on nil receiver: %v", r)
 			}
 		}()
-		_ = obj.GetID() // Should return zero value
+		_ = obj.GetId() // Should return zero value
 	})
 
 }
 
 func TestSettersMarkExplicitCategoryIdentifier(t *testing.T) {
-	t.Run("SetID_MarksExplicit", func(t *testing.T) {
+	t.Run("SetId_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &CategoryIdentifier{}
-		var fernTestValueID string
+		var fernTestValueId string
 
 		// Act
-		obj.SetID(fernTestValueID)
+		obj.SetId(fernTestValueId)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -1741,11 +1741,11 @@ func TestSettersMarkExplicitCategoryIdentifier(t *testing.T) {
 }
 
 func TestSettersCategoryIncluded(t *testing.T) {
-	t.Run("SetID", func(t *testing.T) {
+	t.Run("SetId", func(t *testing.T) {
 		obj := &CategoryIncluded{}
-		var fernTestValueID string
-		obj.SetID(fernTestValueID)
-		assert.Equal(t, fernTestValueID, obj.ID)
+		var fernTestValueId string
+		obj.SetId(fernTestValueId)
+		assert.Equal(t, fernTestValueId, obj.Id)
 		assert.NotNil(t, obj.explicitFields)
 	})
 
@@ -1760,18 +1760,18 @@ func TestSettersCategoryIncluded(t *testing.T) {
 }
 
 func TestGettersCategoryIncluded(t *testing.T) {
-	t.Run("GetID", func(t *testing.T) {
+	t.Run("GetId", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &CategoryIncluded{}
 		var expected string
-		obj.ID = expected
+		obj.Id = expected
 
 		// Act & Assert
-		assert.Equal(t, expected, obj.GetID(), "getter should return the property value")
+		assert.Equal(t, expected, obj.GetId(), "getter should return the property value")
 	})
 
-	t.Run("GetID_NilReceiver", func(t *testing.T) {
+	t.Run("GetId_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *CategoryIncluded
 		// Should not panic - getters should handle nil receiver gracefully
@@ -1780,7 +1780,7 @@ func TestGettersCategoryIncluded(t *testing.T) {
 				t.Errorf("Getter panicked on nil receiver: %v", r)
 			}
 		}()
-		_ = obj.GetID() // Should return zero value
+		_ = obj.GetId() // Should return zero value
 	})
 
 	t.Run("GetAttributes", func(t *testing.T) {
@@ -1819,14 +1819,14 @@ func TestGettersCategoryIncluded(t *testing.T) {
 }
 
 func TestSettersMarkExplicitCategoryIncluded(t *testing.T) {
-	t.Run("SetID_MarksExplicit", func(t *testing.T) {
+	t.Run("SetId_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &CategoryIncluded{}
-		var fernTestValueID string
+		var fernTestValueId string
 
 		// Act
-		obj.SetID(fernTestValueID)
+		obj.SetId(fernTestValueId)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -2312,11 +2312,11 @@ func TestSettersMarkExplicitCoordinates(t *testing.T) {
 }
 
 func TestSettersCtaAction(t *testing.T) {
-	t.Run("SetURL", func(t *testing.T) {
+	t.Run("SetUrl", func(t *testing.T) {
 		obj := &CtaAction{}
-		var fernTestValueURL string
-		obj.SetURL(fernTestValueURL)
-		assert.Equal(t, fernTestValueURL, obj.URL)
+		var fernTestValueUrl string
+		obj.SetUrl(fernTestValueUrl)
+		assert.Equal(t, fernTestValueUrl, obj.Url)
 		assert.NotNil(t, obj.explicitFields)
 	})
 
@@ -2331,18 +2331,18 @@ func TestSettersCtaAction(t *testing.T) {
 }
 
 func TestGettersCtaAction(t *testing.T) {
-	t.Run("GetURL", func(t *testing.T) {
+	t.Run("GetUrl", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &CtaAction{}
 		var expected string
-		obj.URL = expected
+		obj.Url = expected
 
 		// Act & Assert
-		assert.Equal(t, expected, obj.GetURL(), "getter should return the property value")
+		assert.Equal(t, expected, obj.GetUrl(), "getter should return the property value")
 	})
 
-	t.Run("GetURL_NilReceiver", func(t *testing.T) {
+	t.Run("GetUrl_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *CtaAction
 		// Should not panic - getters should handle nil receiver gracefully
@@ -2351,7 +2351,7 @@ func TestGettersCtaAction(t *testing.T) {
 				t.Errorf("Getter panicked on nil receiver: %v", r)
 			}
 		}()
-		_ = obj.GetURL() // Should return zero value
+		_ = obj.GetUrl() // Should return zero value
 	})
 
 	t.Run("GetMethod", func(t *testing.T) {
@@ -2380,14 +2380,14 @@ func TestGettersCtaAction(t *testing.T) {
 }
 
 func TestSettersMarkExplicitCtaAction(t *testing.T) {
-	t.Run("SetURL_MarksExplicit", func(t *testing.T) {
+	t.Run("SetUrl_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &CtaAction{}
-		var fernTestValueURL string
+		var fernTestValueUrl string
 
 		// Act
-		obj.SetURL(fernTestValueURL)
+		obj.SetUrl(fernTestValueUrl)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -3469,11 +3469,11 @@ func TestSettersMarkExplicitLocationAttributes(t *testing.T) {
 }
 
 func TestSettersLocationData(t *testing.T) {
-	t.Run("SetID", func(t *testing.T) {
+	t.Run("SetId", func(t *testing.T) {
 		obj := &LocationData{}
-		var fernTestValueID kardgosdk.MongoID
-		obj.SetID(fernTestValueID)
-		assert.Equal(t, fernTestValueID, obj.ID)
+		var fernTestValueId kardgosdk.MongoId
+		obj.SetId(fernTestValueId)
+		assert.Equal(t, fernTestValueId, obj.Id)
 		assert.NotNil(t, obj.explicitFields)
 	})
 
@@ -3496,18 +3496,18 @@ func TestSettersLocationData(t *testing.T) {
 }
 
 func TestGettersLocationData(t *testing.T) {
-	t.Run("GetID", func(t *testing.T) {
+	t.Run("GetId", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &LocationData{}
-		var expected kardgosdk.MongoID
-		obj.ID = expected
+		var expected kardgosdk.MongoId
+		obj.Id = expected
 
 		// Act & Assert
-		assert.Equal(t, expected, obj.GetID(), "getter should return the property value")
+		assert.Equal(t, expected, obj.GetId(), "getter should return the property value")
 	})
 
-	t.Run("GetID_NilReceiver", func(t *testing.T) {
+	t.Run("GetId_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *LocationData
 		// Should not panic - getters should handle nil receiver gracefully
@@ -3516,7 +3516,7 @@ func TestGettersLocationData(t *testing.T) {
 				t.Errorf("Getter panicked on nil receiver: %v", r)
 			}
 		}()
-		_ = obj.GetID() // Should return zero value
+		_ = obj.GetId() // Should return zero value
 	})
 
 	t.Run("GetAttributes", func(t *testing.T) {
@@ -3588,14 +3588,14 @@ func TestGettersLocationData(t *testing.T) {
 }
 
 func TestSettersMarkExplicitLocationData(t *testing.T) {
-	t.Run("SetID_MarksExplicit", func(t *testing.T) {
+	t.Run("SetId_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &LocationData{}
-		var fernTestValueID kardgosdk.MongoID
+		var fernTestValueId kardgosdk.MongoId
 
 		// Act
-		obj.SetID(fernTestValueID)
+		obj.SetId(fernTestValueId)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -4442,11 +4442,11 @@ func TestSettersOfferCommonFields(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
-	t.Run("SetWebsiteURL", func(t *testing.T) {
+	t.Run("SetWebsiteUrl", func(t *testing.T) {
 		obj := &OfferCommonFields{}
-		var fernTestValueWebsiteURL *string
-		obj.SetWebsiteURL(fernTestValueWebsiteURL)
-		assert.Equal(t, fernTestValueWebsiteURL, obj.WebsiteURL)
+		var fernTestValueWebsiteUrl *string
+		obj.SetWebsiteUrl(fernTestValueWebsiteUrl)
+		assert.Equal(t, fernTestValueWebsiteUrl, obj.WebsiteUrl)
 		assert.NotNil(t, obj.explicitFields)
 	})
 
@@ -4848,28 +4848,28 @@ func TestGettersOfferCommonFields(t *testing.T) {
 		_ = obj.GetMaxRewardAmount() // Should return zero value
 	})
 
-	t.Run("GetWebsiteURL", func(t *testing.T) {
+	t.Run("GetWebsiteUrl", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &OfferCommonFields{}
 		var expected *string
-		obj.WebsiteURL = expected
+		obj.WebsiteUrl = expected
 
 		// Act & Assert
-		assert.Equal(t, expected, obj.GetWebsiteURL(), "getter should return the property value")
+		assert.Equal(t, expected, obj.GetWebsiteUrl(), "getter should return the property value")
 	})
 
-	t.Run("GetWebsiteURL_NilValue", func(t *testing.T) {
+	t.Run("GetWebsiteUrl_NilValue", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &OfferCommonFields{}
-		obj.WebsiteURL = nil
+		obj.WebsiteUrl = nil
 
 		// Act & Assert
-		assert.Nil(t, obj.GetWebsiteURL(), "getter should return nil when property is nil")
+		assert.Nil(t, obj.GetWebsiteUrl(), "getter should return nil when property is nil")
 	})
 
-	t.Run("GetWebsiteURL_NilReceiver", func(t *testing.T) {
+	t.Run("GetWebsiteUrl_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *OfferCommonFields
 		// Should not panic - getters should handle nil receiver gracefully
@@ -4878,7 +4878,7 @@ func TestGettersOfferCommonFields(t *testing.T) {
 				t.Errorf("Getter panicked on nil receiver: %v", r)
 			}
 		}()
-		_ = obj.GetWebsiteURL() // Should return zero value
+		_ = obj.GetWebsiteUrl() // Should return zero value
 	})
 
 	t.Run("GetDescription", func(t *testing.T) {
@@ -5353,14 +5353,14 @@ func TestSettersMarkExplicitOfferCommonFields(t *testing.T) {
 		// It verifies that setting a field via setter allows successful JSON round-trip
 	})
 
-	t.Run("SetWebsiteURL_MarksExplicit", func(t *testing.T) {
+	t.Run("SetWebsiteUrl_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &OfferCommonFields{}
-		var fernTestValueWebsiteURL *string
+		var fernTestValueWebsiteUrl *string
 
 		// Act
-		obj.SetWebsiteURL(fernTestValueWebsiteURL)
+		obj.SetWebsiteUrl(fernTestValueWebsiteUrl)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -8138,11 +8138,11 @@ func TestSettersMarkExplicitProgressBarSegments(t *testing.T) {
 }
 
 func TestSettersStandardOffer(t *testing.T) {
-	t.Run("SetID", func(t *testing.T) {
+	t.Run("SetId", func(t *testing.T) {
 		obj := &StandardOffer{}
-		var fernTestValueID kardgosdk.MongoID
-		obj.SetID(fernTestValueID)
-		assert.Equal(t, fernTestValueID, obj.ID)
+		var fernTestValueId kardgosdk.MongoId
+		obj.SetId(fernTestValueId)
+		assert.Equal(t, fernTestValueId, obj.Id)
 		assert.NotNil(t, obj.explicitFields)
 	})
 
@@ -8165,18 +8165,18 @@ func TestSettersStandardOffer(t *testing.T) {
 }
 
 func TestGettersStandardOffer(t *testing.T) {
-	t.Run("GetID", func(t *testing.T) {
+	t.Run("GetId", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &StandardOffer{}
-		var expected kardgosdk.MongoID
-		obj.ID = expected
+		var expected kardgosdk.MongoId
+		obj.Id = expected
 
 		// Act & Assert
-		assert.Equal(t, expected, obj.GetID(), "getter should return the property value")
+		assert.Equal(t, expected, obj.GetId(), "getter should return the property value")
 	})
 
-	t.Run("GetID_NilReceiver", func(t *testing.T) {
+	t.Run("GetId_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *StandardOffer
 		// Should not panic - getters should handle nil receiver gracefully
@@ -8185,7 +8185,7 @@ func TestGettersStandardOffer(t *testing.T) {
 				t.Errorf("Getter panicked on nil receiver: %v", r)
 			}
 		}()
-		_ = obj.GetID() // Should return zero value
+		_ = obj.GetId() // Should return zero value
 	})
 
 	t.Run("GetAttributes", func(t *testing.T) {
@@ -8257,14 +8257,14 @@ func TestGettersStandardOffer(t *testing.T) {
 }
 
 func TestSettersMarkExplicitStandardOffer(t *testing.T) {
-	t.Run("SetID_MarksExplicit", func(t *testing.T) {
+	t.Run("SetId_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &StandardOffer{}
-		var fernTestValueID kardgosdk.MongoID
+		var fernTestValueId kardgosdk.MongoId
 
 		// Act
-		obj.SetID(fernTestValueID)
+		obj.SetId(fernTestValueId)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -8353,11 +8353,11 @@ func TestSettersMarkExplicitStandardOffer(t *testing.T) {
 }
 
 func TestSettersStandardOfferCore(t *testing.T) {
-	t.Run("SetID", func(t *testing.T) {
+	t.Run("SetId", func(t *testing.T) {
 		obj := &StandardOfferCore{}
-		var fernTestValueID kardgosdk.MongoID
-		obj.SetID(fernTestValueID)
-		assert.Equal(t, fernTestValueID, obj.ID)
+		var fernTestValueId kardgosdk.MongoId
+		obj.SetId(fernTestValueId)
+		assert.Equal(t, fernTestValueId, obj.Id)
 		assert.NotNil(t, obj.explicitFields)
 	})
 
@@ -8372,18 +8372,18 @@ func TestSettersStandardOfferCore(t *testing.T) {
 }
 
 func TestGettersStandardOfferCore(t *testing.T) {
-	t.Run("GetID", func(t *testing.T) {
+	t.Run("GetId", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &StandardOfferCore{}
-		var expected kardgosdk.MongoID
-		obj.ID = expected
+		var expected kardgosdk.MongoId
+		obj.Id = expected
 
 		// Act & Assert
-		assert.Equal(t, expected, obj.GetID(), "getter should return the property value")
+		assert.Equal(t, expected, obj.GetId(), "getter should return the property value")
 	})
 
-	t.Run("GetID_NilReceiver", func(t *testing.T) {
+	t.Run("GetId_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *StandardOfferCore
 		// Should not panic - getters should handle nil receiver gracefully
@@ -8392,7 +8392,7 @@ func TestGettersStandardOfferCore(t *testing.T) {
 				t.Errorf("Getter panicked on nil receiver: %v", r)
 			}
 		}()
-		_ = obj.GetID() // Should return zero value
+		_ = obj.GetId() // Should return zero value
 	})
 
 	t.Run("GetAttributes", func(t *testing.T) {
@@ -8431,14 +8431,14 @@ func TestGettersStandardOfferCore(t *testing.T) {
 }
 
 func TestSettersMarkExplicitStandardOfferCore(t *testing.T) {
-	t.Run("SetID_MarksExplicit", func(t *testing.T) {
+	t.Run("SetId_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &StandardOfferCore{}
-		var fernTestValueID kardgosdk.MongoID
+		var fernTestValueId kardgosdk.MongoId
 
 		// Act
-		obj.SetID(fernTestValueID)
+		obj.SetId(fernTestValueId)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -8600,11 +8600,11 @@ func TestSettersStandardOfferFields(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
-	t.Run("SetWebsiteURL", func(t *testing.T) {
+	t.Run("SetWebsiteUrl", func(t *testing.T) {
 		obj := &StandardOfferFields{}
-		var fernTestValueWebsiteURL *string
-		obj.SetWebsiteURL(fernTestValueWebsiteURL)
-		assert.Equal(t, fernTestValueWebsiteURL, obj.WebsiteURL)
+		var fernTestValueWebsiteUrl *string
+		obj.SetWebsiteUrl(fernTestValueWebsiteUrl)
+		assert.Equal(t, fernTestValueWebsiteUrl, obj.WebsiteUrl)
 		assert.NotNil(t, obj.explicitFields)
 	})
 
@@ -9006,28 +9006,28 @@ func TestGettersStandardOfferFields(t *testing.T) {
 		_ = obj.GetMaxRewardAmount() // Should return zero value
 	})
 
-	t.Run("GetWebsiteURL", func(t *testing.T) {
+	t.Run("GetWebsiteUrl", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &StandardOfferFields{}
 		var expected *string
-		obj.WebsiteURL = expected
+		obj.WebsiteUrl = expected
 
 		// Act & Assert
-		assert.Equal(t, expected, obj.GetWebsiteURL(), "getter should return the property value")
+		assert.Equal(t, expected, obj.GetWebsiteUrl(), "getter should return the property value")
 	})
 
-	t.Run("GetWebsiteURL_NilValue", func(t *testing.T) {
+	t.Run("GetWebsiteUrl_NilValue", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &StandardOfferFields{}
-		obj.WebsiteURL = nil
+		obj.WebsiteUrl = nil
 
 		// Act & Assert
-		assert.Nil(t, obj.GetWebsiteURL(), "getter should return nil when property is nil")
+		assert.Nil(t, obj.GetWebsiteUrl(), "getter should return nil when property is nil")
 	})
 
-	t.Run("GetWebsiteURL_NilReceiver", func(t *testing.T) {
+	t.Run("GetWebsiteUrl_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *StandardOfferFields
 		// Should not panic - getters should handle nil receiver gracefully
@@ -9036,7 +9036,7 @@ func TestGettersStandardOfferFields(t *testing.T) {
 				t.Errorf("Getter panicked on nil receiver: %v", r)
 			}
 		}()
-		_ = obj.GetWebsiteURL() // Should return zero value
+		_ = obj.GetWebsiteUrl() // Should return zero value
 	})
 
 	t.Run("GetDescription", func(t *testing.T) {
@@ -9511,14 +9511,14 @@ func TestSettersMarkExplicitStandardOfferFields(t *testing.T) {
 		// It verifies that setting a field via setter allows successful JSON round-trip
 	})
 
-	t.Run("SetWebsiteURL_MarksExplicit", func(t *testing.T) {
+	t.Run("SetWebsiteUrl_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &StandardOfferFields{}
-		var fernTestValueWebsiteURL *string
+		var fernTestValueWebsiteUrl *string
 
 		// Act
-		obj.SetWebsiteURL(fernTestValueWebsiteURL)
+		obj.SetWebsiteUrl(fernTestValueWebsiteUrl)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)

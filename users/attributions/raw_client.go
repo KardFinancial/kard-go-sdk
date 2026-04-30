@@ -6,7 +6,7 @@ import (
 	context "context"
 	http "net/http"
 
-	kardgosdk "github.com/KardFinancial/kard-go-sdk"
+	kard "github.com/KardFinancial/kard-go-sdk"
 	core "github.com/KardFinancial/kard-go-sdk/core"
 	internal "github.com/KardFinancial/kard-go-sdk/internal"
 	option "github.com/KardFinancial/kard-go-sdk/option"
@@ -34,8 +34,8 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 
 func (r *RawClient) Create(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
-	userID kardgosdk.UserID,
+	organizationId kard.OrganizationId,
+	userId kard.UserId,
 	request *users.CreateAttributionRequestObject,
 	opts ...option.RequestOption,
 ) (*core.Response[*users.CreateAttributionResponse], error) {
@@ -47,8 +47,8 @@ func (r *RawClient) Create(
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/issuers/%v/users/%v/attributions",
-		organizationID,
-		userID,
+		organizationId,
+		userId,
 	)
 	headers := internal.MergeHeaders(
 		r.options.ToHeader(),
@@ -82,10 +82,10 @@ func (r *RawClient) Create(
 
 func (r *RawClient) Activate(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
-	userID kardgosdk.UserID,
+	organizationId kard.OrganizationId,
+	userId kard.UserId,
 	// The unique identifier of the offer being activated
-	offerID string,
+	offerId string,
 	request *users.ActivateOfferRequest,
 	opts ...option.RequestOption,
 ) (*core.Response[*users.ActivateOfferResponse], error) {
@@ -97,9 +97,9 @@ func (r *RawClient) Activate(
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/issuers/%v/users/%v/offers/%v/activate",
-		organizationID,
-		userID,
-		offerID,
+		organizationId,
+		userId,
+		offerId,
 	)
 	queryParams, err := internal.QueryValues(request)
 	if err != nil {
@@ -139,10 +139,10 @@ func (r *RawClient) Activate(
 
 func (r *RawClient) Boost(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
-	userID kardgosdk.UserID,
+	organizationId kard.OrganizationId,
+	userId kard.UserId,
 	// The unique identifier of the offer being boosted
-	offerID string,
+	offerId string,
 	request *users.BoostOfferRequest,
 	opts ...option.RequestOption,
 ) (*core.Response[*users.BoostOfferResponse], error) {
@@ -154,9 +154,9 @@ func (r *RawClient) Boost(
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/issuers/%v/users/%v/offers/%v/boost",
-		organizationID,
-		userID,
-		offerID,
+		organizationId,
+		userId,
+		offerId,
 	)
 	queryParams, err := internal.QueryValues(request)
 	if err != nil {

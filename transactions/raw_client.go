@@ -6,7 +6,7 @@ import (
 	context "context"
 	http "net/http"
 
-	kardgosdk "github.com/KardFinancial/kard-go-sdk"
+	kard "github.com/KardFinancial/kard-go-sdk"
 	core "github.com/KardFinancial/kard-go-sdk/core"
 	internal "github.com/KardFinancial/kard-go-sdk/internal"
 	option "github.com/KardFinancial/kard-go-sdk/option"
@@ -33,10 +33,10 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 
 func (r *RawClient) Create(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
-	request *kardgosdk.TransactionsRequestBody,
+	organizationId kard.OrganizationId,
+	request *kard.TransactionsRequestBody,
 	opts ...option.RequestOption,
-) (*core.Response[*kardgosdk.TransactionsResponse], error) {
+) (*core.Response[*kard.TransactionsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -45,13 +45,13 @@ func (r *RawClient) Create(
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/issuers/%v/transactions",
-		organizationID,
+		organizationId,
 	)
 	headers := internal.MergeHeaders(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *kardgosdk.TransactionsResponse
+	var response *kard.TransactionsResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -64,13 +64,13 @@ func (r *RawClient) Create(
 			Client:          options.HTTPClient,
 			Request:         request,
 			Response:        &response,
-			ErrorDecoder:    internal.NewErrorDecoder(kardgosdk.ErrorCodes),
+			ErrorDecoder:    internal.NewErrorDecoder(kard.ErrorCodes),
 		},
 	)
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*kardgosdk.TransactionsResponse]{
+	return &core.Response[*kard.TransactionsResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -79,10 +79,10 @@ func (r *RawClient) Create(
 
 func (r *RawClient) CreateFraudMarkers(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
-	request *kardgosdk.FraudulentTransactionRequestBody,
+	organizationId kard.OrganizationId,
+	request *kard.FraudulentTransactionRequestBody,
 	opts ...option.RequestOption,
-) (*core.Response[*kardgosdk.FraudulentTransactionObject], error) {
+) (*core.Response[*kard.FraudulentTransactionObject], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -91,13 +91,13 @@ func (r *RawClient) CreateFraudMarkers(
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/issuers/%v/fraud",
-		organizationID,
+		organizationId,
 	)
 	headers := internal.MergeHeaders(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *kardgosdk.FraudulentTransactionObject
+	var response *kard.FraudulentTransactionObject
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -110,13 +110,13 @@ func (r *RawClient) CreateFraudMarkers(
 			Client:          options.HTTPClient,
 			Request:         request,
 			Response:        &response,
-			ErrorDecoder:    internal.NewErrorDecoder(kardgosdk.ErrorCodes),
+			ErrorDecoder:    internal.NewErrorDecoder(kard.ErrorCodes),
 		},
 	)
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*kardgosdk.FraudulentTransactionObject]{
+	return &core.Response[*kard.FraudulentTransactionObject]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -125,12 +125,12 @@ func (r *RawClient) CreateFraudMarkers(
 
 func (r *RawClient) CreateAudits(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
+	organizationId kard.OrganizationId,
 	// The ID of the user as defined on the issuers system
-	userID string,
-	request *kardgosdk.CreateAuditRequestBody,
+	userId string,
+	request *kard.CreateAuditRequestBody,
 	opts ...option.RequestOption,
-) (*core.Response[*kardgosdk.CreateAuditResponseBody], error) {
+) (*core.Response[*kard.CreateAuditResponseBody], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -139,14 +139,14 @@ func (r *RawClient) CreateAudits(
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/issuers/%v/users/%v/audits",
-		organizationID,
-		userID,
+		organizationId,
+		userId,
 	)
 	headers := internal.MergeHeaders(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *kardgosdk.CreateAuditResponseBody
+	var response *kard.CreateAuditResponseBody
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -159,25 +159,25 @@ func (r *RawClient) CreateAudits(
 			Client:          options.HTTPClient,
 			Request:         request,
 			Response:        &response,
-			ErrorDecoder:    internal.NewErrorDecoder(kardgosdk.ErrorCodes),
+			ErrorDecoder:    internal.NewErrorDecoder(kard.ErrorCodes),
 		},
 	)
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*kardgosdk.CreateAuditResponseBody]{
+	return &core.Response[*kard.CreateAuditResponseBody]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
 	}, nil
 }
 
-func (r *RawClient) CreateBulkTransactionsUploadURL(
+func (r *RawClient) CreateBulkTransactionsUploadUrl(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
-	request *kardgosdk.CreateFileUploadRequestBody,
+	organizationId kard.OrganizationId,
+	request *kard.CreateFileUploadRequestBody,
 	opts ...option.RequestOption,
-) (*core.Response[*kardgosdk.CreateFileUploadURLResponse], error) {
+) (*core.Response[*kard.CreateFileUploadUrlResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -186,13 +186,13 @@ func (r *RawClient) CreateBulkTransactionsUploadURL(
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/issuers/%v/transactions/uploads",
-		organizationID,
+		organizationId,
 	)
 	headers := internal.MergeHeaders(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *kardgosdk.CreateFileUploadURLResponse
+	var response *kard.CreateFileUploadUrlResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -205,13 +205,13 @@ func (r *RawClient) CreateBulkTransactionsUploadURL(
 			Client:          options.HTTPClient,
 			Request:         request,
 			Response:        &response,
-			ErrorDecoder:    internal.NewErrorDecoder(kardgosdk.ErrorCodes),
+			ErrorDecoder:    internal.NewErrorDecoder(kard.ErrorCodes),
 		},
 	)
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*kardgosdk.CreateFileUploadURLResponse]{
+	return &core.Response[*kard.CreateFileUploadUrlResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -220,12 +220,12 @@ func (r *RawClient) CreateBulkTransactionsUploadURL(
 
 func (r *RawClient) GetEarnedRewards(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
+	organizationId kard.OrganizationId,
 	// The ID of the user as defined on the issuers system
-	userID string,
-	request *kardgosdk.GetEarnedRewardsRequest,
+	userId string,
+	request *kard.GetEarnedRewardsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*kardgosdk.GetEarnedRewardsResponse], error) {
+) (*core.Response[*kard.GetEarnedRewardsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -234,8 +234,8 @@ func (r *RawClient) GetEarnedRewards(
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/issuers/%v/users/%v/earned-rewards",
-		organizationID,
-		userID,
+		organizationId,
+		userId,
 	)
 	queryParams, err := internal.QueryValues(request)
 	if err != nil {
@@ -248,7 +248,7 @@ func (r *RawClient) GetEarnedRewards(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *kardgosdk.GetEarnedRewardsResponse
+	var response *kard.GetEarnedRewardsResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -260,13 +260,13 @@ func (r *RawClient) GetEarnedRewards(
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
 			Response:        &response,
-			ErrorDecoder:    internal.NewErrorDecoder(kardgosdk.ErrorCodes),
+			ErrorDecoder:    internal.NewErrorDecoder(kard.ErrorCodes),
 		},
 	)
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*kardgosdk.GetEarnedRewardsResponse]{
+	return &core.Response[*kard.GetEarnedRewardsResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

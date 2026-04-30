@@ -6,7 +6,7 @@ import (
 	context "context"
 	os "os"
 
-	kardgosdk "github.com/KardFinancial/kard-go-sdk"
+	kard "github.com/KardFinancial/kard-go-sdk"
 	core "github.com/KardFinancial/kard-go-sdk/core"
 	internal "github.com/KardFinancial/kard-go-sdk/internal"
 	option "github.com/KardFinancial/kard-go-sdk/option"
@@ -44,7 +44,7 @@ func NewClient(options *core.RequestOptions) *Client {
 func (c *Client) Ping(
 	ctx context.Context,
 	opts ...option.RequestOption,
-) (*kardgosdk.PingResponseObject, error) {
+) (*kard.PingResponseObject, error) {
 	response, err := c.WithRawResponse.Ping(
 		ctx,
 		opts...,

@@ -6,7 +6,7 @@ import (
 	context "context"
 	http "net/http"
 
-	kardgosdk "github.com/KardFinancial/kard-go-sdk"
+	kard "github.com/KardFinancial/kard-go-sdk"
 	core "github.com/KardFinancial/kard-go-sdk/core"
 	internal "github.com/KardFinancial/kard-go-sdk/internal"
 	option "github.com/KardFinancial/kard-go-sdk/option"
@@ -35,7 +35,7 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 func (r *RawClient) Create(
 	ctx context.Context,
 	// Unique identifier of the organization
-	organizationID string,
+	organizationId string,
 	request *organizations.CreatePlacementRequestBody,
 	opts ...option.RequestOption,
 ) (*core.Response[*organizations.PlacementFormatUnion], error) {
@@ -47,7 +47,7 @@ func (r *RawClient) Create(
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/issuers/%v/placements",
-		organizationID,
+		organizationId,
 	)
 	headers := internal.MergeHeaders(
 		r.options.ToHeader(),
@@ -82,7 +82,7 @@ func (r *RawClient) Create(
 func (r *RawClient) List(
 	ctx context.Context,
 	// Unique identifier of the organization
-	organizationID string,
+	organizationId string,
 	request *organizations.ListPlacementsRequest,
 	opts ...option.RequestOption,
 ) (*core.Response[*organizations.PlacementListResponse], error) {
@@ -94,7 +94,7 @@ func (r *RawClient) List(
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/issuers/%v/placements",
-		organizationID,
+		organizationId,
 	)
 	queryParams, err := internal.QueryValues(request)
 	if err != nil {
@@ -135,9 +135,9 @@ func (r *RawClient) List(
 func (r *RawClient) Get(
 	ctx context.Context,
 	// Unique identifier of the organization
-	organizationID string,
+	organizationId string,
 	// Unique identifier of the placement (UUID v7)
-	placementID string,
+	placementId string,
 	opts ...option.RequestOption,
 ) (*core.Response[*organizations.PlacementFormatUnion], error) {
 	options := core.NewRequestOptions(opts...)
@@ -148,8 +148,8 @@ func (r *RawClient) Get(
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/issuers/%v/placements/%v",
-		organizationID,
-		placementID,
+		organizationId,
+		placementId,
 	)
 	headers := internal.MergeHeaders(
 		r.options.ToHeader(),
@@ -183,9 +183,9 @@ func (r *RawClient) Get(
 func (r *RawClient) Update(
 	ctx context.Context,
 	// Unique identifier of the organization
-	organizationID string,
+	organizationId string,
 	// Unique identifier of the placement (UUID v7)
-	placementID string,
+	placementId string,
 	request *organizations.UpdatePlacementRequestBody,
 	opts ...option.RequestOption,
 ) (*core.Response[*organizations.PlacementFormatUnion], error) {
@@ -197,8 +197,8 @@ func (r *RawClient) Update(
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/issuers/%v/placements/%v",
-		organizationID,
-		placementID,
+		organizationId,
+		placementId,
 	)
 	headers := internal.MergeHeaders(
 		r.options.ToHeader(),
@@ -233,11 +233,11 @@ func (r *RawClient) Update(
 func (r *RawClient) Delete(
 	ctx context.Context,
 	// Unique identifier of the organization
-	organizationID string,
+	organizationId string,
 	// Unique identifier of the placement (UUID v7)
-	placementID string,
+	placementId string,
 	opts ...option.RequestOption,
-) (*core.Response[*kardgosdk.DeleteResourceResponse], error) {
+) (*core.Response[*kard.DeleteResourceResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -246,14 +246,14 @@ func (r *RawClient) Delete(
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/issuers/%v/placements/%v",
-		organizationID,
-		placementID,
+		organizationId,
+		placementId,
 	)
 	headers := internal.MergeHeaders(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *kardgosdk.DeleteResourceResponse
+	var response *kard.DeleteResourceResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -271,7 +271,7 @@ func (r *RawClient) Delete(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*kardgosdk.DeleteResourceResponse]{
+	return &core.Response[*kard.DeleteResourceResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

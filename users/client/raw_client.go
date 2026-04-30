@@ -6,7 +6,7 @@ import (
 	context "context"
 	http "net/http"
 
-	kardgosdk "github.com/KardFinancial/kard-go-sdk"
+	kard "github.com/KardFinancial/kard-go-sdk"
 	core "github.com/KardFinancial/kard-go-sdk/core"
 	internal "github.com/KardFinancial/kard-go-sdk/internal"
 	option "github.com/KardFinancial/kard-go-sdk/option"
@@ -33,10 +33,10 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 
 func (r *RawClient) Create(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
-	request *kardgosdk.CreateUsersObject,
+	organizationId kard.OrganizationId,
+	request *kard.CreateUsersObject,
 	opts ...option.RequestOption,
-) (*core.Response[*kardgosdk.CreateUsersObject], error) {
+) (*core.Response[*kard.CreateUsersObject], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -45,13 +45,13 @@ func (r *RawClient) Create(
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/issuers/%v/users",
-		organizationID,
+		organizationId,
 	)
 	headers := internal.MergeHeaders(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *kardgosdk.CreateUsersObject
+	var response *kard.CreateUsersObject
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -64,13 +64,13 @@ func (r *RawClient) Create(
 			Client:          options.HTTPClient,
 			Request:         request,
 			Response:        &response,
-			ErrorDecoder:    internal.NewErrorDecoder(kardgosdk.ErrorCodes),
+			ErrorDecoder:    internal.NewErrorDecoder(kard.ErrorCodes),
 		},
 	)
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*kardgosdk.CreateUsersObject]{
+	return &core.Response[*kard.CreateUsersObject]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -79,11 +79,11 @@ func (r *RawClient) Create(
 
 func (r *RawClient) Update(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
-	userID kardgosdk.UserID,
-	request *kardgosdk.UpdateUserObject,
+	organizationId kard.OrganizationId,
+	userId kard.UserId,
+	request *kard.UpdateUserObject,
 	opts ...option.RequestOption,
-) (*core.Response[*kardgosdk.UserResponseObject], error) {
+) (*core.Response[*kard.UserResponseObject], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -92,14 +92,14 @@ func (r *RawClient) Update(
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/issuers/%v/users/%v",
-		organizationID,
-		userID,
+		organizationId,
+		userId,
 	)
 	headers := internal.MergeHeaders(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *kardgosdk.UserResponseObject
+	var response *kard.UserResponseObject
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -112,13 +112,13 @@ func (r *RawClient) Update(
 			Client:          options.HTTPClient,
 			Request:         request,
 			Response:        &response,
-			ErrorDecoder:    internal.NewErrorDecoder(kardgosdk.ErrorCodes),
+			ErrorDecoder:    internal.NewErrorDecoder(kard.ErrorCodes),
 		},
 	)
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*kardgosdk.UserResponseObject]{
+	return &core.Response[*kard.UserResponseObject]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -127,10 +127,10 @@ func (r *RawClient) Update(
 
 func (r *RawClient) Delete(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
-	userID kardgosdk.UserID,
+	organizationId kard.OrganizationId,
+	userId kard.UserId,
 	opts ...option.RequestOption,
-) (*core.Response[*kardgosdk.DeleteUserResponseObject], error) {
+) (*core.Response[*kard.DeleteUserResponseObject], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -139,14 +139,14 @@ func (r *RawClient) Delete(
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/issuers/%v/users/%v",
-		organizationID,
-		userID,
+		organizationId,
+		userId,
 	)
 	headers := internal.MergeHeaders(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *kardgosdk.DeleteUserResponseObject
+	var response *kard.DeleteUserResponseObject
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -158,13 +158,13 @@ func (r *RawClient) Delete(
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
 			Response:        &response,
-			ErrorDecoder:    internal.NewErrorDecoder(kardgosdk.ErrorCodes),
+			ErrorDecoder:    internal.NewErrorDecoder(kard.ErrorCodes),
 		},
 	)
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*kardgosdk.DeleteUserResponseObject]{
+	return &core.Response[*kard.DeleteUserResponseObject]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -173,10 +173,10 @@ func (r *RawClient) Delete(
 
 func (r *RawClient) Get(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
-	userID kardgosdk.UserID,
+	organizationId kard.OrganizationId,
+	userId kard.UserId,
 	opts ...option.RequestOption,
-) (*core.Response[*kardgosdk.UserResponseObject], error) {
+) (*core.Response[*kard.UserResponseObject], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -185,14 +185,14 @@ func (r *RawClient) Get(
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/issuers/%v/users/%v",
-		organizationID,
-		userID,
+		organizationId,
+		userId,
 	)
 	headers := internal.MergeHeaders(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *kardgosdk.UserResponseObject
+	var response *kard.UserResponseObject
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -204,13 +204,13 @@ func (r *RawClient) Get(
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
 			Response:        &response,
-			ErrorDecoder:    internal.NewErrorDecoder(kardgosdk.ErrorCodes),
+			ErrorDecoder:    internal.NewErrorDecoder(kard.ErrorCodes),
 		},
 	)
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*kardgosdk.UserResponseObject]{
+	return &core.Response[*kard.UserResponseObject]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

@@ -6,7 +6,7 @@ import (
 	context "context"
 	http "net/http"
 
-	kardgosdk "github.com/KardFinancial/kard-go-sdk"
+	kard "github.com/KardFinancial/kard-go-sdk"
 	core "github.com/KardFinancial/kard-go-sdk/core"
 	internal "github.com/KardFinancial/kard-go-sdk/internal"
 	option "github.com/KardFinancial/kard-go-sdk/option"
@@ -33,10 +33,10 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 
 func (r *RawClient) GetMetadata(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
-	request *kardgosdk.GetFilesMetadataRequest,
+	organizationId kard.OrganizationId,
+	request *kard.GetFilesMetadataRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*kardgosdk.GetFilesMetadataResponse], error) {
+) (*core.Response[*kard.GetFilesMetadataResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -45,7 +45,7 @@ func (r *RawClient) GetMetadata(
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/issuers/%v/files/metadata",
-		organizationID,
+		organizationId,
 	)
 	queryParams, err := internal.QueryValues(request)
 	if err != nil {
@@ -58,7 +58,7 @@ func (r *RawClient) GetMetadata(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *kardgosdk.GetFilesMetadataResponse
+	var response *kard.GetFilesMetadataResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -70,13 +70,13 @@ func (r *RawClient) GetMetadata(
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
 			Response:        &response,
-			ErrorDecoder:    internal.NewErrorDecoder(kardgosdk.ErrorCodes),
+			ErrorDecoder:    internal.NewErrorDecoder(kard.ErrorCodes),
 		},
 	)
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*kardgosdk.GetFilesMetadataResponse]{
+	return &core.Response[*kard.GetFilesMetadataResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

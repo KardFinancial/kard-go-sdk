@@ -103,11 +103,11 @@ func TestSettersChildOrganizationAttributes(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
-	t.Run("SetExternalID", func(t *testing.T) {
+	t.Run("SetExternalId", func(t *testing.T) {
 		obj := &ChildOrganizationAttributes{}
-		var fernTestValueExternalID *string
-		obj.SetExternalID(fernTestValueExternalID)
-		assert.Equal(t, fernTestValueExternalID, obj.ExternalID)
+		var fernTestValueExternalId *string
+		obj.SetExternalId(fernTestValueExternalId)
+		assert.Equal(t, fernTestValueExternalId, obj.ExternalId)
 		assert.NotNil(t, obj.explicitFields)
 	})
 
@@ -145,28 +145,28 @@ func TestGettersChildOrganizationAttributes(t *testing.T) {
 		_ = obj.GetName() // Should return zero value
 	})
 
-	t.Run("GetExternalID", func(t *testing.T) {
+	t.Run("GetExternalId", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &ChildOrganizationAttributes{}
 		var expected *string
-		obj.ExternalID = expected
+		obj.ExternalId = expected
 
 		// Act & Assert
-		assert.Equal(t, expected, obj.GetExternalID(), "getter should return the property value")
+		assert.Equal(t, expected, obj.GetExternalId(), "getter should return the property value")
 	})
 
-	t.Run("GetExternalID_NilValue", func(t *testing.T) {
+	t.Run("GetExternalId_NilValue", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &ChildOrganizationAttributes{}
-		obj.ExternalID = nil
+		obj.ExternalId = nil
 
 		// Act & Assert
-		assert.Nil(t, obj.GetExternalID(), "getter should return nil when property is nil")
+		assert.Nil(t, obj.GetExternalId(), "getter should return nil when property is nil")
 	})
 
-	t.Run("GetExternalID_NilReceiver", func(t *testing.T) {
+	t.Run("GetExternalId_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *ChildOrganizationAttributes
 		// Should not panic - getters should handle nil receiver gracefully
@@ -175,7 +175,7 @@ func TestGettersChildOrganizationAttributes(t *testing.T) {
 				t.Errorf("Getter panicked on nil receiver: %v", r)
 			}
 		}()
-		_ = obj.GetExternalID() // Should return zero value
+		_ = obj.GetExternalId() // Should return zero value
 	})
 
 	t.Run("GetBins", func(t *testing.T) {
@@ -245,14 +245,14 @@ func TestSettersMarkExplicitChildOrganizationAttributes(t *testing.T) {
 		// It verifies that setting a field via setter allows successful JSON round-trip
 	})
 
-	t.Run("SetExternalID_MarksExplicit", func(t *testing.T) {
+	t.Run("SetExternalId_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &ChildOrganizationAttributes{}
-		var fernTestValueExternalID *string
+		var fernTestValueExternalId *string
 
 		// Act
-		obj.SetExternalID(fernTestValueExternalID)
+		obj.SetExternalId(fernTestValueExternalId)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -535,11 +535,11 @@ func TestSettersMarkExplicitChildOrganizationListResponse(t *testing.T) {
 }
 
 func TestSettersChildOrganizationResponse(t *testing.T) {
-	t.Run("SetID", func(t *testing.T) {
+	t.Run("SetId", func(t *testing.T) {
 		obj := &ChildOrganizationResponse{}
-		var fernTestValueID string
-		obj.SetID(fernTestValueID)
-		assert.Equal(t, fernTestValueID, obj.ID)
+		var fernTestValueId string
+		obj.SetId(fernTestValueId)
+		assert.Equal(t, fernTestValueId, obj.Id)
 		assert.NotNil(t, obj.explicitFields)
 	})
 
@@ -554,18 +554,18 @@ func TestSettersChildOrganizationResponse(t *testing.T) {
 }
 
 func TestGettersChildOrganizationResponse(t *testing.T) {
-	t.Run("GetID", func(t *testing.T) {
+	t.Run("GetId", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &ChildOrganizationResponse{}
 		var expected string
-		obj.ID = expected
+		obj.Id = expected
 
 		// Act & Assert
-		assert.Equal(t, expected, obj.GetID(), "getter should return the property value")
+		assert.Equal(t, expected, obj.GetId(), "getter should return the property value")
 	})
 
-	t.Run("GetID_NilReceiver", func(t *testing.T) {
+	t.Run("GetId_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *ChildOrganizationResponse
 		// Should not panic - getters should handle nil receiver gracefully
@@ -574,7 +574,7 @@ func TestGettersChildOrganizationResponse(t *testing.T) {
 				t.Errorf("Getter panicked on nil receiver: %v", r)
 			}
 		}()
-		_ = obj.GetID() // Should return zero value
+		_ = obj.GetId() // Should return zero value
 	})
 
 	t.Run("GetAttributes", func(t *testing.T) {
@@ -613,14 +613,14 @@ func TestGettersChildOrganizationResponse(t *testing.T) {
 }
 
 func TestSettersMarkExplicitChildOrganizationResponse(t *testing.T) {
-	t.Run("SetID_MarksExplicit", func(t *testing.T) {
+	t.Run("SetId_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &ChildOrganizationResponse{}
-		var fernTestValueID string
+		var fernTestValueId string
 
 		// Act
-		obj.SetID(fernTestValueID)
+		obj.SetId(fernTestValueId)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -686,11 +686,11 @@ func TestSettersCreateChildAttributes(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
-	t.Run("SetExternalID", func(t *testing.T) {
+	t.Run("SetExternalId", func(t *testing.T) {
 		obj := &CreateChildAttributes{}
-		var fernTestValueExternalID *string
-		obj.SetExternalID(fernTestValueExternalID)
-		assert.Equal(t, fernTestValueExternalID, obj.ExternalID)
+		var fernTestValueExternalId *string
+		obj.SetExternalId(fernTestValueExternalId)
+		assert.Equal(t, fernTestValueExternalId, obj.ExternalId)
 		assert.NotNil(t, obj.explicitFields)
 	})
 
@@ -728,28 +728,28 @@ func TestGettersCreateChildAttributes(t *testing.T) {
 		_ = obj.GetName() // Should return zero value
 	})
 
-	t.Run("GetExternalID", func(t *testing.T) {
+	t.Run("GetExternalId", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &CreateChildAttributes{}
 		var expected *string
-		obj.ExternalID = expected
+		obj.ExternalId = expected
 
 		// Act & Assert
-		assert.Equal(t, expected, obj.GetExternalID(), "getter should return the property value")
+		assert.Equal(t, expected, obj.GetExternalId(), "getter should return the property value")
 	})
 
-	t.Run("GetExternalID_NilValue", func(t *testing.T) {
+	t.Run("GetExternalId_NilValue", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &CreateChildAttributes{}
-		obj.ExternalID = nil
+		obj.ExternalId = nil
 
 		// Act & Assert
-		assert.Nil(t, obj.GetExternalID(), "getter should return nil when property is nil")
+		assert.Nil(t, obj.GetExternalId(), "getter should return nil when property is nil")
 	})
 
-	t.Run("GetExternalID_NilReceiver", func(t *testing.T) {
+	t.Run("GetExternalId_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *CreateChildAttributes
 		// Should not panic - getters should handle nil receiver gracefully
@@ -758,7 +758,7 @@ func TestGettersCreateChildAttributes(t *testing.T) {
 				t.Errorf("Getter panicked on nil receiver: %v", r)
 			}
 		}()
-		_ = obj.GetExternalID() // Should return zero value
+		_ = obj.GetExternalId() // Should return zero value
 	})
 
 	t.Run("GetBins", func(t *testing.T) {
@@ -828,14 +828,14 @@ func TestSettersMarkExplicitCreateChildAttributes(t *testing.T) {
 		// It verifies that setting a field via setter allows successful JSON round-trip
 	})
 
-	t.Run("SetExternalID_MarksExplicit", func(t *testing.T) {
+	t.Run("SetExternalId_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &CreateChildAttributes{}
-		var fernTestValueExternalID *string
+		var fernTestValueExternalId *string
 
 		// Act
-		obj.SetExternalID(fernTestValueExternalID)
+		obj.SetExternalId(fernTestValueExternalId)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -1063,11 +1063,11 @@ func TestSettersUpdateChildAttributes(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
-	t.Run("SetExternalID", func(t *testing.T) {
+	t.Run("SetExternalId", func(t *testing.T) {
 		obj := &UpdateChildAttributes{}
-		var fernTestValueExternalID *string
-		obj.SetExternalID(fernTestValueExternalID)
-		assert.Equal(t, fernTestValueExternalID, obj.ExternalID)
+		var fernTestValueExternalId *string
+		obj.SetExternalId(fernTestValueExternalId)
+		assert.Equal(t, fernTestValueExternalId, obj.ExternalId)
 		assert.NotNil(t, obj.explicitFields)
 	})
 
@@ -1115,28 +1115,28 @@ func TestGettersUpdateChildAttributes(t *testing.T) {
 		_ = obj.GetName() // Should return zero value
 	})
 
-	t.Run("GetExternalID", func(t *testing.T) {
+	t.Run("GetExternalId", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &UpdateChildAttributes{}
 		var expected *string
-		obj.ExternalID = expected
+		obj.ExternalId = expected
 
 		// Act & Assert
-		assert.Equal(t, expected, obj.GetExternalID(), "getter should return the property value")
+		assert.Equal(t, expected, obj.GetExternalId(), "getter should return the property value")
 	})
 
-	t.Run("GetExternalID_NilValue", func(t *testing.T) {
+	t.Run("GetExternalId_NilValue", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &UpdateChildAttributes{}
-		obj.ExternalID = nil
+		obj.ExternalId = nil
 
 		// Act & Assert
-		assert.Nil(t, obj.GetExternalID(), "getter should return nil when property is nil")
+		assert.Nil(t, obj.GetExternalId(), "getter should return nil when property is nil")
 	})
 
-	t.Run("GetExternalID_NilReceiver", func(t *testing.T) {
+	t.Run("GetExternalId_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *UpdateChildAttributes
 		// Should not panic - getters should handle nil receiver gracefully
@@ -1145,7 +1145,7 @@ func TestGettersUpdateChildAttributes(t *testing.T) {
 				t.Errorf("Getter panicked on nil receiver: %v", r)
 			}
 		}()
-		_ = obj.GetExternalID() // Should return zero value
+		_ = obj.GetExternalId() // Should return zero value
 	})
 
 	t.Run("GetBins", func(t *testing.T) {
@@ -1215,14 +1215,14 @@ func TestSettersMarkExplicitUpdateChildAttributes(t *testing.T) {
 		// It verifies that setting a field via setter allows successful JSON round-trip
 	})
 
-	t.Run("SetExternalID_MarksExplicit", func(t *testing.T) {
+	t.Run("SetExternalId_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &UpdateChildAttributes{}
-		var fernTestValueExternalID *string
+		var fernTestValueExternalId *string
 
 		// Act
-		obj.SetExternalID(fernTestValueExternalID)
+		obj.SetExternalId(fernTestValueExternalId)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)

@@ -6,7 +6,7 @@ import (
 	context "context"
 	http "net/http"
 
-	kardgosdk "github.com/KardFinancial/kard-go-sdk"
+	kard "github.com/KardFinancial/kard-go-sdk"
 	core "github.com/KardFinancial/kard-go-sdk/core"
 	internal "github.com/KardFinancial/kard-go-sdk/internal"
 	option "github.com/KardFinancial/kard-go-sdk/option"
@@ -35,7 +35,7 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 func (r *RawClient) List(
 	ctx context.Context,
 	// Unique identifier of the parent organization
-	organizationID string,
+	organizationId string,
 	request *organizations.ListChildrenRequest,
 	opts ...option.RequestOption,
 ) (*core.Response[*organizations.ChildOrganizationListResponse], error) {
@@ -47,7 +47,7 @@ func (r *RawClient) List(
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/issuers/%v/children",
-		organizationID,
+		organizationId,
 	)
 	queryParams, err := internal.QueryValues(request)
 	if err != nil {
@@ -88,7 +88,7 @@ func (r *RawClient) List(
 func (r *RawClient) Create(
 	ctx context.Context,
 	// Unique identifier of the parent organization
-	organizationID string,
+	organizationId string,
 	request *organizations.CreateChildRequestBody,
 	opts ...option.RequestOption,
 ) (*core.Response[*organizations.ChildOrganizationResponse], error) {
@@ -100,7 +100,7 @@ func (r *RawClient) Create(
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/issuers/%v/children",
-		organizationID,
+		organizationId,
 	)
 	headers := internal.MergeHeaders(
 		r.options.ToHeader(),
@@ -135,9 +135,9 @@ func (r *RawClient) Create(
 func (r *RawClient) Get(
 	ctx context.Context,
 	// Unique identifier of the parent organization
-	organizationID string,
+	organizationId string,
 	// Unique identifier of the child organization
-	childID string,
+	childId string,
 	opts ...option.RequestOption,
 ) (*core.Response[*organizations.ChildOrganizationResponse], error) {
 	options := core.NewRequestOptions(opts...)
@@ -148,8 +148,8 @@ func (r *RawClient) Get(
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/issuers/%v/children/%v",
-		organizationID,
-		childID,
+		organizationId,
+		childId,
 	)
 	headers := internal.MergeHeaders(
 		r.options.ToHeader(),
@@ -183,9 +183,9 @@ func (r *RawClient) Get(
 func (r *RawClient) Update(
 	ctx context.Context,
 	// Unique identifier of the parent organization
-	organizationID string,
+	organizationId string,
 	// Unique identifier of the child organization
-	childID string,
+	childId string,
 	request *organizations.UpdateChildRequestBody,
 	opts ...option.RequestOption,
 ) (*core.Response[*organizations.ChildOrganizationResponse], error) {
@@ -197,8 +197,8 @@ func (r *RawClient) Update(
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/issuers/%v/children/%v",
-		organizationID,
-		childID,
+		organizationId,
+		childId,
 	)
 	headers := internal.MergeHeaders(
 		r.options.ToHeader(),
@@ -233,11 +233,11 @@ func (r *RawClient) Update(
 func (r *RawClient) Delete(
 	ctx context.Context,
 	// Unique identifier of the parent organization
-	organizationID string,
+	organizationId string,
 	// Unique identifier of the child organization
-	childID string,
+	childId string,
 	opts ...option.RequestOption,
-) (*core.Response[*kardgosdk.DeleteResourceResponse], error) {
+) (*core.Response[*kard.DeleteResourceResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -246,14 +246,14 @@ func (r *RawClient) Delete(
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/issuers/%v/children/%v",
-		organizationID,
-		childID,
+		organizationId,
+		childId,
 	)
 	headers := internal.MergeHeaders(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *kardgosdk.DeleteResourceResponse
+	var response *kard.DeleteResourceResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -271,7 +271,7 @@ func (r *RawClient) Delete(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*kardgosdk.DeleteResourceResponse]{
+	return &core.Response[*kard.DeleteResourceResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

@@ -6,7 +6,7 @@ import (
 	context "context"
 	http "net/http"
 
-	kardgosdk "github.com/KardFinancial/kard-go-sdk"
+	kard "github.com/KardFinancial/kard-go-sdk"
 	core "github.com/KardFinancial/kard-go-sdk/core"
 	internal "github.com/KardFinancial/kard-go-sdk/internal"
 	option "github.com/KardFinancial/kard-go-sdk/option"
@@ -34,9 +34,9 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 
 func (r *RawClient) Create(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
+	organizationId kard.OrganizationId,
 	// The ID of the user as defined on the issuers system
-	userID string,
+	userId string,
 	request *users.CreateUploadRequestObject,
 	opts ...option.RequestOption,
 ) (*core.Response[*users.CreateUploadResponseObject], error) {
@@ -48,8 +48,8 @@ func (r *RawClient) Create(
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/issuers/%v/users/%v/uploads",
-		organizationID,
-		userID,
+		organizationId,
+		userId,
 	)
 	headers := internal.MergeHeaders(
 		r.options.ToHeader(),
@@ -83,11 +83,11 @@ func (r *RawClient) Create(
 
 func (r *RawClient) CreatePart(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
+	organizationId kard.OrganizationId,
 	// The ID of the user as defined on the issuers system
-	userID string,
+	userId string,
 	// The upload ID identifying the upload session to add parts
-	uploadID string,
+	uploadId string,
 	request *users.CreateUploadPartRequestObject,
 	opts ...option.RequestOption,
 ) (*core.Response[*users.CreateUploadPartResponseObject], error) {
@@ -99,9 +99,9 @@ func (r *RawClient) CreatePart(
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/issuers/%v/users/%v/uploads/%v/parts",
-		organizationID,
-		userID,
-		uploadID,
+		organizationId,
+		userId,
+		uploadId,
 	)
 	headers := internal.MergeHeaders(
 		r.options.ToHeader(),
@@ -135,11 +135,11 @@ func (r *RawClient) CreatePart(
 
 func (r *RawClient) Update(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
+	organizationId kard.OrganizationId,
 	// The ID of the user as defined on the issuers system
-	userID string,
+	userId string,
 	// The upload ID identifying the upload session to update
-	uploadID string,
+	uploadId string,
 	request *users.UpdateUploadRequestObject,
 	opts ...option.RequestOption,
 ) (*core.Response[*users.UpdateUploadResponseObject], error) {
@@ -151,9 +151,9 @@ func (r *RawClient) Update(
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/issuers/%v/users/%v/uploads/%v",
-		organizationID,
-		userID,
-		uploadID,
+		organizationId,
+		userId,
+		uploadId,
 	)
 	headers := internal.MergeHeaders(
 		r.options.ToHeader(),

@@ -6,7 +6,7 @@ import (
 	context "context"
 	os "os"
 
-	kardgosdk "github.com/KardFinancial/kard-go-sdk"
+	kard "github.com/KardFinancial/kard-go-sdk"
 	core "github.com/KardFinancial/kard-go-sdk/core"
 	internal "github.com/KardFinancial/kard-go-sdk/internal"
 	option "github.com/KardFinancial/kard-go-sdk/option"
@@ -46,13 +46,13 @@ func NewClient(options *core.RequestOptions) *Client {
 // <b>Required scopes:</b> `files.read`
 func (c *Client) GetMetadata(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
-	request *kardgosdk.GetFilesMetadataRequest,
+	organizationId kard.OrganizationId,
+	request *kard.GetFilesMetadataRequest,
 	opts ...option.RequestOption,
-) (*kardgosdk.GetFilesMetadataResponse, error) {
+) (*kard.GetFilesMetadataResponse, error) {
 	response, err := c.WithRawResponse.GetMetadata(
 		ctx,
-		organizationID,
+		organizationId,
 		request,
 		opts...,
 	)

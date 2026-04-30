@@ -6,7 +6,7 @@ import (
 	context "context"
 	os "os"
 
-	kardgosdk "github.com/KardFinancial/kard-go-sdk"
+	kard "github.com/KardFinancial/kard-go-sdk"
 	core "github.com/KardFinancial/kard-go-sdk/core"
 	internal "github.com/KardFinancial/kard-go-sdk/internal"
 	option "github.com/KardFinancial/kard-go-sdk/option"
@@ -45,13 +45,13 @@ func NewClient(options *core.RequestOptions) *Client {
 func (c *Client) List(
 	ctx context.Context,
 	// Unique identifier of the parent organization
-	organizationID string,
+	organizationId string,
 	request *organizations.ListChildrenRequest,
 	opts ...option.RequestOption,
 ) (*organizations.ChildOrganizationListResponse, error) {
 	response, err := c.WithRawResponse.List(
 		ctx,
-		organizationID,
+		organizationId,
 		request,
 		opts...,
 	)
@@ -65,13 +65,13 @@ func (c *Client) List(
 func (c *Client) Create(
 	ctx context.Context,
 	// Unique identifier of the parent organization
-	organizationID string,
+	organizationId string,
 	request *organizations.CreateChildRequestBody,
 	opts ...option.RequestOption,
 ) (*organizations.ChildOrganizationResponse, error) {
 	response, err := c.WithRawResponse.Create(
 		ctx,
-		organizationID,
+		organizationId,
 		request,
 		opts...,
 	)
@@ -85,15 +85,15 @@ func (c *Client) Create(
 func (c *Client) Get(
 	ctx context.Context,
 	// Unique identifier of the parent organization
-	organizationID string,
+	organizationId string,
 	// Unique identifier of the child organization
-	childID string,
+	childId string,
 	opts ...option.RequestOption,
 ) (*organizations.ChildOrganizationResponse, error) {
 	response, err := c.WithRawResponse.Get(
 		ctx,
-		organizationID,
-		childID,
+		organizationId,
+		childId,
 		opts...,
 	)
 	if err != nil {
@@ -106,16 +106,16 @@ func (c *Client) Get(
 func (c *Client) Update(
 	ctx context.Context,
 	// Unique identifier of the parent organization
-	organizationID string,
+	organizationId string,
 	// Unique identifier of the child organization
-	childID string,
+	childId string,
 	request *organizations.UpdateChildRequestBody,
 	opts ...option.RequestOption,
 ) (*organizations.ChildOrganizationResponse, error) {
 	response, err := c.WithRawResponse.Update(
 		ctx,
-		organizationID,
-		childID,
+		organizationId,
+		childId,
 		request,
 		opts...,
 	)
@@ -129,15 +129,15 @@ func (c *Client) Update(
 func (c *Client) Delete(
 	ctx context.Context,
 	// Unique identifier of the parent organization
-	organizationID string,
+	organizationId string,
 	// Unique identifier of the child organization
-	childID string,
+	childId string,
 	opts ...option.RequestOption,
-) (*kardgosdk.DeleteResourceResponse, error) {
+) (*kard.DeleteResourceResponse, error) {
 	response, err := c.WithRawResponse.Delete(
 		ctx,
-		organizationID,
-		childID,
+		organizationId,
+		childId,
 		opts...,
 	)
 	if err != nil {

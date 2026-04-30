@@ -6,7 +6,7 @@ import (
 	context "context"
 	os "os"
 
-	kardgosdk "github.com/KardFinancial/kard-go-sdk"
+	kard "github.com/KardFinancial/kard-go-sdk"
 	core "github.com/KardFinancial/kard-go-sdk/core"
 	internal "github.com/KardFinancial/kard-go-sdk/internal"
 	option "github.com/KardFinancial/kard-go-sdk/option"
@@ -46,16 +46,16 @@ func NewClient(options *core.RequestOptions) *Client {
 // <b>Required scopes:</b> `transaction:write`
 func (c *Client) Create(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
+	organizationId kard.OrganizationId,
 	// The ID of the user as defined on the issuers system
-	userID string,
+	userId string,
 	request *users.CreateUploadRequestObject,
 	opts ...option.RequestOption,
 ) (*users.CreateUploadResponseObject, error) {
 	response, err := c.WithRawResponse.Create(
 		ctx,
-		organizationID,
-		userID,
+		organizationId,
+		userId,
 		request,
 		opts...,
 	)
@@ -70,19 +70,19 @@ func (c *Client) Create(
 // <b>Note:</b> `Maximum of 500 transactions can be uploaded per request`.
 func (c *Client) CreatePart(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
+	organizationId kard.OrganizationId,
 	// The ID of the user as defined on the issuers system
-	userID string,
+	userId string,
 	// The upload ID identifying the upload session to add parts
-	uploadID string,
+	uploadId string,
 	request *users.CreateUploadPartRequestObject,
 	opts ...option.RequestOption,
 ) (*users.CreateUploadPartResponseObject, error) {
 	response, err := c.WithRawResponse.CreatePart(
 		ctx,
-		organizationID,
-		userID,
-		uploadID,
+		organizationId,
+		userId,
+		uploadId,
 		request,
 		opts...,
 	)
@@ -96,19 +96,19 @@ func (c *Client) CreatePart(
 // <b>Required scopes:</b> `transaction:write`
 func (c *Client) Update(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
+	organizationId kard.OrganizationId,
 	// The ID of the user as defined on the issuers system
-	userID string,
+	userId string,
 	// The upload ID identifying the upload session to update
-	uploadID string,
+	uploadId string,
 	request *users.UpdateUploadRequestObject,
 	opts ...option.RequestOption,
 ) (*users.UpdateUploadResponseObject, error) {
 	response, err := c.WithRawResponse.Update(
 		ctx,
-		organizationID,
-		userID,
-		uploadID,
+		organizationId,
+		userId,
+		uploadId,
 		request,
 		opts...,
 	)

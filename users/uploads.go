@@ -288,13 +288,13 @@ func (c *CreateUploadPartRequestObject) String() string {
 }
 
 var (
-	createUploadPartResponseDataFieldID         = big.NewInt(1 << 0)
+	createUploadPartResponseDataFieldId         = big.NewInt(1 << 0)
 	createUploadPartResponseDataFieldAttributes = big.NewInt(1 << 1)
 )
 
 type CreateUploadPartResponseData struct {
 	// Id of the upload to add parts
-	ID         string                 `json:"id" url:"id"`
+	Id         string                 `json:"id" url:"id"`
 	Attributes *kardgosdk.EmptyObject `json:"attributes" url:"attributes"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
@@ -304,11 +304,11 @@ type CreateUploadPartResponseData struct {
 	rawJSON         json.RawMessage
 }
 
-func (c *CreateUploadPartResponseData) GetID() string {
+func (c *CreateUploadPartResponseData) GetId() string {
 	if c == nil {
 		return ""
 	}
-	return c.ID
+	return c.Id
 }
 
 func (c *CreateUploadPartResponseData) GetAttributes() *kardgosdk.EmptyObject {
@@ -332,11 +332,11 @@ func (c *CreateUploadPartResponseData) require(field *big.Int) {
 	c.explicitFields.Or(c.explicitFields, field)
 }
 
-// SetID sets the ID field and marks it as non-optional;
+// SetId sets the Id field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateUploadPartResponseData) SetID(id string) {
-	c.ID = id
-	c.require(createUploadPartResponseDataFieldID)
+func (c *CreateUploadPartResponseData) SetId(id string) {
+	c.Id = id
+	c.require(createUploadPartResponseDataFieldId)
 }
 
 // SetAttributes sets the Attributes field and marks it as non-optional;
@@ -743,13 +743,13 @@ func (c *CreateUploadRequestObject) String() string {
 }
 
 var (
-	createUploadResponseDataFieldID         = big.NewInt(1 << 0)
+	createUploadResponseDataFieldId         = big.NewInt(1 << 0)
 	createUploadResponseDataFieldAttributes = big.NewInt(1 << 1)
 )
 
 type CreateUploadResponseData struct {
 	// Upload id to reference in subsequent upload request
-	ID         string                 `json:"id" url:"id"`
+	Id         string                 `json:"id" url:"id"`
 	Attributes *kardgosdk.EmptyObject `json:"attributes" url:"attributes"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
@@ -759,11 +759,11 @@ type CreateUploadResponseData struct {
 	rawJSON         json.RawMessage
 }
 
-func (c *CreateUploadResponseData) GetID() string {
+func (c *CreateUploadResponseData) GetId() string {
 	if c == nil {
 		return ""
 	}
-	return c.ID
+	return c.Id
 }
 
 func (c *CreateUploadResponseData) GetAttributes() *kardgosdk.EmptyObject {
@@ -787,11 +787,11 @@ func (c *CreateUploadResponseData) require(field *big.Int) {
 	c.explicitFields.Or(c.explicitFields, field)
 }
 
-// SetID sets the ID field and marks it as non-optional;
+// SetId sets the Id field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateUploadResponseData) SetID(id string) {
-	c.ID = id
-	c.require(createUploadResponseDataFieldID)
+func (c *CreateUploadResponseData) SetId(id string) {
+	c.Id = id
+	c.require(createUploadResponseDataFieldId)
 }
 
 // SetAttributes sets the Attributes field and marks it as non-optional;
@@ -1021,13 +1021,13 @@ func (c *CreateUploadResponseObject) String() string {
 }
 
 var (
-	historicalTransactionCompleteNoDataFieldID         = big.NewInt(1 << 0)
+	historicalTransactionCompleteNoDataFieldId         = big.NewInt(1 << 0)
 	historicalTransactionCompleteNoDataFieldAttributes = big.NewInt(1 << 1)
 )
 
 type HistoricalTransactionCompleteNoData struct {
 	// Upload id the issuer can use in reference to the upload session
-	ID         string                 `json:"id" url:"id"`
+	Id         string                 `json:"id" url:"id"`
 	Attributes *kardgosdk.EmptyObject `json:"attributes" url:"attributes"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
@@ -1037,11 +1037,11 @@ type HistoricalTransactionCompleteNoData struct {
 	rawJSON         json.RawMessage
 }
 
-func (h *HistoricalTransactionCompleteNoData) GetID() string {
+func (h *HistoricalTransactionCompleteNoData) GetId() string {
 	if h == nil {
 		return ""
 	}
-	return h.ID
+	return h.Id
 }
 
 func (h *HistoricalTransactionCompleteNoData) GetAttributes() *kardgosdk.EmptyObject {
@@ -1065,11 +1065,11 @@ func (h *HistoricalTransactionCompleteNoData) require(field *big.Int) {
 	h.explicitFields.Or(h.explicitFields, field)
 }
 
-// SetID sets the ID field and marks it as non-optional;
+// SetId sets the Id field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (h *HistoricalTransactionCompleteNoData) SetID(id string) {
-	h.ID = id
-	h.require(historicalTransactionCompleteNoDataFieldID)
+func (h *HistoricalTransactionCompleteNoData) SetId(id string) {
+	h.Id = id
+	h.require(historicalTransactionCompleteNoDataFieldId)
 }
 
 // SetAttributes sets the Attributes field and marks it as non-optional;
@@ -1383,13 +1383,13 @@ func (u *UpdateUploadRequestObject) String() string {
 }
 
 var (
-	updateUploadResponseDataFieldID         = big.NewInt(1 << 0)
+	updateUploadResponseDataFieldId         = big.NewInt(1 << 0)
 	updateUploadResponseDataFieldAttributes = big.NewInt(1 << 1)
 )
 
 type UpdateUploadResponseData struct {
 	// Upload id to reference in subsequent upload request
-	ID         string                 `json:"id" url:"id"`
+	Id         string                 `json:"id" url:"id"`
 	Attributes *kardgosdk.EmptyObject `json:"attributes" url:"attributes"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
@@ -1399,11 +1399,11 @@ type UpdateUploadResponseData struct {
 	rawJSON         json.RawMessage
 }
 
-func (u *UpdateUploadResponseData) GetID() string {
+func (u *UpdateUploadResponseData) GetId() string {
 	if u == nil {
 		return ""
 	}
-	return u.ID
+	return u.Id
 }
 
 func (u *UpdateUploadResponseData) GetAttributes() *kardgosdk.EmptyObject {
@@ -1427,11 +1427,11 @@ func (u *UpdateUploadResponseData) require(field *big.Int) {
 	u.explicitFields.Or(u.explicitFields, field)
 }
 
-// SetID sets the ID field and marks it as non-optional;
+// SetId sets the Id field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpdateUploadResponseData) SetID(id string) {
-	u.ID = id
-	u.require(updateUploadResponseDataFieldID)
+func (u *UpdateUploadResponseData) SetId(id string) {
+	u.Id = id
+	u.require(updateUploadResponseDataFieldId)
 }
 
 // SetAttributes sets the Attributes field and marks it as non-optional;

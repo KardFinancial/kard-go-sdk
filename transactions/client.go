@@ -6,7 +6,7 @@ import (
 	context "context"
 	os "os"
 
-	kardgosdk "github.com/KardFinancial/kard-go-sdk"
+	kard "github.com/KardFinancial/kard-go-sdk"
 	core "github.com/KardFinancial/kard-go-sdk/core"
 	internal "github.com/KardFinancial/kard-go-sdk/internal"
 	option "github.com/KardFinancial/kard-go-sdk/option"
@@ -50,13 +50,13 @@ func NewClient(options *core.RequestOptions) *Client {
 // <b>Note:</b> `Maximum of 500 transactions can be created per request`.
 func (c *Client) Create(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
-	request *kardgosdk.TransactionsRequestBody,
+	organizationId kard.OrganizationId,
+	request *kard.TransactionsRequestBody,
 	opts ...option.RequestOption,
-) (*kardgosdk.TransactionsResponse, error) {
+) (*kard.TransactionsResponse, error) {
 	response, err := c.WithRawResponse.Create(
 		ctx,
-		organizationID,
+		organizationId,
 		request,
 		opts...,
 	)
@@ -72,13 +72,13 @@ func (c *Client) Create(
 // <b>Note:</b> `Maximum of 500 fraudulent transactions can be created per request`.
 func (c *Client) CreateFraudMarkers(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
-	request *kardgosdk.FraudulentTransactionRequestBody,
+	organizationId kard.OrganizationId,
+	request *kard.FraudulentTransactionRequestBody,
 	opts ...option.RequestOption,
-) (*kardgosdk.FraudulentTransactionObject, error) {
+) (*kard.FraudulentTransactionObject, error) {
 	response, err := c.WithRawResponse.CreateFraudMarkers(
 		ctx,
-		organizationID,
+		organizationId,
 		request,
 		opts...,
 	)
@@ -92,16 +92,16 @@ func (c *Client) CreateFraudMarkers(
 // <b>Required scopes:</b> `audit:write`
 func (c *Client) CreateAudits(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
+	organizationId kard.OrganizationId,
 	// The ID of the user as defined on the issuers system
-	userID string,
-	request *kardgosdk.CreateAuditRequestBody,
+	userId string,
+	request *kard.CreateAuditRequestBody,
 	opts ...option.RequestOption,
-) (*kardgosdk.CreateAuditResponseBody, error) {
+) (*kard.CreateAuditResponseBody, error) {
 	response, err := c.WithRawResponse.CreateAudits(
 		ctx,
-		organizationID,
-		userID,
+		organizationId,
+		userId,
 		request,
 		opts...,
 	)
@@ -117,15 +117,15 @@ func (c *Client) CreateAudits(
 // Files can be uploaded as plain JSONL or as a gzip-compressed file.
 // Only `coreTransaction` type is supported for bulk file uploads.
 // <b>Required scopes:</b> `transaction:write`
-func (c *Client) CreateBulkTransactionsUploadURL(
+func (c *Client) CreateBulkTransactionsUploadUrl(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
-	request *kardgosdk.CreateFileUploadRequestBody,
+	organizationId kard.OrganizationId,
+	request *kard.CreateFileUploadRequestBody,
 	opts ...option.RequestOption,
-) (*kardgosdk.CreateFileUploadURLResponse, error) {
-	response, err := c.WithRawResponse.CreateBulkTransactionsUploadURL(
+) (*kard.CreateFileUploadUrlResponse, error) {
+	response, err := c.WithRawResponse.CreateBulkTransactionsUploadUrl(
 		ctx,
-		organizationID,
+		organizationId,
 		request,
 		opts...,
 	)
@@ -142,16 +142,16 @@ func (c *Client) CreateBulkTransactionsUploadURL(
 // <b>Query Limit:</b> Maximum of 12 months of transaction data can be queried.
 func (c *Client) GetEarnedRewards(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
+	organizationId kard.OrganizationId,
 	// The ID of the user as defined on the issuers system
-	userID string,
-	request *kardgosdk.GetEarnedRewardsRequest,
+	userId string,
+	request *kard.GetEarnedRewardsRequest,
 	opts ...option.RequestOption,
-) (*kardgosdk.GetEarnedRewardsResponse, error) {
+) (*kard.GetEarnedRewardsResponse, error) {
 	response, err := c.WithRawResponse.GetEarnedRewards(
 		ctx,
-		organizationID,
-		userID,
+		organizationId,
+		userId,
 		request,
 		opts...,
 	)

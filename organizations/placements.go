@@ -853,7 +853,7 @@ func (d DayOfWeek) Ptr() *DayOfWeek {
 // Attributes for a main-page placement
 var (
 	mainPagePlacementAttributesFieldName           = big.NewInt(1 << 0)
-	mainPagePlacementAttributesFieldOrganizationID = big.NewInt(1 << 1)
+	mainPagePlacementAttributesFieldOrganizationId = big.NewInt(1 << 1)
 	mainPagePlacementAttributesFieldAvailableSlots = big.NewInt(1 << 2)
 	mainPagePlacementAttributesFieldCreatedAt      = big.NewInt(1 << 3)
 	mainPagePlacementAttributesFieldLastModified   = big.NewInt(1 << 4)
@@ -863,7 +863,7 @@ type MainPagePlacementAttributes struct {
 	// Name of the placement
 	Name string `json:"name" url:"name"`
 	// ID of the organization this placement belongs to
-	OrganizationID string `json:"organizationId" url:"organizationId"`
+	OrganizationId string `json:"organizationId" url:"organizationId"`
 	// Number of available slots
 	AvailableSlots int `json:"availableSlots" url:"availableSlots"`
 	// When the placement was created (ISO 8601 UTC)
@@ -885,11 +885,11 @@ func (m *MainPagePlacementAttributes) GetName() string {
 	return m.Name
 }
 
-func (m *MainPagePlacementAttributes) GetOrganizationID() string {
+func (m *MainPagePlacementAttributes) GetOrganizationId() string {
 	if m == nil {
 		return ""
 	}
-	return m.OrganizationID
+	return m.OrganizationId
 }
 
 func (m *MainPagePlacementAttributes) GetAvailableSlots() int {
@@ -934,11 +934,11 @@ func (m *MainPagePlacementAttributes) SetName(name string) {
 	m.require(mainPagePlacementAttributesFieldName)
 }
 
-// SetOrganizationID sets the OrganizationID field and marks it as non-optional;
+// SetOrganizationId sets the OrganizationId field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MainPagePlacementAttributes) SetOrganizationID(organizationID string) {
-	m.OrganizationID = organizationID
-	m.require(mainPagePlacementAttributesFieldOrganizationID)
+func (m *MainPagePlacementAttributes) SetOrganizationId(organizationId string) {
+	m.OrganizationId = organizationId
+	m.require(mainPagePlacementAttributesFieldOrganizationId)
 }
 
 // SetAvailableSlots sets the AvailableSlots field and marks it as non-optional;
@@ -1018,13 +1018,13 @@ func (m *MainPagePlacementAttributes) String() string {
 
 // Main-page placement resource data
 var (
-	mainPagePlacementDataFieldID         = big.NewInt(1 << 0)
+	mainPagePlacementDataFieldId         = big.NewInt(1 << 0)
 	mainPagePlacementDataFieldAttributes = big.NewInt(1 << 1)
 )
 
 type MainPagePlacementData struct {
 	// Unique identifier of the placement (UUID v7)
-	ID         string                       `json:"id" url:"id"`
+	Id         string                       `json:"id" url:"id"`
 	Attributes *MainPagePlacementAttributes `json:"attributes" url:"attributes"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
@@ -1034,11 +1034,11 @@ type MainPagePlacementData struct {
 	rawJSON         json.RawMessage
 }
 
-func (m *MainPagePlacementData) GetID() string {
+func (m *MainPagePlacementData) GetId() string {
 	if m == nil {
 		return ""
 	}
-	return m.ID
+	return m.Id
 }
 
 func (m *MainPagePlacementData) GetAttributes() *MainPagePlacementAttributes {
@@ -1062,11 +1062,11 @@ func (m *MainPagePlacementData) require(field *big.Int) {
 	m.explicitFields.Or(m.explicitFields, field)
 }
 
-// SetID sets the ID field and marks it as non-optional;
+// SetId sets the Id field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MainPagePlacementData) SetID(id string) {
-	m.ID = id
-	m.require(mainPagePlacementDataFieldID)
+func (m *MainPagePlacementData) SetId(id string) {
+	m.Id = id
+	m.require(mainPagePlacementDataFieldId)
 }
 
 // SetAttributes sets the Attributes field and marks it as non-optional;
@@ -1381,7 +1381,7 @@ func (p PlacementTypeFilter) Ptr() *PlacementTypeFilter {
 // Attributes for a push-notification placement
 var (
 	pushNotificationPlacementAttributesFieldName           = big.NewInt(1 << 0)
-	pushNotificationPlacementAttributesFieldOrganizationID = big.NewInt(1 << 1)
+	pushNotificationPlacementAttributesFieldOrganizationId = big.NewInt(1 << 1)
 	pushNotificationPlacementAttributesFieldCadence        = big.NewInt(1 << 2)
 	pushNotificationPlacementAttributesFieldCreatedAt      = big.NewInt(1 << 3)
 	pushNotificationPlacementAttributesFieldLastModified   = big.NewInt(1 << 4)
@@ -1391,7 +1391,7 @@ type PushNotificationPlacementAttributes struct {
 	// Name of the placement
 	Name string `json:"name" url:"name"`
 	// ID of the organization this placement belongs to
-	OrganizationID string `json:"organizationId" url:"organizationId"`
+	OrganizationId string `json:"organizationId" url:"organizationId"`
 	// Delivery cadence for the notification
 	Cadence *Cadence `json:"cadence" url:"cadence"`
 	// When the placement was created (ISO 8601 UTC)
@@ -1413,11 +1413,11 @@ func (p *PushNotificationPlacementAttributes) GetName() string {
 	return p.Name
 }
 
-func (p *PushNotificationPlacementAttributes) GetOrganizationID() string {
+func (p *PushNotificationPlacementAttributes) GetOrganizationId() string {
 	if p == nil {
 		return ""
 	}
-	return p.OrganizationID
+	return p.OrganizationId
 }
 
 func (p *PushNotificationPlacementAttributes) GetCadence() *Cadence {
@@ -1462,11 +1462,11 @@ func (p *PushNotificationPlacementAttributes) SetName(name string) {
 	p.require(pushNotificationPlacementAttributesFieldName)
 }
 
-// SetOrganizationID sets the OrganizationID field and marks it as non-optional;
+// SetOrganizationId sets the OrganizationId field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (p *PushNotificationPlacementAttributes) SetOrganizationID(organizationID string) {
-	p.OrganizationID = organizationID
-	p.require(pushNotificationPlacementAttributesFieldOrganizationID)
+func (p *PushNotificationPlacementAttributes) SetOrganizationId(organizationId string) {
+	p.OrganizationId = organizationId
+	p.require(pushNotificationPlacementAttributesFieldOrganizationId)
 }
 
 // SetCadence sets the Cadence field and marks it as non-optional;
@@ -1546,13 +1546,13 @@ func (p *PushNotificationPlacementAttributes) String() string {
 
 // Push-notification placement resource data
 var (
-	pushNotificationPlacementDataFieldID         = big.NewInt(1 << 0)
+	pushNotificationPlacementDataFieldId         = big.NewInt(1 << 0)
 	pushNotificationPlacementDataFieldAttributes = big.NewInt(1 << 1)
 )
 
 type PushNotificationPlacementData struct {
 	// Unique identifier of the placement (UUID v7)
-	ID         string                               `json:"id" url:"id"`
+	Id         string                               `json:"id" url:"id"`
 	Attributes *PushNotificationPlacementAttributes `json:"attributes" url:"attributes"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
@@ -1562,11 +1562,11 @@ type PushNotificationPlacementData struct {
 	rawJSON         json.RawMessage
 }
 
-func (p *PushNotificationPlacementData) GetID() string {
+func (p *PushNotificationPlacementData) GetId() string {
 	if p == nil {
 		return ""
 	}
-	return p.ID
+	return p.Id
 }
 
 func (p *PushNotificationPlacementData) GetAttributes() *PushNotificationPlacementAttributes {
@@ -1590,11 +1590,11 @@ func (p *PushNotificationPlacementData) require(field *big.Int) {
 	p.explicitFields.Or(p.explicitFields, field)
 }
 
-// SetID sets the ID field and marks it as non-optional;
+// SetId sets the Id field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (p *PushNotificationPlacementData) SetID(id string) {
-	p.ID = id
-	p.require(pushNotificationPlacementDataFieldID)
+func (p *PushNotificationPlacementData) SetId(id string) {
+	p.Id = id
+	p.require(pushNotificationPlacementDataFieldId)
 }
 
 // SetAttributes sets the Attributes field and marks it as non-optional;

@@ -6,7 +6,7 @@ import (
 	context "context"
 	os "os"
 
-	kardgosdk "github.com/KardFinancial/kard-go-sdk"
+	kard "github.com/KardFinancial/kard-go-sdk"
 	core "github.com/KardFinancial/kard-go-sdk/core"
 	internal "github.com/KardFinancial/kard-go-sdk/internal"
 	option "github.com/KardFinancial/kard-go-sdk/option"
@@ -47,15 +47,15 @@ func NewClient(options *core.RequestOptions) *Client {
 // <b>Required scopes:</b> `rewards:read`
 func (c *Client) Offers(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
-	userID kardgosdk.UserID,
+	organizationId kard.OrganizationId,
+	userId kard.UserId,
 	request *users.GetOffersByUserRequest,
 	opts ...option.RequestOption,
 ) (*users.OffersResponseObject, error) {
 	response, err := c.WithRawResponse.Offers(
 		ctx,
-		organizationID,
-		userID,
+		organizationId,
+		userId,
 		request,
 		opts...,
 	)
@@ -70,17 +70,17 @@ func (c *Client) Offers(
 // <b>Required scopes:</b> `rewards:read`
 func (c *Client) PlacementOffers(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
-	userID kardgosdk.UserID,
-	placementID string,
+	organizationId kard.OrganizationId,
+	userId kard.UserId,
+	placementId string,
 	request *users.GetOffersByPlacementRequest,
 	opts ...option.RequestOption,
 ) (*users.OffersResponseObject, error) {
 	response, err := c.WithRawResponse.PlacementOffers(
 		ctx,
-		organizationID,
-		userID,
-		placementID,
+		organizationId,
+		userId,
+		placementId,
 		request,
 		opts...,
 	)
@@ -98,15 +98,15 @@ func (c *Client) PlacementOffers(
 // <b>Required scopes:</b> `rewards:read`
 func (c *Client) Locations(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
-	userID kardgosdk.UserID,
+	organizationId kard.OrganizationId,
+	userId kard.UserId,
 	request *users.GetLocationsByUserRequest,
 	opts ...option.RequestOption,
 ) (*users.LocationsResponseObject, error) {
 	response, err := c.WithRawResponse.Locations(
 		ctx,
-		organizationID,
-		userID,
+		organizationId,
+		userId,
 		request,
 		opts...,
 	)

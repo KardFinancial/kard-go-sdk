@@ -6,7 +6,7 @@ import (
 	context "context"
 	os "os"
 
-	kardgosdk "github.com/KardFinancial/kard-go-sdk"
+	kard "github.com/KardFinancial/kard-go-sdk"
 	core "github.com/KardFinancial/kard-go-sdk/core"
 	internal "github.com/KardFinancial/kard-go-sdk/internal"
 	notifications "github.com/KardFinancial/kard-go-sdk/notifications"
@@ -45,13 +45,13 @@ func NewClient(options *core.RequestOptions) *Client {
 // <b>Required scopes:</b> `notifications:read`
 func (c *Client) Get(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
+	organizationId kard.OrganizationId,
 	request *notifications.GetSubscriptionsRequest,
 	opts ...option.RequestOption,
 ) (*notifications.SubscriptionsResponseObject, error) {
 	response, err := c.WithRawResponse.Get(
 		ctx,
-		organizationID,
+		organizationId,
 		request,
 		opts...,
 	)
@@ -65,13 +65,13 @@ func (c *Client) Get(
 // <b>Required scopes:</b> `notifications:write`
 func (c *Client) Create(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
+	organizationId kard.OrganizationId,
 	request *notifications.SubscriptionRequestBody,
 	opts ...option.RequestOption,
 ) (*notifications.CreateSubscriptionsResponseObject, error) {
 	response, err := c.WithRawResponse.Create(
 		ctx,
-		organizationID,
+		organizationId,
 		request,
 		opts...,
 	)
@@ -85,15 +85,15 @@ func (c *Client) Create(
 // <b>Required scopes:</b> `notifications:write`
 func (c *Client) Update(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
-	subscriptionID kardgosdk.SubscriptionID,
+	organizationId kard.OrganizationId,
+	subscriptionId kard.SubscriptionId,
 	request *notifications.UpdateSubscriptionRequestBody,
 	opts ...option.RequestOption,
 ) (*notifications.UpdateSubscriptionsResponseObject, error) {
 	response, err := c.WithRawResponse.Update(
 		ctx,
-		organizationID,
-		subscriptionID,
+		organizationId,
+		subscriptionId,
 		request,
 		opts...,
 	)

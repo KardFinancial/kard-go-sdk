@@ -6,7 +6,7 @@ import (
 	context "context"
 	os "os"
 
-	kardgosdk "github.com/KardFinancial/kard-go-sdk"
+	kard "github.com/KardFinancial/kard-go-sdk"
 	core "github.com/KardFinancial/kard-go-sdk/core"
 	internal "github.com/KardFinancial/kard-go-sdk/internal"
 	option "github.com/KardFinancial/kard-go-sdk/option"
@@ -45,13 +45,13 @@ func NewClient(options *core.RequestOptions) *Client {
 func (c *Client) Create(
 	ctx context.Context,
 	// Unique identifier of the organization
-	organizationID string,
+	organizationId string,
 	request *organizations.CreatePlacementRequestBody,
 	opts ...option.RequestOption,
 ) (*organizations.PlacementFormatUnion, error) {
 	response, err := c.WithRawResponse.Create(
 		ctx,
-		organizationID,
+		organizationId,
 		request,
 		opts...,
 	)
@@ -65,13 +65,13 @@ func (c *Client) Create(
 func (c *Client) List(
 	ctx context.Context,
 	// Unique identifier of the organization
-	organizationID string,
+	organizationId string,
 	request *organizations.ListPlacementsRequest,
 	opts ...option.RequestOption,
 ) (*organizations.PlacementListResponse, error) {
 	response, err := c.WithRawResponse.List(
 		ctx,
-		organizationID,
+		organizationId,
 		request,
 		opts...,
 	)
@@ -85,15 +85,15 @@ func (c *Client) List(
 func (c *Client) Get(
 	ctx context.Context,
 	// Unique identifier of the organization
-	organizationID string,
+	organizationId string,
 	// Unique identifier of the placement (UUID v7)
-	placementID string,
+	placementId string,
 	opts ...option.RequestOption,
 ) (*organizations.PlacementFormatUnion, error) {
 	response, err := c.WithRawResponse.Get(
 		ctx,
-		organizationID,
-		placementID,
+		organizationId,
+		placementId,
 		opts...,
 	)
 	if err != nil {
@@ -106,16 +106,16 @@ func (c *Client) Get(
 func (c *Client) Update(
 	ctx context.Context,
 	// Unique identifier of the organization
-	organizationID string,
+	organizationId string,
 	// Unique identifier of the placement (UUID v7)
-	placementID string,
+	placementId string,
 	request *organizations.UpdatePlacementRequestBody,
 	opts ...option.RequestOption,
 ) (*organizations.PlacementFormatUnion, error) {
 	response, err := c.WithRawResponse.Update(
 		ctx,
-		organizationID,
-		placementID,
+		organizationId,
+		placementId,
 		request,
 		opts...,
 	)
@@ -129,15 +129,15 @@ func (c *Client) Update(
 func (c *Client) Delete(
 	ctx context.Context,
 	// Unique identifier of the organization
-	organizationID string,
+	organizationId string,
 	// Unique identifier of the placement (UUID v7)
-	placementID string,
+	placementId string,
 	opts ...option.RequestOption,
-) (*kardgosdk.DeleteResourceResponse, error) {
+) (*kard.DeleteResourceResponse, error) {
 	response, err := c.WithRawResponse.Delete(
 		ctx,
-		organizationID,
-		placementID,
+		organizationId,
+		placementId,
 		opts...,
 	)
 	if err != nil {

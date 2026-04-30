@@ -6,7 +6,7 @@ import (
 	context "context"
 	http "net/http"
 
-	kardgosdk "github.com/KardFinancial/kard-go-sdk"
+	kard "github.com/KardFinancial/kard-go-sdk"
 	core "github.com/KardFinancial/kard-go-sdk/core"
 	internal "github.com/KardFinancial/kard-go-sdk/internal"
 	notifications "github.com/KardFinancial/kard-go-sdk/notifications"
@@ -34,7 +34,7 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 
 func (r *RawClient) Get(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
+	organizationId kard.OrganizationId,
 	request *notifications.GetSubscriptionsRequest,
 	opts ...option.RequestOption,
 ) (*core.Response[*notifications.SubscriptionsResponseObject], error) {
@@ -46,7 +46,7 @@ func (r *RawClient) Get(
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/issuers/%v/subscriptions",
-		organizationID,
+		organizationId,
 	)
 	queryParams, err := internal.QueryValues(request)
 	if err != nil {
@@ -86,7 +86,7 @@ func (r *RawClient) Get(
 
 func (r *RawClient) Create(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
+	organizationId kard.OrganizationId,
 	request *notifications.SubscriptionRequestBody,
 	opts ...option.RequestOption,
 ) (*core.Response[*notifications.CreateSubscriptionsResponseObject], error) {
@@ -98,7 +98,7 @@ func (r *RawClient) Create(
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/issuers/%v/subscriptions",
-		organizationID,
+		organizationId,
 	)
 	headers := internal.MergeHeaders(
 		r.options.ToHeader(),
@@ -132,8 +132,8 @@ func (r *RawClient) Create(
 
 func (r *RawClient) Update(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
-	subscriptionID kardgosdk.SubscriptionID,
+	organizationId kard.OrganizationId,
+	subscriptionId kard.SubscriptionId,
 	request *notifications.UpdateSubscriptionRequestBody,
 	opts ...option.RequestOption,
 ) (*core.Response[*notifications.UpdateSubscriptionsResponseObject], error) {
@@ -145,8 +145,8 @@ func (r *RawClient) Update(
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/issuers/%v/subscriptions/%v",
-		organizationID,
-		subscriptionID,
+		organizationId,
+		subscriptionId,
 	)
 	headers := internal.MergeHeaders(
 		r.options.ToHeader(),

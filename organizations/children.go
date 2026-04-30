@@ -49,7 +49,7 @@ func (l *ListChildrenRequest) SetPageSize(pageSize *int) {
 // Limited set of child organization attributes exposed to external consumers
 var (
 	childOrganizationAttributesFieldName       = big.NewInt(1 << 0)
-	childOrganizationAttributesFieldExternalID = big.NewInt(1 << 1)
+	childOrganizationAttributesFieldExternalId = big.NewInt(1 << 1)
 	childOrganizationAttributesFieldBins       = big.NewInt(1 << 2)
 )
 
@@ -57,7 +57,7 @@ type ChildOrganizationAttributes struct {
 	// Name of the child organization (uppercase, no spaces)
 	Name string `json:"name" url:"name"`
 	// External identifier for the child organization
-	ExternalID *string `json:"externalId,omitempty" url:"externalId,omitempty"`
+	ExternalId *string `json:"externalId,omitempty" url:"externalId,omitempty"`
 	// Bank Identification Numbers for the child organization
 	Bins []string `json:"bins" url:"bins"`
 
@@ -75,11 +75,11 @@ func (c *ChildOrganizationAttributes) GetName() string {
 	return c.Name
 }
 
-func (c *ChildOrganizationAttributes) GetExternalID() *string {
+func (c *ChildOrganizationAttributes) GetExternalId() *string {
 	if c == nil {
 		return nil
 	}
-	return c.ExternalID
+	return c.ExternalId
 }
 
 func (c *ChildOrganizationAttributes) GetBins() []string {
@@ -110,11 +110,11 @@ func (c *ChildOrganizationAttributes) SetName(name string) {
 	c.require(childOrganizationAttributesFieldName)
 }
 
-// SetExternalID sets the ExternalID field and marks it as non-optional;
+// SetExternalId sets the ExternalId field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *ChildOrganizationAttributes) SetExternalID(externalID *string) {
-	c.ExternalID = externalID
-	c.require(childOrganizationAttributesFieldExternalID)
+func (c *ChildOrganizationAttributes) SetExternalId(externalId *string) {
+	c.ExternalId = externalId
+	c.require(childOrganizationAttributesFieldExternalId)
 }
 
 // SetBins sets the Bins field and marks it as non-optional;
@@ -287,13 +287,13 @@ func (c *ChildOrganizationListResponse) String() string {
 
 // Child organization resource response
 var (
-	childOrganizationResponseFieldID         = big.NewInt(1 << 0)
+	childOrganizationResponseFieldId         = big.NewInt(1 << 0)
 	childOrganizationResponseFieldAttributes = big.NewInt(1 << 1)
 )
 
 type ChildOrganizationResponse struct {
 	// Unique identifier of the child organization
-	ID         string                       `json:"id" url:"id"`
+	Id         string                       `json:"id" url:"id"`
 	Attributes *ChildOrganizationAttributes `json:"attributes" url:"attributes"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
@@ -304,11 +304,11 @@ type ChildOrganizationResponse struct {
 	rawJSON         json.RawMessage
 }
 
-func (c *ChildOrganizationResponse) GetID() string {
+func (c *ChildOrganizationResponse) GetId() string {
 	if c == nil {
 		return ""
 	}
-	return c.ID
+	return c.Id
 }
 
 func (c *ChildOrganizationResponse) GetAttributes() *ChildOrganizationAttributes {
@@ -336,11 +336,11 @@ func (c *ChildOrganizationResponse) require(field *big.Int) {
 	c.explicitFields.Or(c.explicitFields, field)
 }
 
-// SetID sets the ID field and marks it as non-optional;
+// SetId sets the Id field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *ChildOrganizationResponse) SetID(id string) {
-	c.ID = id
-	c.require(childOrganizationResponseFieldID)
+func (c *ChildOrganizationResponse) SetId(id string) {
+	c.Id = id
+	c.require(childOrganizationResponseFieldId)
 }
 
 // SetAttributes sets the Attributes field and marks it as non-optional;
@@ -406,7 +406,7 @@ func (c *ChildOrganizationResponse) String() string {
 // Attributes for creating a child organization. Only name is required. All other fields are optional and default to the parent organization's values.
 var (
 	createChildAttributesFieldName       = big.NewInt(1 << 0)
-	createChildAttributesFieldExternalID = big.NewInt(1 << 1)
+	createChildAttributesFieldExternalId = big.NewInt(1 << 1)
 	createChildAttributesFieldBins       = big.NewInt(1 << 2)
 )
 
@@ -414,7 +414,7 @@ type CreateChildAttributes struct {
 	// Name of the child organization (must be uppercase, no spaces)
 	Name string `json:"name" url:"name"`
 	// External identifier for the child organization
-	ExternalID *string `json:"externalId,omitempty" url:"externalId,omitempty"`
+	ExternalId *string `json:"externalId,omitempty" url:"externalId,omitempty"`
 	// Bank Identification Numbers for the child organization
 	Bins []string `json:"bins,omitempty" url:"bins,omitempty"`
 
@@ -432,11 +432,11 @@ func (c *CreateChildAttributes) GetName() string {
 	return c.Name
 }
 
-func (c *CreateChildAttributes) GetExternalID() *string {
+func (c *CreateChildAttributes) GetExternalId() *string {
 	if c == nil {
 		return nil
 	}
-	return c.ExternalID
+	return c.ExternalId
 }
 
 func (c *CreateChildAttributes) GetBins() []string {
@@ -467,11 +467,11 @@ func (c *CreateChildAttributes) SetName(name string) {
 	c.require(createChildAttributesFieldName)
 }
 
-// SetExternalID sets the ExternalID field and marks it as non-optional;
+// SetExternalId sets the ExternalId field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateChildAttributes) SetExternalID(externalID *string) {
-	c.ExternalID = externalID
-	c.require(createChildAttributesFieldExternalID)
+func (c *CreateChildAttributes) SetExternalId(externalId *string) {
+	c.ExternalId = externalId
+	c.require(createChildAttributesFieldExternalId)
 }
 
 // SetBins sets the Bins field and marks it as non-optional;
@@ -714,7 +714,7 @@ func (c *CreateChildRequestData) String() string {
 // Attributes for updating a child organization. All fields are optional; only provided fields are changed.
 var (
 	updateChildAttributesFieldName       = big.NewInt(1 << 0)
-	updateChildAttributesFieldExternalID = big.NewInt(1 << 1)
+	updateChildAttributesFieldExternalId = big.NewInt(1 << 1)
 	updateChildAttributesFieldBins       = big.NewInt(1 << 2)
 )
 
@@ -722,7 +722,7 @@ type UpdateChildAttributes struct {
 	// New name for the child organization (must be uppercase, no spaces)
 	Name *string `json:"name,omitempty" url:"name,omitempty"`
 	// External identifier for the child organization
-	ExternalID *string `json:"externalId,omitempty" url:"externalId,omitempty"`
+	ExternalId *string `json:"externalId,omitempty" url:"externalId,omitempty"`
 	// Bank Identification Numbers for the child organization
 	Bins []string `json:"bins,omitempty" url:"bins,omitempty"`
 
@@ -740,11 +740,11 @@ func (u *UpdateChildAttributes) GetName() *string {
 	return u.Name
 }
 
-func (u *UpdateChildAttributes) GetExternalID() *string {
+func (u *UpdateChildAttributes) GetExternalId() *string {
 	if u == nil {
 		return nil
 	}
-	return u.ExternalID
+	return u.ExternalId
 }
 
 func (u *UpdateChildAttributes) GetBins() []string {
@@ -775,11 +775,11 @@ func (u *UpdateChildAttributes) SetName(name *string) {
 	u.require(updateChildAttributesFieldName)
 }
 
-// SetExternalID sets the ExternalID field and marks it as non-optional;
+// SetExternalId sets the ExternalId field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpdateChildAttributes) SetExternalID(externalID *string) {
-	u.ExternalID = externalID
-	u.require(updateChildAttributesFieldExternalID)
+func (u *UpdateChildAttributes) SetExternalId(externalId *string) {
+	u.ExternalId = externalId
+	u.require(updateChildAttributesFieldExternalId)
 }
 
 // SetBins sets the Bins field and marks it as non-optional;

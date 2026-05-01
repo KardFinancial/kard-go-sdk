@@ -460,14 +460,14 @@ func (a AmountType) Ptr() *AmountType {
 
 var (
 	assetFieldType = big.NewInt(1 << 0)
-	assetFieldURL  = big.NewInt(1 << 1)
+	assetFieldUrl  = big.NewInt(1 << 1)
 	assetFieldAlt  = big.NewInt(1 << 2)
 )
 
 type Asset struct {
 	Type string `json:"type" url:"type"`
 	// URL of the asset containing an attribution token
-	URL string `json:"url" url:"url"`
+	Url string `json:"url" url:"url"`
 	// Alt text of the asset
 	Alt string `json:"alt" url:"alt"`
 
@@ -485,11 +485,11 @@ func (a *Asset) GetType() string {
 	return a.Type
 }
 
-func (a *Asset) GetURL() string {
+func (a *Asset) GetUrl() string {
 	if a == nil {
 		return ""
 	}
-	return a.URL
+	return a.Url
 }
 
 func (a *Asset) GetAlt() string {
@@ -520,11 +520,11 @@ func (a *Asset) SetType(type_ string) {
 	a.require(assetFieldType)
 }
 
-// SetURL sets the URL field and marks it as non-optional;
+// SetUrl sets the Url field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (a *Asset) SetURL(url string) {
-	a.URL = url
-	a.require(assetFieldURL)
+func (a *Asset) SetUrl(url string) {
+	a.Url = url
+	a.require(assetFieldUrl)
 }
 
 // SetAlt sets the Alt field and marks it as non-optional;
@@ -603,12 +603,12 @@ func (b ButtonStyle) Ptr() *ButtonStyle {
 }
 
 var (
-	categoryDataFieldID = big.NewInt(1 << 0)
+	categoryDataFieldId = big.NewInt(1 << 0)
 )
 
 type CategoryData struct {
 	// id of the category
-	ID string `json:"id" url:"id"`
+	Id string `json:"id" url:"id"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -618,11 +618,11 @@ type CategoryData struct {
 	rawJSON         json.RawMessage
 }
 
-func (c *CategoryData) GetID() string {
+func (c *CategoryData) GetId() string {
 	if c == nil {
 		return ""
 	}
-	return c.ID
+	return c.Id
 }
 
 func (c *CategoryData) Type() string {
@@ -643,11 +643,11 @@ func (c *CategoryData) require(field *big.Int) {
 	c.explicitFields.Or(c.explicitFields, field)
 }
 
-// SetID sets the ID field and marks it as non-optional;
+// SetId sets the Id field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CategoryData) SetID(id string) {
-	c.ID = id
-	c.require(categoryDataFieldID)
+func (c *CategoryData) SetId(id string) {
+	c.Id = id
+	c.require(categoryDataFieldId)
 }
 
 func (c *CategoryData) UnmarshalJSON(data []byte) error {
@@ -789,12 +789,12 @@ func (c *CategoryFields) String() string {
 }
 
 var (
-	categoryIdentifierFieldID = big.NewInt(1 << 0)
+	categoryIdentifierFieldId = big.NewInt(1 << 0)
 )
 
 type CategoryIdentifier struct {
 	// id of the category
-	ID string `json:"id" url:"id"`
+	Id string `json:"id" url:"id"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -804,11 +804,11 @@ type CategoryIdentifier struct {
 	rawJSON         json.RawMessage
 }
 
-func (c *CategoryIdentifier) GetID() string {
+func (c *CategoryIdentifier) GetId() string {
 	if c == nil {
 		return ""
 	}
-	return c.ID
+	return c.Id
 }
 
 func (c *CategoryIdentifier) Type() string {
@@ -829,11 +829,11 @@ func (c *CategoryIdentifier) require(field *big.Int) {
 	c.explicitFields.Or(c.explicitFields, field)
 }
 
-// SetID sets the ID field and marks it as non-optional;
+// SetId sets the Id field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CategoryIdentifier) SetID(id string) {
-	c.ID = id
-	c.require(categoryIdentifierFieldID)
+func (c *CategoryIdentifier) SetId(id string) {
+	c.Id = id
+	c.require(categoryIdentifierFieldId)
 }
 
 func (c *CategoryIdentifier) UnmarshalJSON(data []byte) error {
@@ -890,13 +890,13 @@ func (c *CategoryIdentifier) String() string {
 }
 
 var (
-	categoryIncludedFieldID         = big.NewInt(1 << 0)
+	categoryIncludedFieldId         = big.NewInt(1 << 0)
 	categoryIncludedFieldAttributes = big.NewInt(1 << 1)
 )
 
 type CategoryIncluded struct {
 	// id of the category
-	ID         string          `json:"id" url:"id"`
+	Id         string          `json:"id" url:"id"`
 	Attributes *CategoryFields `json:"attributes" url:"attributes"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
@@ -907,11 +907,11 @@ type CategoryIncluded struct {
 	rawJSON         json.RawMessage
 }
 
-func (c *CategoryIncluded) GetID() string {
+func (c *CategoryIncluded) GetId() string {
 	if c == nil {
 		return ""
 	}
-	return c.ID
+	return c.Id
 }
 
 func (c *CategoryIncluded) GetAttributes() *CategoryFields {
@@ -939,11 +939,11 @@ func (c *CategoryIncluded) require(field *big.Int) {
 	c.explicitFields.Or(c.explicitFields, field)
 }
 
-// SetID sets the ID field and marks it as non-optional;
+// SetId sets the Id field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CategoryIncluded) SetID(id string) {
-	c.ID = id
-	c.require(categoryIncludedFieldID)
+func (c *CategoryIncluded) SetId(id string) {
+	c.Id = id
+	c.require(categoryIncludedFieldId)
 }
 
 // SetAttributes sets the Attributes field and marks it as non-optional;
@@ -1420,13 +1420,13 @@ func (c *Coordinates) String() string {
 
 // Action configuration for CTA button
 var (
-	ctaActionFieldURL    = big.NewInt(1 << 0)
+	ctaActionFieldUrl    = big.NewInt(1 << 0)
 	ctaActionFieldMethod = big.NewInt(1 << 1)
 )
 
 type CtaAction struct {
 	// URL endpoint to call when button is clicked
-	URL string `json:"url" url:"url"`
+	Url string `json:"url" url:"url"`
 	// HTTP method to use (e.g., POST)
 	Method string `json:"method" url:"method"`
 
@@ -1437,11 +1437,11 @@ type CtaAction struct {
 	rawJSON         json.RawMessage
 }
 
-func (c *CtaAction) GetURL() string {
+func (c *CtaAction) GetUrl() string {
 	if c == nil {
 		return ""
 	}
-	return c.URL
+	return c.Url
 }
 
 func (c *CtaAction) GetMethod() string {
@@ -1465,11 +1465,11 @@ func (c *CtaAction) require(field *big.Int) {
 	c.explicitFields.Or(c.explicitFields, field)
 }
 
-// SetURL sets the URL field and marks it as non-optional;
+// SetUrl sets the Url field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CtaAction) SetURL(url string) {
-	c.URL = url
-	c.require(ctaActionFieldURL)
+func (c *CtaAction) SetUrl(url string) {
+	c.Url = url
+	c.require(ctaActionFieldUrl)
 }
 
 // SetMethod sets the Method field and marks it as non-optional;
@@ -2083,14 +2083,14 @@ func (l *LocationAttributes) String() string {
 }
 
 var (
-	locationDataFieldID            = big.NewInt(1 << 0)
+	locationDataFieldId            = big.NewInt(1 << 0)
 	locationDataFieldAttributes    = big.NewInt(1 << 1)
 	locationDataFieldRelationships = big.NewInt(1 << 2)
 )
 
 type LocationData struct {
 	// Location ID in Kard's system
-	ID         kardgosdk.MongoID   `json:"id" url:"id"`
+	Id         kardgosdk.MongoId   `json:"id" url:"id"`
 	Attributes *LocationAttributes `json:"attributes" url:"attributes"`
 	// Related resources to the offer
 	Relationships *LocationRelationships `json:"relationships,omitempty" url:"relationships,omitempty"`
@@ -2103,11 +2103,11 @@ type LocationData struct {
 	rawJSON         json.RawMessage
 }
 
-func (l *LocationData) GetID() kardgosdk.MongoID {
+func (l *LocationData) GetId() kardgosdk.MongoId {
 	if l == nil {
 		return ""
 	}
-	return l.ID
+	return l.Id
 }
 
 func (l *LocationData) GetAttributes() *LocationAttributes {
@@ -2142,11 +2142,11 @@ func (l *LocationData) require(field *big.Int) {
 	l.explicitFields.Or(l.explicitFields, field)
 }
 
-// SetID sets the ID field and marks it as non-optional;
+// SetId sets the Id field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (l *LocationData) SetID(id kardgosdk.MongoID) {
-	l.ID = id
-	l.require(locationDataFieldID)
+func (l *LocationData) SetId(id kardgosdk.MongoId) {
+	l.Id = id
+	l.require(locationDataFieldId)
 }
 
 // SetAttributes sets the Attributes field and marks it as non-optional;
@@ -2726,7 +2726,7 @@ var (
 	offerCommonFieldsFieldMaxTransactionAmount = big.NewInt(1 << 10)
 	offerCommonFieldsFieldMinRewardAmount      = big.NewInt(1 << 11)
 	offerCommonFieldsFieldMaxRewardAmount      = big.NewInt(1 << 12)
-	offerCommonFieldsFieldWebsiteURL           = big.NewInt(1 << 13)
+	offerCommonFieldsFieldWebsiteUrl           = big.NewInt(1 << 13)
 	offerCommonFieldsFieldDescription          = big.NewInt(1 << 14)
 	offerCommonFieldsFieldComponents           = big.NewInt(1 << 15)
 )
@@ -2757,7 +2757,7 @@ type OfferCommonFields struct {
 	// Maximum Reward Amount, if available on offer
 	MaxRewardAmount *Amount `json:"maxRewardAmount,omitempty" url:"maxRewardAmount,omitempty"`
 	// URL to the website of the offer provider
-	WebsiteURL *string `json:"websiteUrl,omitempty" url:"websiteUrl,omitempty"`
+	WebsiteUrl *string `json:"websiteUrl,omitempty" url:"websiteUrl,omitempty"`
 	// Description of the offer
 	Description *string `json:"description,omitempty" url:"description,omitempty"`
 	// UI component data for the offer, returned when supportedComponents query parameter is provided
@@ -2861,11 +2861,11 @@ func (o *OfferCommonFields) GetMaxRewardAmount() *Amount {
 	return o.MaxRewardAmount
 }
 
-func (o *OfferCommonFields) GetWebsiteURL() *string {
+func (o *OfferCommonFields) GetWebsiteUrl() *string {
 	if o == nil {
 		return nil
 	}
-	return o.WebsiteURL
+	return o.WebsiteUrl
 }
 
 func (o *OfferCommonFields) GetDescription() *string {
@@ -2987,11 +2987,11 @@ func (o *OfferCommonFields) SetMaxRewardAmount(maxRewardAmount *Amount) {
 	o.require(offerCommonFieldsFieldMaxRewardAmount)
 }
 
-// SetWebsiteURL sets the WebsiteURL field and marks it as non-optional;
+// SetWebsiteUrl sets the WebsiteUrl field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (o *OfferCommonFields) SetWebsiteURL(websiteURL *string) {
-	o.WebsiteURL = websiteURL
-	o.require(offerCommonFieldsFieldWebsiteURL)
+func (o *OfferCommonFields) SetWebsiteUrl(websiteUrl *string) {
+	o.WebsiteUrl = websiteUrl
+	o.require(offerCommonFieldsFieldWebsiteUrl)
 }
 
 // SetDescription sets the Description field and marks it as non-optional;
@@ -4639,14 +4639,14 @@ func (p *ProgressBarSegments) String() string {
 }
 
 var (
-	standardOfferFieldID            = big.NewInt(1 << 0)
+	standardOfferFieldId            = big.NewInt(1 << 0)
 	standardOfferFieldAttributes    = big.NewInt(1 << 1)
 	standardOfferFieldRelationships = big.NewInt(1 << 2)
 )
 
 type StandardOffer struct {
 	// Offer ID in Kard's system
-	ID            kardgosdk.MongoID             `json:"id" url:"id"`
+	Id            kardgosdk.MongoId             `json:"id" url:"id"`
 	Attributes    *StandardOfferFields          `json:"attributes" url:"attributes"`
 	Relationships *EligibilityOfferRelationship `json:"relationships,omitempty" url:"relationships,omitempty"`
 
@@ -4657,11 +4657,11 @@ type StandardOffer struct {
 	rawJSON         json.RawMessage
 }
 
-func (s *StandardOffer) GetID() kardgosdk.MongoID {
+func (s *StandardOffer) GetId() kardgosdk.MongoId {
 	if s == nil {
 		return ""
 	}
-	return s.ID
+	return s.Id
 }
 
 func (s *StandardOffer) GetAttributes() *StandardOfferFields {
@@ -4692,11 +4692,11 @@ func (s *StandardOffer) require(field *big.Int) {
 	s.explicitFields.Or(s.explicitFields, field)
 }
 
-// SetID sets the ID field and marks it as non-optional;
+// SetId sets the Id field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (s *StandardOffer) SetID(id kardgosdk.MongoID) {
-	s.ID = id
-	s.require(standardOfferFieldID)
+func (s *StandardOffer) SetId(id kardgosdk.MongoId) {
+	s.Id = id
+	s.require(standardOfferFieldId)
 }
 
 // SetAttributes sets the Attributes field and marks it as non-optional;
@@ -4756,13 +4756,13 @@ func (s *StandardOffer) String() string {
 }
 
 var (
-	standardOfferCoreFieldID         = big.NewInt(1 << 0)
+	standardOfferCoreFieldId         = big.NewInt(1 << 0)
 	standardOfferCoreFieldAttributes = big.NewInt(1 << 1)
 )
 
 type StandardOfferCore struct {
 	// Offer ID in Kard's system
-	ID         kardgosdk.MongoID    `json:"id" url:"id"`
+	Id         kardgosdk.MongoId    `json:"id" url:"id"`
 	Attributes *StandardOfferFields `json:"attributes" url:"attributes"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
@@ -4772,11 +4772,11 @@ type StandardOfferCore struct {
 	rawJSON         json.RawMessage
 }
 
-func (s *StandardOfferCore) GetID() kardgosdk.MongoID {
+func (s *StandardOfferCore) GetId() kardgosdk.MongoId {
 	if s == nil {
 		return ""
 	}
-	return s.ID
+	return s.Id
 }
 
 func (s *StandardOfferCore) GetAttributes() *StandardOfferFields {
@@ -4800,11 +4800,11 @@ func (s *StandardOfferCore) require(field *big.Int) {
 	s.explicitFields.Or(s.explicitFields, field)
 }
 
-// SetID sets the ID field and marks it as non-optional;
+// SetId sets the Id field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (s *StandardOfferCore) SetID(id kardgosdk.MongoID) {
-	s.ID = id
-	s.require(standardOfferCoreFieldID)
+func (s *StandardOfferCore) SetId(id kardgosdk.MongoId) {
+	s.Id = id
+	s.require(standardOfferCoreFieldId)
 }
 
 // SetAttributes sets the Attributes field and marks it as non-optional;
@@ -4870,7 +4870,7 @@ var (
 	standardOfferFieldsFieldMaxTransactionAmount = big.NewInt(1 << 10)
 	standardOfferFieldsFieldMinRewardAmount      = big.NewInt(1 << 11)
 	standardOfferFieldsFieldMaxRewardAmount      = big.NewInt(1 << 12)
-	standardOfferFieldsFieldWebsiteURL           = big.NewInt(1 << 13)
+	standardOfferFieldsFieldWebsiteUrl           = big.NewInt(1 << 13)
 	standardOfferFieldsFieldDescription          = big.NewInt(1 << 14)
 	standardOfferFieldsFieldComponents           = big.NewInt(1 << 15)
 )
@@ -4901,7 +4901,7 @@ type StandardOfferFields struct {
 	// Maximum Reward Amount, if available on offer
 	MaxRewardAmount *Amount `json:"maxRewardAmount,omitempty" url:"maxRewardAmount,omitempty"`
 	// URL to the website of the offer provider
-	WebsiteURL *string `json:"websiteUrl,omitempty" url:"websiteUrl,omitempty"`
+	WebsiteUrl *string `json:"websiteUrl,omitempty" url:"websiteUrl,omitempty"`
 	// Description of the offer
 	Description *string `json:"description,omitempty" url:"description,omitempty"`
 	// UI component data for the offer, returned when supportedComponents query parameter is provided
@@ -5005,11 +5005,11 @@ func (s *StandardOfferFields) GetMaxRewardAmount() *Amount {
 	return s.MaxRewardAmount
 }
 
-func (s *StandardOfferFields) GetWebsiteURL() *string {
+func (s *StandardOfferFields) GetWebsiteUrl() *string {
 	if s == nil {
 		return nil
 	}
-	return s.WebsiteURL
+	return s.WebsiteUrl
 }
 
 func (s *StandardOfferFields) GetDescription() *string {
@@ -5131,11 +5131,11 @@ func (s *StandardOfferFields) SetMaxRewardAmount(maxRewardAmount *Amount) {
 	s.require(standardOfferFieldsFieldMaxRewardAmount)
 }
 
-// SetWebsiteURL sets the WebsiteURL field and marks it as non-optional;
+// SetWebsiteUrl sets the WebsiteUrl field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (s *StandardOfferFields) SetWebsiteURL(websiteURL *string) {
-	s.WebsiteURL = websiteURL
-	s.require(standardOfferFieldsFieldWebsiteURL)
+func (s *StandardOfferFields) SetWebsiteUrl(websiteUrl *string) {
+	s.WebsiteUrl = websiteUrl
+	s.require(standardOfferFieldsFieldWebsiteUrl)
 }
 
 // SetDescription sets the Description field and marks it as non-optional;

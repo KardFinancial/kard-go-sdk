@@ -6,7 +6,7 @@ import (
 	context "context"
 	os "os"
 
-	kardgosdk "github.com/KardFinancial/kard-go-sdk"
+	kard "github.com/KardFinancial/kard-go-sdk"
 	core "github.com/KardFinancial/kard-go-sdk/core"
 	internal "github.com/KardFinancial/kard-go-sdk/internal"
 	option "github.com/KardFinancial/kard-go-sdk/option"
@@ -46,15 +46,15 @@ func NewClient(options *core.RequestOptions) *Client {
 // <b>Required scopes:</b> `attributions:write`
 func (c *Client) Create(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
-	userID kardgosdk.UserID,
+	organizationId kard.OrganizationId,
+	userId kard.UserId,
 	request *users.CreateAttributionRequestObject,
 	opts ...option.RequestOption,
 ) (*users.CreateAttributionResponse, error) {
 	response, err := c.WithRawResponse.Create(
 		ctx,
-		organizationID,
-		userID,
+		organizationId,
+		userId,
 		request,
 		opts...,
 	)
@@ -68,18 +68,18 @@ func (c *Client) Create(
 // Optionally include the offer data by passing `include=offer`.
 func (c *Client) Activate(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
-	userID kardgosdk.UserID,
+	organizationId kard.OrganizationId,
+	userId kard.UserId,
 	// The unique identifier of the offer being activated
-	offerID string,
+	offerId string,
 	request *users.ActivateOfferRequest,
 	opts ...option.RequestOption,
 ) (*users.ActivateOfferResponse, error) {
 	response, err := c.WithRawResponse.Activate(
 		ctx,
-		organizationID,
-		userID,
-		offerID,
+		organizationId,
+		userId,
+		offerId,
 		request,
 		opts...,
 	)
@@ -93,18 +93,18 @@ func (c *Client) Activate(
 // Optionally include the offer data by passing `include=offer`.
 func (c *Client) Boost(
 	ctx context.Context,
-	organizationID kardgosdk.OrganizationID,
-	userID kardgosdk.UserID,
+	organizationId kard.OrganizationId,
+	userId kard.UserId,
 	// The unique identifier of the offer being boosted
-	offerID string,
+	offerId string,
 	request *users.BoostOfferRequest,
 	opts ...option.RequestOption,
 ) (*users.BoostOfferResponse, error) {
 	response, err := c.WithRawResponse.Boost(
 		ctx,
-		organizationID,
-		userID,
-		offerID,
+		organizationId,
+		userId,
+		offerId,
 		request,
 		opts...,
 	)

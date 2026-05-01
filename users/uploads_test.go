@@ -304,11 +304,11 @@ func TestSettersMarkExplicitCreateUploadPartRequestObject(t *testing.T) {
 }
 
 func TestSettersCreateUploadPartResponseData(t *testing.T) {
-	t.Run("SetID", func(t *testing.T) {
+	t.Run("SetId", func(t *testing.T) {
 		obj := &CreateUploadPartResponseData{}
-		var fernTestValueID string
-		obj.SetID(fernTestValueID)
-		assert.Equal(t, fernTestValueID, obj.ID)
+		var fernTestValueId string
+		obj.SetId(fernTestValueId)
+		assert.Equal(t, fernTestValueId, obj.Id)
 		assert.NotNil(t, obj.explicitFields)
 	})
 
@@ -323,18 +323,18 @@ func TestSettersCreateUploadPartResponseData(t *testing.T) {
 }
 
 func TestGettersCreateUploadPartResponseData(t *testing.T) {
-	t.Run("GetID", func(t *testing.T) {
+	t.Run("GetId", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &CreateUploadPartResponseData{}
 		var expected string
-		obj.ID = expected
+		obj.Id = expected
 
 		// Act & Assert
-		assert.Equal(t, expected, obj.GetID(), "getter should return the property value")
+		assert.Equal(t, expected, obj.GetId(), "getter should return the property value")
 	})
 
-	t.Run("GetID_NilReceiver", func(t *testing.T) {
+	t.Run("GetId_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *CreateUploadPartResponseData
 		// Should not panic - getters should handle nil receiver gracefully
@@ -343,7 +343,7 @@ func TestGettersCreateUploadPartResponseData(t *testing.T) {
 				t.Errorf("Getter panicked on nil receiver: %v", r)
 			}
 		}()
-		_ = obj.GetID() // Should return zero value
+		_ = obj.GetId() // Should return zero value
 	})
 
 	t.Run("GetAttributes", func(t *testing.T) {
@@ -382,14 +382,14 @@ func TestGettersCreateUploadPartResponseData(t *testing.T) {
 }
 
 func TestSettersMarkExplicitCreateUploadPartResponseData(t *testing.T) {
-	t.Run("SetID_MarksExplicit", func(t *testing.T) {
+	t.Run("SetId_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &CreateUploadPartResponseData{}
-		var fernTestValueID string
+		var fernTestValueId string
 
 		// Act
-		obj.SetID(fernTestValueID)
+		obj.SetId(fernTestValueId)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -727,11 +727,11 @@ func TestSettersMarkExplicitCreateUploadRequestObject(t *testing.T) {
 }
 
 func TestSettersCreateUploadResponseData(t *testing.T) {
-	t.Run("SetID", func(t *testing.T) {
+	t.Run("SetId", func(t *testing.T) {
 		obj := &CreateUploadResponseData{}
-		var fernTestValueID string
-		obj.SetID(fernTestValueID)
-		assert.Equal(t, fernTestValueID, obj.ID)
+		var fernTestValueId string
+		obj.SetId(fernTestValueId)
+		assert.Equal(t, fernTestValueId, obj.Id)
 		assert.NotNil(t, obj.explicitFields)
 	})
 
@@ -746,18 +746,18 @@ func TestSettersCreateUploadResponseData(t *testing.T) {
 }
 
 func TestGettersCreateUploadResponseData(t *testing.T) {
-	t.Run("GetID", func(t *testing.T) {
+	t.Run("GetId", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &CreateUploadResponseData{}
 		var expected string
-		obj.ID = expected
+		obj.Id = expected
 
 		// Act & Assert
-		assert.Equal(t, expected, obj.GetID(), "getter should return the property value")
+		assert.Equal(t, expected, obj.GetId(), "getter should return the property value")
 	})
 
-	t.Run("GetID_NilReceiver", func(t *testing.T) {
+	t.Run("GetId_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *CreateUploadResponseData
 		// Should not panic - getters should handle nil receiver gracefully
@@ -766,7 +766,7 @@ func TestGettersCreateUploadResponseData(t *testing.T) {
 				t.Errorf("Getter panicked on nil receiver: %v", r)
 			}
 		}()
-		_ = obj.GetID() // Should return zero value
+		_ = obj.GetId() // Should return zero value
 	})
 
 	t.Run("GetAttributes", func(t *testing.T) {
@@ -805,14 +805,14 @@ func TestGettersCreateUploadResponseData(t *testing.T) {
 }
 
 func TestSettersMarkExplicitCreateUploadResponseData(t *testing.T) {
-	t.Run("SetID_MarksExplicit", func(t *testing.T) {
+	t.Run("SetId_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &CreateUploadResponseData{}
-		var fernTestValueID string
+		var fernTestValueId string
 
 		// Act
-		obj.SetID(fernTestValueID)
+		obj.SetId(fernTestValueId)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -1010,11 +1010,11 @@ func TestSettersMarkExplicitCreateUploadResponseObject(t *testing.T) {
 }
 
 func TestSettersHistoricalTransactionCompleteNoData(t *testing.T) {
-	t.Run("SetID", func(t *testing.T) {
+	t.Run("SetId", func(t *testing.T) {
 		obj := &HistoricalTransactionCompleteNoData{}
-		var fernTestValueID string
-		obj.SetID(fernTestValueID)
-		assert.Equal(t, fernTestValueID, obj.ID)
+		var fernTestValueId string
+		obj.SetId(fernTestValueId)
+		assert.Equal(t, fernTestValueId, obj.Id)
 		assert.NotNil(t, obj.explicitFields)
 	})
 
@@ -1029,18 +1029,18 @@ func TestSettersHistoricalTransactionCompleteNoData(t *testing.T) {
 }
 
 func TestGettersHistoricalTransactionCompleteNoData(t *testing.T) {
-	t.Run("GetID", func(t *testing.T) {
+	t.Run("GetId", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &HistoricalTransactionCompleteNoData{}
 		var expected string
-		obj.ID = expected
+		obj.Id = expected
 
 		// Act & Assert
-		assert.Equal(t, expected, obj.GetID(), "getter should return the property value")
+		assert.Equal(t, expected, obj.GetId(), "getter should return the property value")
 	})
 
-	t.Run("GetID_NilReceiver", func(t *testing.T) {
+	t.Run("GetId_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *HistoricalTransactionCompleteNoData
 		// Should not panic - getters should handle nil receiver gracefully
@@ -1049,7 +1049,7 @@ func TestGettersHistoricalTransactionCompleteNoData(t *testing.T) {
 				t.Errorf("Getter panicked on nil receiver: %v", r)
 			}
 		}()
-		_ = obj.GetID() // Should return zero value
+		_ = obj.GetId() // Should return zero value
 	})
 
 	t.Run("GetAttributes", func(t *testing.T) {
@@ -1088,14 +1088,14 @@ func TestGettersHistoricalTransactionCompleteNoData(t *testing.T) {
 }
 
 func TestSettersMarkExplicitHistoricalTransactionCompleteNoData(t *testing.T) {
-	t.Run("SetID_MarksExplicit", func(t *testing.T) {
+	t.Run("SetId_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &HistoricalTransactionCompleteNoData{}
-		var fernTestValueID string
+		var fernTestValueId string
 
 		// Act
-		obj.SetID(fernTestValueID)
+		obj.SetId(fernTestValueId)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -1374,11 +1374,11 @@ func TestSettersMarkExplicitUpdateUploadRequestObject(t *testing.T) {
 }
 
 func TestSettersUpdateUploadResponseData(t *testing.T) {
-	t.Run("SetID", func(t *testing.T) {
+	t.Run("SetId", func(t *testing.T) {
 		obj := &UpdateUploadResponseData{}
-		var fernTestValueID string
-		obj.SetID(fernTestValueID)
-		assert.Equal(t, fernTestValueID, obj.ID)
+		var fernTestValueId string
+		obj.SetId(fernTestValueId)
+		assert.Equal(t, fernTestValueId, obj.Id)
 		assert.NotNil(t, obj.explicitFields)
 	})
 
@@ -1393,18 +1393,18 @@ func TestSettersUpdateUploadResponseData(t *testing.T) {
 }
 
 func TestGettersUpdateUploadResponseData(t *testing.T) {
-	t.Run("GetID", func(t *testing.T) {
+	t.Run("GetId", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &UpdateUploadResponseData{}
 		var expected string
-		obj.ID = expected
+		obj.Id = expected
 
 		// Act & Assert
-		assert.Equal(t, expected, obj.GetID(), "getter should return the property value")
+		assert.Equal(t, expected, obj.GetId(), "getter should return the property value")
 	})
 
-	t.Run("GetID_NilReceiver", func(t *testing.T) {
+	t.Run("GetId_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *UpdateUploadResponseData
 		// Should not panic - getters should handle nil receiver gracefully
@@ -1413,7 +1413,7 @@ func TestGettersUpdateUploadResponseData(t *testing.T) {
 				t.Errorf("Getter panicked on nil receiver: %v", r)
 			}
 		}()
-		_ = obj.GetID() // Should return zero value
+		_ = obj.GetId() // Should return zero value
 	})
 
 	t.Run("GetAttributes", func(t *testing.T) {
@@ -1452,14 +1452,14 @@ func TestGettersUpdateUploadResponseData(t *testing.T) {
 }
 
 func TestSettersMarkExplicitUpdateUploadResponseData(t *testing.T) {
-	t.Run("SetID_MarksExplicit", func(t *testing.T) {
+	t.Run("SetId_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &UpdateUploadResponseData{}
-		var fernTestValueID string
+		var fernTestValueId string
 
 		// Act
-		obj.SetID(fernTestValueID)
+		obj.SetId(fernTestValueId)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)

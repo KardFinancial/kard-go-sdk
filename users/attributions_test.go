@@ -402,11 +402,11 @@ func TestSettersMarkExplicitActivateOfferResponse(t *testing.T) {
 }
 
 func TestSettersActivateOfferResponseAttributes(t *testing.T) {
-	t.Run("SetEntityID", func(t *testing.T) {
+	t.Run("SetEntityId", func(t *testing.T) {
 		obj := &ActivateOfferResponseAttributes{}
-		var fernTestValueEntityID string
-		obj.SetEntityID(fernTestValueEntityID)
-		assert.Equal(t, fernTestValueEntityID, obj.EntityID)
+		var fernTestValueEntityId string
+		obj.SetEntityId(fernTestValueEntityId)
+		assert.Equal(t, fernTestValueEntityId, obj.EntityId)
 		assert.NotNil(t, obj.explicitFields)
 	})
 
@@ -437,18 +437,18 @@ func TestSettersActivateOfferResponseAttributes(t *testing.T) {
 }
 
 func TestGettersActivateOfferResponseAttributes(t *testing.T) {
-	t.Run("GetEntityID", func(t *testing.T) {
+	t.Run("GetEntityId", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &ActivateOfferResponseAttributes{}
 		var expected string
-		obj.EntityID = expected
+		obj.EntityId = expected
 
 		// Act & Assert
-		assert.Equal(t, expected, obj.GetEntityID(), "getter should return the property value")
+		assert.Equal(t, expected, obj.GetEntityId(), "getter should return the property value")
 	})
 
-	t.Run("GetEntityID_NilReceiver", func(t *testing.T) {
+	t.Run("GetEntityId_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *ActivateOfferResponseAttributes
 		// Should not panic - getters should handle nil receiver gracefully
@@ -457,7 +457,7 @@ func TestGettersActivateOfferResponseAttributes(t *testing.T) {
 				t.Errorf("Getter panicked on nil receiver: %v", r)
 			}
 		}()
-		_ = obj.GetEntityID() // Should return zero value
+		_ = obj.GetEntityId() // Should return zero value
 	})
 
 	t.Run("GetEventCode", func(t *testing.T) {
@@ -532,14 +532,14 @@ func TestGettersActivateOfferResponseAttributes(t *testing.T) {
 }
 
 func TestSettersMarkExplicitActivateOfferResponseAttributes(t *testing.T) {
-	t.Run("SetEntityID_MarksExplicit", func(t *testing.T) {
+	t.Run("SetEntityId_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &ActivateOfferResponseAttributes{}
-		var fernTestValueEntityID string
+		var fernTestValueEntityId string
 
 		// Act
-		obj.SetEntityID(fernTestValueEntityID)
+		obj.SetEntityId(fernTestValueEntityId)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -667,11 +667,11 @@ func TestSettersActivateOfferResponseData(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
-	t.Run("SetID", func(t *testing.T) {
+	t.Run("SetId", func(t *testing.T) {
 		obj := &ActivateOfferResponseData{}
-		var fernTestValueID string
-		obj.SetID(fernTestValueID)
-		assert.Equal(t, fernTestValueID, obj.ID)
+		var fernTestValueId string
+		obj.SetId(fernTestValueId)
+		assert.Equal(t, fernTestValueId, obj.Id)
 		assert.NotNil(t, obj.explicitFields)
 	})
 
@@ -709,18 +709,18 @@ func TestGettersActivateOfferResponseData(t *testing.T) {
 		_ = obj.GetType() // Should return zero value
 	})
 
-	t.Run("GetID", func(t *testing.T) {
+	t.Run("GetId", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &ActivateOfferResponseData{}
 		var expected string
-		obj.ID = expected
+		obj.Id = expected
 
 		// Act & Assert
-		assert.Equal(t, expected, obj.GetID(), "getter should return the property value")
+		assert.Equal(t, expected, obj.GetId(), "getter should return the property value")
 	})
 
-	t.Run("GetID_NilReceiver", func(t *testing.T) {
+	t.Run("GetId_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *ActivateOfferResponseData
 		// Should not panic - getters should handle nil receiver gracefully
@@ -729,7 +729,7 @@ func TestGettersActivateOfferResponseData(t *testing.T) {
 				t.Errorf("Getter panicked on nil receiver: %v", r)
 			}
 		}()
-		_ = obj.GetID() // Should return zero value
+		_ = obj.GetId() // Should return zero value
 	})
 
 	t.Run("GetAttributes", func(t *testing.T) {
@@ -799,14 +799,14 @@ func TestSettersMarkExplicitActivateOfferResponseData(t *testing.T) {
 		// It verifies that setting a field via setter allows successful JSON round-trip
 	})
 
-	t.Run("SetID_MarksExplicit", func(t *testing.T) {
+	t.Run("SetId_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &ActivateOfferResponseData{}
-		var fernTestValueID string
+		var fernTestValueId string
 
 		// Act
-		obj.SetID(fernTestValueID)
+		obj.SetId(fernTestValueId)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -1372,11 +1372,11 @@ func TestSettersMarkExplicitBoostOfferResponse(t *testing.T) {
 }
 
 func TestSettersBoostOfferResponseAttributes(t *testing.T) {
-	t.Run("SetEntityID", func(t *testing.T) {
+	t.Run("SetEntityId", func(t *testing.T) {
 		obj := &BoostOfferResponseAttributes{}
-		var fernTestValueEntityID string
-		obj.SetEntityID(fernTestValueEntityID)
-		assert.Equal(t, fernTestValueEntityID, obj.EntityID)
+		var fernTestValueEntityId string
+		obj.SetEntityId(fernTestValueEntityId)
+		assert.Equal(t, fernTestValueEntityId, obj.EntityId)
 		assert.NotNil(t, obj.explicitFields)
 	})
 
@@ -1407,18 +1407,18 @@ func TestSettersBoostOfferResponseAttributes(t *testing.T) {
 }
 
 func TestGettersBoostOfferResponseAttributes(t *testing.T) {
-	t.Run("GetEntityID", func(t *testing.T) {
+	t.Run("GetEntityId", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &BoostOfferResponseAttributes{}
 		var expected string
-		obj.EntityID = expected
+		obj.EntityId = expected
 
 		// Act & Assert
-		assert.Equal(t, expected, obj.GetEntityID(), "getter should return the property value")
+		assert.Equal(t, expected, obj.GetEntityId(), "getter should return the property value")
 	})
 
-	t.Run("GetEntityID_NilReceiver", func(t *testing.T) {
+	t.Run("GetEntityId_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *BoostOfferResponseAttributes
 		// Should not panic - getters should handle nil receiver gracefully
@@ -1427,7 +1427,7 @@ func TestGettersBoostOfferResponseAttributes(t *testing.T) {
 				t.Errorf("Getter panicked on nil receiver: %v", r)
 			}
 		}()
-		_ = obj.GetEntityID() // Should return zero value
+		_ = obj.GetEntityId() // Should return zero value
 	})
 
 	t.Run("GetEventCode", func(t *testing.T) {
@@ -1502,14 +1502,14 @@ func TestGettersBoostOfferResponseAttributes(t *testing.T) {
 }
 
 func TestSettersMarkExplicitBoostOfferResponseAttributes(t *testing.T) {
-	t.Run("SetEntityID_MarksExplicit", func(t *testing.T) {
+	t.Run("SetEntityId_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &BoostOfferResponseAttributes{}
-		var fernTestValueEntityID string
+		var fernTestValueEntityId string
 
 		// Act
-		obj.SetEntityID(fernTestValueEntityID)
+		obj.SetEntityId(fernTestValueEntityId)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -1637,11 +1637,11 @@ func TestSettersBoostOfferResponseData(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
-	t.Run("SetID", func(t *testing.T) {
+	t.Run("SetId", func(t *testing.T) {
 		obj := &BoostOfferResponseData{}
-		var fernTestValueID string
-		obj.SetID(fernTestValueID)
-		assert.Equal(t, fernTestValueID, obj.ID)
+		var fernTestValueId string
+		obj.SetId(fernTestValueId)
+		assert.Equal(t, fernTestValueId, obj.Id)
 		assert.NotNil(t, obj.explicitFields)
 	})
 
@@ -1679,18 +1679,18 @@ func TestGettersBoostOfferResponseData(t *testing.T) {
 		_ = obj.GetType() // Should return zero value
 	})
 
-	t.Run("GetID", func(t *testing.T) {
+	t.Run("GetId", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &BoostOfferResponseData{}
 		var expected string
-		obj.ID = expected
+		obj.Id = expected
 
 		// Act & Assert
-		assert.Equal(t, expected, obj.GetID(), "getter should return the property value")
+		assert.Equal(t, expected, obj.GetId(), "getter should return the property value")
 	})
 
-	t.Run("GetID_NilReceiver", func(t *testing.T) {
+	t.Run("GetId_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *BoostOfferResponseData
 		// Should not panic - getters should handle nil receiver gracefully
@@ -1699,7 +1699,7 @@ func TestGettersBoostOfferResponseData(t *testing.T) {
 				t.Errorf("Getter panicked on nil receiver: %v", r)
 			}
 		}()
-		_ = obj.GetID() // Should return zero value
+		_ = obj.GetId() // Should return zero value
 	})
 
 	t.Run("GetAttributes", func(t *testing.T) {
@@ -1769,14 +1769,14 @@ func TestSettersMarkExplicitBoostOfferResponseData(t *testing.T) {
 		// It verifies that setting a field via setter allows successful JSON round-trip
 	})
 
-	t.Run("SetID_MarksExplicit", func(t *testing.T) {
+	t.Run("SetId_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &BoostOfferResponseData{}
-		var fernTestValueID string
+		var fernTestValueId string
 
 		// Act
-		obj.SetID(fernTestValueID)
+		obj.SetId(fernTestValueId)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -2088,11 +2088,11 @@ func TestSettersMarkExplicitCreateAttributionResponse(t *testing.T) {
 }
 
 func TestSettersNotificationAttributionAttributes(t *testing.T) {
-	t.Run("SetEntityID", func(t *testing.T) {
+	t.Run("SetEntityId", func(t *testing.T) {
 		obj := &NotificationAttributionAttributes{}
-		var fernTestValueEntityID string
-		obj.SetEntityID(fernTestValueEntityID)
-		assert.Equal(t, fernTestValueEntityID, obj.EntityID)
+		var fernTestValueEntityId string
+		obj.SetEntityId(fernTestValueEntityId)
+		assert.Equal(t, fernTestValueEntityId, obj.EntityId)
 		assert.NotNil(t, obj.explicitFields)
 	})
 
@@ -2131,18 +2131,18 @@ func TestSettersNotificationAttributionAttributes(t *testing.T) {
 }
 
 func TestGettersNotificationAttributionAttributes(t *testing.T) {
-	t.Run("GetEntityID", func(t *testing.T) {
+	t.Run("GetEntityId", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &NotificationAttributionAttributes{}
 		var expected string
-		obj.EntityID = expected
+		obj.EntityId = expected
 
 		// Act & Assert
-		assert.Equal(t, expected, obj.GetEntityID(), "getter should return the property value")
+		assert.Equal(t, expected, obj.GetEntityId(), "getter should return the property value")
 	})
 
-	t.Run("GetEntityID_NilReceiver", func(t *testing.T) {
+	t.Run("GetEntityId_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *NotificationAttributionAttributes
 		// Should not panic - getters should handle nil receiver gracefully
@@ -2151,7 +2151,7 @@ func TestGettersNotificationAttributionAttributes(t *testing.T) {
 				t.Errorf("Getter panicked on nil receiver: %v", r)
 			}
 		}()
-		_ = obj.GetEntityID() // Should return zero value
+		_ = obj.GetEntityId() // Should return zero value
 	})
 
 	t.Run("GetEventCode", func(t *testing.T) {
@@ -2259,14 +2259,14 @@ func TestGettersNotificationAttributionAttributes(t *testing.T) {
 }
 
 func TestSettersMarkExplicitNotificationAttributionAttributes(t *testing.T) {
-	t.Run("SetEntityID_MarksExplicit", func(t *testing.T) {
+	t.Run("SetEntityId_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &NotificationAttributionAttributes{}
-		var fernTestValueEntityID string
+		var fernTestValueEntityId string
 
 		// Act
-		obj.SetEntityID(fernTestValueEntityID)
+		obj.SetEntityId(fernTestValueEntityId)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -2498,11 +2498,11 @@ func TestSettersMarkExplicitNotificationAttributionRequest(t *testing.T) {
 }
 
 func TestSettersOfferAttributionAttributes(t *testing.T) {
-	t.Run("SetEntityID", func(t *testing.T) {
+	t.Run("SetEntityId", func(t *testing.T) {
 		obj := &OfferAttributionAttributes{}
-		var fernTestValueEntityID string
-		obj.SetEntityID(fernTestValueEntityID)
-		assert.Equal(t, fernTestValueEntityID, obj.EntityID)
+		var fernTestValueEntityId string
+		obj.SetEntityId(fernTestValueEntityId)
+		assert.Equal(t, fernTestValueEntityId, obj.EntityId)
 		assert.NotNil(t, obj.explicitFields)
 	})
 
@@ -2541,18 +2541,18 @@ func TestSettersOfferAttributionAttributes(t *testing.T) {
 }
 
 func TestGettersOfferAttributionAttributes(t *testing.T) {
-	t.Run("GetEntityID", func(t *testing.T) {
+	t.Run("GetEntityId", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &OfferAttributionAttributes{}
 		var expected string
-		obj.EntityID = expected
+		obj.EntityId = expected
 
 		// Act & Assert
-		assert.Equal(t, expected, obj.GetEntityID(), "getter should return the property value")
+		assert.Equal(t, expected, obj.GetEntityId(), "getter should return the property value")
 	})
 
-	t.Run("GetEntityID_NilReceiver", func(t *testing.T) {
+	t.Run("GetEntityId_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *OfferAttributionAttributes
 		// Should not panic - getters should handle nil receiver gracefully
@@ -2561,7 +2561,7 @@ func TestGettersOfferAttributionAttributes(t *testing.T) {
 				t.Errorf("Getter panicked on nil receiver: %v", r)
 			}
 		}()
-		_ = obj.GetEntityID() // Should return zero value
+		_ = obj.GetEntityId() // Should return zero value
 	})
 
 	t.Run("GetEventCode", func(t *testing.T) {
@@ -2669,14 +2669,14 @@ func TestGettersOfferAttributionAttributes(t *testing.T) {
 }
 
 func TestSettersMarkExplicitOfferAttributionAttributes(t *testing.T) {
-	t.Run("SetEntityID_MarksExplicit", func(t *testing.T) {
+	t.Run("SetEntityId_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &OfferAttributionAttributes{}
-		var fernTestValueEntityID string
+		var fernTestValueEntityId string
 
 		// Act
-		obj.SetEntityID(fernTestValueEntityID)
+		obj.SetEntityId(fernTestValueEntityId)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)

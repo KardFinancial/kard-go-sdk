@@ -3,39 +3,39 @@
 package organizations
 
 import (
-	kardgosdk "github.com/KardFinancial/kard-go-sdk"
+	kard "github.com/KardFinancial/kard-go-sdk"
 	core "github.com/KardFinancial/kard-go-sdk/core"
 	internal "github.com/KardFinancial/kard-go-sdk/internal"
 )
 
 var ErrorCodes internal.ErrorCodes = internal.ErrorCodes{
 	401: func(apiError *core.APIError) error {
-		return &kardgosdk.UnauthorizedError{
+		return &kard.UnauthorizedError{
 			APIError: apiError,
 		}
 	},
 	403: func(apiError *core.APIError) error {
-		return &kardgosdk.ForbiddenError{
+		return &kard.ForbiddenError{
 			APIError: apiError,
 		}
 	},
 	404: func(apiError *core.APIError) error {
-		return &kardgosdk.DoesNotExistError{
+		return &kard.DoesNotExistError{
 			APIError: apiError,
 		}
 	},
 	500: func(apiError *core.APIError) error {
-		return &kardgosdk.InternalServerError{
+		return &kard.InternalServerError{
 			APIError: apiError,
 		}
 	},
 	400: func(apiError *core.APIError) error {
-		return &kardgosdk.InvalidRequest{
+		return &kard.InvalidRequest{
 			APIError: apiError,
 		}
 	},
 	409: func(apiError *core.APIError) error {
-		return &kardgosdk.ConflictError{
+		return &kard.ConflictError{
 			APIError: apiError,
 		}
 	},

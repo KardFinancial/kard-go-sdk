@@ -204,11 +204,11 @@ func TestSettersCreatedSubscription(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
-	t.Run("SetID", func(t *testing.T) {
+	t.Run("SetId", func(t *testing.T) {
 		obj := &CreatedSubscription{}
-		var fernTestValueID string
-		obj.SetID(fernTestValueID)
-		assert.Equal(t, fernTestValueID, obj.ID)
+		var fernTestValueId string
+		obj.SetId(fernTestValueId)
+		assert.Equal(t, fernTestValueId, obj.Id)
 		assert.NotNil(t, obj.explicitFields)
 	})
 
@@ -248,18 +248,18 @@ func TestGettersCreatedSubscription(t *testing.T) {
 		_ = obj.GetAttributes() // Should return zero value
 	})
 
-	t.Run("GetID", func(t *testing.T) {
+	t.Run("GetId", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &CreatedSubscription{}
 		var expected string
-		obj.ID = expected
+		obj.Id = expected
 
 		// Act & Assert
-		assert.Equal(t, expected, obj.GetID(), "getter should return the property value")
+		assert.Equal(t, expected, obj.GetId(), "getter should return the property value")
 	})
 
-	t.Run("GetID_NilReceiver", func(t *testing.T) {
+	t.Run("GetId_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *CreatedSubscription
 		// Should not panic - getters should handle nil receiver gracefully
@@ -268,7 +268,7 @@ func TestGettersCreatedSubscription(t *testing.T) {
 				t.Errorf("Getter panicked on nil receiver: %v", r)
 			}
 		}()
-		_ = obj.GetID() // Should return zero value
+		_ = obj.GetId() // Should return zero value
 	})
 
 }
@@ -305,14 +305,14 @@ func TestSettersMarkExplicitCreatedSubscription(t *testing.T) {
 		// It verifies that setting a field via setter allows successful JSON round-trip
 	})
 
-	t.Run("SetID_MarksExplicit", func(t *testing.T) {
+	t.Run("SetId_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &CreatedSubscription{}
-		var fernTestValueID string
+		var fernTestValueId string
 
 		// Act
-		obj.SetID(fernTestValueID)
+		obj.SetId(fernTestValueId)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -339,11 +339,11 @@ func TestSettersMarkExplicitCreatedSubscription(t *testing.T) {
 }
 
 func TestSettersSubscription(t *testing.T) {
-	t.Run("SetID", func(t *testing.T) {
+	t.Run("SetId", func(t *testing.T) {
 		obj := &Subscription{}
-		var fernTestValueID string
-		obj.SetID(fernTestValueID)
-		assert.Equal(t, fernTestValueID, obj.ID)
+		var fernTestValueId string
+		obj.SetId(fernTestValueId)
+		assert.Equal(t, fernTestValueId, obj.Id)
 		assert.NotNil(t, obj.explicitFields)
 	})
 
@@ -358,18 +358,18 @@ func TestSettersSubscription(t *testing.T) {
 }
 
 func TestGettersSubscription(t *testing.T) {
-	t.Run("GetID", func(t *testing.T) {
+	t.Run("GetId", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &Subscription{}
 		var expected string
-		obj.ID = expected
+		obj.Id = expected
 
 		// Act & Assert
-		assert.Equal(t, expected, obj.GetID(), "getter should return the property value")
+		assert.Equal(t, expected, obj.GetId(), "getter should return the property value")
 	})
 
-	t.Run("GetID_NilReceiver", func(t *testing.T) {
+	t.Run("GetId_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *Subscription
 		// Should not panic - getters should handle nil receiver gracefully
@@ -378,7 +378,7 @@ func TestGettersSubscription(t *testing.T) {
 				t.Errorf("Getter panicked on nil receiver: %v", r)
 			}
 		}()
-		_ = obj.GetID() // Should return zero value
+		_ = obj.GetId() // Should return zero value
 	})
 
 	t.Run("GetAttributes", func(t *testing.T) {
@@ -417,14 +417,14 @@ func TestGettersSubscription(t *testing.T) {
 }
 
 func TestSettersMarkExplicitSubscription(t *testing.T) {
-	t.Run("SetID_MarksExplicit", func(t *testing.T) {
+	t.Run("SetId_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &Subscription{}
-		var fernTestValueID string
+		var fernTestValueId string
 
 		// Act
-		obj.SetID(fernTestValueID)
+		obj.SetId(fernTestValueId)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -490,11 +490,11 @@ func TestSettersSubscriptionAttributes(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
-	t.Run("SetWebhookURL", func(t *testing.T) {
+	t.Run("SetWebhookUrl", func(t *testing.T) {
 		obj := &SubscriptionAttributes{}
-		var fernTestValueWebhookURL string
-		obj.SetWebhookURL(fernTestValueWebhookURL)
-		assert.Equal(t, fernTestValueWebhookURL, obj.WebhookURL)
+		var fernTestValueWebhookUrl string
+		obj.SetWebhookUrl(fernTestValueWebhookUrl)
+		assert.Equal(t, fernTestValueWebhookUrl, obj.WebhookUrl)
 		assert.NotNil(t, obj.explicitFields)
 	})
 
@@ -532,18 +532,18 @@ func TestGettersSubscriptionAttributes(t *testing.T) {
 		_ = obj.GetEventName() // Should return zero value
 	})
 
-	t.Run("GetWebhookURL", func(t *testing.T) {
+	t.Run("GetWebhookUrl", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &SubscriptionAttributes{}
 		var expected string
-		obj.WebhookURL = expected
+		obj.WebhookUrl = expected
 
 		// Act & Assert
-		assert.Equal(t, expected, obj.GetWebhookURL(), "getter should return the property value")
+		assert.Equal(t, expected, obj.GetWebhookUrl(), "getter should return the property value")
 	})
 
-	t.Run("GetWebhookURL_NilReceiver", func(t *testing.T) {
+	t.Run("GetWebhookUrl_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *SubscriptionAttributes
 		// Should not panic - getters should handle nil receiver gracefully
@@ -552,7 +552,7 @@ func TestGettersSubscriptionAttributes(t *testing.T) {
 				t.Errorf("Getter panicked on nil receiver: %v", r)
 			}
 		}()
-		_ = obj.GetWebhookURL() // Should return zero value
+		_ = obj.GetWebhookUrl() // Should return zero value
 	})
 
 	t.Run("GetEnabled", func(t *testing.T) {
@@ -612,14 +612,14 @@ func TestSettersMarkExplicitSubscriptionAttributes(t *testing.T) {
 		// It verifies that setting a field via setter allows successful JSON round-trip
 	})
 
-	t.Run("SetWebhookURL_MarksExplicit", func(t *testing.T) {
+	t.Run("SetWebhookUrl_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &SubscriptionAttributes{}
-		var fernTestValueWebhookURL string
+		var fernTestValueWebhookUrl string
 
 		// Act
-		obj.SetWebhookURL(fernTestValueWebhookURL)
+		obj.SetWebhookUrl(fernTestValueWebhookUrl)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -766,11 +766,11 @@ func TestSettersSubscriptionRequestAttributes(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
-	t.Run("SetWebhookURL", func(t *testing.T) {
+	t.Run("SetWebhookUrl", func(t *testing.T) {
 		obj := &SubscriptionRequestAttributes{}
-		var fernTestValueWebhookURL string
-		obj.SetWebhookURL(fernTestValueWebhookURL)
-		assert.Equal(t, fernTestValueWebhookURL, obj.WebhookURL)
+		var fernTestValueWebhookUrl string
+		obj.SetWebhookUrl(fernTestValueWebhookUrl)
+		assert.Equal(t, fernTestValueWebhookUrl, obj.WebhookUrl)
 		assert.NotNil(t, obj.explicitFields)
 	})
 
@@ -808,18 +808,18 @@ func TestGettersSubscriptionRequestAttributes(t *testing.T) {
 		_ = obj.GetEventName() // Should return zero value
 	})
 
-	t.Run("GetWebhookURL", func(t *testing.T) {
+	t.Run("GetWebhookUrl", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &SubscriptionRequestAttributes{}
 		var expected string
-		obj.WebhookURL = expected
+		obj.WebhookUrl = expected
 
 		// Act & Assert
-		assert.Equal(t, expected, obj.GetWebhookURL(), "getter should return the property value")
+		assert.Equal(t, expected, obj.GetWebhookUrl(), "getter should return the property value")
 	})
 
-	t.Run("GetWebhookURL_NilReceiver", func(t *testing.T) {
+	t.Run("GetWebhookUrl_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *SubscriptionRequestAttributes
 		// Should not panic - getters should handle nil receiver gracefully
@@ -828,7 +828,7 @@ func TestGettersSubscriptionRequestAttributes(t *testing.T) {
 				t.Errorf("Getter panicked on nil receiver: %v", r)
 			}
 		}()
-		_ = obj.GetWebhookURL() // Should return zero value
+		_ = obj.GetWebhookUrl() // Should return zero value
 	})
 
 	t.Run("GetEnabled", func(t *testing.T) {
@@ -888,14 +888,14 @@ func TestSettersMarkExplicitSubscriptionRequestAttributes(t *testing.T) {
 		// It verifies that setting a field via setter allows successful JSON round-trip
 	})
 
-	t.Run("SetWebhookURL_MarksExplicit", func(t *testing.T) {
+	t.Run("SetWebhookUrl_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &SubscriptionRequestAttributes{}
-		var fernTestValueWebhookURL string
+		var fernTestValueWebhookUrl string
 
 		// Act
-		obj.SetWebhookURL(fernTestValueWebhookURL)
+		obj.SetWebhookUrl(fernTestValueWebhookUrl)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -1322,11 +1322,11 @@ func TestSettersUpdateSubscriptionRequestAttributes(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
-	t.Run("SetWebhookURL", func(t *testing.T) {
+	t.Run("SetWebhookUrl", func(t *testing.T) {
 		obj := &UpdateSubscriptionRequestAttributes{}
-		var fernTestValueWebhookURL *string
-		obj.SetWebhookURL(fernTestValueWebhookURL)
-		assert.Equal(t, fernTestValueWebhookURL, obj.WebhookURL)
+		var fernTestValueWebhookUrl *string
+		obj.SetWebhookUrl(fernTestValueWebhookUrl)
+		assert.Equal(t, fernTestValueWebhookUrl, obj.WebhookUrl)
 		assert.NotNil(t, obj.explicitFields)
 	})
 
@@ -1374,28 +1374,28 @@ func TestGettersUpdateSubscriptionRequestAttributes(t *testing.T) {
 		_ = obj.GetEventName() // Should return zero value
 	})
 
-	t.Run("GetWebhookURL", func(t *testing.T) {
+	t.Run("GetWebhookUrl", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &UpdateSubscriptionRequestAttributes{}
 		var expected *string
-		obj.WebhookURL = expected
+		obj.WebhookUrl = expected
 
 		// Act & Assert
-		assert.Equal(t, expected, obj.GetWebhookURL(), "getter should return the property value")
+		assert.Equal(t, expected, obj.GetWebhookUrl(), "getter should return the property value")
 	})
 
-	t.Run("GetWebhookURL_NilValue", func(t *testing.T) {
+	t.Run("GetWebhookUrl_NilValue", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &UpdateSubscriptionRequestAttributes{}
-		obj.WebhookURL = nil
+		obj.WebhookUrl = nil
 
 		// Act & Assert
-		assert.Nil(t, obj.GetWebhookURL(), "getter should return nil when property is nil")
+		assert.Nil(t, obj.GetWebhookUrl(), "getter should return nil when property is nil")
 	})
 
-	t.Run("GetWebhookURL_NilReceiver", func(t *testing.T) {
+	t.Run("GetWebhookUrl_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *UpdateSubscriptionRequestAttributes
 		// Should not panic - getters should handle nil receiver gracefully
@@ -1404,7 +1404,7 @@ func TestGettersUpdateSubscriptionRequestAttributes(t *testing.T) {
 				t.Errorf("Getter panicked on nil receiver: %v", r)
 			}
 		}()
-		_ = obj.GetWebhookURL() // Should return zero value
+		_ = obj.GetWebhookUrl() // Should return zero value
 	})
 
 	t.Run("GetEnabled", func(t *testing.T) {
@@ -1474,14 +1474,14 @@ func TestSettersMarkExplicitUpdateSubscriptionRequestAttributes(t *testing.T) {
 		// It verifies that setting a field via setter allows successful JSON round-trip
 	})
 
-	t.Run("SetWebhookURL_MarksExplicit", func(t *testing.T) {
+	t.Run("SetWebhookUrl_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &UpdateSubscriptionRequestAttributes{}
-		var fernTestValueWebhookURL *string
+		var fernTestValueWebhookUrl *string
 
 		// Act
-		obj.SetWebhookURL(fernTestValueWebhookURL)
+		obj.SetWebhookUrl(fernTestValueWebhookUrl)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)

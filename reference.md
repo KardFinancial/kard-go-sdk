@@ -1,6 +1,6 @@
 # Reference
 ## Auth
-<details><summary><code>client.Auth.GetToken(request) -> *kardgosdk.TokenResponse</code></summary>
+<details><summary><code>client.Auth.GetToken(request) -> *kard.TokenResponse</code></summary>
 <dl>
 <dd>
 
@@ -13,8 +13,8 @@
 <dd>
 
 ```go
-request := &kardgosdk.GetTokenRequest{
-        ClientID: "client_id",
+request := &kard.GetTokenRequest{
+        ClientId: "client_id",
         ClientSecret: "client_secret",
     }
 client.Auth.GetToken(
@@ -44,7 +44,7 @@ client.Auth.GetToken(
 <dl>
 <dd>
 
-**clientID:** `string` 
+**clientId:** `string` 
     
 </dd>
 </dl>
@@ -65,7 +65,7 @@ client.Auth.GetToken(
 </details>
 
 ## Files
-<details><summary><code>client.Files.GetMetadata(OrganizationID) -> *kardgosdk.GetFilesMetadataResponse</code></summary>
+<details><summary><code>client.Files.GetMetadata(OrganizationId) -> *kard.GetFilesMetadataResponse</code></summary>
 <dl>
 <dd>
 
@@ -95,19 +95,19 @@ through potentially large sets of file metadata.
 <dd>
 
 ```go
-request := &kardgosdk.GetFilesMetadataRequest{
-        PageSize: kardgosdk.Int(
+request := &kard.GetFilesMetadataRequest{
+        PageSize: kard.Int(
             5,
         ),
-        FilterDateFrom: kardgosdk.String(
+        FilterDateFrom: kard.String(
             "2025-02-20T21:56:23Z",
         ),
-        FilterDateTo: kardgosdk.String(
+        FilterDateTo: kard.String(
             "2025-03-20T21:56:23Z",
         ),
-        FilterFileType: kardgosdk.FileTypeEarnedRewardApprovedDailyReconciliationFile.Ptr(),
-        Sort: []*kardgosdk.FilesMetadataSortOptions{
-            kardgosdk.FilesMetadataSortOptionsSentDateDesc.Ptr(),
+        FilterFileType: kard.FileTypeEarnedRewardApprovedDailyReconciliationFile.Ptr(),
+        Sort: []*kard.FilesMetadataSortOptions{
+            kard.FilesMetadataSortOptionsSentDateDesc.Ptr(),
         },
     }
 client.Files.GetMetadata(
@@ -130,7 +130,7 @@ client.Files.GetMetadata(
 <dl>
 <dd>
 
-**organizationID:** `kardgosdk.OrganizationID` 
+**organizationId:** `kard.OrganizationId` 
     
 </dd>
 </dl>
@@ -154,7 +154,7 @@ client.Files.GetMetadata(
 <dl>
 <dd>
 
-**filterFileType:** `*kardgosdk.FileType` — The document file type.
+**filterFileType:** `*kard.FileType` — The document file type.
     
 </dd>
 </dl>
@@ -186,7 +186,7 @@ client.Files.GetMetadata(
 <dl>
 <dd>
 
-**sort:** `*kardgosdk.FilesMetadataSortOptions` — If provided, response will be sorted by the specified fields. Defaults to descending sentDate, equivalent to "-sentDate"
+**sort:** `*kard.FilesMetadataSortOptions` — If provided, response will be sorted by the specified fields. Defaults to descending sentDate, equivalent to "-sentDate"
     
 </dd>
 </dl>
@@ -199,7 +199,7 @@ client.Files.GetMetadata(
 </details>
 
 ## Subscriptions
-<details><summary><code>client.Notifications.Subscriptions.Get(OrganizationID) -> *notifications.SubscriptionsResponseObject</code></summary>
+<details><summary><code>client.Notifications.Subscriptions.Get(OrganizationId) -> *notifications.SubscriptionsResponseObject</code></summary>
 <dl>
 <dd>
 
@@ -248,7 +248,7 @@ client.Notifications.Subscriptions.Get(
 <dl>
 <dd>
 
-**organizationID:** `kardgosdk.OrganizationID` 
+**organizationId:** `kard.OrganizationId` 
     
 </dd>
 </dl>
@@ -256,7 +256,7 @@ client.Notifications.Subscriptions.Get(
 <dl>
 <dd>
 
-**filterEventName:** `*kardgosdk.NotificationType` 
+**filterEventName:** `*kard.NotificationType` 
     
 </dd>
 </dl>
@@ -268,7 +268,7 @@ client.Notifications.Subscriptions.Get(
 </dl>
 </details>
 
-<details><summary><code>client.Notifications.Subscriptions.Create(OrganizationID, request) -> *notifications.CreateSubscriptionsResponseObject</code></summary>
+<details><summary><code>client.Notifications.Subscriptions.Create(OrganizationId, request) -> *notifications.CreateSubscriptionsResponseObject</code></summary>
 <dl>
 <dd>
 
@@ -301,8 +301,8 @@ request := &notifications.SubscriptionRequestBody{
             &notifications.SubscriptionRequestUnion{
                 Subscription: &notifications.SubscriptionRequest{
                     Attributes: &notifications.SubscriptionRequestAttributes{
-                        EventName: kardgosdk.NotificationTypeEarnedRewardApproved,
-                        WebhookURL: "https://webhookUrl.com/post",
+                        EventName: kard.NotificationTypeEarnedRewardApproved,
+                        WebhookUrl: "https://webhookUrl.com/post",
                         Enabled: true,
                     },
                 },
@@ -329,7 +329,7 @@ client.Notifications.Subscriptions.Create(
 <dl>
 <dd>
 
-**organizationID:** `kardgosdk.OrganizationID` 
+**organizationId:** `kard.OrganizationId` 
     
 </dd>
 </dl>
@@ -349,7 +349,7 @@ client.Notifications.Subscriptions.Create(
 </dl>
 </details>
 
-<details><summary><code>client.Notifications.Subscriptions.Update(OrganizationID, SubscriptionID, request) -> *notifications.UpdateSubscriptionsResponseObject</code></summary>
+<details><summary><code>client.Notifications.Subscriptions.Update(OrganizationId, SubscriptionId, request) -> *notifications.UpdateSubscriptionsResponseObject</code></summary>
 <dl>
 <dd>
 
@@ -381,11 +381,11 @@ request := &notifications.UpdateSubscriptionRequestBody{
         Data: &notifications.UpdateSubscriptionRequestUnion{
             Subscription: &notifications.UpdateSubscriptionRequest{
                 Attributes: &notifications.UpdateSubscriptionRequestAttributes{
-                    EventName: kardgosdk.NotificationTypeEarnedRewardApproved.Ptr(),
-                    WebhookURL: kardgosdk.String(
+                    EventName: kard.NotificationTypeEarnedRewardApproved.Ptr(),
+                    WebhookUrl: kard.String(
                         "https://webhookUrl.com/post",
                     ),
-                    Enabled: kardgosdk.Bool(
+                    Enabled: kard.Bool(
                         true,
                     ),
                 },
@@ -413,7 +413,7 @@ client.Notifications.Subscriptions.Update(
 <dl>
 <dd>
 
-**organizationID:** `kardgosdk.OrganizationID` 
+**organizationId:** `kard.OrganizationId` 
     
 </dd>
 </dl>
@@ -421,7 +421,7 @@ client.Notifications.Subscriptions.Update(
 <dl>
 <dd>
 
-**subscriptionID:** `kardgosdk.SubscriptionID` 
+**subscriptionId:** `kard.SubscriptionId` 
     
 </dd>
 </dl>
@@ -442,7 +442,7 @@ client.Notifications.Subscriptions.Update(
 </details>
 
 ## Organizations
-<details><summary><code>client.Organizations.Get() -> *kardgosdk.ExternalOrganizationResponse</code></summary>
+<details><summary><code>client.Organizations.Get() -> *kard.ExternalOrganizationResponse</code></summary>
 <dl>
 <dd>
 
@@ -485,7 +485,7 @@ client.Organizations.Get(
 </details>
 
 ## Children
-<details><summary><code>client.Organizations.Children.List(OrganizationID) -> *organizations.ChildOrganizationListResponse</code></summary>
+<details><summary><code>client.Organizations.Children.List(OrganizationId) -> *organizations.ChildOrganizationListResponse</code></summary>
 <dl>
 <dd>
 
@@ -533,7 +533,7 @@ client.Organizations.Children.List(
 <dl>
 <dd>
 
-**organizationID:** `string` — Unique identifier of the parent organization
+**organizationId:** `string` — Unique identifier of the parent organization
     
 </dd>
 </dl>
@@ -561,7 +561,7 @@ client.Organizations.Children.List(
 </dl>
 </details>
 
-<details><summary><code>client.Organizations.Children.Create(OrganizationID, request) -> *organizations.ChildOrganizationResponse</code></summary>
+<details><summary><code>client.Organizations.Children.Create(OrganizationId, request) -> *organizations.ChildOrganizationResponse</code></summary>
 <dl>
 <dd>
 
@@ -615,7 +615,7 @@ client.Organizations.Children.Create(
 <dl>
 <dd>
 
-**organizationID:** `string` — Unique identifier of the parent organization
+**organizationId:** `string` — Unique identifier of the parent organization
     
 </dd>
 </dl>
@@ -635,7 +635,7 @@ client.Organizations.Children.Create(
 </dl>
 </details>
 
-<details><summary><code>client.Organizations.Children.Get(OrganizationID, ChildID) -> *organizations.ChildOrganizationResponse</code></summary>
+<details><summary><code>client.Organizations.Children.Get(OrganizationId, ChildId) -> *organizations.ChildOrganizationResponse</code></summary>
 <dl>
 <dd>
 
@@ -682,7 +682,7 @@ client.Organizations.Children.Get(
 <dl>
 <dd>
 
-**organizationID:** `string` — Unique identifier of the parent organization
+**organizationId:** `string` — Unique identifier of the parent organization
     
 </dd>
 </dl>
@@ -690,7 +690,7 @@ client.Organizations.Children.Get(
 <dl>
 <dd>
 
-**childID:** `string` — Unique identifier of the child organization
+**childId:** `string` — Unique identifier of the child organization
     
 </dd>
 </dl>
@@ -702,7 +702,7 @@ client.Organizations.Children.Get(
 </dl>
 </details>
 
-<details><summary><code>client.Organizations.Children.Update(OrganizationID, ChildID, request) -> *organizations.ChildOrganizationResponse</code></summary>
+<details><summary><code>client.Organizations.Children.Update(OrganizationId, ChildId, request) -> *organizations.ChildOrganizationResponse</code></summary>
 <dl>
 <dd>
 
@@ -755,7 +755,7 @@ client.Organizations.Children.Update(
 <dl>
 <dd>
 
-**organizationID:** `string` — Unique identifier of the parent organization
+**organizationId:** `string` — Unique identifier of the parent organization
     
 </dd>
 </dl>
@@ -763,7 +763,7 @@ client.Organizations.Children.Update(
 <dl>
 <dd>
 
-**childID:** `string` — Unique identifier of the child organization
+**childId:** `string` — Unique identifier of the child organization
     
 </dd>
 </dl>
@@ -783,7 +783,7 @@ client.Organizations.Children.Update(
 </dl>
 </details>
 
-<details><summary><code>client.Organizations.Children.Delete(OrganizationID, ChildID) -> *kardgosdk.DeleteResourceResponse</code></summary>
+<details><summary><code>client.Organizations.Children.Delete(OrganizationId, ChildId) -> *kard.DeleteResourceResponse</code></summary>
 <dl>
 <dd>
 
@@ -830,7 +830,7 @@ client.Organizations.Children.Delete(
 <dl>
 <dd>
 
-**organizationID:** `string` — Unique identifier of the parent organization
+**organizationId:** `string` — Unique identifier of the parent organization
     
 </dd>
 </dl>
@@ -838,7 +838,7 @@ client.Organizations.Children.Delete(
 <dl>
 <dd>
 
-**childID:** `string` — Unique identifier of the child organization
+**childId:** `string` — Unique identifier of the child organization
     
 </dd>
 </dl>
@@ -851,7 +851,7 @@ client.Organizations.Children.Delete(
 </details>
 
 ## Placements
-<details><summary><code>client.Organizations.Placements.Create(OrganizationID, request) -> *organizations.PlacementFormatUnion</code></summary>
+<details><summary><code>client.Organizations.Placements.Create(OrganizationId, request) -> *organizations.PlacementFormatUnion</code></summary>
 <dl>
 <dd>
 
@@ -908,7 +908,7 @@ client.Organizations.Placements.Create(
 <dl>
 <dd>
 
-**organizationID:** `string` — Unique identifier of the organization
+**organizationId:** `string` — Unique identifier of the organization
     
 </dd>
 </dl>
@@ -928,7 +928,7 @@ client.Organizations.Placements.Create(
 </dl>
 </details>
 
-<details><summary><code>client.Organizations.Placements.List(OrganizationID) -> *organizations.PlacementListResponse</code></summary>
+<details><summary><code>client.Organizations.Placements.List(OrganizationId) -> *organizations.PlacementListResponse</code></summary>
 <dl>
 <dd>
 
@@ -976,7 +976,7 @@ client.Organizations.Placements.List(
 <dl>
 <dd>
 
-**organizationID:** `string` — Unique identifier of the organization
+**organizationId:** `string` — Unique identifier of the organization
     
 </dd>
 </dl>
@@ -1020,7 +1020,7 @@ client.Organizations.Placements.List(
 </dl>
 </details>
 
-<details><summary><code>client.Organizations.Placements.Get(OrganizationID, PlacementID) -> *organizations.PlacementFormatUnion</code></summary>
+<details><summary><code>client.Organizations.Placements.Get(OrganizationId, PlacementId) -> *organizations.PlacementFormatUnion</code></summary>
 <dl>
 <dd>
 
@@ -1067,7 +1067,7 @@ client.Organizations.Placements.Get(
 <dl>
 <dd>
 
-**organizationID:** `string` — Unique identifier of the organization
+**organizationId:** `string` — Unique identifier of the organization
     
 </dd>
 </dl>
@@ -1075,7 +1075,7 @@ client.Organizations.Placements.Get(
 <dl>
 <dd>
 
-**placementID:** `string` — Unique identifier of the placement (UUID v7)
+**placementId:** `string` — Unique identifier of the placement (UUID v7)
     
 </dd>
 </dl>
@@ -1087,7 +1087,7 @@ client.Organizations.Placements.Get(
 </dl>
 </details>
 
-<details><summary><code>client.Organizations.Placements.Update(OrganizationID, PlacementID, request) -> *organizations.PlacementFormatUnion</code></summary>
+<details><summary><code>client.Organizations.Placements.Update(OrganizationId, PlacementId, request) -> *organizations.PlacementFormatUnion</code></summary>
 <dl>
 <dd>
 
@@ -1145,7 +1145,7 @@ client.Organizations.Placements.Update(
 <dl>
 <dd>
 
-**organizationID:** `string` — Unique identifier of the organization
+**organizationId:** `string` — Unique identifier of the organization
     
 </dd>
 </dl>
@@ -1153,7 +1153,7 @@ client.Organizations.Placements.Update(
 <dl>
 <dd>
 
-**placementID:** `string` — Unique identifier of the placement (UUID v7)
+**placementId:** `string` — Unique identifier of the placement (UUID v7)
     
 </dd>
 </dl>
@@ -1173,7 +1173,7 @@ client.Organizations.Placements.Update(
 </dl>
 </details>
 
-<details><summary><code>client.Organizations.Placements.Delete(OrganizationID, PlacementID) -> *kardgosdk.DeleteResourceResponse</code></summary>
+<details><summary><code>client.Organizations.Placements.Delete(OrganizationId, PlacementId) -> *kard.DeleteResourceResponse</code></summary>
 <dl>
 <dd>
 
@@ -1220,7 +1220,7 @@ client.Organizations.Placements.Delete(
 <dl>
 <dd>
 
-**organizationID:** `string` — Unique identifier of the organization
+**organizationId:** `string` — Unique identifier of the organization
     
 </dd>
 </dl>
@@ -1228,7 +1228,7 @@ client.Organizations.Placements.Delete(
 <dl>
 <dd>
 
-**placementID:** `string` — Unique identifier of the placement (UUID v7)
+**placementId:** `string` — Unique identifier of the placement (UUID v7)
     
 </dd>
 </dl>
@@ -1241,7 +1241,7 @@ client.Organizations.Placements.Delete(
 </details>
 
 ## Ping
-<details><summary><code>client.Ping.Ping() -> *kardgosdk.PingResponseObject</code></summary>
+<details><summary><code>client.Ping.Ping() -> *kard.PingResponseObject</code></summary>
 <dl>
 <dd>
 
@@ -1284,7 +1284,7 @@ client.Ping.Ping(
 </details>
 
 ## Transactions
-<details><summary><code>client.Transactions.Create(OrganizationID, request) -> *kardgosdk.TransactionsResponse</code></summary>
+<details><summary><code>client.Transactions.Create(OrganizationId, request) -> *kard.TransactionsResponse</code></summary>
 <dl>
 <dd>
 
@@ -1318,82 +1318,82 @@ Please use the correct type when calling the endpoint:
 <dd>
 
 ```go
-request := &kardgosdk.TransactionsRequestBody{
-        Data: []*kardgosdk.Transactions{
-            &kardgosdk.Transactions{
-                Transaction: &kardgosdk.TransactionsRequest{
-                    ID: "309rjfoincor3icno3rind093cdow3jciwjdwcm",
-                    Attributes: &kardgosdk.TransactionsAttributes{
-                        UserID: "6FHt5b6Fnp0qdomMEy5AN6PXcSJIeX69",
-                        Status: kardgosdk.TransactionStatusApproved,
+request := &kard.TransactionsRequestBody{
+        Data: []*kard.Transactions{
+            &kard.Transactions{
+                Transaction: &kard.TransactionsRequest{
+                    Id: "309rjfoincor3icno3rind093cdow3jciwjdwcm",
+                    Attributes: &kard.TransactionsAttributes{
+                        UserId: "6FHt5b6Fnp0qdomMEy5AN6PXcSJIeX69",
+                        Status: kard.TransactionStatusApproved,
                         Amount: 1000,
-                        Subtotal: kardgosdk.Int(
+                        Subtotal: kard.Int(
                             800,
                         ),
                         Currency: "USD",
-                        Direction: kardgosdk.DirectionTypeDebit,
-                        PaymentType: kardgosdk.TransactionPaymentTypeCard,
+                        Direction: kard.DirectionTypeDebit,
+                        PaymentType: kard.TransactionPaymentTypeCard,
                         Description: "ADVANCEAUTO",
-                        Description2: kardgosdk.String(
+                        Description2: kard.String(
                             "ADVANCEAUTO",
                         ),
-                        Mcc: kardgosdk.String(
+                        Mcc: kard.String(
                             "1234",
                         ),
                         CardBin: "123456",
                         CardLastFour: "4321",
-                        AuthorizationDate: kardgosdk.Time(
-                            kardgosdk.MustParseDateTime(
+                        AuthorizationDate: kard.Time(
+                            kard.MustParseDateTime(
                                 "2021-07-02T17:47:06Z",
                             ),
                         ),
-                        Merchant: &kardgosdk.Merchant{
-                            ID: kardgosdk.String(
+                        Merchant: &kard.Merchant{
+                            Id: kard.String(
                                 "12345678901234567",
                             ),
                             Name: "ADVANCEAUTO",
-                            AddrStreet: kardgosdk.String(
+                            AddrStreet: kard.String(
                                 "125 Main St",
                             ),
-                            AddrCity: kardgosdk.String(
+                            AddrCity: kard.String(
                                 "Philadelphia",
                             ),
-                            AddrState: kardgosdk.StatesPa.Ptr(),
-                            AddrZipcode: kardgosdk.String(
+                            AddrState: kard.StatesPa.Ptr(),
+                            AddrZipcode: kard.String(
                                 "19147",
                             ),
-                            AddrCountry: kardgosdk.String(
+                            AddrCountry: kard.String(
                                 "United States",
                             ),
-                            Latitude: kardgosdk.String(
+                            Latitude: kard.String(
                                 "37.9419429",
                             ),
-                            Longitude: kardgosdk.String(
+                            Longitude: kard.String(
                                 "-73.1446869",
                             ),
-                            StoreID: kardgosdk.String(
+                            StoreId: kard.String(
                                 "12345",
                             ),
                         },
-                        AuthorizationCode: kardgosdk.String(
+                        AuthorizationCode: kard.String(
                             "123456",
                         ),
-                        RetrievalReferenceNumber: kardgosdk.String(
+                        RetrievalReferenceNumber: kard.String(
                             "100804333919",
                         ),
-                        AcquirerReferenceNumber: kardgosdk.String(
+                        AcquirerReferenceNumber: kard.String(
                             "1234567890123456789012345678",
                         ),
-                        SystemTraceAuditNumber: kardgosdk.String(
+                        SystemTraceAuditNumber: kard.String(
                             "333828",
                         ),
-                        TransactionID: "2467de37-cbdc-416d-a359-75de87bfffb0",
-                        CardProductID: kardgosdk.String(
+                        TransactionId: "2467de37-cbdc-416d-a359-75de87bfffb0",
+                        CardProductId: kard.String(
                             "1234567890123456789012345678",
                         ),
-                        ProcessorMids: &kardgosdk.ProcessorMid{
-                            Visa: &kardgosdk.VisaMid{
-                                Mids: &kardgosdk.VisaMidDetails{
+                        ProcessorMids: &kard.ProcessorMid{
+                            Visa: &kard.VisaMid{
+                                Mids: &kard.VisaMidDetails{
                                     Vmid: "12345678901",
                                     Vsid: "12345678",
                                 },
@@ -1424,7 +1424,7 @@ client.Transactions.Create(
 <dl>
 <dd>
 
-**organizationID:** `kardgosdk.OrganizationID` 
+**organizationId:** `kard.OrganizationId` 
     
 </dd>
 </dl>
@@ -1432,7 +1432,7 @@ client.Transactions.Create(
 <dl>
 <dd>
 
-**request:** `*kardgosdk.TransactionsRequestBody` 
+**request:** `*kard.TransactionsRequestBody` 
     
 </dd>
 </dl>
@@ -1444,7 +1444,7 @@ client.Transactions.Create(
 </dl>
 </details>
 
-<details><summary><code>client.Transactions.CreateFraudMarkers(OrganizationID, request) -> *kardgosdk.FraudulentTransactionObject</code></summary>
+<details><summary><code>client.Transactions.CreateFraudMarkers(OrganizationId, request) -> *kard.FraudulentTransactionObject</code></summary>
 <dl>
 <dd>
 
@@ -1474,13 +1474,13 @@ Call this endpoint to flag a submitted transaction as fraudulent. This will prev
 <dd>
 
 ```go
-request := &kardgosdk.FraudulentTransactionRequestBody{
-        Data: []*kardgosdk.FraudulentTransactionData{
-            &kardgosdk.FraudulentTransactionData{
-                ID: "myTxnId12345",
+request := &kard.FraudulentTransactionRequestBody{
+        Data: []*kard.FraudulentTransactionData{
+            &kard.FraudulentTransactionData{
+                Id: "myTxnId12345",
                 Type: "fraudulentTransaction",
-                Attributes: &kardgosdk.FraudulentTransactionAttributes{
-                    UserID: "userId123",
+                Attributes: &kard.FraudulentTransactionAttributes{
+                    UserId: "userId123",
                 },
             },
         },
@@ -1505,7 +1505,7 @@ client.Transactions.CreateFraudMarkers(
 <dl>
 <dd>
 
-**organizationID:** `kardgosdk.OrganizationID` 
+**organizationId:** `kard.OrganizationId` 
     
 </dd>
 </dl>
@@ -1513,7 +1513,7 @@ client.Transactions.CreateFraudMarkers(
 <dl>
 <dd>
 
-**request:** `*kardgosdk.FraudulentTransactionRequestBody` 
+**request:** `*kard.FraudulentTransactionRequestBody` 
     
 </dd>
 </dl>
@@ -1525,7 +1525,7 @@ client.Transactions.CreateFraudMarkers(
 </dl>
 </details>
 
-<details><summary><code>client.Transactions.CreateAudits(OrganizationID, UserID, request) -> *kardgosdk.CreateAuditResponseBody</code></summary>
+<details><summary><code>client.Transactions.CreateAudits(OrganizationId, UserId, request) -> *kard.CreateAuditResponseBody</code></summary>
 <dl>
 <dd>
 
@@ -1553,15 +1553,15 @@ Call this endpoint to request that a particular transaction be audited further b
 <dd>
 
 ```go
-request := &kardgosdk.CreateAuditRequestBody{
-        Data: []*kardgosdk.CreateAuditRequestDataUnion{
-            &kardgosdk.CreateAuditRequestDataUnion{
-                Audit: &kardgosdk.AuditRequestData{
-                    Attributes: &kardgosdk.AuditAttributes{
+request := &kard.CreateAuditRequestBody{
+        Data: []*kard.CreateAuditRequestDataUnion{
+            &kard.CreateAuditRequestDataUnion{
+                Audit: &kard.AuditRequestData{
+                    Attributes: &kard.AuditAttributes{
                         AuditCode: 8001,
                         MerchantName: "Caribbean Goodness",
                         AuditDescription: "duplicate transaction",
-                        TransactionID: "issuerTransaction123",
+                        TransactionId: "issuerTransaction123",
                     },
                 },
             },
@@ -1588,7 +1588,7 @@ client.Transactions.CreateAudits(
 <dl>
 <dd>
 
-**organizationID:** `kardgosdk.OrganizationID` 
+**organizationId:** `kard.OrganizationId` 
     
 </dd>
 </dl>
@@ -1596,7 +1596,7 @@ client.Transactions.CreateAudits(
 <dl>
 <dd>
 
-**userID:** `string` — The ID of the user as defined on the issuers system
+**userId:** `string` — The ID of the user as defined on the issuers system
     
 </dd>
 </dl>
@@ -1604,7 +1604,7 @@ client.Transactions.CreateAudits(
 <dl>
 <dd>
 
-**request:** `*kardgosdk.CreateAuditRequestBody` 
+**request:** `*kard.CreateAuditRequestBody` 
     
 </dd>
 </dl>
@@ -1616,7 +1616,7 @@ client.Transactions.CreateAudits(
 </dl>
 </details>
 
-<details><summary><code>client.Transactions.CreateBulkTransactionsUploadURL(OrganizationID, request) -> *kardgosdk.CreateFileUploadURLResponse</code></summary>
+<details><summary><code>client.Transactions.CreateBulkTransactionsUploadUrl(OrganizationId, request) -> *kard.CreateFileUploadUrlResponse</code></summary>
 <dl>
 <dd>
 
@@ -1648,23 +1648,23 @@ Only `coreTransaction` type is supported for bulk file uploads.
 <dd>
 
 ```go
-request := &kardgosdk.CreateFileUploadRequestBody{
-        Data: []*kardgosdk.CreateFileUploadData{
-            &kardgosdk.CreateFileUploadData{
-                Type: kardgosdk.FileUploadTypeIncomingTransactionsFile,
-                Attributes: &kardgosdk.CreateFileUploadAttributes{
+request := &kard.CreateFileUploadRequestBody{
+        Data: []*kard.CreateFileUploadData{
+            &kard.CreateFileUploadData{
+                Type: kard.FileUploadTypeIncomingTransactionsFile,
+                Attributes: &kard.CreateFileUploadAttributes{
                     Filename: "transaction_12345.jsonl",
                 },
             },
-            &kardgosdk.CreateFileUploadData{
-                Type: kardgosdk.FileUploadTypeIncomingTransactionsFile,
-                Attributes: &kardgosdk.CreateFileUploadAttributes{
+            &kard.CreateFileUploadData{
+                Type: kard.FileUploadTypeIncomingTransactionsFile,
+                Attributes: &kard.CreateFileUploadAttributes{
                     Filename: "transaction_67890.jsonl",
                 },
             },
         },
     }
-client.Transactions.CreateBulkTransactionsUploadURL(
+client.Transactions.CreateBulkTransactionsUploadUrl(
         context.TODO(),
         "organization-123",
         request,
@@ -1684,7 +1684,7 @@ client.Transactions.CreateBulkTransactionsUploadURL(
 <dl>
 <dd>
 
-**organizationID:** `kardgosdk.OrganizationID` 
+**organizationId:** `kard.OrganizationId` 
     
 </dd>
 </dl>
@@ -1692,7 +1692,7 @@ client.Transactions.CreateBulkTransactionsUploadURL(
 <dl>
 <dd>
 
-**request:** `*kardgosdk.CreateFileUploadRequestBody` 
+**request:** `*kard.CreateFileUploadRequestBody` 
     
 </dd>
 </dl>
@@ -1704,7 +1704,7 @@ client.Transactions.CreateBulkTransactionsUploadURL(
 </dl>
 </details>
 
-<details><summary><code>client.Transactions.GetEarnedRewards(OrganizationID, UserID) -> *kardgosdk.GetEarnedRewardsResponse</code></summary>
+<details><summary><code>client.Transactions.GetEarnedRewards(OrganizationId, UserId) -> *kard.GetEarnedRewardsResponse</code></summary>
 <dl>
 <dd>
 
@@ -1735,12 +1735,12 @@ Retrieve rewarded transaction history for a specific user. By default this retur
 <dd>
 
 ```go
-request := &kardgosdk.GetEarnedRewardsRequest{
-        PageSize: kardgosdk.Int(
+request := &kard.GetEarnedRewardsRequest{
+        PageSize: kard.Int(
             10,
         ),
-        FilterStatus: kardgosdk.RewardedTransactionStatusApproved.Ptr(),
-        Include: kardgosdk.String(
+        FilterStatus: kard.RewardedTransactionStatusApproved.Ptr(),
+        Include: kard.String(
             "merchant,offer",
         ),
     }
@@ -1765,7 +1765,7 @@ client.Transactions.GetEarnedRewards(
 <dl>
 <dd>
 
-**organizationID:** `kardgosdk.OrganizationID` 
+**organizationId:** `kard.OrganizationId` 
     
 </dd>
 </dl>
@@ -1773,7 +1773,7 @@ client.Transactions.GetEarnedRewards(
 <dl>
 <dd>
 
-**userID:** `string` — The ID of the user as defined on the issuers system
+**userId:** `string` — The ID of the user as defined on the issuers system
     
 </dd>
 </dl>
@@ -1805,7 +1805,7 @@ client.Transactions.GetEarnedRewards(
 <dl>
 <dd>
 
-**filterStatus:** `*kardgosdk.RewardedTransactionStatus` — Filter by transaction status. Supported values are `APPROVED` and `SETTLED`. Defaults to `SETTLED` when omitted. When `APPROVED` is specified, only approved transactions that do not yet have a corresponding settled transaction are returned.
+**filterStatus:** `*kard.RewardedTransactionStatus` — Filter by transaction status. Supported values are `APPROVED` and `SETTLED`. Defaults to `SETTLED` when omitted. When `APPROVED` is specified, only approved transactions that do not yet have a corresponding settled transaction are returned.
     
 </dd>
 </dl>
@@ -1826,7 +1826,7 @@ client.Transactions.GetEarnedRewards(
 </details>
 
 ## Users
-<details><summary><code>client.Users.Create(OrganizationID, request) -> *kardgosdk.CreateUsersObject</code></summary>
+<details><summary><code>client.Users.Create(OrganizationId, request) -> *kard.CreateUsersObject</code></summary>
 <dl>
 <dd>
 
@@ -1856,31 +1856,31 @@ Call this endpoint to enroll a specified user into your rewards program.<br/>
 <dd>
 
 ```go
-request := &kardgosdk.CreateUsersObject{
-        Data: []*kardgosdk.UserRequestDataUnion{
-            &kardgosdk.UserRequestDataUnion{
-                User: &kardgosdk.UserRequestData{
-                    ID: "1234567890",
-                    Attributes: &kardgosdk.UserRequestAttributes{
-                        ZipCode: kardgosdk.String(
+request := &kard.CreateUsersObject{
+        Data: []*kard.UserRequestDataUnion{
+            &kard.UserRequestDataUnion{
+                User: &kard.UserRequestData{
+                    Id: "1234567890",
+                    Attributes: &kard.UserRequestAttributes{
+                        ZipCode: kard.String(
                             "11238",
                         ),
-                        EnrolledRewards: []kardgosdk.EnrolledRewardsType{
-                            kardgosdk.EnrolledRewardsTypeCardlinked,
+                        EnrolledRewards: []kard.EnrolledRewardsType{
+                            kard.EnrolledRewardsTypeCardlinked,
                         },
-                        Email: kardgosdk.String(
+                        Email: kard.String(
                             "user@example.com",
                         ),
-                        HashedEmail: kardgosdk.String(
+                        HashedEmail: kard.String(
                             "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3e2d8a5b76e45a1d4c4e2e3a1",
                         ),
-                        PhoneNumber: kardgosdk.String(
+                        PhoneNumber: kard.String(
                             "+14155552671",
                         ),
-                        BirthYear: kardgosdk.String(
+                        BirthYear: kard.String(
                             "1990",
                         ),
-                        HistoricalTransactionsSent: kardgosdk.Bool(
+                        HistoricalTransactionsSent: kard.Bool(
                             true,
                         ),
                     },
@@ -1908,7 +1908,7 @@ client.Users.Create(
 <dl>
 <dd>
 
-**organizationID:** `kardgosdk.OrganizationID` 
+**organizationId:** `kard.OrganizationId` 
     
 </dd>
 </dl>
@@ -1916,7 +1916,7 @@ client.Users.Create(
 <dl>
 <dd>
 
-**request:** `*kardgosdk.CreateUsersObject` 
+**request:** `*kard.CreateUsersObject` 
     
 </dd>
 </dl>
@@ -1928,7 +1928,7 @@ client.Users.Create(
 </dl>
 </details>
 
-<details><summary><code>client.Users.Update(OrganizationID, UserID, request) -> *kardgosdk.UserResponseObject</code></summary>
+<details><summary><code>client.Users.Update(OrganizationId, UserId, request) -> *kard.UserResponseObject</code></summary>
 <dl>
 <dd>
 
@@ -1957,27 +1957,27 @@ Call this endpoint to update the details on a specified user.<br/>
 <dd>
 
 ```go
-request := &kardgosdk.UpdateUserObject{
-        Data: &kardgosdk.UpdateUserRequestDataUnion{
-            User: &kardgosdk.UpdateUserRequestData{
-                ID: "1234567890",
-                Attributes: &kardgosdk.UpdateUserRequestAttributes{
-                    ZipCode: kardgosdk.String(
+request := &kard.UpdateUserObject{
+        Data: &kard.UpdateUserRequestDataUnion{
+            User: &kard.UpdateUserRequestData{
+                Id: "1234567890",
+                Attributes: &kard.UpdateUserRequestAttributes{
+                    ZipCode: kard.String(
                         "11238",
                     ),
-                    EnrolledRewards: []kardgosdk.EnrolledRewardsType{
-                        kardgosdk.EnrolledRewardsTypeCardlinked,
+                    EnrolledRewards: []kard.EnrolledRewardsType{
+                        kard.EnrolledRewardsTypeCardlinked,
                     },
-                    Email: kardgosdk.String(
+                    Email: kard.String(
                         "user@example.com",
                     ),
-                    HashedEmail: kardgosdk.String(
+                    HashedEmail: kard.String(
                         "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3e2d8a5b76e45a1d4c4e2e3a1",
                     ),
-                    PhoneNumber: kardgosdk.String(
+                    PhoneNumber: kard.String(
                         "+14155552671",
                     ),
-                    BirthYear: kardgosdk.String(
+                    BirthYear: kard.String(
                         "1990",
                     ),
                 },
@@ -2005,7 +2005,7 @@ client.Users.Update(
 <dl>
 <dd>
 
-**organizationID:** `kardgosdk.OrganizationID` 
+**organizationId:** `kard.OrganizationId` 
     
 </dd>
 </dl>
@@ -2013,7 +2013,7 @@ client.Users.Update(
 <dl>
 <dd>
 
-**userID:** `kardgosdk.UserID` 
+**userId:** `kard.UserId` 
     
 </dd>
 </dl>
@@ -2021,7 +2021,7 @@ client.Users.Update(
 <dl>
 <dd>
 
-**request:** `*kardgosdk.UpdateUserObject` 
+**request:** `*kard.UpdateUserObject` 
     
 </dd>
 </dl>
@@ -2033,7 +2033,7 @@ client.Users.Update(
 </dl>
 </details>
 
-<details><summary><code>client.Users.Delete(OrganizationID, UserID) -> *kardgosdk.DeleteUserResponseObject</code></summary>
+<details><summary><code>client.Users.Delete(OrganizationId, UserId) -> *kard.DeleteUserResponseObject</code></summary>
 <dl>
 <dd>
 
@@ -2082,7 +2082,7 @@ client.Users.Delete(
 <dl>
 <dd>
 
-**organizationID:** `kardgosdk.OrganizationID` 
+**organizationId:** `kard.OrganizationId` 
     
 </dd>
 </dl>
@@ -2090,7 +2090,7 @@ client.Users.Delete(
 <dl>
 <dd>
 
-**userID:** `kardgosdk.UserID` 
+**userId:** `kard.UserId` 
     
 </dd>
 </dl>
@@ -2102,7 +2102,7 @@ client.Users.Delete(
 </dl>
 </details>
 
-<details><summary><code>client.Users.Get(OrganizationID, UserID) -> *kardgosdk.UserResponseObject</code></summary>
+<details><summary><code>client.Users.Get(OrganizationId, UserId) -> *kard.UserResponseObject</code></summary>
 <dl>
 <dd>
 
@@ -2151,7 +2151,7 @@ client.Users.Get(
 <dl>
 <dd>
 
-**organizationID:** `kardgosdk.OrganizationID` 
+**organizationId:** `kard.OrganizationId` 
     
 </dd>
 </dl>
@@ -2159,7 +2159,7 @@ client.Users.Get(
 <dl>
 <dd>
 
-**userID:** `kardgosdk.UserID` 
+**userId:** `kard.UserId` 
     
 </dd>
 </dl>
@@ -2172,7 +2172,7 @@ client.Users.Get(
 </details>
 
 ## Users Attributions
-<details><summary><code>client.Users.Attributions.Create(OrganizationID, UserID, request) -> *users.CreateAttributionResponse</code></summary>
+<details><summary><code>client.Users.Attributions.Create(OrganizationId, UserId, request) -> *users.CreateAttributionResponse</code></summary>
 <dl>
 <dd>
 
@@ -2206,10 +2206,10 @@ request := &users.CreateAttributionRequestObject{
             &users.CreateAttributionRequestUnion{
                 OfferAttribution: &users.OfferAttributionRequest{
                     Attributes: &users.OfferAttributionAttributes{
-                        EntityID: "60e4ba1da31c5a22a144c075",
+                        EntityId: "60e4ba1da31c5a22a144c075",
                         EventCode: users.EventCodeView,
                         Medium: users.OfferMediumSearch,
-                        EventDate: kardgosdk.MustParseDateTime(
+                        EventDate: kard.MustParseDateTime(
                             "2025-01-01T00:00:00Z",
                         ),
                     },
@@ -2218,10 +2218,10 @@ request := &users.CreateAttributionRequestObject{
             &users.CreateAttributionRequestUnion{
                 OfferAttribution: &users.OfferAttributionRequest{
                     Attributes: &users.OfferAttributionAttributes{
-                        EntityID: "60e4ba1da31c5a22a144c077",
+                        EntityId: "60e4ba1da31c5a22a144c077",
                         EventCode: users.EventCodeImpression,
                         Medium: users.OfferMediumEmail,
-                        EventDate: kardgosdk.MustParseDateTime(
+                        EventDate: kard.MustParseDateTime(
                             "2025-01-01T00:00:00Z",
                         ),
                     },
@@ -2230,10 +2230,10 @@ request := &users.CreateAttributionRequestObject{
             &users.CreateAttributionRequestUnion{
                 NotificationAttribution: &users.NotificationAttributionRequest{
                     Attributes: &users.NotificationAttributionAttributes{
-                        EntityID: "60e4ba1da31c5a22a144c076",
+                        EntityId: "60e4ba1da31c5a22a144c076",
                         EventCode: users.EventCodeImpression,
                         Medium: users.NotificationMediumPush,
-                        EventDate: kardgosdk.MustParseDateTime(
+                        EventDate: kard.MustParseDateTime(
                             "2025-01-01T00:00:00Z",
                         ),
                     },
@@ -2262,7 +2262,7 @@ client.Users.Attributions.Create(
 <dl>
 <dd>
 
-**organizationID:** `kardgosdk.OrganizationID` 
+**organizationId:** `kard.OrganizationId` 
     
 </dd>
 </dl>
@@ -2270,7 +2270,7 @@ client.Users.Attributions.Create(
 <dl>
 <dd>
 
-**userID:** `kardgosdk.UserID` 
+**userId:** `kard.UserId` 
     
 </dd>
 </dl>
@@ -2290,7 +2290,7 @@ client.Users.Attributions.Create(
 </dl>
 </details>
 
-<details><summary><code>client.Users.Attributions.Activate(OrganizationID, UserID, OfferID) -> *users.ActivateOfferResponse</code></summary>
+<details><summary><code>client.Users.Attributions.Activate(OrganizationId, UserId, OfferId) -> *users.ActivateOfferResponse</code></summary>
 <dl>
 <dd>
 
@@ -2341,7 +2341,7 @@ client.Users.Attributions.Activate(
 <dl>
 <dd>
 
-**organizationID:** `kardgosdk.OrganizationID` 
+**organizationId:** `kard.OrganizationId` 
     
 </dd>
 </dl>
@@ -2349,7 +2349,7 @@ client.Users.Attributions.Activate(
 <dl>
 <dd>
 
-**userID:** `kardgosdk.UserID` 
+**userId:** `kard.UserId` 
     
 </dd>
 </dl>
@@ -2357,7 +2357,7 @@ client.Users.Attributions.Activate(
 <dl>
 <dd>
 
-**offerID:** `string` — The unique identifier of the offer being activated
+**offerId:** `string` — The unique identifier of the offer being activated
     
 </dd>
 </dl>
@@ -2385,7 +2385,7 @@ client.Users.Attributions.Activate(
 </dl>
 </details>
 
-<details><summary><code>client.Users.Attributions.Boost(OrganizationID, UserID, OfferID) -> *users.BoostOfferResponse</code></summary>
+<details><summary><code>client.Users.Attributions.Boost(OrganizationId, UserId, OfferId) -> *users.BoostOfferResponse</code></summary>
 <dl>
 <dd>
 
@@ -2436,7 +2436,7 @@ client.Users.Attributions.Boost(
 <dl>
 <dd>
 
-**organizationID:** `kardgosdk.OrganizationID` 
+**organizationId:** `kard.OrganizationId` 
     
 </dd>
 </dl>
@@ -2444,7 +2444,7 @@ client.Users.Attributions.Boost(
 <dl>
 <dd>
 
-**userID:** `kardgosdk.UserID` 
+**userId:** `kard.UserId` 
     
 </dd>
 </dl>
@@ -2452,7 +2452,7 @@ client.Users.Attributions.Boost(
 <dl>
 <dd>
 
-**offerID:** `string` — The unique identifier of the offer being boosted
+**offerId:** `string` — The unique identifier of the offer being boosted
     
 </dd>
 </dl>
@@ -2481,7 +2481,7 @@ client.Users.Attributions.Boost(
 </details>
 
 ## WebView
-<details><summary><code>client.Users.Auth.GetWebViewToken(OrganizationID, UserID) -> *users.WebViewTokenResponse</code></summary>
+<details><summary><code>client.Users.Auth.GetWebViewToken(OrganizationId, UserId) -> *users.WebViewTokenResponse</code></summary>
 <dl>
 <dd>
 
@@ -2528,7 +2528,7 @@ client.Users.Auth.GetWebViewToken(
 <dl>
 <dd>
 
-**organizationID:** `kardgosdk.OrganizationID` 
+**organizationId:** `kard.OrganizationId` 
     
 </dd>
 </dl>
@@ -2536,7 +2536,7 @@ client.Users.Auth.GetWebViewToken(
 <dl>
 <dd>
 
-**userID:** `kardgosdk.UserID` 
+**userId:** `kard.UserId` 
     
 </dd>
 </dl>
@@ -2549,7 +2549,7 @@ client.Users.Auth.GetWebViewToken(
 </details>
 
 ## Rewards
-<details><summary><code>client.Users.Rewards.Offers(OrganizationID, UserID) -> *users.OffersResponseObject</code></summary>
+<details><summary><code>client.Users.Rewards.Offers(OrganizationId, UserId) -> *users.OffersResponseObject</code></summary>
 <dl>
 <dd>
 
@@ -2580,10 +2580,10 @@ can be found by calling the [Get Eligible Locations](/2024-10-01/api/rewards/loc
 
 ```go
 request := &users.GetOffersByUserRequest{
-        PageSize: kardgosdk.Int(
+        PageSize: kard.Int(
             1,
         ),
-        FilterIsTargeted: kardgosdk.Bool(
+        FilterIsTargeted: kard.Bool(
             true,
         ),
         Sort: []*users.OfferSortOptions{
@@ -2611,7 +2611,7 @@ client.Users.Rewards.Offers(
 <dl>
 <dd>
 
-**organizationID:** `kardgosdk.OrganizationID` 
+**organizationId:** `kard.OrganizationId` 
     
 </dd>
 </dl>
@@ -2619,7 +2619,7 @@ client.Users.Rewards.Offers(
 <dl>
 <dd>
 
-**userID:** `kardgosdk.UserID` 
+**userId:** `kard.UserId` 
     
 </dd>
 </dl>
@@ -2659,7 +2659,7 @@ client.Users.Rewards.Offers(
 <dl>
 <dd>
 
-**filterPurchaseChannel:** `[]*kardgosdk.PurchaseChannel` 
+**filterPurchaseChannel:** `[]*kard.PurchaseChannel` 
     
 </dd>
 </dl>
@@ -2667,7 +2667,7 @@ client.Users.Rewards.Offers(
 <dl>
 <dd>
 
-**filterCategory:** `*kardgosdk.CategoryOption` 
+**filterCategory:** `*kard.CategoryOption` 
     
 </dd>
 </dl>
@@ -2711,7 +2711,7 @@ client.Users.Rewards.Offers(
 </dl>
 </details>
 
-<details><summary><code>client.Users.Rewards.PlacementOffers(OrganizationID, UserID, PlacementID) -> *users.OffersResponseObject</code></summary>
+<details><summary><code>client.Users.Rewards.PlacementOffers(OrganizationId, UserId, PlacementId) -> *users.OffersResponseObject</code></summary>
 <dl>
 <dd>
 
@@ -2763,7 +2763,7 @@ client.Users.Rewards.PlacementOffers(
 <dl>
 <dd>
 
-**organizationID:** `kardgosdk.OrganizationID` 
+**organizationId:** `kard.OrganizationId` 
     
 </dd>
 </dl>
@@ -2771,7 +2771,7 @@ client.Users.Rewards.PlacementOffers(
 <dl>
 <dd>
 
-**userID:** `kardgosdk.UserID` 
+**userId:** `kard.UserId` 
     
 </dd>
 </dl>
@@ -2779,7 +2779,7 @@ client.Users.Rewards.PlacementOffers(
 <dl>
 <dd>
 
-**placementID:** `string` 
+**placementId:** `string` 
     
 </dd>
 </dl>
@@ -2795,7 +2795,7 @@ client.Users.Rewards.PlacementOffers(
 <dl>
 <dd>
 
-**filterPurchaseChannel:** `[]*kardgosdk.PurchaseChannel` 
+**filterPurchaseChannel:** `[]*kard.PurchaseChannel` 
     
 </dd>
 </dl>
@@ -2803,7 +2803,7 @@ client.Users.Rewards.PlacementOffers(
 <dl>
 <dd>
 
-**filterCategory:** `*kardgosdk.CategoryOption` 
+**filterCategory:** `*kard.CategoryOption` 
     
 </dd>
 </dl>
@@ -2839,7 +2839,7 @@ client.Users.Rewards.PlacementOffers(
 </dl>
 </details>
 
-<details><summary><code>client.Users.Rewards.Locations(OrganizationID, UserID) -> *users.LocationsResponseObject</code></summary>
+<details><summary><code>client.Users.Rewards.Locations(OrganizationId, UserId) -> *users.LocationsResponseObject</code></summary>
 <dl>
 <dd>
 
@@ -2872,20 +2872,20 @@ pattern.<br/>
 
 ```go
 request := &users.GetLocationsByUserRequest{
-        PageSize: kardgosdk.Int(
+        PageSize: kard.Int(
             1,
         ),
-        FilterLatitude: kardgosdk.Float64(
+        FilterLatitude: kard.Float64(
             39.9419429,
         ),
-        FilterLongitude: kardgosdk.Float64(
+        FilterLongitude: kard.Float64(
             -75.1446869,
         ),
-        FilterRadius: kardgosdk.Int(
+        FilterRadius: kard.Int(
             10,
         ),
         Include: []*string{
-            kardgosdk.String(
+            kard.String(
                 "offers,categories",
             ),
         },
@@ -2911,7 +2911,7 @@ client.Users.Rewards.Locations(
 <dl>
 <dd>
 
-**organizationID:** `kardgosdk.OrganizationID` 
+**organizationId:** `kard.OrganizationId` 
     
 </dd>
 </dl>
@@ -2919,7 +2919,7 @@ client.Users.Rewards.Locations(
 <dl>
 <dd>
 
-**userID:** `kardgosdk.UserID` 
+**userId:** `kard.UserId` 
     
 </dd>
 </dl>
@@ -2975,7 +2975,7 @@ client.Users.Rewards.Locations(
 <dl>
 <dd>
 
-**filterState:** `*kardgosdk.State` 
+**filterState:** `*kard.State` 
     
 </dd>
 </dl>
@@ -2983,7 +2983,7 @@ client.Users.Rewards.Locations(
 <dl>
 <dd>
 
-**filterCategory:** `*kardgosdk.CategoryOption` 
+**filterCategory:** `*kard.CategoryOption` 
     
 </dd>
 </dl>
@@ -3044,7 +3044,7 @@ client.Users.Rewards.Locations(
 </details>
 
 ## Users Uploads
-<details><summary><code>client.Users.Uploads.Create(OrganizationID, UserID, request) -> *users.CreateUploadResponseObject</code></summary>
+<details><summary><code>client.Users.Uploads.Create(OrganizationId, UserId, request) -> *users.CreateUploadResponseObject</code></summary>
 <dl>
 <dd>
 
@@ -3076,7 +3076,7 @@ Part](/api/uploads/create-upload-part) endpoint, historical transactions can be 
 request := &users.CreateUploadRequestObject{
         Data: &users.CreateUploadRequestDataUnion{
             HistoricalTransactionStart: &users.StartHistoricalUploadNoData{
-                Attributes: &kardgosdk.EmptyObject{},
+                Attributes: &kard.EmptyObject{},
             },
         },
     }
@@ -3101,7 +3101,7 @@ client.Users.Uploads.Create(
 <dl>
 <dd>
 
-**organizationID:** `kardgosdk.OrganizationID` 
+**organizationId:** `kard.OrganizationId` 
     
 </dd>
 </dl>
@@ -3109,7 +3109,7 @@ client.Users.Uploads.Create(
 <dl>
 <dd>
 
-**userID:** `string` — The ID of the user as defined on the issuers system
+**userId:** `string` — The ID of the user as defined on the issuers system
     
 </dd>
 </dl>
@@ -3129,7 +3129,7 @@ client.Users.Uploads.Create(
 </dl>
 </details>
 
-<details><summary><code>client.Users.Uploads.CreatePart(OrganizationID, UserID, UploadID, request) -> *users.CreateUploadPartResponseObject</code></summary>
+<details><summary><code>client.Users.Uploads.CreatePart(OrganizationId, UserId, UploadId, request) -> *users.CreateUploadPartResponseObject</code></summary>
 <dl>
 <dd>
 
@@ -3161,73 +3161,73 @@ Call this endpoint using the upload ID provided in the [Create Upload](/api/uplo
 request := &users.CreateUploadPartRequestObject{
         Data: []*users.CreateUploadPartDataUnion{
             &users.CreateUploadPartDataUnion{
-                HistoricalTransaction: &kardgosdk.TransactionsRequest{
-                    ID: "309rjfoincor3icno3rind093cdow3jciwjdwcm",
-                    Attributes: &kardgosdk.TransactionsAttributes{
-                        UserID: "6FHt5b6Fnp0qdomMEy5AN6PXcSJIeX69",
-                        Status: kardgosdk.TransactionStatusApproved,
+                HistoricalTransaction: &kard.TransactionsRequest{
+                    Id: "309rjfoincor3icno3rind093cdow3jciwjdwcm",
+                    Attributes: &kard.TransactionsAttributes{
+                        UserId: "6FHt5b6Fnp0qdomMEy5AN6PXcSJIeX69",
+                        Status: kard.TransactionStatusApproved,
                         Amount: 1000,
-                        Subtotal: kardgosdk.Int(
+                        Subtotal: kard.Int(
                             800,
                         ),
                         Currency: "USD",
-                        Direction: kardgosdk.DirectionTypeDebit,
-                        PaymentType: kardgosdk.TransactionPaymentTypeCard,
+                        Direction: kard.DirectionTypeDebit,
+                        PaymentType: kard.TransactionPaymentTypeCard,
                         Description: "ADVANCEAUTO",
-                        Description2: kardgosdk.String(
+                        Description2: kard.String(
                             "ADVANCEAUTO",
                         ),
-                        Mcc: kardgosdk.String(
+                        Mcc: kard.String(
                             "1234",
                         ),
                         CardBin: "123456",
                         CardLastFour: "4321",
-                        AuthorizationDate: kardgosdk.Time(
-                            kardgosdk.MustParseDateTime(
+                        AuthorizationDate: kard.Time(
+                            kard.MustParseDateTime(
                                 "2021-07-02T17:47:06Z",
                             ),
                         ),
-                        Merchant: &kardgosdk.Merchant{
-                            ID: kardgosdk.String(
+                        Merchant: &kard.Merchant{
+                            Id: kard.String(
                                 "12345678901234567",
                             ),
                             Name: "ADVANCEAUTO",
-                            AddrStreet: kardgosdk.String(
+                            AddrStreet: kard.String(
                                 "125 Main St",
                             ),
-                            AddrCity: kardgosdk.String(
+                            AddrCity: kard.String(
                                 "Philadelphia",
                             ),
-                            AddrState: kardgosdk.StatesPa.Ptr(),
-                            AddrZipcode: kardgosdk.String(
+                            AddrState: kard.StatesPa.Ptr(),
+                            AddrZipcode: kard.String(
                                 "19147",
                             ),
-                            AddrCountry: kardgosdk.String(
+                            AddrCountry: kard.String(
                                 "United States",
                             ),
-                            Latitude: kardgosdk.String(
+                            Latitude: kard.String(
                                 "37.9419429",
                             ),
-                            Longitude: kardgosdk.String(
+                            Longitude: kard.String(
                                 "-73.1446869",
                             ),
-                            StoreID: kardgosdk.String(
+                            StoreId: kard.String(
                                 "12345",
                             ),
                         },
-                        AuthorizationCode: kardgosdk.String(
+                        AuthorizationCode: kard.String(
                             "123456",
                         ),
-                        RetrievalReferenceNumber: kardgosdk.String(
+                        RetrievalReferenceNumber: kard.String(
                             "100804333919",
                         ),
-                        AcquirerReferenceNumber: kardgosdk.String(
+                        AcquirerReferenceNumber: kard.String(
                             "1234567890123456789012345678",
                         ),
-                        SystemTraceAuditNumber: kardgosdk.String(
+                        SystemTraceAuditNumber: kard.String(
                             "333828",
                         ),
-                        TransactionID: "2467de37-cbdc-416d-a359-75de87bfffb0",
+                        TransactionId: "2467de37-cbdc-416d-a359-75de87bfffb0",
                     },
                 },
             },
@@ -3255,7 +3255,7 @@ client.Users.Uploads.CreatePart(
 <dl>
 <dd>
 
-**organizationID:** `kardgosdk.OrganizationID` 
+**organizationId:** `kard.OrganizationId` 
     
 </dd>
 </dl>
@@ -3263,7 +3263,7 @@ client.Users.Uploads.CreatePart(
 <dl>
 <dd>
 
-**userID:** `string` — The ID of the user as defined on the issuers system
+**userId:** `string` — The ID of the user as defined on the issuers system
     
 </dd>
 </dl>
@@ -3271,7 +3271,7 @@ client.Users.Uploads.CreatePart(
 <dl>
 <dd>
 
-**uploadID:** `string` — The upload ID identifying the upload session to add parts
+**uploadId:** `string` — The upload ID identifying the upload session to add parts
     
 </dd>
 </dl>
@@ -3291,7 +3291,7 @@ client.Users.Uploads.CreatePart(
 </dl>
 </details>
 
-<details><summary><code>client.Users.Uploads.Update(OrganizationID, UserID, UploadID, request) -> *users.UpdateUploadResponseObject</code></summary>
+<details><summary><code>client.Users.Uploads.Update(OrganizationId, UserId, UploadId, request) -> *users.UpdateUploadResponseObject</code></summary>
 <dl>
 <dd>
 
@@ -3322,8 +3322,8 @@ Call this endpoint to update your upload session. Currently, you can signal comp
 request := &users.UpdateUploadRequestObject{
         Data: &users.UpdateUploadRequestDataUnion{
             HistoricalTransactionComplete: &users.HistoricalTransactionCompleteNoData{
-                ID: "7e382223-b9a5-4825-91fb-436c8957a2e7",
-                Attributes: &kardgosdk.EmptyObject{},
+                Id: "7e382223-b9a5-4825-91fb-436c8957a2e7",
+                Attributes: &kard.EmptyObject{},
             },
         },
     }
@@ -3349,7 +3349,7 @@ client.Users.Uploads.Update(
 <dl>
 <dd>
 
-**organizationID:** `kardgosdk.OrganizationID` 
+**organizationId:** `kard.OrganizationId` 
     
 </dd>
 </dl>
@@ -3357,7 +3357,7 @@ client.Users.Uploads.Update(
 <dl>
 <dd>
 
-**userID:** `string` — The ID of the user as defined on the issuers system
+**userId:** `string` — The ID of the user as defined on the issuers system
     
 </dd>
 </dl>
@@ -3365,7 +3365,7 @@ client.Users.Uploads.Update(
 <dl>
 <dd>
 
-**uploadID:** `string` — The upload ID identifying the upload session to update
+**uploadId:** `string` — The upload ID identifying the upload session to update
     
 </dd>
 </dl>

@@ -214,13 +214,13 @@ func (c *CreateSubscriptionsResponseObject) String() string {
 
 var (
 	createdSubscriptionFieldAttributes = big.NewInt(1 << 0)
-	createdSubscriptionFieldID         = big.NewInt(1 << 1)
+	createdSubscriptionFieldId         = big.NewInt(1 << 1)
 )
 
 type CreatedSubscription struct {
 	Attributes *SubscriptionRequestAttributes `json:"attributes" url:"attributes"`
 	// The ID of the subscription
-	ID string `json:"id" url:"id"`
+	Id string `json:"id" url:"id"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -236,11 +236,11 @@ func (c *CreatedSubscription) GetAttributes() *SubscriptionRequestAttributes {
 	return c.Attributes
 }
 
-func (c *CreatedSubscription) GetID() string {
+func (c *CreatedSubscription) GetId() string {
 	if c == nil {
 		return ""
 	}
-	return c.ID
+	return c.Id
 }
 
 func (c *CreatedSubscription) GetExtraProperties() map[string]interface{} {
@@ -264,11 +264,11 @@ func (c *CreatedSubscription) SetAttributes(attributes *SubscriptionRequestAttri
 	c.require(createdSubscriptionFieldAttributes)
 }
 
-// SetID sets the ID field and marks it as non-optional;
+// SetId sets the Id field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreatedSubscription) SetID(id string) {
-	c.ID = id
-	c.require(createdSubscriptionFieldID)
+func (c *CreatedSubscription) SetId(id string) {
+	c.Id = id
+	c.require(createdSubscriptionFieldId)
 }
 
 func (c *CreatedSubscription) UnmarshalJSON(data []byte) error {
@@ -314,13 +314,13 @@ func (c *CreatedSubscription) String() string {
 }
 
 var (
-	subscriptionFieldID         = big.NewInt(1 << 0)
+	subscriptionFieldId         = big.NewInt(1 << 0)
 	subscriptionFieldAttributes = big.NewInt(1 << 1)
 )
 
 type Subscription struct {
 	// The ID of the subscription
-	ID         string                  `json:"id" url:"id"`
+	Id         string                  `json:"id" url:"id"`
 	Attributes *SubscriptionAttributes `json:"attributes" url:"attributes"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
@@ -330,11 +330,11 @@ type Subscription struct {
 	rawJSON         json.RawMessage
 }
 
-func (s *Subscription) GetID() string {
+func (s *Subscription) GetId() string {
 	if s == nil {
 		return ""
 	}
-	return s.ID
+	return s.Id
 }
 
 func (s *Subscription) GetAttributes() *SubscriptionAttributes {
@@ -358,11 +358,11 @@ func (s *Subscription) require(field *big.Int) {
 	s.explicitFields.Or(s.explicitFields, field)
 }
 
-// SetID sets the ID field and marks it as non-optional;
+// SetId sets the Id field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (s *Subscription) SetID(id string) {
-	s.ID = id
-	s.require(subscriptionFieldID)
+func (s *Subscription) SetId(id string) {
+	s.Id = id
+	s.require(subscriptionFieldId)
 }
 
 // SetAttributes sets the Attributes field and marks it as non-optional;
@@ -416,7 +416,7 @@ func (s *Subscription) String() string {
 
 var (
 	subscriptionAttributesFieldEventName  = big.NewInt(1 << 0)
-	subscriptionAttributesFieldWebhookURL = big.NewInt(1 << 1)
+	subscriptionAttributesFieldWebhookUrl = big.NewInt(1 << 1)
 	subscriptionAttributesFieldEnabled    = big.NewInt(1 << 2)
 )
 
@@ -424,7 +424,7 @@ type SubscriptionAttributes struct {
 	// The name of the event
 	EventName kardgosdk.NotificationType `json:"eventName" url:"eventName"`
 	// The URL to which notifications will be sent
-	WebhookURL string `json:"webhookUrl" url:"webhookUrl"`
+	WebhookUrl string `json:"webhookUrl" url:"webhookUrl"`
 	// Indicates whether the subscription is active
 	Enabled bool `json:"enabled" url:"enabled"`
 
@@ -442,11 +442,11 @@ func (s *SubscriptionAttributes) GetEventName() kardgosdk.NotificationType {
 	return s.EventName
 }
 
-func (s *SubscriptionAttributes) GetWebhookURL() string {
+func (s *SubscriptionAttributes) GetWebhookUrl() string {
 	if s == nil {
 		return ""
 	}
-	return s.WebhookURL
+	return s.WebhookUrl
 }
 
 func (s *SubscriptionAttributes) GetEnabled() bool {
@@ -477,11 +477,11 @@ func (s *SubscriptionAttributes) SetEventName(eventName kardgosdk.NotificationTy
 	s.require(subscriptionAttributesFieldEventName)
 }
 
-// SetWebhookURL sets the WebhookURL field and marks it as non-optional;
+// SetWebhookUrl sets the WebhookUrl field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (s *SubscriptionAttributes) SetWebhookURL(webhookURL string) {
-	s.WebhookURL = webhookURL
-	s.require(subscriptionAttributesFieldWebhookURL)
+func (s *SubscriptionAttributes) SetWebhookUrl(webhookUrl string) {
+	s.WebhookUrl = webhookUrl
+	s.require(subscriptionAttributesFieldWebhookUrl)
 }
 
 // SetEnabled sets the Enabled field and marks it as non-optional;
@@ -619,7 +619,7 @@ func (s *SubscriptionRequest) String() string {
 
 var (
 	subscriptionRequestAttributesFieldEventName  = big.NewInt(1 << 0)
-	subscriptionRequestAttributesFieldWebhookURL = big.NewInt(1 << 1)
+	subscriptionRequestAttributesFieldWebhookUrl = big.NewInt(1 << 1)
 	subscriptionRequestAttributesFieldEnabled    = big.NewInt(1 << 2)
 )
 
@@ -627,7 +627,7 @@ type SubscriptionRequestAttributes struct {
 	// The name of the event for the subscription
 	EventName kardgosdk.NotificationType `json:"eventName" url:"eventName"`
 	// The URL where notifications will be delivered
-	WebhookURL string `json:"webhookUrl" url:"webhookUrl"`
+	WebhookUrl string `json:"webhookUrl" url:"webhookUrl"`
 	// Indicates whether the subscription is active
 	Enabled bool `json:"enabled" url:"enabled"`
 
@@ -645,11 +645,11 @@ func (s *SubscriptionRequestAttributes) GetEventName() kardgosdk.NotificationTyp
 	return s.EventName
 }
 
-func (s *SubscriptionRequestAttributes) GetWebhookURL() string {
+func (s *SubscriptionRequestAttributes) GetWebhookUrl() string {
 	if s == nil {
 		return ""
 	}
-	return s.WebhookURL
+	return s.WebhookUrl
 }
 
 func (s *SubscriptionRequestAttributes) GetEnabled() bool {
@@ -680,11 +680,11 @@ func (s *SubscriptionRequestAttributes) SetEventName(eventName kardgosdk.Notific
 	s.require(subscriptionRequestAttributesFieldEventName)
 }
 
-// SetWebhookURL sets the WebhookURL field and marks it as non-optional;
+// SetWebhookUrl sets the WebhookUrl field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (s *SubscriptionRequestAttributes) SetWebhookURL(webhookURL string) {
-	s.WebhookURL = webhookURL
-	s.require(subscriptionRequestAttributesFieldWebhookURL)
+func (s *SubscriptionRequestAttributes) SetWebhookUrl(webhookUrl string) {
+	s.WebhookUrl = webhookUrl
+	s.require(subscriptionRequestAttributesFieldWebhookUrl)
 }
 
 // SetEnabled sets the Enabled field and marks it as non-optional;
@@ -1176,7 +1176,7 @@ func (u *UpdateSubscriptionRequest) String() string {
 
 var (
 	updateSubscriptionRequestAttributesFieldEventName  = big.NewInt(1 << 0)
-	updateSubscriptionRequestAttributesFieldWebhookURL = big.NewInt(1 << 1)
+	updateSubscriptionRequestAttributesFieldWebhookUrl = big.NewInt(1 << 1)
 	updateSubscriptionRequestAttributesFieldEnabled    = big.NewInt(1 << 2)
 )
 
@@ -1184,7 +1184,7 @@ type UpdateSubscriptionRequestAttributes struct {
 	// The name of the event for the subscription
 	EventName *kardgosdk.NotificationType `json:"eventName,omitempty" url:"eventName,omitempty"`
 	// The URL where notifications will be delivered
-	WebhookURL *string `json:"webhookUrl,omitempty" url:"webhookUrl,omitempty"`
+	WebhookUrl *string `json:"webhookUrl,omitempty" url:"webhookUrl,omitempty"`
 	// Indicates whether the subscription is active
 	Enabled *bool `json:"enabled,omitempty" url:"enabled,omitempty"`
 
@@ -1202,11 +1202,11 @@ func (u *UpdateSubscriptionRequestAttributes) GetEventName() *kardgosdk.Notifica
 	return u.EventName
 }
 
-func (u *UpdateSubscriptionRequestAttributes) GetWebhookURL() *string {
+func (u *UpdateSubscriptionRequestAttributes) GetWebhookUrl() *string {
 	if u == nil {
 		return nil
 	}
-	return u.WebhookURL
+	return u.WebhookUrl
 }
 
 func (u *UpdateSubscriptionRequestAttributes) GetEnabled() *bool {
@@ -1237,11 +1237,11 @@ func (u *UpdateSubscriptionRequestAttributes) SetEventName(eventName *kardgosdk.
 	u.require(updateSubscriptionRequestAttributesFieldEventName)
 }
 
-// SetWebhookURL sets the WebhookURL field and marks it as non-optional;
+// SetWebhookUrl sets the WebhookUrl field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpdateSubscriptionRequestAttributes) SetWebhookURL(webhookURL *string) {
-	u.WebhookURL = webhookURL
-	u.require(updateSubscriptionRequestAttributesFieldWebhookURL)
+func (u *UpdateSubscriptionRequestAttributes) SetWebhookUrl(webhookUrl *string) {
+	u.WebhookUrl = webhookUrl
+	u.require(updateSubscriptionRequestAttributesFieldWebhookUrl)
 }
 
 // SetEnabled sets the Enabled field and marks it as non-optional;

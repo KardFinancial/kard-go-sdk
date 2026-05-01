@@ -6,7 +6,7 @@ import (
 	context "context"
 	http "net/http"
 
-	kardgosdk "github.com/KardFinancial/kard-go-sdk"
+	kard "github.com/KardFinancial/kard-go-sdk"
 	core "github.com/KardFinancial/kard-go-sdk/core"
 	internal "github.com/KardFinancial/kard-go-sdk/internal"
 	option "github.com/KardFinancial/kard-go-sdk/option"
@@ -33,9 +33,9 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 
 func (r *RawClient) GetToken(
 	ctx context.Context,
-	request *kardgosdk.GetTokenRequest,
+	request *kard.GetTokenRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*kardgosdk.TokenResponse], error) {
+) (*core.Response[*kard.TokenResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -50,8 +50,8 @@ func (r *RawClient) GetToken(
 	if request.XKardTargetIssuer != nil {
 		headers.Add("X-Kard-Target-Issuer", *request.XKardTargetIssuer)
 	}
-
-	var response *kardgosdk.TokenResponse
+	headers.Add("Content-Type", "application/x-www-form-urlencoded")
+	var response *kard.TokenResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -69,7 +69,7 @@ func (r *RawClient) GetToken(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*kardgosdk.TokenResponse]{
+	return &core.Response[*kard.TokenResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

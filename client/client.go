@@ -7,7 +7,7 @@ import (
 	errors "errors"
 	os "os"
 
-	kardgosdk "github.com/KardFinancial/kard-go-sdk"
+	kard "github.com/KardFinancial/kard-go-sdk"
 	auth "github.com/KardFinancial/kard-go-sdk/auth"
 	core "github.com/KardFinancial/kard-go-sdk/core"
 	files "github.com/KardFinancial/kard-go-sdk/files"
@@ -51,8 +51,8 @@ func NewClient(opts ...option.RequestOption) *Client {
 	)
 	options.SetTokenGetter(func() (string, error) {
 		return oauthTokenProvider.GetOrFetch(func() (string, int, error) {
-			response, err := authClient.GetToken(context.Background(), &kardgosdk.GetTokenRequest{
-				ClientID:     options.ClientID,
+			response, err := authClient.GetToken(context.Background(), &kard.GetTokenRequest{
+				ClientId:     options.ClientID,
 				ClientSecret: options.ClientSecret,
 			})
 			if err != nil {

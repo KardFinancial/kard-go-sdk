@@ -2,3 +2,6 @@
 .github/workflows/changelog-dispatch.yml
 changelog.md
 LICENSE
+
+# Custom HEM (Hashed Email) utility
+hem

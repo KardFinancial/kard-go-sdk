@@ -1632,7 +1632,7 @@ Generates up to 10 presigned PUT URLs for uploading JSONL transaction files (up 
 to storage. Each URL is valid for 15 minutes. Use the returned URL to upload the file via an HTTP PUT request with the
 binary file content as the body. If a URL expires before the upload completes, you must request a new one.
 Files can be uploaded as plain JSONL or as a gzip-compressed file.
-Only `coreTransaction` type is supported for bulk file uploads.
+Supports both `incomingTransactionsFile` for daily transaction ingestion and `historicalTransactionsFile` for historical transaction ingestion. See the [Historical Transaction Uploads](/2024-10-01/api/integration-guides/historical-transaction-uploads) integration guide for details on the historical flow.
 <b>Required scopes:</b> `transaction:write`
 </dd>
 </dl>
@@ -3056,7 +3056,9 @@ client.Users.Rewards.Locations(
 <dl>
 <dd>
 
-Call this endpoint to create an upload session and retrieve an upload ID. Using the upload ID in the [Add Upload 
+<b>Deprecated.</b> This endpoint is deprecated in favor of the [Create Bulk Transactions Upload URL](/2024-10-01/api/transactions/create-bulk-transactions-upload-url) endpoint. New integrations should use the bulk flow outlined in the [Historical Transaction Uploads](/2024-10-01/api/integration-guides/historical-transaction-uploads) integration guide.
+
+Call this endpoint to create an upload session and retrieve an upload ID. Using the upload ID in the [Add Upload
 Part](/api/uploads/create-upload-part) endpoint, historical transactions can be sent in batches for further processing.
 <b>Required scopes:</b> `transaction:write`
 </dd>
@@ -3140,6 +3142,8 @@ client.Users.Uploads.Create(
 
 <dl>
 <dd>
+
+<b>Deprecated.</b> This endpoint is deprecated in favor of the [Create Bulk Transactions Upload URL](/2024-10-01/api/transactions/create-bulk-transactions-upload-url) endpoint. New integrations should use the bulk flow outlined in the [Historical Transaction Uploads](/2024-10-01/api/integration-guides/historical-transaction-uploads) integration guide.
 
 Call this endpoint using the upload ID provided in the [Create Upload](/api/uploads/create-upload) endpoint to add parts to your upload. Currently, this endpoint supports adding historical transactions.
 <b>Required scopes:</b> `transaction:write`
@@ -3302,6 +3306,8 @@ client.Users.Uploads.CreatePart(
 
 <dl>
 <dd>
+
+<b>Deprecated.</b> This endpoint is deprecated in favor of the [Create Bulk Transactions Upload URL](/2024-10-01/api/transactions/create-bulk-transactions-upload-url) endpoint. New integrations should use the bulk flow outlined in the [Historical Transaction Uploads](/2024-10-01/api/integration-guides/historical-transaction-uploads) integration guide.
 
 Call this endpoint to update your upload session. Currently, you can signal completing a historical transactions upload.
 <b>Required scopes:</b> `transaction:write`

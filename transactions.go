@@ -2064,7 +2064,7 @@ func (d DirectionType) Ptr() *DirectionType {
 	return &d
 }
 
-// Specifies the category of transaction file being uploaded. Use `incomingTransactionsFile` for new, real-time transactions that need to be processed and matched as they arrive. Use `historicalTransactionsFile` for back-filled or retroactive transaction data that covers a past time period.
+// Specifies the category of transaction file being uploaded. Use `incomingTransactionsFile` for new, real-time transactions that need to be processed and matched as they arrive. Use `historicalTransactionsFile` for historical transaction ingestion.
 type FileUploadType string
 
 const (

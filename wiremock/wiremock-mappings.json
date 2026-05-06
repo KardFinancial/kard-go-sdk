@@ -649,8 +649,8 @@
       }
     },
     {
-      "id": "17747af4-fc46-4397-9311-f231db29f2ba",
-      "name": "Create Bulk Transactions Upload URL - Bulk Transactions Upload URL",
+      "id": "0ee77945-f7da-45c5-899e-fa2918c35230",
+      "name": "Create Bulk Transactions Upload URL - Incoming Transactions Upload URL",
       "request": {
         "urlPathTemplate": "/v2/issuers/{organizationId}/transactions/uploads",
         "method": "POST",
@@ -667,7 +667,7 @@
           "Content-Type": "application/json"
         }
       },
-      "uuid": "17747af4-fc46-4397-9311-f231db29f2ba",
+      "uuid": "0ee77945-f7da-45c5-899e-fa2918c35230",
       "persistent": true,
       "priority": 3,
       "metadata": {

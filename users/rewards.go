@@ -1940,6 +1940,7 @@ var (
 	locationAttributesFieldCoordinates    = big.NewInt(1 << 2)
 	locationAttributesFieldPhone          = big.NewInt(1 << 3)
 	locationAttributesFieldOperationHours = big.NewInt(1 << 4)
+	locationAttributesFieldPartnerIds     = big.NewInt(1 << 5)
 )
 
 type LocationAttributes struct {
@@ -1948,6 +1949,8 @@ type LocationAttributes struct {
 	Coordinates    *Coordinates                `json:"coordinates" url:"coordinates"`
 	Phone          string                      `json:"phone" url:"phone"`
 	OperationHours *OperationHours             `json:"operationHours" url:"operationHours"`
+	// List of ids associated with the location from third party partners. Only included on LOCAL locations.
+	PartnerIds []*LocationPartnerId `json:"partnerIds,omitempty" url:"partnerIds,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -1989,6 +1992,13 @@ func (l *LocationAttributes) GetOperationHours() *OperationHours {
 		return nil
 	}
 	return l.OperationHours
+}
+
+func (l *LocationAttributes) GetPartnerIds() []*LocationPartnerId {
+	if l == nil {
+		return nil
+	}
+	return l.PartnerIds
 }
 
 func (l *LocationAttributes) GetExtraProperties() map[string]interface{} {
@@ -2038,6 +2048,13 @@ func (l *LocationAttributes) SetPhone(phone string) {
 func (l *LocationAttributes) SetOperationHours(operationHours *OperationHours) {
 	l.OperationHours = operationHours
 	l.require(locationAttributesFieldOperationHours)
+}
+
+// SetPartnerIds sets the PartnerIds field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LocationAttributes) SetPartnerIds(partnerIds []*LocationPartnerId) {
+	l.PartnerIds = partnerIds
+	l.require(locationAttributesFieldPartnerIds)
 }
 
 func (l *LocationAttributes) UnmarshalJSON(data []byte) error {
@@ -2214,6 +2231,125 @@ func (l *LocationData) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", l)
+}
+
+var (
+	locationPartnerIdFieldType = big.NewInt(1 << 0)
+	locationPartnerIdFieldId   = big.NewInt(1 << 1)
+)
+
+type LocationPartnerId struct {
+	Type LocationPartnerIdType `json:"type" url:"type"`
+	Id   string                `json:"id" url:"id"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LocationPartnerId) GetType() LocationPartnerIdType {
+	if l == nil {
+		return ""
+	}
+	return l.Type
+}
+
+func (l *LocationPartnerId) GetId() string {
+	if l == nil {
+		return ""
+	}
+	return l.Id
+}
+
+func (l *LocationPartnerId) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
+	return l.extraProperties
+}
+
+func (l *LocationPartnerId) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetType sets the Type field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LocationPartnerId) SetType(type_ LocationPartnerIdType) {
+	l.Type = type_
+	l.require(locationPartnerIdFieldType)
+}
+
+// SetId sets the Id field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LocationPartnerId) SetId(id string) {
+	l.Id = id
+	l.require(locationPartnerIdFieldId)
+}
+
+func (l *LocationPartnerId) UnmarshalJSON(data []byte) error {
+	type unmarshaler LocationPartnerId
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LocationPartnerId(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LocationPartnerId) MarshalJSON() ([]byte, error) {
+	type embed LocationPartnerId
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*l),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (l *LocationPartnerId) String() string {
+	if l == nil {
+		return "<nil>"
+	}
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LocationPartnerIdType string
+
+const (
+	LocationPartnerIdTypeGoogle LocationPartnerIdType = "google"
+)
+
+func NewLocationPartnerIdTypeFromString(s string) (LocationPartnerIdType, error) {
+	switch s {
+	case "google":
+		return LocationPartnerIdTypeGoogle, nil
+	}
+	var t LocationPartnerIdType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (l LocationPartnerIdType) Ptr() *LocationPartnerIdType {
+	return &l
 }
 
 var (

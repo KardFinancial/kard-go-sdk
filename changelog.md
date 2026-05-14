@@ -1,3 +1,14 @@
+## v2.0.1 - 2026-05-14
+* chore: update LocationAttributes.PartnerIds comment and omitempty tag
+* Refine the `PartnerIds` field on `LocationAttributes` by updating its
+* godoc comment from "Only included on LOCAL locations" to "Only applicable
+* for LOCAL locations" and removing the `omitempty` JSON/URL tag so the
+* field is always serialized when present.
+* Key changes:
+* Update `PartnerIds` godoc comment for clarity ("Only applicable for LOCAL locations")
+* Remove `omitempty` from `json` and `url` struct tags on `PartnerIds`
+* 🌿 Generated with Fern
+
 ## v2.0.0 - 2026-05-14
 ### Breaking Changes
 * **`EarnedRewardAttributes`** — struct and all associated getter/setter methods have been removed; migrate by replacing any usage with `RewardNotificationAttributes`.

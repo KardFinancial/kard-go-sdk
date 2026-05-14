@@ -1949,8 +1949,8 @@ type LocationAttributes struct {
 	Coordinates    *Coordinates                `json:"coordinates" url:"coordinates"`
 	Phone          string                      `json:"phone" url:"phone"`
 	OperationHours *OperationHours             `json:"operationHours" url:"operationHours"`
-	// List of ids associated with the location from third party partners. Only included on LOCAL locations.
-	PartnerIds []*LocationPartnerId `json:"partnerIds,omitempty" url:"partnerIds,omitempty"`
+	// List of ids associated with the location from third party partners. Only applicable for LOCAL locations.
+	PartnerIds []*LocationPartnerId `json:"partnerIds" url:"partnerIds"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`

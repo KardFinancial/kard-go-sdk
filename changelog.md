@@ -1,3 +1,12 @@
+## v2.0.0 - 2026-05-14
+### Breaking Changes
+* **`EarnedRewardAttributes`** — struct and all associated getter/setter methods have been removed; migrate by replacing any usage with `RewardNotificationAttributes`.
+* **`EarnedRewardApprovedData.Attributes`** — field type changed from `*EarnedRewardAttributes` to `*RewardNotificationAttributes`; update all call sites to use `RewardNotificationAttributes`.
+### Added
+* **`RewardNotificationAttributes.TransactionId`**, **`TransactionAmountInCents`**, and **`TransactionTimestamp`** — new fields (with corresponding getters and setters) exposing originating transaction details on reward notification attributes.
+* **`EarnedRewardSettledAttributes.TransactionId`** and **`TransactionAmountInCents`** — new fields providing transaction ID and amount in cents for settled reward events.
+* **`ValidTransactionAttributes.TransactionId`**, **`TransactionAmountInCents`**, and **`TransactionTimestamp`** — new fields providing originating transaction details for valid transaction notification attributes.
+
 ## v1.1.0 - 2026-05-12
 ### Added
 * **`LocationPartnerId`** — new struct representing a third-party partner ID (e.g. a Google place ID) associated with a location.

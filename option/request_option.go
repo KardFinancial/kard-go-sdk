@@ -3,7 +3,7 @@
 package option
 
 import (
-	core "github.com/KardFinancial/kard-go-sdk/core"
+	core "github.com/KardFinancial/kard-go-sdk/v2/core"
 	http "net/http"
 	url "net/url"
 )

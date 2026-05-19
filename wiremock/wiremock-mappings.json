@@ -362,6 +362,170 @@
       }
     },
     {
+      "id": "2290b8e9-557a-4601-9d2c-3333a8d867b9",
+      "name": "create - Create Content Strategy",
+      "request": {
+        "urlPathTemplate": "/v2/issuers/{organizationId}/contentStrategies",
+        "method": "POST",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "org-123"
+          }
+        }
+      },
+      "response": {
+        "status": 201,
+        "body": "{\n  \"type\": \"contentStrategy\",\n  \"id\": \"01961e5a-b74c-7d42-8456-d3a1f2c90e71\",\n  \"attributes\": {\n    \"name\": \"Featured Travel\",\n    \"organizationId\": \"org-123\",\n    \"filters\": [\n      \"HIGHEST_CASHBACK\",\n      \"NEWLY_LIVE\"\n    ],\n    \"categories\": [\n      \"Travel\"\n    ],\n    \"categoryExclusions\": [\n      \"Gas\"\n    ],\n    \"merchantExclusions\": [\n      \"merchant-abc\"\n    ],\n    \"createdAt\": \"2026-04-15T12:00:00Z\",\n    \"lastModified\": \"2026-04-15T12:00:00Z\"\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "2290b8e9-557a-4601-9d2c-3333a8d867b9",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "58b83d09-c7fa-43e3-93df-33376e4263b9",
+      "name": "list - default",
+      "request": {
+        "urlPathTemplate": "/v2/issuers/{organizationId}/contentStrategies",
+        "method": "GET",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "organizationId"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"data\": [\n    {\n      \"type\": \"contentStrategy\",\n      \"id\": \"id\",\n      \"attributes\": {\n        \"name\": \"name\",\n        \"organizationId\": \"organizationId\",\n        \"filters\": [\n          \"NEWLY_LIVE\",\n          \"NEWLY_LIVE\"\n        ],\n        \"categories\": [\n          \"Arts & Entertainment\",\n          \"Arts & Entertainment\"\n        ],\n        \"categoryExclusions\": [\n          \"Arts & Entertainment\",\n          \"Arts & Entertainment\"\n        ],\n        \"merchantExclusions\": [\n          \"merchantExclusions\",\n          \"merchantExclusions\"\n        ],\n        \"createdAt\": \"2024-01-15T09:30:00Z\",\n        \"lastModified\": \"2024-01-15T09:30:00Z\"\n      }\n    },\n    {\n      \"type\": \"contentStrategy\",\n      \"id\": \"id\",\n      \"attributes\": {\n        \"name\": \"name\",\n        \"organizationId\": \"organizationId\",\n        \"filters\": [\n          \"NEWLY_LIVE\",\n          \"NEWLY_LIVE\"\n        ],\n        \"categories\": [\n          \"Arts & Entertainment\",\n          \"Arts & Entertainment\"\n        ],\n        \"categoryExclusions\": [\n          \"Arts & Entertainment\",\n          \"Arts & Entertainment\"\n        ],\n        \"merchantExclusions\": [\n          \"merchantExclusions\",\n          \"merchantExclusions\"\n        ],\n        \"createdAt\": \"2024-01-15T09:30:00Z\",\n        \"lastModified\": \"2024-01-15T09:30:00Z\"\n      }\n    }\n  ],\n  \"links\": {\n    \"self\": \"self\",\n    \"prev\": \"prev\",\n    \"next\": \"next\"\n  },\n  \"meta\": {\n    \"pageSize\": 1,\n    \"hasNextPage\": true\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "58b83d09-c7fa-43e3-93df-33376e4263b9",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "b49c0a89-7e6b-4432-af96-9110bc69a7f8",
+      "name": "get - default",
+      "request": {
+        "urlPathTemplate": "/v2/issuers/{organizationId}/contentStrategies/{contentStrategyId}",
+        "method": "GET",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "organizationId"
+          },
+          "contentStrategyId": {
+            "equalTo": "contentStrategyId"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"type\": \"contentStrategy\",\n  \"id\": \"id\",\n  \"attributes\": {\n    \"name\": \"name\",\n    \"organizationId\": \"organizationId\",\n    \"filters\": [\n      \"NEWLY_LIVE\",\n      \"NEWLY_LIVE\"\n    ],\n    \"categories\": [\n      \"Arts & Entertainment\",\n      \"Arts & Entertainment\"\n    ],\n    \"categoryExclusions\": [\n      \"Arts & Entertainment\",\n      \"Arts & Entertainment\"\n    ],\n    \"merchantExclusions\": [\n      \"merchantExclusions\",\n      \"merchantExclusions\"\n    ],\n    \"createdAt\": \"2024-01-15T09:30:00Z\",\n    \"lastModified\": \"2024-01-15T09:30:00Z\"\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "b49c0a89-7e6b-4432-af96-9110bc69a7f8",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "45eb5204-8224-43ec-b1b4-46d27fb08658",
+      "name": "update - default",
+      "request": {
+        "urlPathTemplate": "/v2/issuers/{organizationId}/contentStrategies/{contentStrategyId}",
+        "method": "PUT",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "organizationId"
+          },
+          "contentStrategyId": {
+            "equalTo": "contentStrategyId"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"type\": \"contentStrategy\",\n  \"id\": \"id\",\n  \"attributes\": {\n    \"name\": \"name\",\n    \"organizationId\": \"organizationId\",\n    \"filters\": [\n      \"NEWLY_LIVE\",\n      \"NEWLY_LIVE\"\n    ],\n    \"categories\": [\n      \"Arts & Entertainment\",\n      \"Arts & Entertainment\"\n    ],\n    \"categoryExclusions\": [\n      \"Arts & Entertainment\",\n      \"Arts & Entertainment\"\n    ],\n    \"merchantExclusions\": [\n      \"merchantExclusions\",\n      \"merchantExclusions\"\n    ],\n    \"createdAt\": \"2024-01-15T09:30:00Z\",\n    \"lastModified\": \"2024-01-15T09:30:00Z\"\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "45eb5204-8224-43ec-b1b4-46d27fb08658",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "5d049a53-bd31-40d2-923a-080858c5f857",
+      "name": "delete - default",
+      "request": {
+        "urlPathTemplate": "/v2/issuers/{organizationId}/contentStrategies/{contentStrategyId}",
+        "method": "DELETE",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "organizationId"
+          },
+          "contentStrategyId": {
+            "equalTo": "contentStrategyId"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"data\": {\n    \"type\": \"type\",\n    \"id\": \"id\",\n    \"attributes\": {}\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "5d049a53-bd31-40d2-923a-080858c5f857",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
       "id": "165c918b-6831-464d-a508-c1c8959fcee4",
       "name": "create - Create Main Page Placement",
       "request": {
@@ -1242,6 +1406,6 @@
     }
   ],
   "meta": {
-    "total": 36
+    "total": 41
   }
 }

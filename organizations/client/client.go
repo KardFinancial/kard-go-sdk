@@ -11,13 +11,15 @@ import (
 	internal "github.com/KardFinancial/kard-go-sdk/v2/internal"
 	option "github.com/KardFinancial/kard-go-sdk/v2/option"
 	children "github.com/KardFinancial/kard-go-sdk/v2/organizations/children"
+	contentstrategies "github.com/KardFinancial/kard-go-sdk/v2/organizations/contentstrategies"
 	placements "github.com/KardFinancial/kard-go-sdk/v2/organizations/placements"
 )
 
 type Client struct {
-	WithRawResponse *RawClient
-	Children        *children.Client
-	Placements      *placements.Client
+	WithRawResponse   *RawClient
+	Children          *children.Client
+	ContentStrategies *contentstrategies.Client
+	Placements        *placements.Client
 
 	options *core.RequestOptions
 	baseURL string
@@ -32,11 +34,12 @@ func NewClient(options *core.RequestOptions) *Client {
 		options.ClientSecret = os.Getenv("KARD_CLIENT_SECRET")
 	}
 	return &Client{
-		Children:        children.NewClient(options),
-		Placements:      placements.NewClient(options),
-		WithRawResponse: NewRawClient(options),
-		options:         options,
-		baseURL:         options.BaseURL,
+		Children:          children.NewClient(options),
+		ContentStrategies: contentstrategies.NewClient(options),
+		Placements:        placements.NewClient(options),
+		WithRawResponse:   NewRawClient(options),
+		options:           options,
+		baseURL:           options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
 				Client:      options.HTTPClient,

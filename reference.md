@@ -850,6 +850,411 @@ client.Organizations.Children.Delete(
 </dl>
 </details>
 
+## ContentStrategies
+<details><summary><code>client.Organizations.ContentStrategies.Create(OrganizationId, request) -> *organizations.ContentStrategyResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create a content strategy for the organization. The strategy name must be unique within the organization.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```go
+request := &organizations.CreateContentStrategyRequestBody{
+        Data: &organizations.CreateContentStrategyRequestData{
+            Attributes: &organizations.CreateContentStrategyAttributes{
+                Name: "Featured Travel",
+                Filters: []organizations.ContentStrategyFilter{
+                    organizations.ContentStrategyFilterHighestCashback,
+                    organizations.ContentStrategyFilterNewlyLive,
+                },
+                Categories: []kard.CategoryOption{
+                    kard.CategoryOptionTravel,
+                },
+                CategoryExclusions: []kard.CategoryOption{
+                    kard.CategoryOptionGas,
+                },
+                MerchantExclusions: []string{
+                    "merchant-abc",
+                },
+            },
+        },
+    }
+client.Organizations.ContentStrategies.Create(
+        context.TODO(),
+        "org-123",
+        request,
+    )
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**organizationId:** `string` — Unique identifier of the organization
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `*organizations.CreateContentStrategyRequestBody` — Content strategy data for creation
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.Organizations.ContentStrategies.List(OrganizationId) -> *organizations.ContentStrategyListResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List content strategies belonging to the authenticated organization
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```go
+request := &organizations.ListContentStrategiesRequest{}
+client.Organizations.ContentStrategies.List(
+        context.TODO(),
+        "organizationId",
+        request,
+    )
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**organizationId:** `string` — Unique identifier of the organization
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**filterName:** `*string` — Filter by exact content strategy name (unique within an organization)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**pageAfter:** `*string` — Cursor value for the next page of results
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**pageSize:** `*int` — Maximum number of records to return [1 - 200] (default = 200)
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.Organizations.ContentStrategies.Get(OrganizationId, ContentStrategyId) -> *organizations.ContentStrategyResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve a specific content strategy
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```go
+client.Organizations.ContentStrategies.Get(
+        context.TODO(),
+        "organizationId",
+        "contentStrategyId",
+    )
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**organizationId:** `string` — Unique identifier of the organization
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**contentStrategyId:** `string` — Unique identifier of the content strategy (UUID v7)
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.Organizations.ContentStrategies.Update(OrganizationId, ContentStrategyId, request) -> *organizations.ContentStrategyResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Replace a content strategy. All fields must be provided; any omitted attribute is treated as cleared.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```go
+request := &organizations.UpdateContentStrategyRequestBody{
+        Data: &organizations.UpdateContentStrategyRequestData{
+            Attributes: &organizations.UpdateContentStrategyAttributes{
+                Name: "name",
+                Filters: []organizations.ContentStrategyFilter{
+                    organizations.ContentStrategyFilterNewlyLive,
+                    organizations.ContentStrategyFilterNewlyLive,
+                },
+                Categories: []kard.CategoryOption{
+                    kard.CategoryOptionArtsEntertainment,
+                    kard.CategoryOptionArtsEntertainment,
+                },
+                CategoryExclusions: []kard.CategoryOption{
+                    kard.CategoryOptionArtsEntertainment,
+                    kard.CategoryOptionArtsEntertainment,
+                },
+                MerchantExclusions: []string{
+                    "merchantExclusions",
+                    "merchantExclusions",
+                },
+            },
+        },
+    }
+client.Organizations.ContentStrategies.Update(
+        context.TODO(),
+        "organizationId",
+        "contentStrategyId",
+        request,
+    )
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**organizationId:** `string` — Unique identifier of the organization
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**contentStrategyId:** `string` — Unique identifier of the content strategy (UUID v7)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `*organizations.UpdateContentStrategyRequestBody` — Content strategy data for update
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.Organizations.ContentStrategies.Delete(OrganizationId, ContentStrategyId) -> *kard.DeleteResourceResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete a content strategy. Returns 409 if the strategy is still referenced by another resource.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```go
+client.Organizations.ContentStrategies.Delete(
+        context.TODO(),
+        "organizationId",
+        "contentStrategyId",
+    )
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**organizationId:** `string` — Unique identifier of the organization
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**contentStrategyId:** `string` — Unique identifier of the content strategy (UUID v7)
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Placements
 <details><summary><code>client.Organizations.Placements.Create(OrganizationId, request) -> *organizations.PlacementFormatUnion</code></summary>
 <dl>

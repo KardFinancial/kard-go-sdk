@@ -1,3 +1,11 @@
+## v2.1.0 - 2026-05-19
+### Added
+* **`contentstrategies.Client`** — new sub-client on the organizations `Client` with `Create`, `List`, `Get`, `Update`, and `Delete` methods for managing content strategies scoped to an organization.
+* **`contentstrategies.RawClient`** — companion raw client returning full HTTP response metadata alongside typed response bodies for all content strategy operations.
+* **`ContentStrategyAttributes`**, **`ContentStrategyResponse`**, and **`ContentStrategyListResponse`** — new structs representing content strategy resources with full getter/setter and JSON serialization support.
+* **`CreateContentStrategyRequestBody`**, **`UpdateContentStrategyRequestBody`**, and **`ListContentStrategiesRequest`** — new request types for creating, updating, and paginated listing of content strategies.
+* **`ContentStrategyFilter`** — new string enum type with constants for `NewlyLive`, `ExpiringSoon`, `HighestCashback`, and `Personalized` filters, plus a `NewContentStrategyFilterFromString` constructor.
+
 ## v2.0.1 - 2026-05-14
 * chore: update LocationAttributes.PartnerIds comment and omitempty tag
 * Refine the `PartnerIds` field on `LocationAttributes` by updating its

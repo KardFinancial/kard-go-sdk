@@ -28,6 +28,14 @@ func TestSettersListPlacementsRequest(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
+	t.Run("SetFilterContentStrategyId", func(t *testing.T) {
+		obj := &ListPlacementsRequest{}
+		var fernTestValueFilterContentStrategyId *string
+		obj.SetFilterContentStrategyId(fernTestValueFilterContentStrategyId)
+		assert.Equal(t, fernTestValueFilterContentStrategyId, obj.FilterContentStrategyId)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
 	t.Run("SetPageAfter", func(t *testing.T) {
 		obj := &ListPlacementsRequest{}
 		var fernTestValuePageAfter *string
@@ -86,6 +94,37 @@ func TestSettersMarkExplicitListPlacementsRequest(t *testing.T) {
 
 		// Act
 		obj.SetFilterName(fernTestValueFilterName)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+	t.Run("SetFilterContentStrategyId_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &ListPlacementsRequest{}
+		var fernTestValueFilterContentStrategyId *string
+
+		// Act
+		obj.SetFilterContentStrategyId(fernTestValueFilterContentStrategyId)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -477,6 +516,14 @@ func TestSettersCreateMainPageAttributes(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
+	t.Run("SetContentStrategyId", func(t *testing.T) {
+		obj := &CreateMainPageAttributes{}
+		var fernTestValueContentStrategyId *string
+		obj.SetContentStrategyId(fernTestValueContentStrategyId)
+		assert.Equal(t, fernTestValueContentStrategyId, obj.ContentStrategyId)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
 }
 
 func TestGettersCreateMainPageAttributes(t *testing.T) {
@@ -526,6 +573,39 @@ func TestGettersCreateMainPageAttributes(t *testing.T) {
 		_ = obj.GetAvailableSlots() // Should return zero value
 	})
 
+	t.Run("GetContentStrategyId", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &CreateMainPageAttributes{}
+		var expected *string
+		obj.ContentStrategyId = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetContentStrategyId(), "getter should return the property value")
+	})
+
+	t.Run("GetContentStrategyId_NilValue", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &CreateMainPageAttributes{}
+		obj.ContentStrategyId = nil
+
+		// Act & Assert
+		assert.Nil(t, obj.GetContentStrategyId(), "getter should return nil when property is nil")
+	})
+
+	t.Run("GetContentStrategyId_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *CreateMainPageAttributes
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetContentStrategyId() // Should return zero value
+	})
+
 }
 
 func TestSettersMarkExplicitCreateMainPageAttributes(t *testing.T) {
@@ -568,6 +648,37 @@ func TestSettersMarkExplicitCreateMainPageAttributes(t *testing.T) {
 
 		// Act
 		obj.SetAvailableSlots(fernTestValueAvailableSlots)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+	t.Run("SetContentStrategyId_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &CreateMainPageAttributes{}
+		var fernTestValueContentStrategyId *string
+
+		// Act
+		obj.SetContentStrategyId(fernTestValueContentStrategyId)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -864,6 +975,14 @@ func TestSettersCreatePushNotificationAttributes(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
+	t.Run("SetContentStrategyId", func(t *testing.T) {
+		obj := &CreatePushNotificationAttributes{}
+		var fernTestValueContentStrategyId *string
+		obj.SetContentStrategyId(fernTestValueContentStrategyId)
+		assert.Equal(t, fernTestValueContentStrategyId, obj.ContentStrategyId)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
 }
 
 func TestGettersCreatePushNotificationAttributes(t *testing.T) {
@@ -923,6 +1042,39 @@ func TestGettersCreatePushNotificationAttributes(t *testing.T) {
 		_ = obj.GetCadence() // Should return zero value
 	})
 
+	t.Run("GetContentStrategyId", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &CreatePushNotificationAttributes{}
+		var expected *string
+		obj.ContentStrategyId = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetContentStrategyId(), "getter should return the property value")
+	})
+
+	t.Run("GetContentStrategyId_NilValue", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &CreatePushNotificationAttributes{}
+		obj.ContentStrategyId = nil
+
+		// Act & Assert
+		assert.Nil(t, obj.GetContentStrategyId(), "getter should return nil when property is nil")
+	})
+
+	t.Run("GetContentStrategyId_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *CreatePushNotificationAttributes
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetContentStrategyId() // Should return zero value
+	})
+
 }
 
 func TestSettersMarkExplicitCreatePushNotificationAttributes(t *testing.T) {
@@ -965,6 +1117,37 @@ func TestSettersMarkExplicitCreatePushNotificationAttributes(t *testing.T) {
 
 		// Act
 		obj.SetCadence(fernTestValueCadence)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+	t.Run("SetContentStrategyId_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &CreatePushNotificationAttributes{}
+		var fernTestValueContentStrategyId *string
+
+		// Act
+		obj.SetContentStrategyId(fernTestValueContentStrategyId)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -1096,6 +1279,14 @@ func TestSettersMainPagePlacementAttributes(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
+	t.Run("SetContentStrategyId", func(t *testing.T) {
+		obj := &MainPagePlacementAttributes{}
+		var fernTestValueContentStrategyId *string
+		obj.SetContentStrategyId(fernTestValueContentStrategyId)
+		assert.Equal(t, fernTestValueContentStrategyId, obj.ContentStrategyId)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
 	t.Run("SetCreatedAt", func(t *testing.T) {
 		obj := &MainPagePlacementAttributes{}
 		var fernTestValueCreatedAt time.Time
@@ -1182,6 +1373,39 @@ func TestGettersMainPagePlacementAttributes(t *testing.T) {
 			}
 		}()
 		_ = obj.GetAvailableSlots() // Should return zero value
+	})
+
+	t.Run("GetContentStrategyId", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &MainPagePlacementAttributes{}
+		var expected *string
+		obj.ContentStrategyId = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetContentStrategyId(), "getter should return the property value")
+	})
+
+	t.Run("GetContentStrategyId_NilValue", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &MainPagePlacementAttributes{}
+		obj.ContentStrategyId = nil
+
+		// Act & Assert
+		assert.Nil(t, obj.GetContentStrategyId(), "getter should return nil when property is nil")
+	})
+
+	t.Run("GetContentStrategyId_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *MainPagePlacementAttributes
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetContentStrategyId() // Should return zero value
 	})
 
 	t.Run("GetCreatedAt", func(t *testing.T) {
@@ -1303,6 +1527,37 @@ func TestSettersMarkExplicitMainPagePlacementAttributes(t *testing.T) {
 
 		// Act
 		obj.SetAvailableSlots(fernTestValueAvailableSlots)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+	t.Run("SetContentStrategyId_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &MainPagePlacementAttributes{}
+		var fernTestValueContentStrategyId *string
+
+		// Act
+		obj.SetContentStrategyId(fernTestValueContentStrategyId)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -1875,6 +2130,14 @@ func TestSettersPushNotificationPlacementAttributes(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
+	t.Run("SetContentStrategyId", func(t *testing.T) {
+		obj := &PushNotificationPlacementAttributes{}
+		var fernTestValueContentStrategyId *string
+		obj.SetContentStrategyId(fernTestValueContentStrategyId)
+		assert.Equal(t, fernTestValueContentStrategyId, obj.ContentStrategyId)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
 	t.Run("SetCreatedAt", func(t *testing.T) {
 		obj := &PushNotificationPlacementAttributes{}
 		var fernTestValueCreatedAt time.Time
@@ -1971,6 +2234,39 @@ func TestGettersPushNotificationPlacementAttributes(t *testing.T) {
 			}
 		}()
 		_ = obj.GetCadence() // Should return zero value
+	})
+
+	t.Run("GetContentStrategyId", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &PushNotificationPlacementAttributes{}
+		var expected *string
+		obj.ContentStrategyId = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetContentStrategyId(), "getter should return the property value")
+	})
+
+	t.Run("GetContentStrategyId_NilValue", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &PushNotificationPlacementAttributes{}
+		obj.ContentStrategyId = nil
+
+		// Act & Assert
+		assert.Nil(t, obj.GetContentStrategyId(), "getter should return nil when property is nil")
+	})
+
+	t.Run("GetContentStrategyId_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *PushNotificationPlacementAttributes
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetContentStrategyId() // Should return zero value
 	})
 
 	t.Run("GetCreatedAt", func(t *testing.T) {
@@ -2092,6 +2388,37 @@ func TestSettersMarkExplicitPushNotificationPlacementAttributes(t *testing.T) {
 
 		// Act
 		obj.SetCadence(fernTestValueCadence)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+	t.Run("SetContentStrategyId_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &PushNotificationPlacementAttributes{}
+		var fernTestValueContentStrategyId *string
+
+		// Act
+		obj.SetContentStrategyId(fernTestValueContentStrategyId)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -2339,6 +2666,14 @@ func TestSettersUpdateMainPageAttributes(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
+	t.Run("SetContentStrategyId", func(t *testing.T) {
+		obj := &UpdateMainPageAttributes{}
+		var fernTestValueContentStrategyId *string
+		obj.SetContentStrategyId(fernTestValueContentStrategyId)
+		assert.Equal(t, fernTestValueContentStrategyId, obj.ContentStrategyId)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
 }
 
 func TestGettersUpdateMainPageAttributes(t *testing.T) {
@@ -2388,6 +2723,39 @@ func TestGettersUpdateMainPageAttributes(t *testing.T) {
 		_ = obj.GetAvailableSlots() // Should return zero value
 	})
 
+	t.Run("GetContentStrategyId", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &UpdateMainPageAttributes{}
+		var expected *string
+		obj.ContentStrategyId = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetContentStrategyId(), "getter should return the property value")
+	})
+
+	t.Run("GetContentStrategyId_NilValue", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &UpdateMainPageAttributes{}
+		obj.ContentStrategyId = nil
+
+		// Act & Assert
+		assert.Nil(t, obj.GetContentStrategyId(), "getter should return nil when property is nil")
+	})
+
+	t.Run("GetContentStrategyId_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *UpdateMainPageAttributes
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetContentStrategyId() // Should return zero value
+	})
+
 }
 
 func TestSettersMarkExplicitUpdateMainPageAttributes(t *testing.T) {
@@ -2430,6 +2798,37 @@ func TestSettersMarkExplicitUpdateMainPageAttributes(t *testing.T) {
 
 		// Act
 		obj.SetAvailableSlots(fernTestValueAvailableSlots)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+	t.Run("SetContentStrategyId_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &UpdateMainPageAttributes{}
+		var fernTestValueContentStrategyId *string
+
+		// Act
+		obj.SetContentStrategyId(fernTestValueContentStrategyId)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -2726,6 +3125,14 @@ func TestSettersUpdatePushNotificationAttributes(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
+	t.Run("SetContentStrategyId", func(t *testing.T) {
+		obj := &UpdatePushNotificationAttributes{}
+		var fernTestValueContentStrategyId *string
+		obj.SetContentStrategyId(fernTestValueContentStrategyId)
+		assert.Equal(t, fernTestValueContentStrategyId, obj.ContentStrategyId)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
 }
 
 func TestGettersUpdatePushNotificationAttributes(t *testing.T) {
@@ -2785,6 +3192,39 @@ func TestGettersUpdatePushNotificationAttributes(t *testing.T) {
 		_ = obj.GetCadence() // Should return zero value
 	})
 
+	t.Run("GetContentStrategyId", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &UpdatePushNotificationAttributes{}
+		var expected *string
+		obj.ContentStrategyId = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetContentStrategyId(), "getter should return the property value")
+	})
+
+	t.Run("GetContentStrategyId_NilValue", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &UpdatePushNotificationAttributes{}
+		obj.ContentStrategyId = nil
+
+		// Act & Assert
+		assert.Nil(t, obj.GetContentStrategyId(), "getter should return nil when property is nil")
+	})
+
+	t.Run("GetContentStrategyId_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *UpdatePushNotificationAttributes
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetContentStrategyId() // Should return zero value
+	})
+
 }
 
 func TestSettersMarkExplicitUpdatePushNotificationAttributes(t *testing.T) {
@@ -2827,6 +3267,37 @@ func TestSettersMarkExplicitUpdatePushNotificationAttributes(t *testing.T) {
 
 		// Act
 		obj.SetCadence(fernTestValueCadence)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+	t.Run("SetContentStrategyId_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &UpdatePushNotificationAttributes{}
+		var fernTestValueContentStrategyId *string
+
+		// Act
+		obj.SetContentStrategyId(fernTestValueContentStrategyId)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)

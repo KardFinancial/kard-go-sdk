@@ -1,3 +1,10 @@
+## v2.2.0 - 2026-05-19
+### Added
+* **`ListPlacementsRequest.FilterContentStrategyId`** — new optional filter field (with `SetFilterContentStrategyId` setter) to narrow placement listings by the ID of a linked content strategy.
+* **`CreateMainPageAttributes.ContentStrategyId`** and **`CreatePushNotificationAttributes.ContentStrategyId`** — new optional field (with getter/setter) to link a content strategy to a placement at creation time.
+* **`UpdateMainPageAttributes.ContentStrategyId`** and **`UpdatePushNotificationAttributes.ContentStrategyId`** — new optional field (with getter/setter) to link or unlink a content strategy when updating a placement.
+* **`MainPagePlacementAttributes.ContentStrategyId`** and **`PushNotificationPlacementAttributes.ContentStrategyId`** — new optional response field (with getter/setter) exposing the ID of the content strategy linked to a placement.
+
 ## v2.1.0 - 2026-05-19
 ### Added
 * **`contentstrategies.Client`** — new sub-client on the organizations `Client` with `Create`, `List`, `Get`, `Update`, and `Delete` methods for managing content strategies scoped to an organization.

@@ -12,10 +12,11 @@ import (
 )
 
 var (
-	listPlacementsRequestFieldFilterType = big.NewInt(1 << 0)
-	listPlacementsRequestFieldFilterName = big.NewInt(1 << 1)
-	listPlacementsRequestFieldPageAfter  = big.NewInt(1 << 2)
-	listPlacementsRequestFieldPageSize   = big.NewInt(1 << 3)
+	listPlacementsRequestFieldFilterType              = big.NewInt(1 << 0)
+	listPlacementsRequestFieldFilterName              = big.NewInt(1 << 1)
+	listPlacementsRequestFieldFilterContentStrategyId = big.NewInt(1 << 2)
+	listPlacementsRequestFieldPageAfter               = big.NewInt(1 << 3)
+	listPlacementsRequestFieldPageSize                = big.NewInt(1 << 4)
 )
 
 type ListPlacementsRequest struct {
@@ -23,6 +24,8 @@ type ListPlacementsRequest struct {
 	FilterType *PlacementTypeFilter `json:"-" url:"filter[type],omitempty"`
 	// Filter by exact placement name (unique within an organization per type)
 	FilterName *string `json:"-" url:"filter[name],omitempty"`
+	// Filter by the ID of the content strategy linked to the placement
+	FilterContentStrategyId *string `json:"-" url:"filter[contentStrategyId],omitempty"`
 	// Cursor value for the next page of results
 	PageAfter *string `json:"-" url:"page[after],omitempty"`
 	// Maximum number of records to return [1 - 200] (default = 200)
@@ -51,6 +54,13 @@ func (l *ListPlacementsRequest) SetFilterType(filterType *PlacementTypeFilter) {
 func (l *ListPlacementsRequest) SetFilterName(filterName *string) {
 	l.FilterName = filterName
 	l.require(listPlacementsRequestFieldFilterName)
+}
+
+// SetFilterContentStrategyId sets the FilterContentStrategyId field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListPlacementsRequest) SetFilterContentStrategyId(filterContentStrategyId *string) {
+	l.FilterContentStrategyId = filterContentStrategyId
+	l.require(listPlacementsRequestFieldFilterContentStrategyId)
 }
 
 // SetPageAfter sets the PageAfter field and marks it as non-optional;
@@ -232,8 +242,9 @@ func (c CadenceFrequency) Ptr() *CadenceFrequency {
 
 // Attributes for creating a main-page placement
 var (
-	createMainPageAttributesFieldName           = big.NewInt(1 << 0)
-	createMainPageAttributesFieldAvailableSlots = big.NewInt(1 << 1)
+	createMainPageAttributesFieldName              = big.NewInt(1 << 0)
+	createMainPageAttributesFieldAvailableSlots    = big.NewInt(1 << 1)
+	createMainPageAttributesFieldContentStrategyId = big.NewInt(1 << 2)
 )
 
 type CreateMainPageAttributes struct {
@@ -241,6 +252,8 @@ type CreateMainPageAttributes struct {
 	Name string `json:"name" url:"name"`
 	// Number of available slots (minimum 1)
 	AvailableSlots int `json:"availableSlots" url:"availableSlots"`
+	// ID of the content strategy to link this placement to
+	ContentStrategyId *string `json:"contentStrategyId,omitempty" url:"contentStrategyId,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -261,6 +274,13 @@ func (c *CreateMainPageAttributes) GetAvailableSlots() int {
 		return 0
 	}
 	return c.AvailableSlots
+}
+
+func (c *CreateMainPageAttributes) GetContentStrategyId() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ContentStrategyId
 }
 
 func (c *CreateMainPageAttributes) GetExtraProperties() map[string]interface{} {
@@ -289,6 +309,13 @@ func (c *CreateMainPageAttributes) SetName(name string) {
 func (c *CreateMainPageAttributes) SetAvailableSlots(availableSlots int) {
 	c.AvailableSlots = availableSlots
 	c.require(createMainPageAttributesFieldAvailableSlots)
+}
+
+// SetContentStrategyId sets the ContentStrategyId field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateMainPageAttributes) SetContentStrategyId(contentStrategyId *string) {
+	c.ContentStrategyId = contentStrategyId
+	c.require(createMainPageAttributesFieldContentStrategyId)
 }
 
 func (c *CreateMainPageAttributes) UnmarshalJSON(data []byte) error {
@@ -625,8 +652,9 @@ func (c *CreatePlacementRequestBody) String() string {
 
 // Attributes for creating a push-notification placement
 var (
-	createPushNotificationAttributesFieldName    = big.NewInt(1 << 0)
-	createPushNotificationAttributesFieldCadence = big.NewInt(1 << 1)
+	createPushNotificationAttributesFieldName              = big.NewInt(1 << 0)
+	createPushNotificationAttributesFieldCadence           = big.NewInt(1 << 1)
+	createPushNotificationAttributesFieldContentStrategyId = big.NewInt(1 << 2)
 )
 
 type CreatePushNotificationAttributes struct {
@@ -634,6 +662,8 @@ type CreatePushNotificationAttributes struct {
 	Name string `json:"name" url:"name"`
 	// Delivery cadence for the notification
 	Cadence *Cadence `json:"cadence" url:"cadence"`
+	// ID of the content strategy to link this placement to
+	ContentStrategyId *string `json:"contentStrategyId,omitempty" url:"contentStrategyId,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -654,6 +684,13 @@ func (c *CreatePushNotificationAttributes) GetCadence() *Cadence {
 		return nil
 	}
 	return c.Cadence
+}
+
+func (c *CreatePushNotificationAttributes) GetContentStrategyId() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ContentStrategyId
 }
 
 func (c *CreatePushNotificationAttributes) GetExtraProperties() map[string]interface{} {
@@ -682,6 +719,13 @@ func (c *CreatePushNotificationAttributes) SetName(name string) {
 func (c *CreatePushNotificationAttributes) SetCadence(cadence *Cadence) {
 	c.Cadence = cadence
 	c.require(createPushNotificationAttributesFieldCadence)
+}
+
+// SetContentStrategyId sets the ContentStrategyId field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreatePushNotificationAttributes) SetContentStrategyId(contentStrategyId *string) {
+	c.ContentStrategyId = contentStrategyId
+	c.require(createPushNotificationAttributesFieldContentStrategyId)
 }
 
 func (c *CreatePushNotificationAttributes) UnmarshalJSON(data []byte) error {
@@ -852,11 +896,12 @@ func (d DayOfWeek) Ptr() *DayOfWeek {
 
 // Attributes for a main-page placement
 var (
-	mainPagePlacementAttributesFieldName           = big.NewInt(1 << 0)
-	mainPagePlacementAttributesFieldOrganizationId = big.NewInt(1 << 1)
-	mainPagePlacementAttributesFieldAvailableSlots = big.NewInt(1 << 2)
-	mainPagePlacementAttributesFieldCreatedAt      = big.NewInt(1 << 3)
-	mainPagePlacementAttributesFieldLastModified   = big.NewInt(1 << 4)
+	mainPagePlacementAttributesFieldName              = big.NewInt(1 << 0)
+	mainPagePlacementAttributesFieldOrganizationId    = big.NewInt(1 << 1)
+	mainPagePlacementAttributesFieldAvailableSlots    = big.NewInt(1 << 2)
+	mainPagePlacementAttributesFieldContentStrategyId = big.NewInt(1 << 3)
+	mainPagePlacementAttributesFieldCreatedAt         = big.NewInt(1 << 4)
+	mainPagePlacementAttributesFieldLastModified      = big.NewInt(1 << 5)
 )
 
 type MainPagePlacementAttributes struct {
@@ -866,6 +911,8 @@ type MainPagePlacementAttributes struct {
 	OrganizationId string `json:"organizationId" url:"organizationId"`
 	// Number of available slots
 	AvailableSlots int `json:"availableSlots" url:"availableSlots"`
+	// ID of the content strategy linked to this placement, if any
+	ContentStrategyId *string `json:"contentStrategyId,omitempty" url:"contentStrategyId,omitempty"`
 	// When the placement was created (ISO 8601 UTC)
 	CreatedAt time.Time `json:"createdAt" url:"createdAt"`
 	// When the placement was last modified (ISO 8601 UTC)
@@ -897,6 +944,13 @@ func (m *MainPagePlacementAttributes) GetAvailableSlots() int {
 		return 0
 	}
 	return m.AvailableSlots
+}
+
+func (m *MainPagePlacementAttributes) GetContentStrategyId() *string {
+	if m == nil {
+		return nil
+	}
+	return m.ContentStrategyId
 }
 
 func (m *MainPagePlacementAttributes) GetCreatedAt() time.Time {
@@ -946,6 +1000,13 @@ func (m *MainPagePlacementAttributes) SetOrganizationId(organizationId string) {
 func (m *MainPagePlacementAttributes) SetAvailableSlots(availableSlots int) {
 	m.AvailableSlots = availableSlots
 	m.require(mainPagePlacementAttributesFieldAvailableSlots)
+}
+
+// SetContentStrategyId sets the ContentStrategyId field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (m *MainPagePlacementAttributes) SetContentStrategyId(contentStrategyId *string) {
+	m.ContentStrategyId = contentStrategyId
+	m.require(mainPagePlacementAttributesFieldContentStrategyId)
 }
 
 // SetCreatedAt sets the CreatedAt field and marks it as non-optional;
@@ -1380,11 +1441,12 @@ func (p PlacementTypeFilter) Ptr() *PlacementTypeFilter {
 
 // Attributes for a push-notification placement
 var (
-	pushNotificationPlacementAttributesFieldName           = big.NewInt(1 << 0)
-	pushNotificationPlacementAttributesFieldOrganizationId = big.NewInt(1 << 1)
-	pushNotificationPlacementAttributesFieldCadence        = big.NewInt(1 << 2)
-	pushNotificationPlacementAttributesFieldCreatedAt      = big.NewInt(1 << 3)
-	pushNotificationPlacementAttributesFieldLastModified   = big.NewInt(1 << 4)
+	pushNotificationPlacementAttributesFieldName              = big.NewInt(1 << 0)
+	pushNotificationPlacementAttributesFieldOrganizationId    = big.NewInt(1 << 1)
+	pushNotificationPlacementAttributesFieldCadence           = big.NewInt(1 << 2)
+	pushNotificationPlacementAttributesFieldContentStrategyId = big.NewInt(1 << 3)
+	pushNotificationPlacementAttributesFieldCreatedAt         = big.NewInt(1 << 4)
+	pushNotificationPlacementAttributesFieldLastModified      = big.NewInt(1 << 5)
 )
 
 type PushNotificationPlacementAttributes struct {
@@ -1394,6 +1456,8 @@ type PushNotificationPlacementAttributes struct {
 	OrganizationId string `json:"organizationId" url:"organizationId"`
 	// Delivery cadence for the notification
 	Cadence *Cadence `json:"cadence" url:"cadence"`
+	// ID of the content strategy linked to this placement, if any
+	ContentStrategyId *string `json:"contentStrategyId,omitempty" url:"contentStrategyId,omitempty"`
 	// When the placement was created (ISO 8601 UTC)
 	CreatedAt time.Time `json:"createdAt" url:"createdAt"`
 	// When the placement was last modified (ISO 8601 UTC)
@@ -1425,6 +1489,13 @@ func (p *PushNotificationPlacementAttributes) GetCadence() *Cadence {
 		return nil
 	}
 	return p.Cadence
+}
+
+func (p *PushNotificationPlacementAttributes) GetContentStrategyId() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ContentStrategyId
 }
 
 func (p *PushNotificationPlacementAttributes) GetCreatedAt() time.Time {
@@ -1474,6 +1545,13 @@ func (p *PushNotificationPlacementAttributes) SetOrganizationId(organizationId s
 func (p *PushNotificationPlacementAttributes) SetCadence(cadence *Cadence) {
 	p.Cadence = cadence
 	p.require(pushNotificationPlacementAttributesFieldCadence)
+}
+
+// SetContentStrategyId sets the ContentStrategyId field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PushNotificationPlacementAttributes) SetContentStrategyId(contentStrategyId *string) {
+	p.ContentStrategyId = contentStrategyId
+	p.require(pushNotificationPlacementAttributesFieldContentStrategyId)
 }
 
 // SetCreatedAt sets the CreatedAt field and marks it as non-optional;
@@ -1648,8 +1726,9 @@ func (p *PushNotificationPlacementData) String() string {
 
 // Attributes for updating a main-page placement. All fields are required.
 var (
-	updateMainPageAttributesFieldName           = big.NewInt(1 << 0)
-	updateMainPageAttributesFieldAvailableSlots = big.NewInt(1 << 1)
+	updateMainPageAttributesFieldName              = big.NewInt(1 << 0)
+	updateMainPageAttributesFieldAvailableSlots    = big.NewInt(1 << 1)
+	updateMainPageAttributesFieldContentStrategyId = big.NewInt(1 << 2)
 )
 
 type UpdateMainPageAttributes struct {
@@ -1657,6 +1736,8 @@ type UpdateMainPageAttributes struct {
 	Name string `json:"name" url:"name"`
 	// Number of available slots (minimum 1)
 	AvailableSlots int `json:"availableSlots" url:"availableSlots"`
+	// ID of the content strategy to link this placement to. Omit to clear any existing link (PUT requires the full attribute set, so a missing value unlinks the placement).
+	ContentStrategyId *string `json:"contentStrategyId,omitempty" url:"contentStrategyId,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -1677,6 +1758,13 @@ func (u *UpdateMainPageAttributes) GetAvailableSlots() int {
 		return 0
 	}
 	return u.AvailableSlots
+}
+
+func (u *UpdateMainPageAttributes) GetContentStrategyId() *string {
+	if u == nil {
+		return nil
+	}
+	return u.ContentStrategyId
 }
 
 func (u *UpdateMainPageAttributes) GetExtraProperties() map[string]interface{} {
@@ -1705,6 +1793,13 @@ func (u *UpdateMainPageAttributes) SetName(name string) {
 func (u *UpdateMainPageAttributes) SetAvailableSlots(availableSlots int) {
 	u.AvailableSlots = availableSlots
 	u.require(updateMainPageAttributesFieldAvailableSlots)
+}
+
+// SetContentStrategyId sets the ContentStrategyId field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateMainPageAttributes) SetContentStrategyId(contentStrategyId *string) {
+	u.ContentStrategyId = contentStrategyId
+	u.require(updateMainPageAttributesFieldContentStrategyId)
 }
 
 func (u *UpdateMainPageAttributes) UnmarshalJSON(data []byte) error {
@@ -2041,8 +2136,9 @@ func (u *UpdatePlacementRequestBody) String() string {
 
 // Attributes for updating a push-notification placement. All fields are required.
 var (
-	updatePushNotificationAttributesFieldName    = big.NewInt(1 << 0)
-	updatePushNotificationAttributesFieldCadence = big.NewInt(1 << 1)
+	updatePushNotificationAttributesFieldName              = big.NewInt(1 << 0)
+	updatePushNotificationAttributesFieldCadence           = big.NewInt(1 << 1)
+	updatePushNotificationAttributesFieldContentStrategyId = big.NewInt(1 << 2)
 )
 
 type UpdatePushNotificationAttributes struct {
@@ -2050,6 +2146,8 @@ type UpdatePushNotificationAttributes struct {
 	Name string `json:"name" url:"name"`
 	// Delivery cadence for the notification
 	Cadence *Cadence `json:"cadence" url:"cadence"`
+	// ID of the content strategy to link this placement to. Omit to clear any existing link (PUT requires the full attribute set, so a missing value unlinks the placement).
+	ContentStrategyId *string `json:"contentStrategyId,omitempty" url:"contentStrategyId,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -2070,6 +2168,13 @@ func (u *UpdatePushNotificationAttributes) GetCadence() *Cadence {
 		return nil
 	}
 	return u.Cadence
+}
+
+func (u *UpdatePushNotificationAttributes) GetContentStrategyId() *string {
+	if u == nil {
+		return nil
+	}
+	return u.ContentStrategyId
 }
 
 func (u *UpdatePushNotificationAttributes) GetExtraProperties() map[string]interface{} {
@@ -2098,6 +2203,13 @@ func (u *UpdatePushNotificationAttributes) SetName(name string) {
 func (u *UpdatePushNotificationAttributes) SetCadence(cadence *Cadence) {
 	u.Cadence = cadence
 	u.require(updatePushNotificationAttributesFieldCadence)
+}
+
+// SetContentStrategyId sets the ContentStrategyId field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdatePushNotificationAttributes) SetContentStrategyId(contentStrategyId *string) {
+	u.ContentStrategyId = contentStrategyId
+	u.require(updatePushNotificationAttributesFieldContentStrategyId)
 }
 
 func (u *UpdatePushNotificationAttributes) UnmarshalJSON(data []byte) error {

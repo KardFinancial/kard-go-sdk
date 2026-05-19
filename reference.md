@@ -1405,6 +1405,14 @@ client.Organizations.Placements.List(
 <dl>
 <dd>
 
+**filterContentStrategyId:** `*string` — Filter by the ID of the content strategy linked to the placement
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **pageAfter:** `*string` — Cursor value for the next page of results
     
 </dd>

@@ -5,10 +5,9 @@ package organizations
 import (
 	json "encoding/json"
 	fmt "fmt"
-	kardgosdk "github.com/KardFinancial/kard-go-sdk/v4"
-	internal "github.com/KardFinancial/kard-go-sdk/v4/internal"
+	kardgosdk "github.com/KardFinancial/kard-go-sdk/v5"
+	internal "github.com/KardFinancial/kard-go-sdk/v5/internal"
 	big "math/big"
-	time "time"
 )
 
 var (
@@ -936,8 +935,6 @@ var (
 	mainPagePlacementAttributesFieldOrganizationId    = big.NewInt(1 << 1)
 	mainPagePlacementAttributesFieldAvailableSlots    = big.NewInt(1 << 2)
 	mainPagePlacementAttributesFieldContentStrategyId = big.NewInt(1 << 3)
-	mainPagePlacementAttributesFieldCreatedAt         = big.NewInt(1 << 4)
-	mainPagePlacementAttributesFieldLastModified      = big.NewInt(1 << 5)
 )
 
 type MainPagePlacementAttributes struct {
@@ -949,10 +946,6 @@ type MainPagePlacementAttributes struct {
 	AvailableSlots int `json:"availableSlots" url:"availableSlots"`
 	// ID of the content strategy linked to this placement, if any
 	ContentStrategyId *string `json:"contentStrategyId,omitempty" url:"contentStrategyId,omitempty"`
-	// When the placement was created (ISO 8601 UTC)
-	CreatedAt time.Time `json:"createdAt" url:"createdAt"`
-	// When the placement was last modified (ISO 8601 UTC)
-	LastModified time.Time `json:"lastModified" url:"lastModified"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -987,20 +980,6 @@ func (m *MainPagePlacementAttributes) GetContentStrategyId() *string {
 		return nil
 	}
 	return m.ContentStrategyId
-}
-
-func (m *MainPagePlacementAttributes) GetCreatedAt() time.Time {
-	if m == nil {
-		return time.Time{}
-	}
-	return m.CreatedAt
-}
-
-func (m *MainPagePlacementAttributes) GetLastModified() time.Time {
-	if m == nil {
-		return time.Time{}
-	}
-	return m.LastModified
 }
 
 func (m *MainPagePlacementAttributes) GetExtraProperties() map[string]interface{} {
@@ -1045,35 +1024,13 @@ func (m *MainPagePlacementAttributes) SetContentStrategyId(contentStrategyId *st
 	m.require(mainPagePlacementAttributesFieldContentStrategyId)
 }
 
-// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MainPagePlacementAttributes) SetCreatedAt(createdAt time.Time) {
-	m.CreatedAt = createdAt
-	m.require(mainPagePlacementAttributesFieldCreatedAt)
-}
-
-// SetLastModified sets the LastModified field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MainPagePlacementAttributes) SetLastModified(lastModified time.Time) {
-	m.LastModified = lastModified
-	m.require(mainPagePlacementAttributesFieldLastModified)
-}
-
 func (m *MainPagePlacementAttributes) UnmarshalJSON(data []byte) error {
-	type embed MainPagePlacementAttributes
-	var unmarshaler = struct {
-		embed
-		CreatedAt    *internal.DateTime `json:"createdAt"`
-		LastModified *internal.DateTime `json:"lastModified"`
-	}{
-		embed: embed(*m),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler MainPagePlacementAttributes
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*m = MainPagePlacementAttributes(unmarshaler.embed)
-	m.CreatedAt = unmarshaler.CreatedAt.Time()
-	m.LastModified = unmarshaler.LastModified.Time()
+	*m = MainPagePlacementAttributes(value)
 	extraProperties, err := internal.ExtractExtraProperties(data, *m)
 	if err != nil {
 		return err
@@ -1087,12 +1044,8 @@ func (m *MainPagePlacementAttributes) MarshalJSON() ([]byte, error) {
 	type embed MainPagePlacementAttributes
 	var marshaler = struct {
 		embed
-		CreatedAt    *internal.DateTime `json:"createdAt"`
-		LastModified *internal.DateTime `json:"lastModified"`
 	}{
-		embed:        embed(*m),
-		CreatedAt:    internal.NewDateTime(m.CreatedAt),
-		LastModified: internal.NewDateTime(m.LastModified),
+		embed: embed(*m),
 	}
 	explicitMarshaler := internal.HandleExplicitFields(marshaler, m.explicitFields)
 	return json.Marshal(explicitMarshaler)
@@ -1601,8 +1554,6 @@ var (
 	pushNotificationPlacementAttributesFieldOrganizationId    = big.NewInt(1 << 1)
 	pushNotificationPlacementAttributesFieldCadence           = big.NewInt(1 << 2)
 	pushNotificationPlacementAttributesFieldContentStrategyId = big.NewInt(1 << 3)
-	pushNotificationPlacementAttributesFieldCreatedAt         = big.NewInt(1 << 4)
-	pushNotificationPlacementAttributesFieldLastModified      = big.NewInt(1 << 5)
 )
 
 type PushNotificationPlacementAttributes struct {
@@ -1614,10 +1565,6 @@ type PushNotificationPlacementAttributes struct {
 	Cadence *Cadence `json:"cadence" url:"cadence"`
 	// ID of the content strategy linked to this placement, if any
 	ContentStrategyId *string `json:"contentStrategyId,omitempty" url:"contentStrategyId,omitempty"`
-	// When the placement was created (ISO 8601 UTC)
-	CreatedAt time.Time `json:"createdAt" url:"createdAt"`
-	// When the placement was last modified (ISO 8601 UTC)
-	LastModified time.Time `json:"lastModified" url:"lastModified"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -1652,20 +1599,6 @@ func (p *PushNotificationPlacementAttributes) GetContentStrategyId() *string {
 		return nil
 	}
 	return p.ContentStrategyId
-}
-
-func (p *PushNotificationPlacementAttributes) GetCreatedAt() time.Time {
-	if p == nil {
-		return time.Time{}
-	}
-	return p.CreatedAt
-}
-
-func (p *PushNotificationPlacementAttributes) GetLastModified() time.Time {
-	if p == nil {
-		return time.Time{}
-	}
-	return p.LastModified
 }
 
 func (p *PushNotificationPlacementAttributes) GetExtraProperties() map[string]interface{} {
@@ -1710,35 +1643,13 @@ func (p *PushNotificationPlacementAttributes) SetContentStrategyId(contentStrate
 	p.require(pushNotificationPlacementAttributesFieldContentStrategyId)
 }
 
-// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (p *PushNotificationPlacementAttributes) SetCreatedAt(createdAt time.Time) {
-	p.CreatedAt = createdAt
-	p.require(pushNotificationPlacementAttributesFieldCreatedAt)
-}
-
-// SetLastModified sets the LastModified field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (p *PushNotificationPlacementAttributes) SetLastModified(lastModified time.Time) {
-	p.LastModified = lastModified
-	p.require(pushNotificationPlacementAttributesFieldLastModified)
-}
-
 func (p *PushNotificationPlacementAttributes) UnmarshalJSON(data []byte) error {
-	type embed PushNotificationPlacementAttributes
-	var unmarshaler = struct {
-		embed
-		CreatedAt    *internal.DateTime `json:"createdAt"`
-		LastModified *internal.DateTime `json:"lastModified"`
-	}{
-		embed: embed(*p),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler PushNotificationPlacementAttributes
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*p = PushNotificationPlacementAttributes(unmarshaler.embed)
-	p.CreatedAt = unmarshaler.CreatedAt.Time()
-	p.LastModified = unmarshaler.LastModified.Time()
+	*p = PushNotificationPlacementAttributes(value)
 	extraProperties, err := internal.ExtractExtraProperties(data, *p)
 	if err != nil {
 		return err
@@ -1752,12 +1663,8 @@ func (p *PushNotificationPlacementAttributes) MarshalJSON() ([]byte, error) {
 	type embed PushNotificationPlacementAttributes
 	var marshaler = struct {
 		embed
-		CreatedAt    *internal.DateTime `json:"createdAt"`
-		LastModified *internal.DateTime `json:"lastModified"`
 	}{
-		embed:        embed(*p),
-		CreatedAt:    internal.NewDateTime(p.CreatedAt),
-		LastModified: internal.NewDateTime(p.LastModified),
+		embed: embed(*p),
 	}
 	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
 	return json.Marshal(explicitMarshaler)

@@ -1,3 +1,9 @@
+## v5.0.0 - 2026-05-20
+### Breaking Changes
+* **`ContentStrategyAttributes.CreatedAt`** and **`ContentStrategyAttributes.LastModified`** — exported fields and their `GetCreatedAt()`, `GetLastModified()`, `SetCreatedAt()`, and `SetLastModified()` methods have been removed. Remove any references to these fields or methods from your code.
+* **`MainPagePlacementAttributes.CreatedAt`** and **`MainPagePlacementAttributes.LastModified`** — exported fields and their `GetCreatedAt()`, `GetLastModified()`, `SetCreatedAt()`, and `SetLastModified()` methods have been removed. Remove any references to these fields or methods from your code.
+* **`PushNotificationPlacementAttributes.CreatedAt`** and **`PushNotificationPlacementAttributes.LastModified`** — exported fields and their `GetCreatedAt()`, `GetLastModified()`, `SetCreatedAt()`, and `SetLastModified()` methods have been removed. Remove any references to these fields or methods from your code.
+
 ## v4.0.0 - 2026-05-20
 ### Breaking Changes
 * **`placements.Client.Get`** now requires a new `*organizations.GetPlacementRequest` parameter and returns `*organizations.PlacementResource` instead of `*organizations.PlacementFormatUnion`. Add `nil` (or a populated `GetPlacementRequest`) as the third argument and update any code that reads the return value directly as a `PlacementFormatUnion` to use `result.GetData()` instead.

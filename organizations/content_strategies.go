@@ -5,10 +5,9 @@ package organizations
 import (
 	json "encoding/json"
 	fmt "fmt"
-	kardgosdk "github.com/KardFinancial/kard-go-sdk/v4"
-	internal "github.com/KardFinancial/kard-go-sdk/v4/internal"
+	kardgosdk "github.com/KardFinancial/kard-go-sdk/v5"
+	internal "github.com/KardFinancial/kard-go-sdk/v5/internal"
 	big "math/big"
-	time "time"
 )
 
 var (
@@ -65,8 +64,6 @@ var (
 	contentStrategyAttributesFieldCategories         = big.NewInt(1 << 3)
 	contentStrategyAttributesFieldCategoryExclusions = big.NewInt(1 << 4)
 	contentStrategyAttributesFieldMerchantExclusions = big.NewInt(1 << 5)
-	contentStrategyAttributesFieldCreatedAt          = big.NewInt(1 << 6)
-	contentStrategyAttributesFieldLastModified       = big.NewInt(1 << 7)
 )
 
 type ContentStrategyAttributes struct {
@@ -82,10 +79,6 @@ type ContentStrategyAttributes struct {
 	CategoryExclusions []kardgosdk.CategoryOption `json:"categoryExclusions" url:"categoryExclusions"`
 	// Merchant IDs to exclude
 	MerchantExclusions []string `json:"merchantExclusions" url:"merchantExclusions"`
-	// When the content strategy was created (ISO 8601 UTC)
-	CreatedAt time.Time `json:"createdAt" url:"createdAt"`
-	// When the content strategy was last modified (ISO 8601 UTC)
-	LastModified time.Time `json:"lastModified" url:"lastModified"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -134,20 +127,6 @@ func (c *ContentStrategyAttributes) GetMerchantExclusions() []string {
 		return nil
 	}
 	return c.MerchantExclusions
-}
-
-func (c *ContentStrategyAttributes) GetCreatedAt() time.Time {
-	if c == nil {
-		return time.Time{}
-	}
-	return c.CreatedAt
-}
-
-func (c *ContentStrategyAttributes) GetLastModified() time.Time {
-	if c == nil {
-		return time.Time{}
-	}
-	return c.LastModified
 }
 
 func (c *ContentStrategyAttributes) GetExtraProperties() map[string]interface{} {
@@ -206,35 +185,13 @@ func (c *ContentStrategyAttributes) SetMerchantExclusions(merchantExclusions []s
 	c.require(contentStrategyAttributesFieldMerchantExclusions)
 }
 
-// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *ContentStrategyAttributes) SetCreatedAt(createdAt time.Time) {
-	c.CreatedAt = createdAt
-	c.require(contentStrategyAttributesFieldCreatedAt)
-}
-
-// SetLastModified sets the LastModified field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *ContentStrategyAttributes) SetLastModified(lastModified time.Time) {
-	c.LastModified = lastModified
-	c.require(contentStrategyAttributesFieldLastModified)
-}
-
 func (c *ContentStrategyAttributes) UnmarshalJSON(data []byte) error {
-	type embed ContentStrategyAttributes
-	var unmarshaler = struct {
-		embed
-		CreatedAt    *internal.DateTime `json:"createdAt"`
-		LastModified *internal.DateTime `json:"lastModified"`
-	}{
-		embed: embed(*c),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler ContentStrategyAttributes
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*c = ContentStrategyAttributes(unmarshaler.embed)
-	c.CreatedAt = unmarshaler.CreatedAt.Time()
-	c.LastModified = unmarshaler.LastModified.Time()
+	*c = ContentStrategyAttributes(value)
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
@@ -248,12 +205,8 @@ func (c *ContentStrategyAttributes) MarshalJSON() ([]byte, error) {
 	type embed ContentStrategyAttributes
 	var marshaler = struct {
 		embed
-		CreatedAt    *internal.DateTime `json:"createdAt"`
-		LastModified *internal.DateTime `json:"lastModified"`
 	}{
-		embed:        embed(*c),
-		CreatedAt:    internal.NewDateTime(c.CreatedAt),
-		LastModified: internal.NewDateTime(c.LastModified),
+		embed: embed(*c),
 	}
 	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
 	return json.Marshal(explicitMarshaler)

@@ -4,11 +4,10 @@ package organizations
 
 import (
 	json "encoding/json"
-	kardgosdk "github.com/KardFinancial/kard-go-sdk/v4"
+	kardgosdk "github.com/KardFinancial/kard-go-sdk/v5"
 	assert "github.com/stretchr/testify/assert"
 	require "github.com/stretchr/testify/require"
 	testing "testing"
-	time "time"
 )
 
 func TestSettersListContentStrategiesRequest(t *testing.T) {
@@ -180,22 +179,6 @@ func TestSettersContentStrategyAttributes(t *testing.T) {
 		var fernTestValueMerchantExclusions []string
 		obj.SetMerchantExclusions(fernTestValueMerchantExclusions)
 		assert.Equal(t, fernTestValueMerchantExclusions, obj.MerchantExclusions)
-		assert.NotNil(t, obj.explicitFields)
-	})
-
-	t.Run("SetCreatedAt", func(t *testing.T) {
-		obj := &ContentStrategyAttributes{}
-		var fernTestValueCreatedAt time.Time
-		obj.SetCreatedAt(fernTestValueCreatedAt)
-		assert.Equal(t, fernTestValueCreatedAt, obj.CreatedAt)
-		assert.NotNil(t, obj.explicitFields)
-	})
-
-	t.Run("SetLastModified", func(t *testing.T) {
-		obj := &ContentStrategyAttributes{}
-		var fernTestValueLastModified time.Time
-		obj.SetLastModified(fernTestValueLastModified)
-		assert.Equal(t, fernTestValueLastModified, obj.LastModified)
 		assert.NotNil(t, obj.explicitFields)
 	})
 
@@ -380,52 +363,6 @@ func TestGettersContentStrategyAttributes(t *testing.T) {
 		_ = obj.GetMerchantExclusions() // Should return zero value
 	})
 
-	t.Run("GetCreatedAt", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &ContentStrategyAttributes{}
-		var expected time.Time
-		obj.CreatedAt = expected
-
-		// Act & Assert
-		assert.Equal(t, expected, obj.GetCreatedAt(), "getter should return the property value")
-	})
-
-	t.Run("GetCreatedAt_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *ContentStrategyAttributes
-		// Should not panic - getters should handle nil receiver gracefully
-		defer func() {
-			if r := recover(); r != nil {
-				t.Errorf("Getter panicked on nil receiver: %v", r)
-			}
-		}()
-		_ = obj.GetCreatedAt() // Should return zero value
-	})
-
-	t.Run("GetLastModified", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &ContentStrategyAttributes{}
-		var expected time.Time
-		obj.LastModified = expected
-
-		// Act & Assert
-		assert.Equal(t, expected, obj.GetLastModified(), "getter should return the property value")
-	})
-
-	t.Run("GetLastModified_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *ContentStrategyAttributes
-		// Should not panic - getters should handle nil receiver gracefully
-		defer func() {
-			if r := recover(); r != nil {
-				t.Errorf("Getter panicked on nil receiver: %v", r)
-			}
-		}()
-		_ = obj.GetLastModified() // Should return zero value
-	})
-
 }
 
 func TestSettersMarkExplicitContentStrategyAttributes(t *testing.T) {
@@ -592,68 +529,6 @@ func TestSettersMarkExplicitContentStrategyAttributes(t *testing.T) {
 
 		// Act
 		obj.SetMerchantExclusions(fernTestValueMerchantExclusions)
-
-		// Assert - object with explicitly set field can be marshaled/unmarshaled
-		bytes, err := json.Marshal(obj)
-		require.NoError(t, err, "marshaling should succeed for test setup")
-
-		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
-		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
-		if len(bytes) > 0 && bytes[0] == '{' {
-			// JSON object - unmarshal into map
-			var unmarshaled map[string]interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		} else {
-			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
-			var unmarshaled interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		}
-
-		// Note: This does not explicitly assert the presence of a specific JSON field
-		// It verifies that setting a field via setter allows successful JSON round-trip
-	})
-
-	t.Run("SetCreatedAt_MarksExplicit", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &ContentStrategyAttributes{}
-		var fernTestValueCreatedAt time.Time
-
-		// Act
-		obj.SetCreatedAt(fernTestValueCreatedAt)
-
-		// Assert - object with explicitly set field can be marshaled/unmarshaled
-		bytes, err := json.Marshal(obj)
-		require.NoError(t, err, "marshaling should succeed for test setup")
-
-		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
-		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
-		if len(bytes) > 0 && bytes[0] == '{' {
-			// JSON object - unmarshal into map
-			var unmarshaled map[string]interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		} else {
-			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
-			var unmarshaled interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		}
-
-		// Note: This does not explicitly assert the presence of a specific JSON field
-		// It verifies that setting a field via setter allows successful JSON round-trip
-	})
-
-	t.Run("SetLastModified_MarksExplicit", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &ContentStrategyAttributes{}
-		var fernTestValueLastModified time.Time
-
-		// Act
-		obj.SetLastModified(fernTestValueLastModified)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)

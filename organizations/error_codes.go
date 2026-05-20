@@ -3,9 +3,9 @@
 package organizations
 
 import (
-	kard "github.com/KardFinancial/kard-go-sdk/v3"
-	core "github.com/KardFinancial/kard-go-sdk/v3/core"
-	internal "github.com/KardFinancial/kard-go-sdk/v3/internal"
+	kard "github.com/KardFinancial/kard-go-sdk/v4"
+	core "github.com/KardFinancial/kard-go-sdk/v4/core"
+	internal "github.com/KardFinancial/kard-go-sdk/v4/internal"
 )
 
 var ErrorCodes internal.ErrorCodes = internal.ErrorCodes{

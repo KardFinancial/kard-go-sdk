@@ -1406,6 +1406,14 @@ client.Organizations.Placements.List(
 <dl>
 <dd>
 
+**include:** `*string` — CSV list of related resources to embed in the `included` array (allowed value is `contentStrategy`).
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **pageAfter:** `*string` — Cursor value for the next page of results
     
 </dd>
@@ -1426,7 +1434,7 @@ client.Organizations.Placements.List(
 </dl>
 </details>
 
-<details><summary><code>client.Organizations.Placements.Get(OrganizationId, PlacementId) -> *organizations.PlacementFormatUnion</code></summary>
+<details><summary><code>client.Organizations.Placements.Get(OrganizationId, PlacementId) -> *organizations.PlacementResource</code></summary>
 <dl>
 <dd>
 
@@ -1453,10 +1461,12 @@ Retrieve a specific placement
 <dd>
 
 ```go
+request := &organizations.GetPlacementRequest{}
 client.Organizations.Placements.Get(
         context.TODO(),
         "organizationId",
         "placementId",
+        request,
     )
 }
 ```
@@ -1482,6 +1492,14 @@ client.Organizations.Placements.Get(
 <dd>
 
 **placementId:** `string` — Unique identifier of the placement (UUID v7)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**include:** `*string` — CSV list of related resources to embed in the `included` array (allowed value is `contentStrategy`).
     
 </dd>
 </dl>

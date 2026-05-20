@@ -10,9 +10,9 @@ import (
 	os "os"
 	testing "testing"
 
-	client "github.com/KardFinancial/kard-go-sdk/v3/client"
-	option "github.com/KardFinancial/kard-go-sdk/v3/option"
-	organizations "github.com/KardFinancial/kard-go-sdk/v3/organizations"
+	client "github.com/KardFinancial/kard-go-sdk/v4/client"
+	option "github.com/KardFinancial/kard-go-sdk/v4/option"
+	organizations "github.com/KardFinancial/kard-go-sdk/v4/organizations"
 	require "github.com/stretchr/testify/require"
 )
 
@@ -144,10 +144,12 @@ func TestOrganizationsPlacementsGetWithWireMock(
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
 	)
+	request := &organizations.GetPlacementRequest{}
 	_, invocationErr := client.Organizations.Placements.Get(
 		context.TODO(),
 		"organizationId",
 		"placementId",
+		request,
 		option.WithHTTPHeader(
 			http.Header{"X-Test-Id": []string{"TestOrganizationsPlacementsGetWithWireMock"}},
 		),

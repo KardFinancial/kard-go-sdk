@@ -5,18 +5,45 @@ package organizations
 import (
 	json "encoding/json"
 	fmt "fmt"
-	kardgosdk "github.com/KardFinancial/kard-go-sdk/v3"
-	internal "github.com/KardFinancial/kard-go-sdk/v3/internal"
+	kardgosdk "github.com/KardFinancial/kard-go-sdk/v4"
+	internal "github.com/KardFinancial/kard-go-sdk/v4/internal"
 	big "math/big"
 	time "time"
 )
 
 var (
+	getPlacementRequestFieldInclude = big.NewInt(1 << 0)
+)
+
+type GetPlacementRequest struct {
+	// CSV list of related resources to embed in the `included` array (allowed value is `contentStrategy`).
+	Include *string `json:"-" url:"include,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (g *GetPlacementRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetInclude sets the Include field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetPlacementRequest) SetInclude(include *string) {
+	g.Include = include
+	g.require(getPlacementRequestFieldInclude)
+}
+
+var (
 	listPlacementsRequestFieldFilterType              = big.NewInt(1 << 0)
 	listPlacementsRequestFieldFilterName              = big.NewInt(1 << 1)
 	listPlacementsRequestFieldFilterContentStrategyId = big.NewInt(1 << 2)
-	listPlacementsRequestFieldPageAfter               = big.NewInt(1 << 3)
-	listPlacementsRequestFieldPageSize                = big.NewInt(1 << 4)
+	listPlacementsRequestFieldInclude                 = big.NewInt(1 << 3)
+	listPlacementsRequestFieldPageAfter               = big.NewInt(1 << 4)
+	listPlacementsRequestFieldPageSize                = big.NewInt(1 << 5)
 )
 
 type ListPlacementsRequest struct {
@@ -26,6 +53,8 @@ type ListPlacementsRequest struct {
 	FilterName *string `json:"-" url:"filter[name],omitempty"`
 	// Filter by the ID of the content strategy linked to the placement
 	FilterContentStrategyId *string `json:"-" url:"filter[contentStrategyId],omitempty"`
+	// CSV list of related resources to embed in the `included` array (allowed value is `contentStrategy`).
+	Include *string `json:"-" url:"include,omitempty"`
 	// Cursor value for the next page of results
 	PageAfter *string `json:"-" url:"page[after],omitempty"`
 	// Maximum number of records to return [1 - 200] (default = 200)
@@ -61,6 +90,13 @@ func (l *ListPlacementsRequest) SetFilterName(filterName *string) {
 func (l *ListPlacementsRequest) SetFilterContentStrategyId(filterContentStrategyId *string) {
 	l.FilterContentStrategyId = filterContentStrategyId
 	l.require(listPlacementsRequestFieldFilterContentStrategyId)
+}
+
+// SetInclude sets the Include field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListPlacementsRequest) SetInclude(include *string) {
+	l.Include = include
+	l.require(listPlacementsRequestFieldInclude)
 }
 
 // SetPageAfter sets the PageAfter field and marks it as non-optional;
@@ -1299,15 +1335,18 @@ func (p *PlacementFormatUnion) validate() error {
 
 // Paginated list of placements
 var (
-	placementListResponseFieldData  = big.NewInt(1 << 0)
-	placementListResponseFieldLinks = big.NewInt(1 << 1)
-	placementListResponseFieldMeta  = big.NewInt(1 << 2)
+	placementListResponseFieldData     = big.NewInt(1 << 0)
+	placementListResponseFieldIncluded = big.NewInt(1 << 1)
+	placementListResponseFieldLinks    = big.NewInt(1 << 2)
+	placementListResponseFieldMeta     = big.NewInt(1 << 3)
 )
 
 type PlacementListResponse struct {
 	// Array of placement resources
-	Data  []*PlacementFormatUnion `json:"data" url:"data"`
-	Links *kardgosdk.Links        `json:"links,omitempty" url:"links,omitempty"`
+	Data []*PlacementFormatUnion `json:"data" url:"data"`
+	// Related resources requested via the `include` query parameter. Only populated when `include=contentStrategy` is supplied and at least one placement in `data` is linked to a content strategy.
+	Included []*ContentStrategyResponse `json:"included,omitempty" url:"included,omitempty"`
+	Links    *kardgosdk.Links           `json:"links,omitempty" url:"links,omitempty"`
 	// Pagination metadata
 	Meta *kardgosdk.OrganizationPaginationMetadata `json:"meta,omitempty" url:"meta,omitempty"`
 
@@ -1323,6 +1362,13 @@ func (p *PlacementListResponse) GetData() []*PlacementFormatUnion {
 		return nil
 	}
 	return p.Data
+}
+
+func (p *PlacementListResponse) GetIncluded() []*ContentStrategyResponse {
+	if p == nil {
+		return nil
+	}
+	return p.Included
 }
 
 func (p *PlacementListResponse) GetLinks() *kardgosdk.Links {
@@ -1358,6 +1404,13 @@ func (p *PlacementListResponse) require(field *big.Int) {
 func (p *PlacementListResponse) SetData(data []*PlacementFormatUnion) {
 	p.Data = data
 	p.require(placementListResponseFieldData)
+}
+
+// SetIncluded sets the Included field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlacementListResponse) SetIncluded(included []*ContentStrategyResponse) {
+	p.Included = included
+	p.require(placementListResponseFieldIncluded)
 }
 
 // SetLinks sets the Links field and marks it as non-optional;
@@ -1402,6 +1455,109 @@ func (p *PlacementListResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (p *PlacementListResponse) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+// Single placement document, optionally with embedded related resources
+var (
+	placementResourceFieldData     = big.NewInt(1 << 0)
+	placementResourceFieldIncluded = big.NewInt(1 << 1)
+)
+
+type PlacementResource struct {
+	// Placement resource
+	Data *PlacementFormatUnion `json:"data" url:"data"`
+	// Related resources requested via the `include` query parameter. Only populated when `include=contentStrategy` is supplied and the placement is linked to a content strategy.
+	Included []*ContentStrategyResponse `json:"included,omitempty" url:"included,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PlacementResource) GetData() *PlacementFormatUnion {
+	if p == nil {
+		return nil
+	}
+	return p.Data
+}
+
+func (p *PlacementResource) GetIncluded() []*ContentStrategyResponse {
+	if p == nil {
+		return nil
+	}
+	return p.Included
+}
+
+func (p *PlacementResource) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *PlacementResource) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetData sets the Data field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlacementResource) SetData(data *PlacementFormatUnion) {
+	p.Data = data
+	p.require(placementResourceFieldData)
+}
+
+// SetIncluded sets the Included field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlacementResource) SetIncluded(included []*ContentStrategyResponse) {
+	p.Included = included
+	p.require(placementResourceFieldIncluded)
+}
+
+func (p *PlacementResource) UnmarshalJSON(data []byte) error {
+	type unmarshaler PlacementResource
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PlacementResource(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PlacementResource) MarshalJSON() ([]byte, error) {
+	type embed PlacementResource
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *PlacementResource) String() string {
 	if p == nil {
 		return "<nil>"
 	}

@@ -6,11 +6,11 @@ import (
 	context "context"
 	http "net/http"
 
-	kard "github.com/KardFinancial/kard-go-sdk/v3"
-	core "github.com/KardFinancial/kard-go-sdk/v3/core"
-	internal "github.com/KardFinancial/kard-go-sdk/v3/internal"
-	option "github.com/KardFinancial/kard-go-sdk/v3/option"
-	organizations "github.com/KardFinancial/kard-go-sdk/v3/organizations"
+	kard "github.com/KardFinancial/kard-go-sdk/v4"
+	core "github.com/KardFinancial/kard-go-sdk/v4/core"
+	internal "github.com/KardFinancial/kard-go-sdk/v4/internal"
+	option "github.com/KardFinancial/kard-go-sdk/v4/option"
+	organizations "github.com/KardFinancial/kard-go-sdk/v4/organizations"
 )
 
 type RawClient struct {
@@ -138,8 +138,9 @@ func (r *RawClient) Get(
 	organizationId string,
 	// Unique identifier of the placement (UUID v7)
 	placementId string,
+	request *organizations.GetPlacementRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*organizations.PlacementFormatUnion], error) {
+) (*core.Response[*organizations.PlacementResource], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -151,11 +152,18 @@ func (r *RawClient) Get(
 		organizationId,
 		placementId,
 	)
+	queryParams, err := internal.QueryValues(request)
+	if err != nil {
+		return nil, err
+	}
+	if len(queryParams) > 0 {
+		endpointURL += "?" + queryParams.Encode()
+	}
 	headers := internal.MergeHeaders(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *organizations.PlacementFormatUnion
+	var response *organizations.PlacementResource
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -173,7 +181,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*organizations.PlacementFormatUnion]{
+	return &core.Response[*organizations.PlacementResource]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

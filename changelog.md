@@ -1,3 +1,12 @@
+## v4.0.0 - 2026-05-20
+### Breaking Changes
+* **`placements.Client.Get`** now requires a new `*organizations.GetPlacementRequest` parameter and returns `*organizations.PlacementResource` instead of `*organizations.PlacementFormatUnion`. Add `nil` (or a populated `GetPlacementRequest`) as the third argument and update any code that reads the return value directly as a `PlacementFormatUnion` to use `result.GetData()` instead.
+* **`placements.RawClient.Get`** now requires a new `*organizations.GetPlacementRequest` parameter and returns `*core.Response[*organizations.PlacementResource]` instead of `*core.Response[*organizations.PlacementFormatUnion]`. Apply the same migration as above.
+### Added
+* **`GetPlacementRequest`** — new request struct with an optional `Include` field (and `SetInclude` setter) to request sideloaded related resources (e.g. `contentStrategy`) when fetching a single placement.
+* **`PlacementResource`** — new response struct wrapping `Data *PlacementFormatUnion` and `Included []*ContentStrategyResponse`, returned by `placements.Client.Get` and `placements.RawClient.Get`.
+* **`ListPlacementsRequest.Include`** and **`PlacementListResponse.Included`** — new optional field (with getter/setter) to request and receive sideloaded content strategy resources when listing placements.
+
 ## v3.0.0 - 2026-05-20
 ### Breaking Changes
 * **`ContentStrategyAttributes.Filters`**, **`CreateContentStrategyAttributes.Filters`**, and **`UpdateContentStrategyAttributes.Filters`** — the `Filters []ContentStrategyFilter` field has been replaced by `Filter *ContentStrategyFilter` (singular, optional pointer). Update direct field access and replace `SetFilters([]ContentStrategyFilter{...})` with `SetFilter(&value)`.

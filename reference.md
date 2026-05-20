@@ -882,10 +882,7 @@ request := &organizations.CreateContentStrategyRequestBody{
         Data: &organizations.CreateContentStrategyRequestData{
             Attributes: &organizations.CreateContentStrategyAttributes{
                 Name: "Featured Travel",
-                Filters: []organizations.ContentStrategyFilter{
-                    organizations.ContentStrategyFilterHighestCashback,
-                    organizations.ContentStrategyFilterNewlyLive,
-                },
+                Filter: organizations.ContentStrategyFilterHighestCashback.Ptr(),
                 Categories: []kard.CategoryOption{
                     kard.CategoryOptionTravel,
                 },
@@ -1120,10 +1117,6 @@ request := &organizations.UpdateContentStrategyRequestBody{
         Data: &organizations.UpdateContentStrategyRequestData{
             Attributes: &organizations.UpdateContentStrategyAttributes{
                 Name: "name",
-                Filters: []organizations.ContentStrategyFilter{
-                    organizations.ContentStrategyFilterNewlyLive,
-                    organizations.ContentStrategyFilterNewlyLive,
-                },
                 Categories: []kard.CategoryOption{
                     kard.CategoryOptionArtsEntertainment,
                     kard.CategoryOptionArtsEntertainment,

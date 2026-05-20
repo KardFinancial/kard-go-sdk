@@ -10,10 +10,10 @@ import (
 	os "os"
 	testing "testing"
 
-	kard "github.com/KardFinancial/kard-go-sdk/v2"
-	client "github.com/KardFinancial/kard-go-sdk/v2/client"
-	option "github.com/KardFinancial/kard-go-sdk/v2/option"
-	organizations "github.com/KardFinancial/kard-go-sdk/v2/organizations"
+	kard "github.com/KardFinancial/kard-go-sdk/v3"
+	client "github.com/KardFinancial/kard-go-sdk/v3/client"
+	option "github.com/KardFinancial/kard-go-sdk/v3/option"
+	organizations "github.com/KardFinancial/kard-go-sdk/v3/organizations"
 	require "github.com/stretchr/testify/require"
 )
 
@@ -91,11 +91,8 @@ func TestOrganizationsContentStrategiesCreateWithWireMock(
 	request := &organizations.CreateContentStrategyRequestBody{
 		Data: &organizations.CreateContentStrategyRequestData{
 			Attributes: &organizations.CreateContentStrategyAttributes{
-				Name: "Featured Travel",
-				Filters: []organizations.ContentStrategyFilter{
-					organizations.ContentStrategyFilterHighestCashback,
-					organizations.ContentStrategyFilterNewlyLive,
-				},
+				Name:   "Featured Travel",
+				Filter: organizations.ContentStrategyFilterHighestCashback.Ptr(),
 				Categories: []kard.CategoryOption{
 					kard.CategoryOptionTravel,
 				},
@@ -182,10 +179,6 @@ func TestOrganizationsContentStrategiesUpdateWithWireMock(
 		Data: &organizations.UpdateContentStrategyRequestData{
 			Attributes: &organizations.UpdateContentStrategyAttributes{
 				Name: "name",
-				Filters: []organizations.ContentStrategyFilter{
-					organizations.ContentStrategyFilterNewlyLive,
-					organizations.ContentStrategyFilterNewlyLive,
-				},
 				Categories: []kard.CategoryOption{
 					kard.CategoryOptionArtsEntertainment,
 					kard.CategoryOptionArtsEntertainment,

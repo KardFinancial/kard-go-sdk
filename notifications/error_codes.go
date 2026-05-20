@@ -3,9 +3,9 @@
 package notifications
 
 import (
-	kard "github.com/KardFinancial/kard-go-sdk/v2"
-	core "github.com/KardFinancial/kard-go-sdk/v2/core"
-	internal "github.com/KardFinancial/kard-go-sdk/v2/internal"
+	kard "github.com/KardFinancial/kard-go-sdk/v3"
+	core "github.com/KardFinancial/kard-go-sdk/v3/core"
+	internal "github.com/KardFinancial/kard-go-sdk/v3/internal"
 )
 
 var ErrorCodes internal.ErrorCodes = internal.ErrorCodes{

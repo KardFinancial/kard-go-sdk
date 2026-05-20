@@ -11,9 +11,9 @@ import (
 	strings "strings"
 	testing "testing"
 
-	kard "github.com/KardFinancial/kard-go-sdk/v2"
-	client "github.com/KardFinancial/kard-go-sdk/v2/client"
-	option "github.com/KardFinancial/kard-go-sdk/v2/option"
+	kard "github.com/KardFinancial/kard-go-sdk/v3"
+	client "github.com/KardFinancial/kard-go-sdk/v3/client"
+	option "github.com/KardFinancial/kard-go-sdk/v3/option"
 	assert "github.com/stretchr/testify/assert"
 	require "github.com/stretchr/testify/require"
 )

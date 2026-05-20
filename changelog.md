@@ -1,3 +1,9 @@
+## v3.0.0 - 2026-05-20
+### Breaking Changes
+* **`ContentStrategyAttributes.Filters`**, **`CreateContentStrategyAttributes.Filters`**, and **`UpdateContentStrategyAttributes.Filters`** — the `Filters []ContentStrategyFilter` field has been replaced by `Filter *ContentStrategyFilter` (singular, optional pointer). Update direct field access and replace `SetFilters([]ContentStrategyFilter{...})` with `SetFilter(&value)`.
+* **`GetFilters()`** on `ContentStrategyAttributes`, `CreateContentStrategyAttributes`, and `UpdateContentStrategyAttributes` — renamed to **`GetFilter()`** and now returns `*ContentStrategyFilter` instead of `[]ContentStrategyFilter`. Update all call sites accordingly.
+* **`SetFilters()`** on `ContentStrategyAttributes`, `CreateContentStrategyAttributes`, and `UpdateContentStrategyAttributes` — renamed to **`SetFilter()`` and now accepts `*ContentStrategyFilter` instead of `[]ContentStrategyFilter`. Update all call sites accordingly.
+
 ## v2.2.0 - 2026-05-19
 ### Added
 * **`ListPlacementsRequest.FilterContentStrategyId`** — new optional filter field (with `SetFilterContentStrategyId` setter) to narrow placement listings by the ID of a linked content strategy.

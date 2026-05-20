@@ -4,7 +4,7 @@ package organizations
 
 import (
 	json "encoding/json"
-	kardgosdk "github.com/KardFinancial/kard-go-sdk/v2"
+	kardgosdk "github.com/KardFinancial/kard-go-sdk/v3"
 	assert "github.com/stretchr/testify/assert"
 	require "github.com/stretchr/testify/require"
 	testing "testing"
@@ -151,11 +151,11 @@ func TestSettersContentStrategyAttributes(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
-	t.Run("SetFilters", func(t *testing.T) {
+	t.Run("SetFilter", func(t *testing.T) {
 		obj := &ContentStrategyAttributes{}
-		var fernTestValueFilters []ContentStrategyFilter
-		obj.SetFilters(fernTestValueFilters)
-		assert.Equal(t, fernTestValueFilters, obj.Filters)
+		var fernTestValueFilter *ContentStrategyFilter
+		obj.SetFilter(fernTestValueFilter)
+		assert.Equal(t, fernTestValueFilter, obj.Filter)
 		assert.NotNil(t, obj.explicitFields)
 	})
 
@@ -248,28 +248,28 @@ func TestGettersContentStrategyAttributes(t *testing.T) {
 		_ = obj.GetOrganizationId() // Should return zero value
 	})
 
-	t.Run("GetFilters", func(t *testing.T) {
+	t.Run("GetFilter", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &ContentStrategyAttributes{}
-		var expected []ContentStrategyFilter
-		obj.Filters = expected
+		var expected *ContentStrategyFilter
+		obj.Filter = expected
 
 		// Act & Assert
-		assert.Equal(t, expected, obj.GetFilters(), "getter should return the property value")
+		assert.Equal(t, expected, obj.GetFilter(), "getter should return the property value")
 	})
 
-	t.Run("GetFilters_NilValue", func(t *testing.T) {
+	t.Run("GetFilter_NilValue", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &ContentStrategyAttributes{}
-		obj.Filters = nil
+		obj.Filter = nil
 
 		// Act & Assert
-		assert.Nil(t, obj.GetFilters(), "getter should return nil when property is nil")
+		assert.Nil(t, obj.GetFilter(), "getter should return nil when property is nil")
 	})
 
-	t.Run("GetFilters_NilReceiver", func(t *testing.T) {
+	t.Run("GetFilter_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *ContentStrategyAttributes
 		// Should not panic - getters should handle nil receiver gracefully
@@ -278,7 +278,7 @@ func TestGettersContentStrategyAttributes(t *testing.T) {
 				t.Errorf("Getter panicked on nil receiver: %v", r)
 			}
 		}()
-		_ = obj.GetFilters() // Should return zero value
+		_ = obj.GetFilter() // Should return zero value
 	})
 
 	t.Run("GetCategories", func(t *testing.T) {
@@ -491,14 +491,14 @@ func TestSettersMarkExplicitContentStrategyAttributes(t *testing.T) {
 		// It verifies that setting a field via setter allows successful JSON round-trip
 	})
 
-	t.Run("SetFilters_MarksExplicit", func(t *testing.T) {
+	t.Run("SetFilter_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &ContentStrategyAttributes{}
-		var fernTestValueFilters []ContentStrategyFilter
+		var fernTestValueFilter *ContentStrategyFilter
 
 		// Act
-		obj.SetFilters(fernTestValueFilters)
+		obj.SetFilter(fernTestValueFilter)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -1056,11 +1056,11 @@ func TestSettersCreateContentStrategyAttributes(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
-	t.Run("SetFilters", func(t *testing.T) {
+	t.Run("SetFilter", func(t *testing.T) {
 		obj := &CreateContentStrategyAttributes{}
-		var fernTestValueFilters []ContentStrategyFilter
-		obj.SetFilters(fernTestValueFilters)
-		assert.Equal(t, fernTestValueFilters, obj.Filters)
+		var fernTestValueFilter *ContentStrategyFilter
+		obj.SetFilter(fernTestValueFilter)
+		assert.Equal(t, fernTestValueFilter, obj.Filter)
 		assert.NotNil(t, obj.explicitFields)
 	})
 
@@ -1114,28 +1114,28 @@ func TestGettersCreateContentStrategyAttributes(t *testing.T) {
 		_ = obj.GetName() // Should return zero value
 	})
 
-	t.Run("GetFilters", func(t *testing.T) {
+	t.Run("GetFilter", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &CreateContentStrategyAttributes{}
-		var expected []ContentStrategyFilter
-		obj.Filters = expected
+		var expected *ContentStrategyFilter
+		obj.Filter = expected
 
 		// Act & Assert
-		assert.Equal(t, expected, obj.GetFilters(), "getter should return the property value")
+		assert.Equal(t, expected, obj.GetFilter(), "getter should return the property value")
 	})
 
-	t.Run("GetFilters_NilValue", func(t *testing.T) {
+	t.Run("GetFilter_NilValue", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &CreateContentStrategyAttributes{}
-		obj.Filters = nil
+		obj.Filter = nil
 
 		// Act & Assert
-		assert.Nil(t, obj.GetFilters(), "getter should return nil when property is nil")
+		assert.Nil(t, obj.GetFilter(), "getter should return nil when property is nil")
 	})
 
-	t.Run("GetFilters_NilReceiver", func(t *testing.T) {
+	t.Run("GetFilter_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *CreateContentStrategyAttributes
 		// Should not panic - getters should handle nil receiver gracefully
@@ -1144,7 +1144,7 @@ func TestGettersCreateContentStrategyAttributes(t *testing.T) {
 				t.Errorf("Getter panicked on nil receiver: %v", r)
 			}
 		}()
-		_ = obj.GetFilters() // Should return zero value
+		_ = obj.GetFilter() // Should return zero value
 	})
 
 	t.Run("GetCategories", func(t *testing.T) {
@@ -1280,14 +1280,14 @@ func TestSettersMarkExplicitCreateContentStrategyAttributes(t *testing.T) {
 		// It verifies that setting a field via setter allows successful JSON round-trip
 	})
 
-	t.Run("SetFilters_MarksExplicit", func(t *testing.T) {
+	t.Run("SetFilter_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &CreateContentStrategyAttributes{}
-		var fernTestValueFilters []ContentStrategyFilter
+		var fernTestValueFilter *ContentStrategyFilter
 
 		// Act
-		obj.SetFilters(fernTestValueFilters)
+		obj.SetFilter(fernTestValueFilter)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -1577,11 +1577,11 @@ func TestSettersUpdateContentStrategyAttributes(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
-	t.Run("SetFilters", func(t *testing.T) {
+	t.Run("SetFilter", func(t *testing.T) {
 		obj := &UpdateContentStrategyAttributes{}
-		var fernTestValueFilters []ContentStrategyFilter
-		obj.SetFilters(fernTestValueFilters)
-		assert.Equal(t, fernTestValueFilters, obj.Filters)
+		var fernTestValueFilter *ContentStrategyFilter
+		obj.SetFilter(fernTestValueFilter)
+		assert.Equal(t, fernTestValueFilter, obj.Filter)
 		assert.NotNil(t, obj.explicitFields)
 	})
 
@@ -1635,28 +1635,28 @@ func TestGettersUpdateContentStrategyAttributes(t *testing.T) {
 		_ = obj.GetName() // Should return zero value
 	})
 
-	t.Run("GetFilters", func(t *testing.T) {
+	t.Run("GetFilter", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &UpdateContentStrategyAttributes{}
-		var expected []ContentStrategyFilter
-		obj.Filters = expected
+		var expected *ContentStrategyFilter
+		obj.Filter = expected
 
 		// Act & Assert
-		assert.Equal(t, expected, obj.GetFilters(), "getter should return the property value")
+		assert.Equal(t, expected, obj.GetFilter(), "getter should return the property value")
 	})
 
-	t.Run("GetFilters_NilValue", func(t *testing.T) {
+	t.Run("GetFilter_NilValue", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &UpdateContentStrategyAttributes{}
-		obj.Filters = nil
+		obj.Filter = nil
 
 		// Act & Assert
-		assert.Nil(t, obj.GetFilters(), "getter should return nil when property is nil")
+		assert.Nil(t, obj.GetFilter(), "getter should return nil when property is nil")
 	})
 
-	t.Run("GetFilters_NilReceiver", func(t *testing.T) {
+	t.Run("GetFilter_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *UpdateContentStrategyAttributes
 		// Should not panic - getters should handle nil receiver gracefully
@@ -1665,7 +1665,7 @@ func TestGettersUpdateContentStrategyAttributes(t *testing.T) {
 				t.Errorf("Getter panicked on nil receiver: %v", r)
 			}
 		}()
-		_ = obj.GetFilters() // Should return zero value
+		_ = obj.GetFilter() // Should return zero value
 	})
 
 	t.Run("GetCategories", func(t *testing.T) {
@@ -1801,14 +1801,14 @@ func TestSettersMarkExplicitUpdateContentStrategyAttributes(t *testing.T) {
 		// It verifies that setting a field via setter allows successful JSON round-trip
 	})
 
-	t.Run("SetFilters_MarksExplicit", func(t *testing.T) {
+	t.Run("SetFilter_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &UpdateContentStrategyAttributes{}
-		var fernTestValueFilters []ContentStrategyFilter
+		var fernTestValueFilter *ContentStrategyFilter
 
 		// Act
-		obj.SetFilters(fernTestValueFilters)
+		obj.SetFilter(fernTestValueFilter)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)

@@ -5,9 +5,9 @@ package client
 import (
 	os "os"
 
-	core "github.com/KardFinancial/kard-go-sdk/v5/core"
-	internal "github.com/KardFinancial/kard-go-sdk/v5/internal"
-	subscriptions "github.com/KardFinancial/kard-go-sdk/v5/notifications/subscriptions"
+	core "github.com/KardFinancial/kard-go-sdk/v6/core"
+	internal "github.com/KardFinancial/kard-go-sdk/v6/internal"
+	subscriptions "github.com/KardFinancial/kard-go-sdk/v6/notifications/subscriptions"
 )
 
 type Client struct {

@@ -4,7 +4,7 @@ package organizations
 
 import (
 	json "encoding/json"
-	kardgosdk "github.com/KardFinancial/kard-go-sdk/v5"
+	kardgosdk "github.com/KardFinancial/kard-go-sdk/v6"
 	assert "github.com/stretchr/testify/assert"
 	require "github.com/stretchr/testify/require"
 	testing "testing"
@@ -150,11 +150,11 @@ func TestSettersContentStrategyAttributes(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
-	t.Run("SetFilter", func(t *testing.T) {
+	t.Run("SetSort", func(t *testing.T) {
 		obj := &ContentStrategyAttributes{}
-		var fernTestValueFilter *ContentStrategyFilter
-		obj.SetFilter(fernTestValueFilter)
-		assert.Equal(t, fernTestValueFilter, obj.Filter)
+		var fernTestValueSort *ContentStrategySort
+		obj.SetSort(fernTestValueSort)
+		assert.Equal(t, fernTestValueSort, obj.Sort)
 		assert.NotNil(t, obj.explicitFields)
 	})
 
@@ -231,28 +231,28 @@ func TestGettersContentStrategyAttributes(t *testing.T) {
 		_ = obj.GetOrganizationId() // Should return zero value
 	})
 
-	t.Run("GetFilter", func(t *testing.T) {
+	t.Run("GetSort", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &ContentStrategyAttributes{}
-		var expected *ContentStrategyFilter
-		obj.Filter = expected
+		var expected *ContentStrategySort
+		obj.Sort = expected
 
 		// Act & Assert
-		assert.Equal(t, expected, obj.GetFilter(), "getter should return the property value")
+		assert.Equal(t, expected, obj.GetSort(), "getter should return the property value")
 	})
 
-	t.Run("GetFilter_NilValue", func(t *testing.T) {
+	t.Run("GetSort_NilValue", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &ContentStrategyAttributes{}
-		obj.Filter = nil
+		obj.Sort = nil
 
 		// Act & Assert
-		assert.Nil(t, obj.GetFilter(), "getter should return nil when property is nil")
+		assert.Nil(t, obj.GetSort(), "getter should return nil when property is nil")
 	})
 
-	t.Run("GetFilter_NilReceiver", func(t *testing.T) {
+	t.Run("GetSort_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *ContentStrategyAttributes
 		// Should not panic - getters should handle nil receiver gracefully
@@ -261,7 +261,7 @@ func TestGettersContentStrategyAttributes(t *testing.T) {
 				t.Errorf("Getter panicked on nil receiver: %v", r)
 			}
 		}()
-		_ = obj.GetFilter() // Should return zero value
+		_ = obj.GetSort() // Should return zero value
 	})
 
 	t.Run("GetCategories", func(t *testing.T) {
@@ -428,14 +428,14 @@ func TestSettersMarkExplicitContentStrategyAttributes(t *testing.T) {
 		// It verifies that setting a field via setter allows successful JSON round-trip
 	})
 
-	t.Run("SetFilter_MarksExplicit", func(t *testing.T) {
+	t.Run("SetSort_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &ContentStrategyAttributes{}
-		var fernTestValueFilter *ContentStrategyFilter
+		var fernTestValueSort *ContentStrategySort
 
 		// Act
-		obj.SetFilter(fernTestValueFilter)
+		obj.SetSort(fernTestValueSort)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -931,11 +931,11 @@ func TestSettersCreateContentStrategyAttributes(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
-	t.Run("SetFilter", func(t *testing.T) {
+	t.Run("SetSort", func(t *testing.T) {
 		obj := &CreateContentStrategyAttributes{}
-		var fernTestValueFilter *ContentStrategyFilter
-		obj.SetFilter(fernTestValueFilter)
-		assert.Equal(t, fernTestValueFilter, obj.Filter)
+		var fernTestValueSort *ContentStrategySort
+		obj.SetSort(fernTestValueSort)
+		assert.Equal(t, fernTestValueSort, obj.Sort)
 		assert.NotNil(t, obj.explicitFields)
 	})
 
@@ -989,28 +989,28 @@ func TestGettersCreateContentStrategyAttributes(t *testing.T) {
 		_ = obj.GetName() // Should return zero value
 	})
 
-	t.Run("GetFilter", func(t *testing.T) {
+	t.Run("GetSort", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &CreateContentStrategyAttributes{}
-		var expected *ContentStrategyFilter
-		obj.Filter = expected
+		var expected *ContentStrategySort
+		obj.Sort = expected
 
 		// Act & Assert
-		assert.Equal(t, expected, obj.GetFilter(), "getter should return the property value")
+		assert.Equal(t, expected, obj.GetSort(), "getter should return the property value")
 	})
 
-	t.Run("GetFilter_NilValue", func(t *testing.T) {
+	t.Run("GetSort_NilValue", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &CreateContentStrategyAttributes{}
-		obj.Filter = nil
+		obj.Sort = nil
 
 		// Act & Assert
-		assert.Nil(t, obj.GetFilter(), "getter should return nil when property is nil")
+		assert.Nil(t, obj.GetSort(), "getter should return nil when property is nil")
 	})
 
-	t.Run("GetFilter_NilReceiver", func(t *testing.T) {
+	t.Run("GetSort_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *CreateContentStrategyAttributes
 		// Should not panic - getters should handle nil receiver gracefully
@@ -1019,7 +1019,7 @@ func TestGettersCreateContentStrategyAttributes(t *testing.T) {
 				t.Errorf("Getter panicked on nil receiver: %v", r)
 			}
 		}()
-		_ = obj.GetFilter() // Should return zero value
+		_ = obj.GetSort() // Should return zero value
 	})
 
 	t.Run("GetCategories", func(t *testing.T) {
@@ -1155,14 +1155,14 @@ func TestSettersMarkExplicitCreateContentStrategyAttributes(t *testing.T) {
 		// It verifies that setting a field via setter allows successful JSON round-trip
 	})
 
-	t.Run("SetFilter_MarksExplicit", func(t *testing.T) {
+	t.Run("SetSort_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &CreateContentStrategyAttributes{}
-		var fernTestValueFilter *ContentStrategyFilter
+		var fernTestValueSort *ContentStrategySort
 
 		// Act
-		obj.SetFilter(fernTestValueFilter)
+		obj.SetSort(fernTestValueSort)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -1452,11 +1452,11 @@ func TestSettersUpdateContentStrategyAttributes(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
-	t.Run("SetFilter", func(t *testing.T) {
+	t.Run("SetSort", func(t *testing.T) {
 		obj := &UpdateContentStrategyAttributes{}
-		var fernTestValueFilter *ContentStrategyFilter
-		obj.SetFilter(fernTestValueFilter)
-		assert.Equal(t, fernTestValueFilter, obj.Filter)
+		var fernTestValueSort *ContentStrategySort
+		obj.SetSort(fernTestValueSort)
+		assert.Equal(t, fernTestValueSort, obj.Sort)
 		assert.NotNil(t, obj.explicitFields)
 	})
 
@@ -1510,28 +1510,28 @@ func TestGettersUpdateContentStrategyAttributes(t *testing.T) {
 		_ = obj.GetName() // Should return zero value
 	})
 
-	t.Run("GetFilter", func(t *testing.T) {
+	t.Run("GetSort", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &UpdateContentStrategyAttributes{}
-		var expected *ContentStrategyFilter
-		obj.Filter = expected
+		var expected *ContentStrategySort
+		obj.Sort = expected
 
 		// Act & Assert
-		assert.Equal(t, expected, obj.GetFilter(), "getter should return the property value")
+		assert.Equal(t, expected, obj.GetSort(), "getter should return the property value")
 	})
 
-	t.Run("GetFilter_NilValue", func(t *testing.T) {
+	t.Run("GetSort_NilValue", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &UpdateContentStrategyAttributes{}
-		obj.Filter = nil
+		obj.Sort = nil
 
 		// Act & Assert
-		assert.Nil(t, obj.GetFilter(), "getter should return nil when property is nil")
+		assert.Nil(t, obj.GetSort(), "getter should return nil when property is nil")
 	})
 
-	t.Run("GetFilter_NilReceiver", func(t *testing.T) {
+	t.Run("GetSort_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *UpdateContentStrategyAttributes
 		// Should not panic - getters should handle nil receiver gracefully
@@ -1540,7 +1540,7 @@ func TestGettersUpdateContentStrategyAttributes(t *testing.T) {
 				t.Errorf("Getter panicked on nil receiver: %v", r)
 			}
 		}()
-		_ = obj.GetFilter() // Should return zero value
+		_ = obj.GetSort() // Should return zero value
 	})
 
 	t.Run("GetCategories", func(t *testing.T) {
@@ -1676,14 +1676,14 @@ func TestSettersMarkExplicitUpdateContentStrategyAttributes(t *testing.T) {
 		// It verifies that setting a field via setter allows successful JSON round-trip
 	})
 
-	t.Run("SetFilter_MarksExplicit", func(t *testing.T) {
+	t.Run("SetSort_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &UpdateContentStrategyAttributes{}
-		var fernTestValueFilter *ContentStrategyFilter
+		var fernTestValueSort *ContentStrategySort
 
 		// Act
-		obj.SetFilter(fernTestValueFilter)
+		obj.SetSort(fernTestValueSort)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -2387,42 +2387,42 @@ func TestStringUpdateContentStrategyRequestData(t *testing.T) {
 	})
 }
 
-func TestEnumContentStrategyFilter(t *testing.T) {
+func TestEnumContentStrategySort(t *testing.T) {
 	t.Run("NewFromString_NEWLY_LIVE", func(t *testing.T) {
 		t.Parallel()
-		val, err := NewContentStrategyFilterFromString("NEWLY_LIVE")
+		val, err := NewContentStrategySortFromString("NEWLY_LIVE")
 		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, ContentStrategyFilter("NEWLY_LIVE"), val, "enum value should match expected wire value")
+		assert.Equal(t, ContentStrategySort("NEWLY_LIVE"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_EXPIRING_SOON", func(t *testing.T) {
 		t.Parallel()
-		val, err := NewContentStrategyFilterFromString("EXPIRING_SOON")
+		val, err := NewContentStrategySortFromString("EXPIRING_SOON")
 		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, ContentStrategyFilter("EXPIRING_SOON"), val, "enum value should match expected wire value")
+		assert.Equal(t, ContentStrategySort("EXPIRING_SOON"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_HIGHEST_CASHBACK", func(t *testing.T) {
 		t.Parallel()
-		val, err := NewContentStrategyFilterFromString("HIGHEST_CASHBACK")
+		val, err := NewContentStrategySortFromString("HIGHEST_CASHBACK")
 		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, ContentStrategyFilter("HIGHEST_CASHBACK"), val, "enum value should match expected wire value")
+		assert.Equal(t, ContentStrategySort("HIGHEST_CASHBACK"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_PERSONALIZED", func(t *testing.T) {
 		t.Parallel()
-		val, err := NewContentStrategyFilterFromString("PERSONALIZED")
+		val, err := NewContentStrategySortFromString("PERSONALIZED")
 		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, ContentStrategyFilter("PERSONALIZED"), val, "enum value should match expected wire value")
+		assert.Equal(t, ContentStrategySort("PERSONALIZED"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
-		_, err := NewContentStrategyFilterFromString("invalid_value_that_does_not_exist")
+		_, err := NewContentStrategySortFromString("invalid_value_that_does_not_exist")
 		assert.Error(t, err)
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewContentStrategyFilterFromString("NEWLY_LIVE")
+		val, err := NewContentStrategySortFromString("NEWLY_LIVE")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)

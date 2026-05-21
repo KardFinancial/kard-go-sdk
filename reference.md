@@ -882,7 +882,7 @@ request := &organizations.CreateContentStrategyRequestBody{
         Data: &organizations.CreateContentStrategyRequestData{
             Attributes: &organizations.CreateContentStrategyAttributes{
                 Name: "Featured Travel",
-                Filter: organizations.ContentStrategyFilterHighestCashback.Ptr(),
+                Sort: organizations.ContentStrategySortHighestCashback.Ptr(),
                 Categories: []kard.CategoryOption{
                     kard.CategoryOptionTravel,
                 },

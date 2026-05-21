@@ -1,3 +1,9 @@
+## v6.0.0 - 2026-05-21
+### Breaking Changes
+* **`ContentStrategyAttributes.Filter`**, **`CreateContentStrategyAttributes.Filter`**, and **`UpdateContentStrategyAttributes.Filter`** — the `Filter *ContentStrategyFilter` field has been renamed to `Sort *ContentStrategySort` on all three types. Update direct field access and replace `SetFilter(...)` with `SetSort(...)` and `GetFilter()` with `GetSort()`.
+* **`ContentStrategyFilter`** type and its constants (`ContentStrategyFilterNewlyLive`, `ContentStrategyFilterExpiringSoon`, `ContentStrategyFilterHighestCashback`, `ContentStrategyFilterPersonalized`) have been removed. Replace with the equivalent `ContentStrategySort` constants (e.g. `ContentStrategySortNewlyLive`).
+* **`NewContentStrategyFilterFromString`** has been removed. Use `NewContentStrategySortFromString` instead.
+
 ## v5.0.0 - 2026-05-20
 ### Breaking Changes
 * **`ContentStrategyAttributes.CreatedAt`** and **`ContentStrategyAttributes.LastModified`** — exported fields and their `GetCreatedAt()`, `GetLastModified()`, `SetCreatedAt()`, and `SetLastModified()` methods have been removed. Remove any references to these fields or methods from your code.

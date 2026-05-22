@@ -1,3 +1,11 @@
+## v6.1.0 - 2026-05-22
+### Added
+* **`ProgressBarSegment.Separator`** — new optional field (`*ProgressBarSegmentSeparator`) to control the separator style rendered between segment nodes, with `GetSeparator` and `SetSeparator` methods.
+* **`ProgressBarSegment.Labels`** — new optional field (`[]*ProgressBarSegmentLabel`) to supply title/description text for each node in the segment, with `GetLabels` and `SetLabels` methods.
+* **`ProgressBarSegment.Selection`** — new optional field (`*ProgressBarSegmentSelection`) to specify which nodes the UI renders as selected, with `GetSelection` and `SetSelection` methods.
+* **`ProgressBarSegmentLabel`** — new struct with `Title` and `Description` string fields, full JSON serialization support, and `GetTitle`, `GetDescription`, `SetTitle`, `SetDescription` methods.
+* **`ProgressBarSegmentSeparator`** and **`ProgressBarSegmentSelection`** — new string enum types with constants (`LINE`; `CURRENT`, `CURRENT_AND_BELOW`), `NewFrom*` constructors, and `Ptr()` helpers.
+
 ## v6.0.0 - 2026-05-21
 ### Breaking Changes
 * **`ContentStrategyAttributes.Filter`**, **`CreateContentStrategyAttributes.Filter`**, and **`UpdateContentStrategyAttributes.Filter`** — the `Filter *ContentStrategyFilter` field has been renamed to `Sort *ContentStrategySort` on all three types. Update direct field access and replace `SetFilter(...)` with `SetSort(...)` and `GetFilter()` with `GetSort()`.

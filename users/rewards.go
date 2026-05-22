@@ -4544,8 +4544,11 @@ func (p *ProgressBarLabels) String() string {
 
 // Segment configuration for a specific layout
 var (
-	progressBarSegmentFieldIcon     = big.NewInt(1 << 0)
-	progressBarSegmentFieldPosition = big.NewInt(1 << 1)
+	progressBarSegmentFieldIcon      = big.NewInt(1 << 0)
+	progressBarSegmentFieldPosition  = big.NewInt(1 << 1)
+	progressBarSegmentFieldSeparator = big.NewInt(1 << 2)
+	progressBarSegmentFieldLabels    = big.NewInt(1 << 3)
+	progressBarSegmentFieldSelection = big.NewInt(1 << 4)
 )
 
 type ProgressBarSegment struct {
@@ -4553,6 +4556,12 @@ type ProgressBarSegment struct {
 	Icon *string `json:"icon,omitempty" url:"icon,omitempty"`
 	// Position of the segment within the layout
 	Position ProgressBarSegmentPosition `json:"position" url:"position"`
+	// Separator style to render between segment nodes
+	Separator *ProgressBarSegmentSeparator `json:"separator,omitempty" url:"separator,omitempty"`
+	// Label configuration for each node in the segment
+	Labels []*ProgressBarSegmentLabel `json:"labels,omitempty" url:"labels,omitempty"`
+	// Which segment nodes the UI should render as selected based on currentProgress
+	Selection *ProgressBarSegmentSelection `json:"selection,omitempty" url:"selection,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -4573,6 +4582,27 @@ func (p *ProgressBarSegment) GetPosition() ProgressBarSegmentPosition {
 		return ""
 	}
 	return p.Position
+}
+
+func (p *ProgressBarSegment) GetSeparator() *ProgressBarSegmentSeparator {
+	if p == nil {
+		return nil
+	}
+	return p.Separator
+}
+
+func (p *ProgressBarSegment) GetLabels() []*ProgressBarSegmentLabel {
+	if p == nil {
+		return nil
+	}
+	return p.Labels
+}
+
+func (p *ProgressBarSegment) GetSelection() *ProgressBarSegmentSelection {
+	if p == nil {
+		return nil
+	}
+	return p.Selection
 }
 
 func (p *ProgressBarSegment) GetExtraProperties() map[string]interface{} {
@@ -4601,6 +4631,27 @@ func (p *ProgressBarSegment) SetIcon(icon *string) {
 func (p *ProgressBarSegment) SetPosition(position ProgressBarSegmentPosition) {
 	p.Position = position
 	p.require(progressBarSegmentFieldPosition)
+}
+
+// SetSeparator sets the Separator field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *ProgressBarSegment) SetSeparator(separator *ProgressBarSegmentSeparator) {
+	p.Separator = separator
+	p.require(progressBarSegmentFieldSeparator)
+}
+
+// SetLabels sets the Labels field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *ProgressBarSegment) SetLabels(labels []*ProgressBarSegmentLabel) {
+	p.Labels = labels
+	p.require(progressBarSegmentFieldLabels)
+}
+
+// SetSelection sets the Selection field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *ProgressBarSegment) SetSelection(selection *ProgressBarSegmentSelection) {
+	p.Selection = selection
+	p.require(progressBarSegmentFieldSelection)
 }
 
 func (p *ProgressBarSegment) UnmarshalJSON(data []byte) error {
@@ -4645,6 +4696,109 @@ func (p *ProgressBarSegment) String() string {
 	return fmt.Sprintf("%#v", p)
 }
 
+// Label configuration for a single node within a segment
+var (
+	progressBarSegmentLabelFieldTitle       = big.NewInt(1 << 0)
+	progressBarSegmentLabelFieldDescription = big.NewInt(1 << 1)
+)
+
+type ProgressBarSegmentLabel struct {
+	// Title text for the segment node
+	Title string `json:"title" url:"title"`
+	// Description text for the segment node
+	Description string `json:"description" url:"description"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *ProgressBarSegmentLabel) GetTitle() string {
+	if p == nil {
+		return ""
+	}
+	return p.Title
+}
+
+func (p *ProgressBarSegmentLabel) GetDescription() string {
+	if p == nil {
+		return ""
+	}
+	return p.Description
+}
+
+func (p *ProgressBarSegmentLabel) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *ProgressBarSegmentLabel) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetTitle sets the Title field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *ProgressBarSegmentLabel) SetTitle(title string) {
+	p.Title = title
+	p.require(progressBarSegmentLabelFieldTitle)
+}
+
+// SetDescription sets the Description field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *ProgressBarSegmentLabel) SetDescription(description string) {
+	p.Description = description
+	p.require(progressBarSegmentLabelFieldDescription)
+}
+
+func (p *ProgressBarSegmentLabel) UnmarshalJSON(data []byte) error {
+	type unmarshaler ProgressBarSegmentLabel
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = ProgressBarSegmentLabel(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *ProgressBarSegmentLabel) MarshalJSON() ([]byte, error) {
+	type embed ProgressBarSegmentLabel
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *ProgressBarSegmentLabel) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
 // Supported segment positions
 type ProgressBarSegmentPosition string
 
@@ -4668,6 +4822,51 @@ func NewProgressBarSegmentPositionFromString(s string) (ProgressBarSegmentPositi
 }
 
 func (p ProgressBarSegmentPosition) Ptr() *ProgressBarSegmentPosition {
+	return &p
+}
+
+// Supported selection strategies for highlighting segment nodes.
+// - CURRENT: select only the segment at currentProgress
+// - CURRENT_AND_BELOW: select the segment at currentProgress and all segments below it
+type ProgressBarSegmentSelection string
+
+const (
+	ProgressBarSegmentSelectionCurrent         ProgressBarSegmentSelection = "CURRENT"
+	ProgressBarSegmentSelectionCurrentAndBelow ProgressBarSegmentSelection = "CURRENT_AND_BELOW"
+)
+
+func NewProgressBarSegmentSelectionFromString(s string) (ProgressBarSegmentSelection, error) {
+	switch s {
+	case "CURRENT":
+		return ProgressBarSegmentSelectionCurrent, nil
+	case "CURRENT_AND_BELOW":
+		return ProgressBarSegmentSelectionCurrentAndBelow, nil
+	}
+	var t ProgressBarSegmentSelection
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (p ProgressBarSegmentSelection) Ptr() *ProgressBarSegmentSelection {
+	return &p
+}
+
+// Supported separator styles between segment nodes
+type ProgressBarSegmentSeparator string
+
+const (
+	ProgressBarSegmentSeparatorLine ProgressBarSegmentSeparator = "LINE"
+)
+
+func NewProgressBarSegmentSeparatorFromString(s string) (ProgressBarSegmentSeparator, error) {
+	switch s {
+	case "LINE":
+		return ProgressBarSegmentSeparatorLine, nil
+	}
+	var t ProgressBarSegmentSeparator
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (p ProgressBarSegmentSeparator) Ptr() *ProgressBarSegmentSeparator {
 	return &p
 }
 

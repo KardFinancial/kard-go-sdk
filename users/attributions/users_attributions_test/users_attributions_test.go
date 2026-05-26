@@ -10,10 +10,10 @@ import (
 	os "os"
 	testing "testing"
 
-	kard "github.com/KardFinancial/kard-go-sdk/v6"
-	client "github.com/KardFinancial/kard-go-sdk/v6/client"
-	option "github.com/KardFinancial/kard-go-sdk/v6/option"
-	users "github.com/KardFinancial/kard-go-sdk/v6/users"
+	kard "github.com/KardFinancial/kard-go-sdk/v7"
+	client "github.com/KardFinancial/kard-go-sdk/v7/client"
+	option "github.com/KardFinancial/kard-go-sdk/v7/option"
+	users "github.com/KardFinancial/kard-go-sdk/v7/users"
 	require "github.com/stretchr/testify/require"
 )
 
@@ -192,4 +192,29 @@ func TestUsersAttributionsBoostWithWireMock(
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
 	VerifyRequestCount(t, "TestUsersAttributionsBoostWithWireMock", "POST", "/v2/issuers/organization-123/users/user-123/offers/offer-456/boost", nil, 1)
+}
+
+func TestUsersAttributionsActivatePlacementSlotWithWireMock(
+	t *testing.T,
+) {
+	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
+	if WireMockBaseURL == "" {
+		WireMockBaseURL = "http://localhost:8080"
+	}
+	client := client.NewClient(
+		option.WithBaseURL(WireMockBaseURL),
+	)
+	_, invocationErr := client.Users.Attributions.ActivatePlacementSlot(
+		context.TODO(),
+		"organization-123",
+		"user-123",
+		"018f8d6b-1abc-7def-9012-345678901234",
+		"slot-a",
+		option.WithHTTPHeader(
+			http.Header{"X-Test-Id": []string{"TestUsersAttributionsActivatePlacementSlotWithWireMock"}},
+		),
+	)
+
+	require.NoError(t, invocationErr, "Client method call should succeed")
+	VerifyRequestCount(t, "TestUsersAttributionsActivatePlacementSlotWithWireMock", "POST", "/v2/issuers/organization-123/users/user-123/placements/018f8d6b-1abc-7def-9012-345678901234/slot/slot-a/activate", nil, 1)
 }

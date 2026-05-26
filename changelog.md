@@ -1,3 +1,12 @@
+## v7.0.0 - 2026-05-26
+### Breaking Changes
+* **`CreateAttributionRequestUnionVisitor`** — a new `VisitPlacementSlotAttribution(*PlacementSlotAttributionRequest) error` method has been added to the interface; all existing implementations must add this method to continue compiling.
+### Added
+* **`Client.ActivatePlacementSlot`** and **`RawClient.ActivatePlacementSlot`** — new methods that call `POST /v2/issuers/{organizationId}/users/{userId}/placements/{placementId}/slot/{slotId}/activate` to record a slot-level activation event and fan out per-offer ACTIVATE events, returning the event ID and resolved offer IDs.
+* **`ActivatePlacementSlotResponse`**, **`ActivatePlacementSlotResponseData`**, and **`ActivatePlacementSlotResponseAttributes`** — new response structs for the slot activation endpoint, exposing `PlacementId`, `SlotId`, `EventCode`, `Medium`, `EventDate`, and `OfferIds`.
+* **`PlacementSlotAttributionRequest`**, **`PlacementSlotAttributionAttributes`**, and **`PlacementSlotMedium`** — new types supporting the `placementSlotAttribution` discriminant in `CreateAttributionRequestUnion`, with `PlacementSlotMediumCta` constant and `NewPlacementSlotMediumFromString` constructor.
+* **`AttributionState.PlacementId`** and **`AttributionState.SlotId`** — new optional fields (with `GetPlacementId`, `GetSlotId`, `SetPlacementId`, `SetSlotId` methods) to carry placement context on attribution state.
+
 ## v6.3.0 - 2026-05-26
 ### Added
 * **`GetBatchesByPlacementRequest`** — new request struct with an optional `SupportedComponents` query parameter for the batch-activation placement endpoint.

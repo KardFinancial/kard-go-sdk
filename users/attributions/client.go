@@ -6,11 +6,11 @@ import (
 	context "context"
 	os "os"
 
-	kard "github.com/KardFinancial/kard-go-sdk/v6"
-	core "github.com/KardFinancial/kard-go-sdk/v6/core"
-	internal "github.com/KardFinancial/kard-go-sdk/v6/internal"
-	option "github.com/KardFinancial/kard-go-sdk/v6/option"
-	users "github.com/KardFinancial/kard-go-sdk/v6/users"
+	kard "github.com/KardFinancial/kard-go-sdk/v7"
+	core "github.com/KardFinancial/kard-go-sdk/v7/core"
+	internal "github.com/KardFinancial/kard-go-sdk/v7/internal"
+	option "github.com/KardFinancial/kard-go-sdk/v7/option"
+	users "github.com/KardFinancial/kard-go-sdk/v7/users"
 )
 
 type Client struct {
@@ -106,6 +106,38 @@ func (c *Client) Boost(
 		userId,
 		offerId,
 		request,
+		opts...,
+	)
+	if err != nil {
+		return nil, err
+	}
+	return response.Body, nil
+}
+
+// Record when a user activates a batch-activation placement slot. Writes a slot-level
+// `placementSlotAttribution` ACTIVATE event and fans out a per-offer
+// `offerAttribution` ACTIVATE event for every offer resolved by the slot's content
+// strategy. The slot-level event id and the resolved `offerIds` are returned so the
+// partner can render the batch immediately without an extra `getBatchesByPlacement`
+// round-trip.
+//
+// <b>Required scopes:</b> `attributions:write`
+func (c *Client) ActivatePlacementSlot(
+	ctx context.Context,
+	organizationId kard.OrganizationId,
+	userId kard.UserId,
+	// Unique identifier of the placement (UUID v7)
+	placementId string,
+	// Stable identifier for the slot within the placement
+	slotId string,
+	opts ...option.RequestOption,
+) (*users.ActivatePlacementSlotResponse, error) {
+	response, err := c.WithRawResponse.ActivatePlacementSlot(
+		ctx,
+		organizationId,
+		userId,
+		placementId,
+		slotId,
 		opts...,
 	)
 	if err != nil {

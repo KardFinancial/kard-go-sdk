@@ -5,8 +5,8 @@ package users
 import (
 	json "encoding/json"
 	fmt "fmt"
-	kardgosdk "github.com/KardFinancial/kard-go-sdk/v6"
-	internal "github.com/KardFinancial/kard-go-sdk/v6/internal"
+	kardgosdk "github.com/KardFinancial/kard-go-sdk/v7"
+	internal "github.com/KardFinancial/kard-go-sdk/v7/internal"
 	big "math/big"
 	time "time"
 )
@@ -521,6 +521,385 @@ func (a *ActivateOfferResponseData) String() string {
 	return fmt.Sprintf("%#v", a)
 }
 
+// Ack payload for a slot activation request.
+var (
+	activatePlacementSlotResponseFieldData = big.NewInt(1 << 0)
+)
+
+type ActivatePlacementSlotResponse struct {
+	Data *ActivatePlacementSlotResponseData `json:"data" url:"data"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (a *ActivatePlacementSlotResponse) GetData() *ActivatePlacementSlotResponseData {
+	if a == nil {
+		return nil
+	}
+	return a.Data
+}
+
+func (a *ActivatePlacementSlotResponse) GetExtraProperties() map[string]interface{} {
+	if a == nil {
+		return nil
+	}
+	return a.extraProperties
+}
+
+func (a *ActivatePlacementSlotResponse) require(field *big.Int) {
+	if a.explicitFields == nil {
+		a.explicitFields = big.NewInt(0)
+	}
+	a.explicitFields.Or(a.explicitFields, field)
+}
+
+// SetData sets the Data field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *ActivatePlacementSlotResponse) SetData(data *ActivatePlacementSlotResponseData) {
+	a.Data = data
+	a.require(activatePlacementSlotResponseFieldData)
+}
+
+func (a *ActivatePlacementSlotResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler ActivatePlacementSlotResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*a = ActivatePlacementSlotResponse(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *a)
+	if err != nil {
+		return err
+	}
+	a.extraProperties = extraProperties
+	a.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (a *ActivatePlacementSlotResponse) MarshalJSON() ([]byte, error) {
+	type embed ActivatePlacementSlotResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*a),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, a.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (a *ActivatePlacementSlotResponse) String() string {
+	if a == nil {
+		return "<nil>"
+	}
+	if len(a.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(a.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(a); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", a)
+}
+
+var (
+	activatePlacementSlotResponseAttributesFieldPlacementId = big.NewInt(1 << 0)
+	activatePlacementSlotResponseAttributesFieldSlotId      = big.NewInt(1 << 1)
+	activatePlacementSlotResponseAttributesFieldEventCode   = big.NewInt(1 << 2)
+	activatePlacementSlotResponseAttributesFieldMedium      = big.NewInt(1 << 3)
+	activatePlacementSlotResponseAttributesFieldEventDate   = big.NewInt(1 << 4)
+	activatePlacementSlotResponseAttributesFieldOfferIds    = big.NewInt(1 << 5)
+)
+
+type ActivatePlacementSlotResponseAttributes struct {
+	// Unique identifier of the placement
+	PlacementId string `json:"placementId" url:"placementId"`
+	// Stable identifier for the slot within the placement
+	SlotId    string    `json:"slotId" url:"slotId"`
+	EventCode string    `json:"eventCode" url:"eventCode"`
+	Medium    string    `json:"medium" url:"medium"`
+	EventDate time.Time `json:"eventDate" url:"eventDate"`
+	// All offer IDs that resolved under the slot's content strategy and had
+	// per-offer `offerAttribution` ACTIVATE events written. The partner can use
+	// this to render the batch immediately without an extra round-trip.
+	OfferIds []string `json:"offerIds" url:"offerIds"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (a *ActivatePlacementSlotResponseAttributes) GetPlacementId() string {
+	if a == nil {
+		return ""
+	}
+	return a.PlacementId
+}
+
+func (a *ActivatePlacementSlotResponseAttributes) GetSlotId() string {
+	if a == nil {
+		return ""
+	}
+	return a.SlotId
+}
+
+func (a *ActivatePlacementSlotResponseAttributes) GetEventCode() string {
+	if a == nil {
+		return ""
+	}
+	return a.EventCode
+}
+
+func (a *ActivatePlacementSlotResponseAttributes) GetMedium() string {
+	if a == nil {
+		return ""
+	}
+	return a.Medium
+}
+
+func (a *ActivatePlacementSlotResponseAttributes) GetEventDate() time.Time {
+	if a == nil {
+		return time.Time{}
+	}
+	return a.EventDate
+}
+
+func (a *ActivatePlacementSlotResponseAttributes) GetOfferIds() []string {
+	if a == nil {
+		return nil
+	}
+	return a.OfferIds
+}
+
+func (a *ActivatePlacementSlotResponseAttributes) GetExtraProperties() map[string]interface{} {
+	if a == nil {
+		return nil
+	}
+	return a.extraProperties
+}
+
+func (a *ActivatePlacementSlotResponseAttributes) require(field *big.Int) {
+	if a.explicitFields == nil {
+		a.explicitFields = big.NewInt(0)
+	}
+	a.explicitFields.Or(a.explicitFields, field)
+}
+
+// SetPlacementId sets the PlacementId field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *ActivatePlacementSlotResponseAttributes) SetPlacementId(placementId string) {
+	a.PlacementId = placementId
+	a.require(activatePlacementSlotResponseAttributesFieldPlacementId)
+}
+
+// SetSlotId sets the SlotId field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *ActivatePlacementSlotResponseAttributes) SetSlotId(slotId string) {
+	a.SlotId = slotId
+	a.require(activatePlacementSlotResponseAttributesFieldSlotId)
+}
+
+// SetEventCode sets the EventCode field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *ActivatePlacementSlotResponseAttributes) SetEventCode(eventCode string) {
+	a.EventCode = eventCode
+	a.require(activatePlacementSlotResponseAttributesFieldEventCode)
+}
+
+// SetMedium sets the Medium field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *ActivatePlacementSlotResponseAttributes) SetMedium(medium string) {
+	a.Medium = medium
+	a.require(activatePlacementSlotResponseAttributesFieldMedium)
+}
+
+// SetEventDate sets the EventDate field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *ActivatePlacementSlotResponseAttributes) SetEventDate(eventDate time.Time) {
+	a.EventDate = eventDate
+	a.require(activatePlacementSlotResponseAttributesFieldEventDate)
+}
+
+// SetOfferIds sets the OfferIds field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *ActivatePlacementSlotResponseAttributes) SetOfferIds(offerIds []string) {
+	a.OfferIds = offerIds
+	a.require(activatePlacementSlotResponseAttributesFieldOfferIds)
+}
+
+func (a *ActivatePlacementSlotResponseAttributes) UnmarshalJSON(data []byte) error {
+	type embed ActivatePlacementSlotResponseAttributes
+	var unmarshaler = struct {
+		embed
+		EventDate *internal.DateTime `json:"eventDate"`
+	}{
+		embed: embed(*a),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*a = ActivatePlacementSlotResponseAttributes(unmarshaler.embed)
+	a.EventDate = unmarshaler.EventDate.Time()
+	extraProperties, err := internal.ExtractExtraProperties(data, *a)
+	if err != nil {
+		return err
+	}
+	a.extraProperties = extraProperties
+	a.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (a *ActivatePlacementSlotResponseAttributes) MarshalJSON() ([]byte, error) {
+	type embed ActivatePlacementSlotResponseAttributes
+	var marshaler = struct {
+		embed
+		EventDate *internal.DateTime `json:"eventDate"`
+	}{
+		embed:     embed(*a),
+		EventDate: internal.NewDateTime(a.EventDate),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, a.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (a *ActivatePlacementSlotResponseAttributes) String() string {
+	if a == nil {
+		return "<nil>"
+	}
+	if len(a.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(a.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(a); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", a)
+}
+
+var (
+	activatePlacementSlotResponseDataFieldType       = big.NewInt(1 << 0)
+	activatePlacementSlotResponseDataFieldId         = big.NewInt(1 << 1)
+	activatePlacementSlotResponseDataFieldAttributes = big.NewInt(1 << 2)
+)
+
+type ActivatePlacementSlotResponseData struct {
+	Type string `json:"type" url:"type"`
+	// The slot-level attribution event id
+	Id         string                                   `json:"id" url:"id"`
+	Attributes *ActivatePlacementSlotResponseAttributes `json:"attributes" url:"attributes"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (a *ActivatePlacementSlotResponseData) GetType() string {
+	if a == nil {
+		return ""
+	}
+	return a.Type
+}
+
+func (a *ActivatePlacementSlotResponseData) GetId() string {
+	if a == nil {
+		return ""
+	}
+	return a.Id
+}
+
+func (a *ActivatePlacementSlotResponseData) GetAttributes() *ActivatePlacementSlotResponseAttributes {
+	if a == nil {
+		return nil
+	}
+	return a.Attributes
+}
+
+func (a *ActivatePlacementSlotResponseData) GetExtraProperties() map[string]interface{} {
+	if a == nil {
+		return nil
+	}
+	return a.extraProperties
+}
+
+func (a *ActivatePlacementSlotResponseData) require(field *big.Int) {
+	if a.explicitFields == nil {
+		a.explicitFields = big.NewInt(0)
+	}
+	a.explicitFields.Or(a.explicitFields, field)
+}
+
+// SetType sets the Type field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *ActivatePlacementSlotResponseData) SetType(type_ string) {
+	a.Type = type_
+	a.require(activatePlacementSlotResponseDataFieldType)
+}
+
+// SetId sets the Id field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *ActivatePlacementSlotResponseData) SetId(id string) {
+	a.Id = id
+	a.require(activatePlacementSlotResponseDataFieldId)
+}
+
+// SetAttributes sets the Attributes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *ActivatePlacementSlotResponseData) SetAttributes(attributes *ActivatePlacementSlotResponseAttributes) {
+	a.Attributes = attributes
+	a.require(activatePlacementSlotResponseDataFieldAttributes)
+}
+
+func (a *ActivatePlacementSlotResponseData) UnmarshalJSON(data []byte) error {
+	type unmarshaler ActivatePlacementSlotResponseData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*a = ActivatePlacementSlotResponseData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *a)
+	if err != nil {
+		return err
+	}
+	a.extraProperties = extraProperties
+	a.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (a *ActivatePlacementSlotResponseData) MarshalJSON() ([]byte, error) {
+	type embed ActivatePlacementSlotResponseData
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*a),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, a.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (a *ActivatePlacementSlotResponseData) String() string {
+	if a == nil {
+		return "<nil>"
+	}
+	if len(a.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(a.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(a); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", a)
+}
+
 var (
 	attributionFilterFieldName  = big.NewInt(1 << 0)
 	attributionFilterFieldValue = big.NewInt(1 << 1)
@@ -622,8 +1001,10 @@ func (a *AttributionFilter) String() string {
 }
 
 var (
-	attributionStateFieldRank    = big.NewInt(1 << 0)
-	attributionStateFieldFilters = big.NewInt(1 << 1)
+	attributionStateFieldRank        = big.NewInt(1 << 0)
+	attributionStateFieldFilters     = big.NewInt(1 << 1)
+	attributionStateFieldPlacementId = big.NewInt(1 << 2)
+	attributionStateFieldSlotId      = big.NewInt(1 << 3)
 )
 
 type AttributionState struct {
@@ -631,6 +1012,10 @@ type AttributionState struct {
 	Rank *int `json:"rank,omitempty" url:"rank,omitempty"`
 	// The active filters when the user saw the offer
 	Filters []*AttributionFilter `json:"filters,omitempty" url:"filters,omitempty"`
+	// Unique identifier of the placement the attribution event originated from
+	PlacementId *string `json:"placementId,omitempty" url:"placementId,omitempty"`
+	// Stable identifier for the slot within the placement
+	SlotId *string `json:"slotId,omitempty" url:"slotId,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -651,6 +1036,20 @@ func (a *AttributionState) GetFilters() []*AttributionFilter {
 		return nil
 	}
 	return a.Filters
+}
+
+func (a *AttributionState) GetPlacementId() *string {
+	if a == nil {
+		return nil
+	}
+	return a.PlacementId
+}
+
+func (a *AttributionState) GetSlotId() *string {
+	if a == nil {
+		return nil
+	}
+	return a.SlotId
 }
 
 func (a *AttributionState) GetExtraProperties() map[string]interface{} {
@@ -679,6 +1078,20 @@ func (a *AttributionState) SetRank(rank *int) {
 func (a *AttributionState) SetFilters(filters []*AttributionFilter) {
 	a.Filters = filters
 	a.require(attributionStateFieldFilters)
+}
+
+// SetPlacementId sets the PlacementId field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *AttributionState) SetPlacementId(placementId *string) {
+	a.PlacementId = placementId
+	a.require(attributionStateFieldPlacementId)
+}
+
+// SetSlotId sets the SlotId field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *AttributionState) SetSlotId(slotId *string) {
+	a.SlotId = slotId
+	a.require(attributionStateFieldSlotId)
 }
 
 func (a *AttributionState) UnmarshalJSON(data []byte) error {
@@ -1250,9 +1663,10 @@ func (c *CreateAttributionRequestObject) String() string {
 }
 
 type CreateAttributionRequestUnion struct {
-	Type                    string
-	OfferAttribution        *OfferAttributionRequest
-	NotificationAttribution *NotificationAttributionRequest
+	Type                     string
+	OfferAttribution         *OfferAttributionRequest
+	NotificationAttribution  *NotificationAttributionRequest
+	PlacementSlotAttribution *PlacementSlotAttributionRequest
 }
 
 func (c *CreateAttributionRequestUnion) GetType() string {
@@ -1274,6 +1688,13 @@ func (c *CreateAttributionRequestUnion) GetNotificationAttribution() *Notificati
 		return nil
 	}
 	return c.NotificationAttribution
+}
+
+func (c *CreateAttributionRequestUnion) GetPlacementSlotAttribution() *PlacementSlotAttributionRequest {
+	if c == nil {
+		return nil
+	}
+	return c.PlacementSlotAttribution
 }
 
 func (c *CreateAttributionRequestUnion) UnmarshalJSON(data []byte) error {
@@ -1300,6 +1721,12 @@ func (c *CreateAttributionRequestUnion) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		c.NotificationAttribution = value
+	case "placementSlotAttribution":
+		value := new(PlacementSlotAttributionRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		c.PlacementSlotAttribution = value
 	}
 	return nil
 }
@@ -1314,12 +1741,16 @@ func (c CreateAttributionRequestUnion) MarshalJSON() ([]byte, error) {
 	if c.NotificationAttribution != nil {
 		return internal.MarshalJSONWithExtraProperty(c.NotificationAttribution, "type", "notificationAttribution")
 	}
+	if c.PlacementSlotAttribution != nil {
+		return internal.MarshalJSONWithExtraProperty(c.PlacementSlotAttribution, "type", "placementSlotAttribution")
+	}
 	return nil, fmt.Errorf("type %T does not define a non-empty union type", c)
 }
 
 type CreateAttributionRequestUnionVisitor interface {
 	VisitOfferAttribution(*OfferAttributionRequest) error
 	VisitNotificationAttribution(*NotificationAttributionRequest) error
+	VisitPlacementSlotAttribution(*PlacementSlotAttributionRequest) error
 }
 
 func (c *CreateAttributionRequestUnion) Accept(visitor CreateAttributionRequestUnionVisitor) error {
@@ -1328,6 +1759,9 @@ func (c *CreateAttributionRequestUnion) Accept(visitor CreateAttributionRequestU
 	}
 	if c.NotificationAttribution != nil {
 		return visitor.VisitNotificationAttribution(c.NotificationAttribution)
+	}
+	if c.PlacementSlotAttribution != nil {
+		return visitor.VisitPlacementSlotAttribution(c.PlacementSlotAttribution)
 	}
 	return fmt.Errorf("type %T does not define a non-empty union type", c)
 }
@@ -1342,6 +1776,9 @@ func (c *CreateAttributionRequestUnion) validate() error {
 	}
 	if c.NotificationAttribution != nil {
 		fields = append(fields, "notificationAttribution")
+	}
+	if c.PlacementSlotAttribution != nil {
+		fields = append(fields, "placementSlotAttribution")
 	}
 	if len(fields) == 0 {
 		if c.Type != "" {
@@ -2017,4 +2454,271 @@ func NewOfferMediumFromString(s string) (OfferMedium, error) {
 
 func (o OfferMedium) Ptr() *OfferMedium {
 	return &o
+}
+
+// Attributes for a slot-level activation event on a batch-activation placement.
+// A slot activation also writes per-offer `offerAttribution` ACTIVATE events for
+// every offer resolved by the slot's content strategy (see `ActivatePlacementSlot`).
+var (
+	placementSlotAttributionAttributesFieldEntityId  = big.NewInt(1 << 0)
+	placementSlotAttributionAttributesFieldEventCode = big.NewInt(1 << 1)
+	placementSlotAttributionAttributesFieldMedium    = big.NewInt(1 << 2)
+	placementSlotAttributionAttributesFieldEventDate = big.NewInt(1 << 3)
+	placementSlotAttributionAttributesFieldState     = big.NewInt(1 << 4)
+)
+
+type PlacementSlotAttributionAttributes struct {
+	// The slot ID (matches `state.slotId`)
+	EntityId  string              `json:"entityId" url:"entityId"`
+	EventCode EventCode           `json:"eventCode" url:"eventCode"`
+	Medium    PlacementSlotMedium `json:"medium" url:"medium"`
+	// The timestamp of the attribution event.
+	// Must be in ISO 8601 format (e.g., "2025-01-01T00:00:00Z").
+	EventDate time.Time `json:"eventDate" url:"eventDate"`
+	// Placement context for the attribution event
+	State *AttributionState `json:"state,omitempty" url:"state,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PlacementSlotAttributionAttributes) GetEntityId() string {
+	if p == nil {
+		return ""
+	}
+	return p.EntityId
+}
+
+func (p *PlacementSlotAttributionAttributes) GetEventCode() EventCode {
+	if p == nil {
+		return ""
+	}
+	return p.EventCode
+}
+
+func (p *PlacementSlotAttributionAttributes) GetMedium() PlacementSlotMedium {
+	if p == nil {
+		return ""
+	}
+	return p.Medium
+}
+
+func (p *PlacementSlotAttributionAttributes) GetEventDate() time.Time {
+	if p == nil {
+		return time.Time{}
+	}
+	return p.EventDate
+}
+
+func (p *PlacementSlotAttributionAttributes) GetState() *AttributionState {
+	if p == nil {
+		return nil
+	}
+	return p.State
+}
+
+func (p *PlacementSlotAttributionAttributes) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *PlacementSlotAttributionAttributes) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetEntityId sets the EntityId field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlacementSlotAttributionAttributes) SetEntityId(entityId string) {
+	p.EntityId = entityId
+	p.require(placementSlotAttributionAttributesFieldEntityId)
+}
+
+// SetEventCode sets the EventCode field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlacementSlotAttributionAttributes) SetEventCode(eventCode EventCode) {
+	p.EventCode = eventCode
+	p.require(placementSlotAttributionAttributesFieldEventCode)
+}
+
+// SetMedium sets the Medium field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlacementSlotAttributionAttributes) SetMedium(medium PlacementSlotMedium) {
+	p.Medium = medium
+	p.require(placementSlotAttributionAttributesFieldMedium)
+}
+
+// SetEventDate sets the EventDate field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlacementSlotAttributionAttributes) SetEventDate(eventDate time.Time) {
+	p.EventDate = eventDate
+	p.require(placementSlotAttributionAttributesFieldEventDate)
+}
+
+// SetState sets the State field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlacementSlotAttributionAttributes) SetState(state *AttributionState) {
+	p.State = state
+	p.require(placementSlotAttributionAttributesFieldState)
+}
+
+func (p *PlacementSlotAttributionAttributes) UnmarshalJSON(data []byte) error {
+	type embed PlacementSlotAttributionAttributes
+	var unmarshaler = struct {
+		embed
+		EventDate *internal.DateTime `json:"eventDate"`
+	}{
+		embed: embed(*p),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*p = PlacementSlotAttributionAttributes(unmarshaler.embed)
+	p.EventDate = unmarshaler.EventDate.Time()
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PlacementSlotAttributionAttributes) MarshalJSON() ([]byte, error) {
+	type embed PlacementSlotAttributionAttributes
+	var marshaler = struct {
+		embed
+		EventDate *internal.DateTime `json:"eventDate"`
+	}{
+		embed:     embed(*p),
+		EventDate: internal.NewDateTime(p.EventDate),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *PlacementSlotAttributionAttributes) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+var (
+	placementSlotAttributionRequestFieldAttributes = big.NewInt(1 << 0)
+)
+
+type PlacementSlotAttributionRequest struct {
+	Attributes *PlacementSlotAttributionAttributes `json:"attributes" url:"attributes"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PlacementSlotAttributionRequest) GetAttributes() *PlacementSlotAttributionAttributes {
+	if p == nil {
+		return nil
+	}
+	return p.Attributes
+}
+
+func (p *PlacementSlotAttributionRequest) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *PlacementSlotAttributionRequest) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetAttributes sets the Attributes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlacementSlotAttributionRequest) SetAttributes(attributes *PlacementSlotAttributionAttributes) {
+	p.Attributes = attributes
+	p.require(placementSlotAttributionRequestFieldAttributes)
+}
+
+func (p *PlacementSlotAttributionRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler PlacementSlotAttributionRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PlacementSlotAttributionRequest(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PlacementSlotAttributionRequest) MarshalJSON() ([]byte, error) {
+	type embed PlacementSlotAttributionRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *PlacementSlotAttributionRequest) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+// Where the placement-slot attribution event is taking place in your rewards experience.
+type PlacementSlotMedium string
+
+const (
+	PlacementSlotMediumCta PlacementSlotMedium = "CTA"
+)
+
+func NewPlacementSlotMediumFromString(s string) (PlacementSlotMedium, error) {
+	switch s {
+	case "CTA":
+		return PlacementSlotMediumCta, nil
+	}
+	var t PlacementSlotMedium
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (p PlacementSlotMedium) Ptr() *PlacementSlotMedium {
+	return &p
 }

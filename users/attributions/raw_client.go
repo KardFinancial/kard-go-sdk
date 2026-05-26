@@ -6,11 +6,11 @@ import (
 	context "context"
 	http "net/http"
 
-	kard "github.com/KardFinancial/kard-go-sdk/v6"
-	core "github.com/KardFinancial/kard-go-sdk/v6/core"
-	internal "github.com/KardFinancial/kard-go-sdk/v6/internal"
-	option "github.com/KardFinancial/kard-go-sdk/v6/option"
-	users "github.com/KardFinancial/kard-go-sdk/v6/users"
+	kard "github.com/KardFinancial/kard-go-sdk/v7"
+	core "github.com/KardFinancial/kard-go-sdk/v7/core"
+	internal "github.com/KardFinancial/kard-go-sdk/v7/internal"
+	option "github.com/KardFinancial/kard-go-sdk/v7/option"
+	users "github.com/KardFinancial/kard-go-sdk/v7/users"
 )
 
 type RawClient struct {
@@ -188,6 +188,58 @@ func (r *RawClient) Boost(
 		return nil, err
 	}
 	return &core.Response[*users.BoostOfferResponse]{
+		StatusCode: raw.StatusCode,
+		Header:     raw.Header,
+		Body:       response,
+	}, nil
+}
+
+func (r *RawClient) ActivatePlacementSlot(
+	ctx context.Context,
+	organizationId kard.OrganizationId,
+	userId kard.UserId,
+	// Unique identifier of the placement (UUID v7)
+	placementId string,
+	// Stable identifier for the slot within the placement
+	slotId string,
+	opts ...option.RequestOption,
+) (*core.Response[*users.ActivatePlacementSlotResponse], error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		r.baseURL,
+		"https://rewards-api.getkard.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/issuers/%v/users/%v/placements/%v/slot/%v/activate",
+		organizationId,
+		userId,
+		placementId,
+		slotId,
+	)
+	headers := internal.MergeHeaders(
+		r.options.ToHeader(),
+		options.ToHeader(),
+	)
+	var response *users.ActivatePlacementSlotResponse
+	raw, err := r.caller.Call(
+		ctx,
+		&internal.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodPost,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Response:        &response,
+			ErrorDecoder:    internal.NewErrorDecoder(users.ErrorCodes),
+		},
+	)
+	if err != nil {
+		return nil, err
+	}
+	return &core.Response[*users.ActivatePlacementSlotResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

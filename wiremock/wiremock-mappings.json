@@ -1130,6 +1130,46 @@
       }
     },
     {
+      "id": "6ed4eb59-d36e-4baf-ac1e-b503a9b251d6",
+      "name": "Activate Placement Slot - default",
+      "request": {
+        "urlPathTemplate": "/v2/issuers/{organizationId}/users/{userId}/placements/{placementId}/slot/{slotId}/activate",
+        "method": "POST",
+        "pathParameters": {
+          "organizationId": {
+            "equalTo": "organization-123"
+          },
+          "userId": {
+            "equalTo": "user-123"
+          },
+          "placementId": {
+            "equalTo": "018f8d6b-1abc-7def-9012-345678901234"
+          },
+          "slotId": {
+            "equalTo": "slot-a"
+          }
+        }
+      },
+      "response": {
+        "status": 201,
+        "body": "{\n  \"data\": {\n    \"type\": \"placementSlotAttribution\",\n    \"id\": \"c94a93a7-beb9-4e58-960c-2c812f849398\",\n    \"attributes\": {\n      \"placementId\": \"018f8d6b-1abc-7def-9012-345678901234\",\n      \"slotId\": \"slot-a\",\n      \"eventCode\": \"ACTIVATE\",\n      \"medium\": \"CTA\",\n      \"eventDate\": \"2025-01-01T00:00:00Z\",\n      \"offerIds\": [\n        \"offer-1\",\n        \"offer-2\",\n        \"offer-3\"\n      ]\n    }\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "6ed4eb59-d36e-4baf-ac1e-b503a9b251d6",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
       "id": "1d2f34d1-2936-42c0-b976-f4438e821a42",
       "name": "Get WebView Token - default",
       "request": {
@@ -1443,6 +1483,6 @@
     }
   ],
   "meta": {
-    "total": 42
+    "total": 43
   }
 }

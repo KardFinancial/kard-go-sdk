@@ -112,6 +112,365 @@ func (l *ListPlacementsRequest) SetPageSize(pageSize *int) {
 	l.require(listPlacementsRequestFieldPageSize)
 }
 
+// Attributes for a batch-activation placement
+var (
+	batchActivationPlacementAttributesFieldName            = big.NewInt(1 << 0)
+	batchActivationPlacementAttributesFieldOrganizationId  = big.NewInt(1 << 1)
+	batchActivationPlacementAttributesFieldRefreshInterval = big.NewInt(1 << 2)
+	batchActivationPlacementAttributesFieldSlots           = big.NewInt(1 << 3)
+)
+
+type BatchActivationPlacementAttributes struct {
+	// Name of the placement
+	Name string `json:"name" url:"name"`
+	// ID of the organization this placement belongs to
+	OrganizationId string `json:"organizationId" url:"organizationId"`
+	// ISO-8601 duration that controls how often the activation cohort refreshes (e.g. "P7D" for weekly).
+	RefreshInterval string `json:"refreshInterval" url:"refreshInterval"`
+	// Slots that make up the activation cohort
+	Slots []*BatchActivationSlot `json:"slots" url:"slots"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (b *BatchActivationPlacementAttributes) GetName() string {
+	if b == nil {
+		return ""
+	}
+	return b.Name
+}
+
+func (b *BatchActivationPlacementAttributes) GetOrganizationId() string {
+	if b == nil {
+		return ""
+	}
+	return b.OrganizationId
+}
+
+func (b *BatchActivationPlacementAttributes) GetRefreshInterval() string {
+	if b == nil {
+		return ""
+	}
+	return b.RefreshInterval
+}
+
+func (b *BatchActivationPlacementAttributes) GetSlots() []*BatchActivationSlot {
+	if b == nil {
+		return nil
+	}
+	return b.Slots
+}
+
+func (b *BatchActivationPlacementAttributes) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
+	return b.extraProperties
+}
+
+func (b *BatchActivationPlacementAttributes) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetName sets the Name field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchActivationPlacementAttributes) SetName(name string) {
+	b.Name = name
+	b.require(batchActivationPlacementAttributesFieldName)
+}
+
+// SetOrganizationId sets the OrganizationId field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchActivationPlacementAttributes) SetOrganizationId(organizationId string) {
+	b.OrganizationId = organizationId
+	b.require(batchActivationPlacementAttributesFieldOrganizationId)
+}
+
+// SetRefreshInterval sets the RefreshInterval field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchActivationPlacementAttributes) SetRefreshInterval(refreshInterval string) {
+	b.RefreshInterval = refreshInterval
+	b.require(batchActivationPlacementAttributesFieldRefreshInterval)
+}
+
+// SetSlots sets the Slots field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchActivationPlacementAttributes) SetSlots(slots []*BatchActivationSlot) {
+	b.Slots = slots
+	b.require(batchActivationPlacementAttributesFieldSlots)
+}
+
+func (b *BatchActivationPlacementAttributes) UnmarshalJSON(data []byte) error {
+	type unmarshaler BatchActivationPlacementAttributes
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BatchActivationPlacementAttributes(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+	b.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BatchActivationPlacementAttributes) MarshalJSON() ([]byte, error) {
+	type embed BatchActivationPlacementAttributes
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (b *BatchActivationPlacementAttributes) String() string {
+	if b == nil {
+		return "<nil>"
+	}
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Batch-activation placement resource data
+var (
+	batchActivationPlacementDataFieldId         = big.NewInt(1 << 0)
+	batchActivationPlacementDataFieldAttributes = big.NewInt(1 << 1)
+)
+
+type BatchActivationPlacementData struct {
+	// Unique identifier of the placement (UUID v7)
+	Id         string                              `json:"id" url:"id"`
+	Attributes *BatchActivationPlacementAttributes `json:"attributes" url:"attributes"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (b *BatchActivationPlacementData) GetId() string {
+	if b == nil {
+		return ""
+	}
+	return b.Id
+}
+
+func (b *BatchActivationPlacementData) GetAttributes() *BatchActivationPlacementAttributes {
+	if b == nil {
+		return nil
+	}
+	return b.Attributes
+}
+
+func (b *BatchActivationPlacementData) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
+	return b.extraProperties
+}
+
+func (b *BatchActivationPlacementData) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetId sets the Id field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchActivationPlacementData) SetId(id string) {
+	b.Id = id
+	b.require(batchActivationPlacementDataFieldId)
+}
+
+// SetAttributes sets the Attributes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchActivationPlacementData) SetAttributes(attributes *BatchActivationPlacementAttributes) {
+	b.Attributes = attributes
+	b.require(batchActivationPlacementDataFieldAttributes)
+}
+
+func (b *BatchActivationPlacementData) UnmarshalJSON(data []byte) error {
+	type unmarshaler BatchActivationPlacementData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BatchActivationPlacementData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+	b.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BatchActivationPlacementData) MarshalJSON() ([]byte, error) {
+	type embed BatchActivationPlacementData
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (b *BatchActivationPlacementData) String() string {
+	if b == nil {
+		return "<nil>"
+	}
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// A slot within a batch-activation placement
+var (
+	batchActivationSlotFieldSlotId            = big.NewInt(1 << 0)
+	batchActivationSlotFieldContentStrategyId = big.NewInt(1 << 1)
+	batchActivationSlotFieldAlias             = big.NewInt(1 << 2)
+)
+
+type BatchActivationSlot struct {
+	// Stable identifier for the slot within the placement
+	SlotId string `json:"slotId" url:"slotId"`
+	// ID of the content strategy linked to this slot
+	ContentStrategyId string `json:"contentStrategyId" url:"contentStrategyId"`
+	// Customer-defined alias for the slot, unique within the placement
+	Alias string `json:"alias" url:"alias"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (b *BatchActivationSlot) GetSlotId() string {
+	if b == nil {
+		return ""
+	}
+	return b.SlotId
+}
+
+func (b *BatchActivationSlot) GetContentStrategyId() string {
+	if b == nil {
+		return ""
+	}
+	return b.ContentStrategyId
+}
+
+func (b *BatchActivationSlot) GetAlias() string {
+	if b == nil {
+		return ""
+	}
+	return b.Alias
+}
+
+func (b *BatchActivationSlot) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
+	return b.extraProperties
+}
+
+func (b *BatchActivationSlot) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetSlotId sets the SlotId field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchActivationSlot) SetSlotId(slotId string) {
+	b.SlotId = slotId
+	b.require(batchActivationSlotFieldSlotId)
+}
+
+// SetContentStrategyId sets the ContentStrategyId field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchActivationSlot) SetContentStrategyId(contentStrategyId string) {
+	b.ContentStrategyId = contentStrategyId
+	b.require(batchActivationSlotFieldContentStrategyId)
+}
+
+// SetAlias sets the Alias field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchActivationSlot) SetAlias(alias string) {
+	b.Alias = alias
+	b.require(batchActivationSlotFieldAlias)
+}
+
+func (b *BatchActivationSlot) UnmarshalJSON(data []byte) error {
+	type unmarshaler BatchActivationSlot
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BatchActivationSlot(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+	b.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BatchActivationSlot) MarshalJSON() ([]byte, error) {
+	type embed BatchActivationSlot
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (b *BatchActivationSlot) String() string {
+	if b == nil {
+		return "<nil>"
+	}
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
 // Cadence schedule for push notification placements
 var (
 	cadenceFieldFrequency  = big.NewInt(1 << 0)
@@ -273,6 +632,315 @@ func NewCadenceFrequencyFromString(s string) (CadenceFrequency, error) {
 
 func (c CadenceFrequency) Ptr() *CadenceFrequency {
 	return &c
+}
+
+// Attributes for creating a batch-activation placement
+var (
+	createBatchActivationAttributesFieldName            = big.NewInt(1 << 0)
+	createBatchActivationAttributesFieldRefreshInterval = big.NewInt(1 << 1)
+	createBatchActivationAttributesFieldSlots           = big.NewInt(1 << 2)
+)
+
+type CreateBatchActivationAttributes struct {
+	// Name of the placement
+	Name string `json:"name" url:"name"`
+	// ISO-8601 duration controlling how often the activation cohort refreshes
+	RefreshInterval string `json:"refreshInterval" url:"refreshInterval"`
+	// Slots that make up the activation cohort
+	Slots []*CreateBatchActivationSlot `json:"slots" url:"slots"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CreateBatchActivationAttributes) GetName() string {
+	if c == nil {
+		return ""
+	}
+	return c.Name
+}
+
+func (c *CreateBatchActivationAttributes) GetRefreshInterval() string {
+	if c == nil {
+		return ""
+	}
+	return c.RefreshInterval
+}
+
+func (c *CreateBatchActivationAttributes) GetSlots() []*CreateBatchActivationSlot {
+	if c == nil {
+		return nil
+	}
+	return c.Slots
+}
+
+func (c *CreateBatchActivationAttributes) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
+	return c.extraProperties
+}
+
+func (c *CreateBatchActivationAttributes) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetName sets the Name field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateBatchActivationAttributes) SetName(name string) {
+	c.Name = name
+	c.require(createBatchActivationAttributesFieldName)
+}
+
+// SetRefreshInterval sets the RefreshInterval field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateBatchActivationAttributes) SetRefreshInterval(refreshInterval string) {
+	c.RefreshInterval = refreshInterval
+	c.require(createBatchActivationAttributesFieldRefreshInterval)
+}
+
+// SetSlots sets the Slots field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateBatchActivationAttributes) SetSlots(slots []*CreateBatchActivationSlot) {
+	c.Slots = slots
+	c.require(createBatchActivationAttributesFieldSlots)
+}
+
+func (c *CreateBatchActivationAttributes) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateBatchActivationAttributes
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CreateBatchActivationAttributes(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CreateBatchActivationAttributes) MarshalJSON() ([]byte, error) {
+	type embed CreateBatchActivationAttributes
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (c *CreateBatchActivationAttributes) String() string {
+	if c == nil {
+		return "<nil>"
+	}
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Data for creating a batch-activation placement
+var (
+	createBatchActivationPlacementDataFieldAttributes = big.NewInt(1 << 0)
+)
+
+type CreateBatchActivationPlacementData struct {
+	// Batch-activation placement attributes for creation
+	Attributes *CreateBatchActivationAttributes `json:"attributes" url:"attributes"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CreateBatchActivationPlacementData) GetAttributes() *CreateBatchActivationAttributes {
+	if c == nil {
+		return nil
+	}
+	return c.Attributes
+}
+
+func (c *CreateBatchActivationPlacementData) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
+	return c.extraProperties
+}
+
+func (c *CreateBatchActivationPlacementData) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetAttributes sets the Attributes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateBatchActivationPlacementData) SetAttributes(attributes *CreateBatchActivationAttributes) {
+	c.Attributes = attributes
+	c.require(createBatchActivationPlacementDataFieldAttributes)
+}
+
+func (c *CreateBatchActivationPlacementData) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateBatchActivationPlacementData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CreateBatchActivationPlacementData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CreateBatchActivationPlacementData) MarshalJSON() ([]byte, error) {
+	type embed CreateBatchActivationPlacementData
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (c *CreateBatchActivationPlacementData) String() string {
+	if c == nil {
+		return "<nil>"
+	}
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// A slot in a batch-activation placement at creation time
+var (
+	createBatchActivationSlotFieldContentStrategyId = big.NewInt(1 << 0)
+	createBatchActivationSlotFieldAlias             = big.NewInt(1 << 1)
+)
+
+type CreateBatchActivationSlot struct {
+	// ID of the content strategy that fills this slot
+	ContentStrategyId string `json:"contentStrategyId" url:"contentStrategyId"`
+	// Customer-defined alias for the slot, unique within the placement
+	Alias string `json:"alias" url:"alias"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CreateBatchActivationSlot) GetContentStrategyId() string {
+	if c == nil {
+		return ""
+	}
+	return c.ContentStrategyId
+}
+
+func (c *CreateBatchActivationSlot) GetAlias() string {
+	if c == nil {
+		return ""
+	}
+	return c.Alias
+}
+
+func (c *CreateBatchActivationSlot) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
+	return c.extraProperties
+}
+
+func (c *CreateBatchActivationSlot) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetContentStrategyId sets the ContentStrategyId field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateBatchActivationSlot) SetContentStrategyId(contentStrategyId string) {
+	c.ContentStrategyId = contentStrategyId
+	c.require(createBatchActivationSlotFieldContentStrategyId)
+}
+
+// SetAlias sets the Alias field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateBatchActivationSlot) SetAlias(alias string) {
+	c.Alias = alias
+	c.require(createBatchActivationSlotFieldAlias)
+}
+
+func (c *CreateBatchActivationSlot) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateBatchActivationSlot
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CreateBatchActivationSlot(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CreateBatchActivationSlot) MarshalJSON() ([]byte, error) {
+	type embed CreateBatchActivationSlot
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (c *CreateBatchActivationSlot) String() string {
+	if c == nil {
+		return "<nil>"
+	}
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
 }
 
 // Attributes for creating a main-page placement
@@ -486,6 +1154,7 @@ type CreatePlacementDataUnion struct {
 	Type                      string
 	PlacementMainPage         *CreateMainPagePlacementData
 	PlacementPushNotification *CreatePushNotificationPlacementData
+	PlacementBatchActivation  *CreateBatchActivationPlacementData
 }
 
 func (c *CreatePlacementDataUnion) GetType() string {
@@ -507,6 +1176,13 @@ func (c *CreatePlacementDataUnion) GetPlacementPushNotification() *CreatePushNot
 		return nil
 	}
 	return c.PlacementPushNotification
+}
+
+func (c *CreatePlacementDataUnion) GetPlacementBatchActivation() *CreateBatchActivationPlacementData {
+	if c == nil {
+		return nil
+	}
+	return c.PlacementBatchActivation
 }
 
 func (c *CreatePlacementDataUnion) UnmarshalJSON(data []byte) error {
@@ -533,6 +1209,12 @@ func (c *CreatePlacementDataUnion) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		c.PlacementPushNotification = value
+	case "placementBatchActivation":
+		value := new(CreateBatchActivationPlacementData)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		c.PlacementBatchActivation = value
 	}
 	return nil
 }
@@ -547,12 +1229,16 @@ func (c CreatePlacementDataUnion) MarshalJSON() ([]byte, error) {
 	if c.PlacementPushNotification != nil {
 		return internal.MarshalJSONWithExtraProperty(c.PlacementPushNotification, "type", "placementPushNotification")
 	}
+	if c.PlacementBatchActivation != nil {
+		return internal.MarshalJSONWithExtraProperty(c.PlacementBatchActivation, "type", "placementBatchActivation")
+	}
 	return nil, fmt.Errorf("type %T does not define a non-empty union type", c)
 }
 
 type CreatePlacementDataUnionVisitor interface {
 	VisitPlacementMainPage(*CreateMainPagePlacementData) error
 	VisitPlacementPushNotification(*CreatePushNotificationPlacementData) error
+	VisitPlacementBatchActivation(*CreateBatchActivationPlacementData) error
 }
 
 func (c *CreatePlacementDataUnion) Accept(visitor CreatePlacementDataUnionVisitor) error {
@@ -561,6 +1247,9 @@ func (c *CreatePlacementDataUnion) Accept(visitor CreatePlacementDataUnionVisito
 	}
 	if c.PlacementPushNotification != nil {
 		return visitor.VisitPlacementPushNotification(c.PlacementPushNotification)
+	}
+	if c.PlacementBatchActivation != nil {
+		return visitor.VisitPlacementBatchActivation(c.PlacementBatchActivation)
 	}
 	return fmt.Errorf("type %T does not define a non-empty union type", c)
 }
@@ -575,6 +1264,9 @@ func (c *CreatePlacementDataUnion) validate() error {
 	}
 	if c.PlacementPushNotification != nil {
 		fields = append(fields, "placementPushNotification")
+	}
+	if c.PlacementBatchActivation != nil {
+		fields = append(fields, "placementBatchActivation")
 	}
 	if len(fields) == 0 {
 		if c.Type != "" {
@@ -1173,6 +1865,7 @@ type PlacementFormatUnion struct {
 	Type                      string
 	PlacementMainPage         *MainPagePlacementData
 	PlacementPushNotification *PushNotificationPlacementData
+	PlacementBatchActivation  *BatchActivationPlacementData
 }
 
 func (p *PlacementFormatUnion) GetType() string {
@@ -1194,6 +1887,13 @@ func (p *PlacementFormatUnion) GetPlacementPushNotification() *PushNotificationP
 		return nil
 	}
 	return p.PlacementPushNotification
+}
+
+func (p *PlacementFormatUnion) GetPlacementBatchActivation() *BatchActivationPlacementData {
+	if p == nil {
+		return nil
+	}
+	return p.PlacementBatchActivation
 }
 
 func (p *PlacementFormatUnion) UnmarshalJSON(data []byte) error {
@@ -1220,6 +1920,12 @@ func (p *PlacementFormatUnion) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		p.PlacementPushNotification = value
+	case "placementBatchActivation":
+		value := new(BatchActivationPlacementData)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.PlacementBatchActivation = value
 	}
 	return nil
 }
@@ -1234,12 +1940,16 @@ func (p PlacementFormatUnion) MarshalJSON() ([]byte, error) {
 	if p.PlacementPushNotification != nil {
 		return internal.MarshalJSONWithExtraProperty(p.PlacementPushNotification, "type", "placementPushNotification")
 	}
+	if p.PlacementBatchActivation != nil {
+		return internal.MarshalJSONWithExtraProperty(p.PlacementBatchActivation, "type", "placementBatchActivation")
+	}
 	return nil, fmt.Errorf("type %T does not define a non-empty union type", p)
 }
 
 type PlacementFormatUnionVisitor interface {
 	VisitPlacementMainPage(*MainPagePlacementData) error
 	VisitPlacementPushNotification(*PushNotificationPlacementData) error
+	VisitPlacementBatchActivation(*BatchActivationPlacementData) error
 }
 
 func (p *PlacementFormatUnion) Accept(visitor PlacementFormatUnionVisitor) error {
@@ -1248,6 +1958,9 @@ func (p *PlacementFormatUnion) Accept(visitor PlacementFormatUnionVisitor) error
 	}
 	if p.PlacementPushNotification != nil {
 		return visitor.VisitPlacementPushNotification(p.PlacementPushNotification)
+	}
+	if p.PlacementBatchActivation != nil {
+		return visitor.VisitPlacementBatchActivation(p.PlacementBatchActivation)
 	}
 	return fmt.Errorf("type %T does not define a non-empty union type", p)
 }
@@ -1262,6 +1975,9 @@ func (p *PlacementFormatUnion) validate() error {
 	}
 	if p.PlacementPushNotification != nil {
 		fields = append(fields, "placementPushNotification")
+	}
+	if p.PlacementBatchActivation != nil {
+		fields = append(fields, "placementBatchActivation")
 	}
 	if len(fields) == 0 {
 		if p.Type != "" {
@@ -1531,6 +2247,7 @@ type PlacementTypeFilter string
 const (
 	PlacementTypeFilterPlacementMainPage         PlacementTypeFilter = "placementMainPage"
 	PlacementTypeFilterPlacementPushNotification PlacementTypeFilter = "placementPushNotification"
+	PlacementTypeFilterPlacementBatchActivation  PlacementTypeFilter = "placementBatchActivation"
 )
 
 func NewPlacementTypeFilterFromString(s string) (PlacementTypeFilter, error) {
@@ -1539,6 +2256,8 @@ func NewPlacementTypeFilterFromString(s string) (PlacementTypeFilter, error) {
 		return PlacementTypeFilterPlacementMainPage, nil
 	case "placementPushNotification":
 		return PlacementTypeFilterPlacementPushNotification, nil
+	case "placementBatchActivation":
+		return PlacementTypeFilterPlacementBatchActivation, nil
 	}
 	var t PlacementTypeFilter
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -1787,6 +2506,332 @@ func (p *PushNotificationPlacementData) String() string {
 	return fmt.Sprintf("%#v", p)
 }
 
+// Attributes for updating a batch-activation placement. All fields are required.
+var (
+	updateBatchActivationAttributesFieldName            = big.NewInt(1 << 0)
+	updateBatchActivationAttributesFieldRefreshInterval = big.NewInt(1 << 1)
+	updateBatchActivationAttributesFieldSlots           = big.NewInt(1 << 2)
+)
+
+type UpdateBatchActivationAttributes struct {
+	// Name of the placement
+	Name string `json:"name" url:"name"`
+	// ISO-8601 duration controlling how often the activation cohort refreshes
+	RefreshInterval string `json:"refreshInterval" url:"refreshInterval"`
+	// Slots that make up the activation cohort. Slots present in the prior state but absent from this list are removed.
+	Slots []*UpdateBatchActivationSlot `json:"slots" url:"slots"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (u *UpdateBatchActivationAttributes) GetName() string {
+	if u == nil {
+		return ""
+	}
+	return u.Name
+}
+
+func (u *UpdateBatchActivationAttributes) GetRefreshInterval() string {
+	if u == nil {
+		return ""
+	}
+	return u.RefreshInterval
+}
+
+func (u *UpdateBatchActivationAttributes) GetSlots() []*UpdateBatchActivationSlot {
+	if u == nil {
+		return nil
+	}
+	return u.Slots
+}
+
+func (u *UpdateBatchActivationAttributes) GetExtraProperties() map[string]interface{} {
+	if u == nil {
+		return nil
+	}
+	return u.extraProperties
+}
+
+func (u *UpdateBatchActivationAttributes) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetName sets the Name field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateBatchActivationAttributes) SetName(name string) {
+	u.Name = name
+	u.require(updateBatchActivationAttributesFieldName)
+}
+
+// SetRefreshInterval sets the RefreshInterval field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateBatchActivationAttributes) SetRefreshInterval(refreshInterval string) {
+	u.RefreshInterval = refreshInterval
+	u.require(updateBatchActivationAttributesFieldRefreshInterval)
+}
+
+// SetSlots sets the Slots field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateBatchActivationAttributes) SetSlots(slots []*UpdateBatchActivationSlot) {
+	u.Slots = slots
+	u.require(updateBatchActivationAttributesFieldSlots)
+}
+
+func (u *UpdateBatchActivationAttributes) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateBatchActivationAttributes
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*u = UpdateBatchActivationAttributes(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *u)
+	if err != nil {
+		return err
+	}
+	u.extraProperties = extraProperties
+	u.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (u *UpdateBatchActivationAttributes) MarshalJSON() ([]byte, error) {
+	type embed UpdateBatchActivationAttributes
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (u *UpdateBatchActivationAttributes) String() string {
+	if u == nil {
+		return "<nil>"
+	}
+	if len(u.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(u); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", u)
+}
+
+// Data for updating a batch-activation placement
+var (
+	updateBatchActivationPlacementDataFieldAttributes = big.NewInt(1 << 0)
+)
+
+type UpdateBatchActivationPlacementData struct {
+	// Batch-activation placement attributes for update
+	Attributes *UpdateBatchActivationAttributes `json:"attributes" url:"attributes"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (u *UpdateBatchActivationPlacementData) GetAttributes() *UpdateBatchActivationAttributes {
+	if u == nil {
+		return nil
+	}
+	return u.Attributes
+}
+
+func (u *UpdateBatchActivationPlacementData) GetExtraProperties() map[string]interface{} {
+	if u == nil {
+		return nil
+	}
+	return u.extraProperties
+}
+
+func (u *UpdateBatchActivationPlacementData) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetAttributes sets the Attributes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateBatchActivationPlacementData) SetAttributes(attributes *UpdateBatchActivationAttributes) {
+	u.Attributes = attributes
+	u.require(updateBatchActivationPlacementDataFieldAttributes)
+}
+
+func (u *UpdateBatchActivationPlacementData) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateBatchActivationPlacementData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*u = UpdateBatchActivationPlacementData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *u)
+	if err != nil {
+		return err
+	}
+	u.extraProperties = extraProperties
+	u.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (u *UpdateBatchActivationPlacementData) MarshalJSON() ([]byte, error) {
+	type embed UpdateBatchActivationPlacementData
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (u *UpdateBatchActivationPlacementData) String() string {
+	if u == nil {
+		return "<nil>"
+	}
+	if len(u.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(u); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", u)
+}
+
+// A slot in a batch-activation placement at update time
+var (
+	updateBatchActivationSlotFieldSlotId            = big.NewInt(1 << 0)
+	updateBatchActivationSlotFieldContentStrategyId = big.NewInt(1 << 1)
+	updateBatchActivationSlotFieldAlias             = big.NewInt(1 << 2)
+)
+
+type UpdateBatchActivationSlot struct {
+	// Existing slot identifier. Echo the value from a prior GET to keep the slot stable; omit to mint a fresh slot. If the contentStrategyId changes, the slotId is regenerated regardless of what was echoed.
+	SlotId *string `json:"slotId,omitempty" url:"slotId,omitempty"`
+	// ID of the content strategy that fills this slot
+	ContentStrategyId string `json:"contentStrategyId" url:"contentStrategyId"`
+	// Customer-defined alias for the slot, unique within the placement
+	Alias string `json:"alias" url:"alias"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (u *UpdateBatchActivationSlot) GetSlotId() *string {
+	if u == nil {
+		return nil
+	}
+	return u.SlotId
+}
+
+func (u *UpdateBatchActivationSlot) GetContentStrategyId() string {
+	if u == nil {
+		return ""
+	}
+	return u.ContentStrategyId
+}
+
+func (u *UpdateBatchActivationSlot) GetAlias() string {
+	if u == nil {
+		return ""
+	}
+	return u.Alias
+}
+
+func (u *UpdateBatchActivationSlot) GetExtraProperties() map[string]interface{} {
+	if u == nil {
+		return nil
+	}
+	return u.extraProperties
+}
+
+func (u *UpdateBatchActivationSlot) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetSlotId sets the SlotId field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateBatchActivationSlot) SetSlotId(slotId *string) {
+	u.SlotId = slotId
+	u.require(updateBatchActivationSlotFieldSlotId)
+}
+
+// SetContentStrategyId sets the ContentStrategyId field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateBatchActivationSlot) SetContentStrategyId(contentStrategyId string) {
+	u.ContentStrategyId = contentStrategyId
+	u.require(updateBatchActivationSlotFieldContentStrategyId)
+}
+
+// SetAlias sets the Alias field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateBatchActivationSlot) SetAlias(alias string) {
+	u.Alias = alias
+	u.require(updateBatchActivationSlotFieldAlias)
+}
+
+func (u *UpdateBatchActivationSlot) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateBatchActivationSlot
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*u = UpdateBatchActivationSlot(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *u)
+	if err != nil {
+		return err
+	}
+	u.extraProperties = extraProperties
+	u.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (u *UpdateBatchActivationSlot) MarshalJSON() ([]byte, error) {
+	type embed UpdateBatchActivationSlot
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (u *UpdateBatchActivationSlot) String() string {
+	if u == nil {
+		return "<nil>"
+	}
+	if len(u.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(u); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", u)
+}
+
 // Attributes for updating a main-page placement. All fields are required.
 var (
 	updateMainPageAttributesFieldName              = big.NewInt(1 << 0)
@@ -1998,6 +3043,7 @@ type UpdatePlacementDataUnion struct {
 	Type                      string
 	PlacementMainPage         *UpdateMainPagePlacementData
 	PlacementPushNotification *UpdatePushNotificationPlacementData
+	PlacementBatchActivation  *UpdateBatchActivationPlacementData
 }
 
 func (u *UpdatePlacementDataUnion) GetType() string {
@@ -2019,6 +3065,13 @@ func (u *UpdatePlacementDataUnion) GetPlacementPushNotification() *UpdatePushNot
 		return nil
 	}
 	return u.PlacementPushNotification
+}
+
+func (u *UpdatePlacementDataUnion) GetPlacementBatchActivation() *UpdateBatchActivationPlacementData {
+	if u == nil {
+		return nil
+	}
+	return u.PlacementBatchActivation
 }
 
 func (u *UpdatePlacementDataUnion) UnmarshalJSON(data []byte) error {
@@ -2045,6 +3098,12 @@ func (u *UpdatePlacementDataUnion) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		u.PlacementPushNotification = value
+	case "placementBatchActivation":
+		value := new(UpdateBatchActivationPlacementData)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		u.PlacementBatchActivation = value
 	}
 	return nil
 }
@@ -2059,12 +3118,16 @@ func (u UpdatePlacementDataUnion) MarshalJSON() ([]byte, error) {
 	if u.PlacementPushNotification != nil {
 		return internal.MarshalJSONWithExtraProperty(u.PlacementPushNotification, "type", "placementPushNotification")
 	}
+	if u.PlacementBatchActivation != nil {
+		return internal.MarshalJSONWithExtraProperty(u.PlacementBatchActivation, "type", "placementBatchActivation")
+	}
 	return nil, fmt.Errorf("type %T does not define a non-empty union type", u)
 }
 
 type UpdatePlacementDataUnionVisitor interface {
 	VisitPlacementMainPage(*UpdateMainPagePlacementData) error
 	VisitPlacementPushNotification(*UpdatePushNotificationPlacementData) error
+	VisitPlacementBatchActivation(*UpdateBatchActivationPlacementData) error
 }
 
 func (u *UpdatePlacementDataUnion) Accept(visitor UpdatePlacementDataUnionVisitor) error {
@@ -2073,6 +3136,9 @@ func (u *UpdatePlacementDataUnion) Accept(visitor UpdatePlacementDataUnionVisito
 	}
 	if u.PlacementPushNotification != nil {
 		return visitor.VisitPlacementPushNotification(u.PlacementPushNotification)
+	}
+	if u.PlacementBatchActivation != nil {
+		return visitor.VisitPlacementBatchActivation(u.PlacementBatchActivation)
 	}
 	return fmt.Errorf("type %T does not define a non-empty union type", u)
 }
@@ -2087,6 +3153,9 @@ func (u *UpdatePlacementDataUnion) validate() error {
 	}
 	if u.PlacementPushNotification != nil {
 		fields = append(fields, "placementPushNotification")
+	}
+	if u.PlacementBatchActivation != nil {
+		fields = append(fields, "placementBatchActivation")
 	}
 	if len(fields) == 0 {
 		if u.Type != "" {

@@ -1,3 +1,11 @@
+## v6.2.0 - 2026-05-26
+### Added
+* **`BatchActivationPlacementAttributes`**, **`BatchActivationPlacementData`**, and **`BatchActivationSlot`** — new structs representing a batch-activation placement and its slots as returned by the API.
+* **`CreateBatchActivationAttributes`**, **`CreateBatchActivationPlacementData`**, and **`CreateBatchActivationSlot`** — new structs for supplying batch-activation placement data on create requests.
+* **`UpdateBatchActivationAttributes`**, **`UpdateBatchActivationPlacementData`**, and **`UpdateBatchActivationSlot`** — new structs for supplying batch-activation placement data on update requests.
+* **`PlacementBatchActivation`** field and **`VisitPlacementBatchActivation`** visitor method on `CreatePlacementDataUnion`, `PlacementFormatUnion`, and `UpdatePlacementDataUnion` — enables handling the new `placementBatchActivation` discriminant in all placement union types.
+* **`PlacementTypeFilterPlacementBatchActivation`** — new `PlacementTypeFilter` constant for filtering placements by the batch-activation type.
+
 ## v6.1.0 - 2026-05-22
 ### Added
 * **`ProgressBarSegment.Separator`** — new optional field (`*ProgressBarSegmentSeparator`) to control the separator style rendered between segment nodes, with `GetSeparator` and `SetSeparator` methods.

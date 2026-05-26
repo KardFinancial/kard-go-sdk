@@ -3263,6 +3263,100 @@ client.Users.Rewards.PlacementOffers(
 </dl>
 </details>
 
+<details><summary><code>client.Users.Rewards.PlacementBatches(OrganizationId, UserId, PlacementId) -> *users.BatchesResponseObject</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve batches for a batch-activation placement. Returns each slot in slot
+order with its current offer set, alias, and freshness fields (`isActive`,
+`lastActivatedAt`, `expiresAt`). Applies the same per-user eligibility and
+per-slot content-strategy filter as Get Offers By Placement, independently
+per slot. A slot only flips to `isActive: false` when its refresh interval
+has elapsed AND its post-eligibility `offers[]` is non-empty; otherwise the
+slot is still returned and stays active so the partner UI does not promote
+"refresh" with nothing to show.<br/>
+<b>Required scopes:</b> `rewards:read`
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```go
+request := &users.GetBatchesByPlacementRequest{}
+client.Users.Rewards.PlacementBatches(
+        context.TODO(),
+        "organizationId",
+        "userId",
+        "placementId",
+        request,
+    )
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**organizationId:** `kard.OrganizationId` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**userId:** `kard.UserId` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**placementId:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**supportedComponents:** `*users.ComponentType` — UI component types to include in the response.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.Users.Rewards.Locations(OrganizationId, UserId) -> *users.LocationsResponseObject</code></summary>
 <dl>
 <dd>

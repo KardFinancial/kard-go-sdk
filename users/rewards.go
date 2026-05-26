@@ -267,6 +267,32 @@ func (g *GetOffersByUserRequest) SetSupportedComponents(supportedComponents []*C
 }
 
 var (
+	getBatchesByPlacementRequestFieldSupportedComponents = big.NewInt(1 << 0)
+)
+
+type GetBatchesByPlacementRequest struct {
+	// UI component types to include in the response.
+	SupportedComponents []*ComponentType `json:"-" url:"supportedComponents,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (g *GetBatchesByPlacementRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetSupportedComponents sets the SupportedComponents field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetBatchesByPlacementRequest) SetSupportedComponents(supportedComponents []*ComponentType) {
+	g.SupportedComponents = supportedComponents
+	g.require(getBatchesByPlacementRequestFieldSupportedComponents)
+}
+
+var (
 	getOffersByPlacementRequestFieldFilterSearch          = big.NewInt(1 << 0)
 	getOffersByPlacementRequestFieldFilterPurchaseChannel = big.NewInt(1 << 1)
 	getOffersByPlacementRequestFieldFilterCategory        = big.NewInt(1 << 2)
@@ -574,6 +600,274 @@ func (a *Asset) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", a)
+}
+
+// One slot in a batch-activation placement, with freshness fields and the offers that resolve under the slot's content strategy.
+var (
+	batchSlotDataFieldSlotId          = big.NewInt(1 << 0)
+	batchSlotDataFieldAlias           = big.NewInt(1 << 1)
+	batchSlotDataFieldIsActive        = big.NewInt(1 << 2)
+	batchSlotDataFieldLastActivatedAt = big.NewInt(1 << 3)
+	batchSlotDataFieldExpiresAt       = big.NewInt(1 << 4)
+	batchSlotDataFieldOffers          = big.NewInt(1 << 5)
+)
+
+type BatchSlotData struct {
+	// Stable identifier for the slot within the placement
+	SlotId string `json:"slotId" url:"slotId"`
+	// Customer-defined alias for the slot, unique within the placement
+	Alias string `json:"alias" url:"alias"`
+	// Whether the slot is still considered "fresh" for the user. Set to false only when the slot's `expiresAt` is in the past AND the slot resolves to a non-empty offer set; an empty offer set keeps the slot active so partner UIs do not promote "tap to refresh" with nothing to show.
+	IsActive bool `json:"isActive" url:"isActive"`
+	// Timestamp of the most recent placementSlotAttribution ACTIVATE event for this (user, placement, slot). Absent for cold slots that have never been activated.
+	LastActivatedAt *time.Time `json:"lastActivatedAt,omitempty" url:"lastActivatedAt,omitempty"`
+	// Computed as `lastActivatedAt + placement.refreshInterval`. Absent for cold slots that have never been activated.
+	ExpiresAt *time.Time `json:"expiresAt,omitempty" url:"expiresAt,omitempty"`
+	// The set of offers eligible for the user under this slot's content strategy.
+	Offers []*OfferDataUnion `json:"offers" url:"offers"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (b *BatchSlotData) GetSlotId() string {
+	if b == nil {
+		return ""
+	}
+	return b.SlotId
+}
+
+func (b *BatchSlotData) GetAlias() string {
+	if b == nil {
+		return ""
+	}
+	return b.Alias
+}
+
+func (b *BatchSlotData) GetIsActive() bool {
+	if b == nil {
+		return false
+	}
+	return b.IsActive
+}
+
+func (b *BatchSlotData) GetLastActivatedAt() *time.Time {
+	if b == nil {
+		return nil
+	}
+	return b.LastActivatedAt
+}
+
+func (b *BatchSlotData) GetExpiresAt() *time.Time {
+	if b == nil {
+		return nil
+	}
+	return b.ExpiresAt
+}
+
+func (b *BatchSlotData) GetOffers() []*OfferDataUnion {
+	if b == nil {
+		return nil
+	}
+	return b.Offers
+}
+
+func (b *BatchSlotData) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
+	return b.extraProperties
+}
+
+func (b *BatchSlotData) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetSlotId sets the SlotId field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchSlotData) SetSlotId(slotId string) {
+	b.SlotId = slotId
+	b.require(batchSlotDataFieldSlotId)
+}
+
+// SetAlias sets the Alias field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchSlotData) SetAlias(alias string) {
+	b.Alias = alias
+	b.require(batchSlotDataFieldAlias)
+}
+
+// SetIsActive sets the IsActive field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchSlotData) SetIsActive(isActive bool) {
+	b.IsActive = isActive
+	b.require(batchSlotDataFieldIsActive)
+}
+
+// SetLastActivatedAt sets the LastActivatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchSlotData) SetLastActivatedAt(lastActivatedAt *time.Time) {
+	b.LastActivatedAt = lastActivatedAt
+	b.require(batchSlotDataFieldLastActivatedAt)
+}
+
+// SetExpiresAt sets the ExpiresAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchSlotData) SetExpiresAt(expiresAt *time.Time) {
+	b.ExpiresAt = expiresAt
+	b.require(batchSlotDataFieldExpiresAt)
+}
+
+// SetOffers sets the Offers field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchSlotData) SetOffers(offers []*OfferDataUnion) {
+	b.Offers = offers
+	b.require(batchSlotDataFieldOffers)
+}
+
+func (b *BatchSlotData) UnmarshalJSON(data []byte) error {
+	type embed BatchSlotData
+	var unmarshaler = struct {
+		embed
+		LastActivatedAt *internal.DateTime `json:"lastActivatedAt,omitempty"`
+		ExpiresAt       *internal.DateTime `json:"expiresAt,omitempty"`
+	}{
+		embed: embed(*b),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*b = BatchSlotData(unmarshaler.embed)
+	b.LastActivatedAt = unmarshaler.LastActivatedAt.TimePtr()
+	b.ExpiresAt = unmarshaler.ExpiresAt.TimePtr()
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+	b.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BatchSlotData) MarshalJSON() ([]byte, error) {
+	type embed BatchSlotData
+	var marshaler = struct {
+		embed
+		LastActivatedAt *internal.DateTime `json:"lastActivatedAt,omitempty"`
+		ExpiresAt       *internal.DateTime `json:"expiresAt,omitempty"`
+	}{
+		embed:           embed(*b),
+		LastActivatedAt: internal.NewOptionalDateTime(b.LastActivatedAt),
+		ExpiresAt:       internal.NewOptionalDateTime(b.ExpiresAt),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (b *BatchSlotData) String() string {
+	if b == nil {
+		return "<nil>"
+	}
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Ordered list of slots for a batch-activation placement, with freshness fields and per-slot offer sets.
+var (
+	batchesResponseObjectFieldData = big.NewInt(1 << 0)
+)
+
+type BatchesResponseObject struct {
+	Data []*BatchSlotData `json:"data" url:"data"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (b *BatchesResponseObject) GetData() []*BatchSlotData {
+	if b == nil {
+		return nil
+	}
+	return b.Data
+}
+
+func (b *BatchesResponseObject) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
+	return b.extraProperties
+}
+
+func (b *BatchesResponseObject) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetData sets the Data field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchesResponseObject) SetData(data []*BatchSlotData) {
+	b.Data = data
+	b.require(batchesResponseObjectFieldData)
+}
+
+func (b *BatchesResponseObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler BatchesResponseObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BatchesResponseObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+	b.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BatchesResponseObject) MarshalJSON() ([]byte, error) {
+	type embed BatchesResponseObject
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (b *BatchesResponseObject) String() string {
+	if b == nil {
+		return "<nil>"
+	}
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
 }
 
 // Available button styles for CTA components

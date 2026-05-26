@@ -90,6 +90,37 @@ func (c *Client) PlacementOffers(
 	return response.Body, nil
 }
 
+// Retrieve batches for a batch-activation placement. Returns each slot in slot
+// order with its current offer set, alias, and freshness fields (`isActive`,
+// `lastActivatedAt`, `expiresAt`). Applies the same per-user eligibility and
+// per-slot content-strategy filter as Get Offers By Placement, independently
+// per slot. A slot only flips to `isActive: false` when its refresh interval
+// has elapsed AND its post-eligibility `offers[]` is non-empty; otherwise the
+// slot is still returned and stays active so the partner UI does not promote
+// "refresh" with nothing to show.<br/>
+// <b>Required scopes:</b> `rewards:read`
+func (c *Client) PlacementBatches(
+	ctx context.Context,
+	organizationId kard.OrganizationId,
+	userId kard.UserId,
+	placementId string,
+	request *users.GetBatchesByPlacementRequest,
+	opts ...option.RequestOption,
+) (*users.BatchesResponseObject, error) {
+	response, err := c.WithRawResponse.PlacementBatches(
+		ctx,
+		organizationId,
+		userId,
+		placementId,
+		request,
+		opts...,
+	)
+	if err != nil {
+		return nil, err
+	}
+	return response.Body, nil
+}
+
 // Retrieve national and local geographic locations that a specified user has eligible in-store offers at. Use this endpoint to build
 // out your [map-specific UX experiences](/2024-10-01/api/getting-started#c-discover-clos-near-you-map-view). Please note
 // that Longitude and Latitude fields are prioritized over State, City and Zipcode and are the recommended search

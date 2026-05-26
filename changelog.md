@@ -1,3 +1,10 @@
+## v6.3.0 - 2026-05-26
+### Added
+* **`GetBatchesByPlacementRequest`** — new request struct with an optional `SupportedComponents` query parameter for the batch-activation placement endpoint.
+* **`BatchSlotData`** — new struct representing a single slot in a batch-activation placement, exposing `SlotId`, `Alias`, `IsActive`, `LastActivatedAt`, `ExpiresAt`, and `Offers` fields with full JSON serialization support.
+* **`BatchesResponseObject`** — new response struct wrapping an ordered list of `BatchSlotData` entries returned by the batches endpoint.
+* **`Client.PlacementBatches`** and **`RawClient.PlacementBatches`** — new methods that call `GET /v2/issuers/{organizationId}/users/{userId}/placements/{placementId}/batches` to retrieve per-slot offer sets and freshness data for a batch-activation placement.
+
 ## v6.2.0 - 2026-05-26
 ### Added
 * **`BatchActivationPlacementAttributes`**, **`BatchActivationPlacementData`**, and **`BatchActivationSlot`** — new structs representing a batch-activation placement and its slots as returned by the API.

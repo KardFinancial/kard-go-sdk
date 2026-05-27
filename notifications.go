@@ -699,11 +699,13 @@ func (e *EarnedRewardApprovedData) String() string {
 
 var (
 	earnedRewardRelationshipsFieldUser        = big.NewInt(1 << 0)
-	earnedRewardRelationshipsFieldTransaction = big.NewInt(1 << 1)
+	earnedRewardRelationshipsFieldOffer       = big.NewInt(1 << 1)
+	earnedRewardRelationshipsFieldTransaction = big.NewInt(1 << 2)
 )
 
 type EarnedRewardRelationships struct {
 	User        *RelationshipSingle `json:"user" url:"user"`
+	Offer       *RelationshipSingle `json:"offer" url:"offer"`
 	Transaction *RelationshipSingle `json:"transaction" url:"transaction"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
@@ -718,6 +720,13 @@ func (e *EarnedRewardRelationships) GetUser() *RelationshipSingle {
 		return nil
 	}
 	return e.User
+}
+
+func (e *EarnedRewardRelationships) GetOffer() *RelationshipSingle {
+	if e == nil {
+		return nil
+	}
+	return e.Offer
 }
 
 func (e *EarnedRewardRelationships) GetTransaction() *RelationshipSingle {
@@ -746,6 +755,13 @@ func (e *EarnedRewardRelationships) require(field *big.Int) {
 func (e *EarnedRewardRelationships) SetUser(user *RelationshipSingle) {
 	e.User = user
 	e.require(earnedRewardRelationshipsFieldUser)
+}
+
+// SetOffer sets the Offer field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EarnedRewardRelationships) SetOffer(offer *RelationshipSingle) {
+	e.Offer = offer
+	e.require(earnedRewardRelationshipsFieldOffer)
 }
 
 // SetTransaction sets the Transaction field and marks it as non-optional;

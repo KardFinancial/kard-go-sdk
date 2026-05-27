@@ -1,3 +1,7 @@
+## v7.1.0 - 2026-05-27
+### Added
+* **`EarnedRewardRelationships.Offer`** — new optional `*RelationshipSingle` field representing the offer relationship on an earned reward, accessible via the new `GetOffer` and `SetOffer` methods.
+
 ## v7.0.1 - 2026-05-27
 * chore: update doc comment links in uploads client
 * Update stale relative API documentation links in the `Create` and

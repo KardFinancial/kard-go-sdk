@@ -1,3 +1,13 @@
+## v7.0.1 - 2026-05-27
+* chore: update doc comment links in uploads client
+* Update stale relative API documentation links in the `Create` and
+* `CreatePart` method godoc comments to use fully-qualified versioned
+* paths. No exported signatures, types, or behavior were changed.
+* Key changes:
+* `Client.Create` godoc: link to Add Upload Part updated from `/api/uploads/create-upload-part` to `/2024-10-01/api/transactions/uploads/create-part`
+* `Client.CreatePart` godoc: link to Create Upload updated from `/api/uploads/create-upload` to `/2024-10-01/api/transactions/uploads/create`
+* 🌿 Generated with Fern
+
 ## v7.0.0 - 2026-05-26
 ### Breaking Changes
 * **`CreateAttributionRequestUnionVisitor`** — a new `VisitPlacementSlotAttribution(*PlacementSlotAttributionRequest) error` method has been added to the interface; all existing implementations must add this method to continue compiling.

@@ -54,7 +54,7 @@ var (
 )
 
 type ChildOrganizationAttributes struct {
-	// Name of the child organization (uppercase, no spaces)
+	// Name of the child organization (at least one letter; letters and spaces only)
 	Name string `json:"name" url:"name"`
 	// External identifier for the child organization
 	ExternalId *string `json:"externalId,omitempty" url:"externalId,omitempty"`
@@ -411,7 +411,7 @@ var (
 )
 
 type CreateChildAttributes struct {
-	// Name of the child organization (must be uppercase, no spaces)
+	// Name of the child organization (at least one letter; letters and spaces only)
 	Name string `json:"name" url:"name"`
 	// External identifier for the child organization
 	ExternalId *string `json:"externalId,omitempty" url:"externalId,omitempty"`
@@ -719,7 +719,7 @@ var (
 )
 
 type UpdateChildAttributes struct {
-	// New name for the child organization (must be uppercase, no spaces)
+	// New name for the child organization (at least one letter; letters and spaces only)
 	Name *string `json:"name,omitempty" url:"name,omitempty"`
 	// External identifier for the child organization
 	ExternalId *string `json:"externalId,omitempty" url:"externalId,omitempty"`

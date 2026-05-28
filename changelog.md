@@ -1,3 +1,17 @@
+## v7.1.1 - 2026-05-28
+* chore: update child organization name validation doc comments
+* Update godoc comments across `ChildOrganizationAttributes`,
+* `CreateChildAttributes`, `UpdateChildAttributes`, and the `Client.Create`
+* method to reflect the revised name validation rule: names must contain at
+* least one letter and may include letters and spaces, replacing the previous
+* "uppercase, no spaces" constraint.
+* Key changes:
+* `ChildOrganizationAttributes.Name` doc: "at least one letter; letters and spaces only"
+* `CreateChildAttributes.Name` doc: "at least one letter; letters and spaces only"
+* `UpdateChildAttributes.Name` doc: "at least one letter; letters and spaces only"
+* `Client.Create` godoc: updated inline description to match new name rule
+* 🌿 Generated with Fern
+
 ## v7.1.0 - 2026-05-27
 ### Added
 * **`EarnedRewardRelationships.Offer`** — new optional `*RelationshipSingle` field representing the offer relationship on an earned reward, accessible via the new `GetOffer` and `SetOffer` methods.

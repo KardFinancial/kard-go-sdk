@@ -1,3 +1,8 @@
+## v7.3.0 - 2026-05-28
+### Added
+* **`BatchSlotData.Components`** — new optional `*OfferComponents` field exposing slot-level UI components (a `cta` when the slot has no active activation, or a `logoFlare` decoration when it does), accessible via `GetComponents` and `SetComponents`.
+* **`BatchSlotData.Assets`** — new optional `[]*Asset` field exposing slot-level visual assets (currently a single `IMG_VIEW` SVG icon), accessible via `GetAssets` and `SetAssets`.
+
 ## v7.2.0 - 2026-05-28
 ### Added
 * **`GetEarnedRewardsRequest.FilterPaidInFullOnly`** — new optional `*bool` field (and `SetFilterPaidInFullOnly` setter) that, when `true`, restricts the earned rewards response to transactions paid in full to the issuer (`paidToIssuer` is `PAID_IN_FULL`) and limits `lifetimeRewardsInCents` to those transactions only.

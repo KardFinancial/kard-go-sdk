@@ -609,7 +609,9 @@ var (
 	batchSlotDataFieldIsActive        = big.NewInt(1 << 2)
 	batchSlotDataFieldLastActivatedAt = big.NewInt(1 << 3)
 	batchSlotDataFieldExpiresAt       = big.NewInt(1 << 4)
-	batchSlotDataFieldOffers          = big.NewInt(1 << 5)
+	batchSlotDataFieldComponents      = big.NewInt(1 << 5)
+	batchSlotDataFieldAssets          = big.NewInt(1 << 6)
+	batchSlotDataFieldOffers          = big.NewInt(1 << 7)
 )
 
 type BatchSlotData struct {
@@ -623,6 +625,10 @@ type BatchSlotData struct {
 	LastActivatedAt *time.Time `json:"lastActivatedAt,omitempty" url:"lastActivatedAt,omitempty"`
 	// Computed as `lastActivatedAt + placement.refreshInterval`. Absent for cold slots that have never been activated.
 	ExpiresAt *time.Time `json:"expiresAt,omitempty" url:"expiresAt,omitempty"`
+	// Slot-level UI components. Carries a `cta` (POST to the slot's activate endpoint) when the slot has no active (non-expired) activation, or a `logoFlare` decoration when it does — mutually exclusive on a single slot.
+	Components *OfferComponents `json:"components,omitempty" url:"components,omitempty"`
+	// Slot-level visual assets. Currently a single `IMG_VIEW` SVG showing the slot's initials, themed via the `--icon-fill` CSS custom property.
+	Assets []*Asset `json:"assets,omitempty" url:"assets,omitempty"`
 	// The set of offers eligible for the user under this slot's content strategy.
 	Offers []*OfferDataUnion `json:"offers" url:"offers"`
 
@@ -666,6 +672,20 @@ func (b *BatchSlotData) GetExpiresAt() *time.Time {
 		return nil
 	}
 	return b.ExpiresAt
+}
+
+func (b *BatchSlotData) GetComponents() *OfferComponents {
+	if b == nil {
+		return nil
+	}
+	return b.Components
+}
+
+func (b *BatchSlotData) GetAssets() []*Asset {
+	if b == nil {
+		return nil
+	}
+	return b.Assets
 }
 
 func (b *BatchSlotData) GetOffers() []*OfferDataUnion {
@@ -722,6 +742,20 @@ func (b *BatchSlotData) SetLastActivatedAt(lastActivatedAt *time.Time) {
 func (b *BatchSlotData) SetExpiresAt(expiresAt *time.Time) {
 	b.ExpiresAt = expiresAt
 	b.require(batchSlotDataFieldExpiresAt)
+}
+
+// SetComponents sets the Components field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchSlotData) SetComponents(components *OfferComponents) {
+	b.Components = components
+	b.require(batchSlotDataFieldComponents)
+}
+
+// SetAssets sets the Assets field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchSlotData) SetAssets(assets []*Asset) {
+	b.Assets = assets
+	b.require(batchSlotDataFieldAssets)
 }
 
 // SetOffers sets the Offers field and marks it as non-optional;

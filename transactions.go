@@ -11,11 +11,12 @@ import (
 )
 
 var (
-	getEarnedRewardsRequestFieldPageAfter    = big.NewInt(1 << 0)
-	getEarnedRewardsRequestFieldPageBefore   = big.NewInt(1 << 1)
-	getEarnedRewardsRequestFieldPageSize     = big.NewInt(1 << 2)
-	getEarnedRewardsRequestFieldFilterStatus = big.NewInt(1 << 3)
-	getEarnedRewardsRequestFieldInclude      = big.NewInt(1 << 4)
+	getEarnedRewardsRequestFieldPageAfter            = big.NewInt(1 << 0)
+	getEarnedRewardsRequestFieldPageBefore           = big.NewInt(1 << 1)
+	getEarnedRewardsRequestFieldPageSize             = big.NewInt(1 << 2)
+	getEarnedRewardsRequestFieldFilterStatus         = big.NewInt(1 << 3)
+	getEarnedRewardsRequestFieldFilterPaidInFullOnly = big.NewInt(1 << 4)
+	getEarnedRewardsRequestFieldInclude              = big.NewInt(1 << 5)
 )
 
 type GetEarnedRewardsRequest struct {
@@ -27,6 +28,8 @@ type GetEarnedRewardsRequest struct {
 	PageSize *int `json:"-" url:"page[size],omitempty"`
 	// Filter by transaction status. Supported values are `APPROVED` and `SETTLED`. Defaults to `SETTLED` when omitted. When `APPROVED` is specified, only approved transactions that do not yet have a corresponding settled transaction are returned.
 	FilterStatus *RewardedTransactionStatus `json:"-" url:"filter[status],omitempty"`
+	// When `true`, only return transactions that have been paid in full to the issuer (`paidToIssuer` is `PAID_IN_FULL`). By default (`false`), any matched transaction is returned regardless of payment status. This also controls whether unpaid transactions contribute to `lifetimeRewardsInCents`. Has no effect on `APPROVED` transactions, which are always returned when requested.
+	FilterPaidInFullOnly *bool `json:"-" url:"filter[paidInFullOnly],omitempty"`
 	// Comma-separated list of related resources to include in the response. Supported values are `merchant` and `offer`.
 	Include *string `json:"-" url:"include,omitempty"`
 
@@ -67,6 +70,13 @@ func (g *GetEarnedRewardsRequest) SetPageSize(pageSize *int) {
 func (g *GetEarnedRewardsRequest) SetFilterStatus(filterStatus *RewardedTransactionStatus) {
 	g.FilterStatus = filterStatus
 	g.require(getEarnedRewardsRequestFieldFilterStatus)
+}
+
+// SetFilterPaidInFullOnly sets the FilterPaidInFullOnly field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetEarnedRewardsRequest) SetFilterPaidInFullOnly(filterPaidInFullOnly *bool) {
+	g.FilterPaidInFullOnly = filterPaidInFullOnly
+	g.require(getEarnedRewardsRequestFieldFilterPaidInFullOnly)
 }
 
 // SetInclude sets the Include field and marks it as non-optional;
@@ -2784,7 +2794,7 @@ var (
 )
 
 type GetEarnedRewardsMeta struct {
-	// Lifetime rewards earned by the user across all matched transactions in cents.
+	// Lifetime rewards earned by the user across matched transactions in cents. By default all matched transactions are included regardless of payment status; pass `filter[paidInFullOnly]=true` to restrict the total to transactions paid in full to the issuer (`paidToIssuer` is `PAID_IN_FULL`).
 	LifetimeRewardsInCents int `json:"lifetimeRewardsInCents" url:"lifetimeRewardsInCents"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted

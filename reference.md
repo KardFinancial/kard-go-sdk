@@ -2140,7 +2140,7 @@ client.Transactions.CreateBulkTransactionsUploadUrl(
 <dl>
 <dd>
 
-Retrieve rewarded transaction history for a specific user. By default this returns only SETTLED transactions within the last 12 months.
+Retrieve rewarded transaction history for a specific user. By default this returns only SETTLED transactions within the last 12 months regardless of payment status. Pass `filter[paidInFullOnly]=true` to restrict the response to matched transactions that have been paid in full to the issuer (`paidToIssuer` is `PAID_IN_FULL`).
 <br/>
 <b>Required scopes:</b> `transaction:read`
 <br/>
@@ -2230,6 +2230,14 @@ client.Transactions.GetEarnedRewards(
 <dd>
 
 **filterStatus:** `*kard.RewardedTransactionStatus` — Filter by transaction status. Supported values are `APPROVED` and `SETTLED`. Defaults to `SETTLED` when omitted. When `APPROVED` is specified, only approved transactions that do not yet have a corresponding settled transaction are returned.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**filterPaidInFullOnly:** `*bool` — When `true`, only return transactions that have been paid in full to the issuer (`paidToIssuer` is `PAID_IN_FULL`). By default (`false`), any matched transaction is returned regardless of payment status. This also controls whether unpaid transactions contribute to `lifetimeRewardsInCents`. Has no effect on `APPROVED` transactions, which are always returned when requested.
     
 </dd>
 </dl>

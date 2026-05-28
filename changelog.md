@@ -1,3 +1,7 @@
+## v7.2.0 - 2026-05-28
+### Added
+* **`GetEarnedRewardsRequest.FilterPaidInFullOnly`** — new optional `*bool` field (and `SetFilterPaidInFullOnly` setter) that, when `true`, restricts the earned rewards response to transactions paid in full to the issuer (`paidToIssuer` is `PAID_IN_FULL`) and limits `lifetimeRewardsInCents` to those transactions only.
+
 ## v7.1.1 - 2026-05-28
 * chore: update child organization name validation doc comments
 * Update godoc comments across `ChildOrganizationAttributes`,

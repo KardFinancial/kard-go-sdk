@@ -68,8 +68,8 @@ func (r *RequestOptions) cloneHeader() http.Header {
 	headers := r.HTTPHeader.Clone()
 	headers.Set("X-Fern-Language", "Go")
 	headers.Set("X-Fern-SDK-Name", "github.com/KardFinancial/kard-go-sdk")
-	headers.Set("X-Fern-SDK-Version", "v7.3.0")
-	headers.Set("User-Agent", "github.com/KardFinancial/kard-go-sdk/v7.3.0")
+	headers.Set("X-Fern-SDK-Version", "v8.0.0")
+	headers.Set("User-Agent", "github.com/KardFinancial/kard-go-sdk/v8.0.0")
 	return headers
 }
 

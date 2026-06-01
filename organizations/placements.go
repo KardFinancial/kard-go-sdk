@@ -5,8 +5,8 @@ package organizations
 import (
 	json "encoding/json"
 	fmt "fmt"
-	kardgosdk "github.com/KardFinancial/kard-go-sdk/v7"
-	internal "github.com/KardFinancial/kard-go-sdk/v7/internal"
+	kardgosdk "github.com/KardFinancial/kard-go-sdk/v8"
+	internal "github.com/KardFinancial/kard-go-sdk/v8/internal"
 	big "math/big"
 )
 
@@ -15,7 +15,7 @@ var (
 )
 
 type GetPlacementRequest struct {
-	// CSV list of related resources to embed in the `included` array (allowed value is `contentStrategy`).
+	// CSV list of related resources to embed in the `included` array. Supported paths: `contentStrategy` (the direct content strategy of a non-batch placement), `slots` (the slot resources of a batch-activation placement), `slots.placement` (and the placement each slot references), and `slots.placement.contentStrategy` (and the content strategy of each referenced placement). Dotted paths implicitly include all intermediate resources.
 	Include *string `json:"-" url:"include,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
@@ -52,7 +52,7 @@ type ListPlacementsRequest struct {
 	FilterName *string `json:"-" url:"filter[name],omitempty"`
 	// Filter by the ID of the content strategy linked to the placement
 	FilterContentStrategyId *string `json:"-" url:"filter[contentStrategyId],omitempty"`
-	// CSV list of related resources to embed in the `included` array (allowed value is `contentStrategy`).
+	// CSV list of related resources to embed in the `included` array. Supported paths: `contentStrategy` (the direct content strategy of a non-batch placement), `slots` (the slot resources of a batch-activation placement), `slots.placement` (and the placement each slot references), and `slots.placement.contentStrategy` (and the content strategy of each referenced placement). Dotted paths implicitly include all intermediate resources.
 	Include *string `json:"-" url:"include,omitempty"`
 	// Cursor value for the next page of results
 	PageAfter *string `json:"-" url:"page[after],omitempty"`
@@ -112,12 +112,11 @@ func (l *ListPlacementsRequest) SetPageSize(pageSize *int) {
 	l.require(listPlacementsRequestFieldPageSize)
 }
 
-// Attributes for a batch-activation placement
+// Attributes for a batch-activation placement. Slot detail is exposed via `relationships.slots` (resource identifiers) and the `batchActivationSlot` entries in `included`; request `?include=slots` (or a deeper path) to get the slot details.
 var (
 	batchActivationPlacementAttributesFieldName            = big.NewInt(1 << 0)
 	batchActivationPlacementAttributesFieldOrganizationId  = big.NewInt(1 << 1)
 	batchActivationPlacementAttributesFieldRefreshInterval = big.NewInt(1 << 2)
-	batchActivationPlacementAttributesFieldSlots           = big.NewInt(1 << 3)
 )
 
 type BatchActivationPlacementAttributes struct {
@@ -127,8 +126,6 @@ type BatchActivationPlacementAttributes struct {
 	OrganizationId string `json:"organizationId" url:"organizationId"`
 	// ISO-8601 duration that controls how often the activation cohort refreshes (e.g. "P7D" for weekly).
 	RefreshInterval string `json:"refreshInterval" url:"refreshInterval"`
-	// Slots that make up the activation cohort
-	Slots []*BatchActivationSlot `json:"slots" url:"slots"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -156,13 +153,6 @@ func (b *BatchActivationPlacementAttributes) GetRefreshInterval() string {
 		return ""
 	}
 	return b.RefreshInterval
-}
-
-func (b *BatchActivationPlacementAttributes) GetSlots() []*BatchActivationSlot {
-	if b == nil {
-		return nil
-	}
-	return b.Slots
 }
 
 func (b *BatchActivationPlacementAttributes) GetExtraProperties() map[string]interface{} {
@@ -198,13 +188,6 @@ func (b *BatchActivationPlacementAttributes) SetOrganizationId(organizationId st
 func (b *BatchActivationPlacementAttributes) SetRefreshInterval(refreshInterval string) {
 	b.RefreshInterval = refreshInterval
 	b.require(batchActivationPlacementAttributesFieldRefreshInterval)
-}
-
-// SetSlots sets the Slots field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (b *BatchActivationPlacementAttributes) SetSlots(slots []*BatchActivationSlot) {
-	b.Slots = slots
-	b.require(batchActivationPlacementAttributesFieldSlots)
 }
 
 func (b *BatchActivationPlacementAttributes) UnmarshalJSON(data []byte) error {
@@ -251,14 +234,17 @@ func (b *BatchActivationPlacementAttributes) String() string {
 
 // Batch-activation placement resource data
 var (
-	batchActivationPlacementDataFieldId         = big.NewInt(1 << 0)
-	batchActivationPlacementDataFieldAttributes = big.NewInt(1 << 1)
+	batchActivationPlacementDataFieldId            = big.NewInt(1 << 0)
+	batchActivationPlacementDataFieldAttributes    = big.NewInt(1 << 1)
+	batchActivationPlacementDataFieldRelationships = big.NewInt(1 << 2)
 )
 
 type BatchActivationPlacementData struct {
 	// Unique identifier of the placement (UUID v7)
 	Id         string                              `json:"id" url:"id"`
 	Attributes *BatchActivationPlacementAttributes `json:"attributes" url:"attributes"`
+	// JSON:API relationships for the placement. Always present on a batch-activation placement; the `slots` to-many relationship lists the slot resource identifiers.
+	Relationships *BatchActivationPlacementRelationships `json:"relationships" url:"relationships"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -279,6 +265,13 @@ func (b *BatchActivationPlacementData) GetAttributes() *BatchActivationPlacement
 		return nil
 	}
 	return b.Attributes
+}
+
+func (b *BatchActivationPlacementData) GetRelationships() *BatchActivationPlacementRelationships {
+	if b == nil {
+		return nil
+	}
+	return b.Relationships
 }
 
 func (b *BatchActivationPlacementData) GetExtraProperties() map[string]interface{} {
@@ -307,6 +300,13 @@ func (b *BatchActivationPlacementData) SetId(id string) {
 func (b *BatchActivationPlacementData) SetAttributes(attributes *BatchActivationPlacementAttributes) {
 	b.Attributes = attributes
 	b.require(batchActivationPlacementDataFieldAttributes)
+}
+
+// SetRelationships sets the Relationships field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchActivationPlacementData) SetRelationships(relationships *BatchActivationPlacementRelationships) {
+	b.Relationships = relationships
+	b.require(batchActivationPlacementDataFieldRelationships)
 }
 
 func (b *BatchActivationPlacementData) UnmarshalJSON(data []byte) error {
@@ -351,20 +351,14 @@ func (b *BatchActivationPlacementData) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// A slot within a batch-activation placement
+// Relationship block for a batch-activation placement.
 var (
-	batchActivationSlotFieldSlotId            = big.NewInt(1 << 0)
-	batchActivationSlotFieldContentStrategyId = big.NewInt(1 << 1)
-	batchActivationSlotFieldAlias             = big.NewInt(1 << 2)
+	batchActivationPlacementRelationshipsFieldSlots = big.NewInt(1 << 0)
 )
 
-type BatchActivationSlot struct {
-	// Stable identifier for the slot within the placement
-	SlotId string `json:"slotId" url:"slotId"`
-	// ID of the content strategy linked to this slot
-	ContentStrategyId string `json:"contentStrategyId" url:"contentStrategyId"`
-	// Customer-defined alias for the slot, unique within the placement
-	Alias string `json:"alias" url:"alias"`
+type BatchActivationPlacementRelationships struct {
+	// Resource identifiers for the slots that make up the activation cohort. Each entry corresponds to a `batchActivationSlot` resource that appears in `included` when the request asks for `slots` (or any deeper path that implies it).
+	Slots *ToManyRelationship `json:"slots" url:"slots"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -373,69 +367,41 @@ type BatchActivationSlot struct {
 	rawJSON         json.RawMessage
 }
 
-func (b *BatchActivationSlot) GetSlotId() string {
+func (b *BatchActivationPlacementRelationships) GetSlots() *ToManyRelationship {
 	if b == nil {
-		return ""
+		return nil
 	}
-	return b.SlotId
+	return b.Slots
 }
 
-func (b *BatchActivationSlot) GetContentStrategyId() string {
-	if b == nil {
-		return ""
-	}
-	return b.ContentStrategyId
-}
-
-func (b *BatchActivationSlot) GetAlias() string {
-	if b == nil {
-		return ""
-	}
-	return b.Alias
-}
-
-func (b *BatchActivationSlot) GetExtraProperties() map[string]interface{} {
+func (b *BatchActivationPlacementRelationships) GetExtraProperties() map[string]interface{} {
 	if b == nil {
 		return nil
 	}
 	return b.extraProperties
 }
 
-func (b *BatchActivationSlot) require(field *big.Int) {
+func (b *BatchActivationPlacementRelationships) require(field *big.Int) {
 	if b.explicitFields == nil {
 		b.explicitFields = big.NewInt(0)
 	}
 	b.explicitFields.Or(b.explicitFields, field)
 }
 
-// SetSlotId sets the SlotId field and marks it as non-optional;
+// SetSlots sets the Slots field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (b *BatchActivationSlot) SetSlotId(slotId string) {
-	b.SlotId = slotId
-	b.require(batchActivationSlotFieldSlotId)
+func (b *BatchActivationPlacementRelationships) SetSlots(slots *ToManyRelationship) {
+	b.Slots = slots
+	b.require(batchActivationPlacementRelationshipsFieldSlots)
 }
 
-// SetContentStrategyId sets the ContentStrategyId field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (b *BatchActivationSlot) SetContentStrategyId(contentStrategyId string) {
-	b.ContentStrategyId = contentStrategyId
-	b.require(batchActivationSlotFieldContentStrategyId)
-}
-
-// SetAlias sets the Alias field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (b *BatchActivationSlot) SetAlias(alias string) {
-	b.Alias = alias
-	b.require(batchActivationSlotFieldAlias)
-}
-
-func (b *BatchActivationSlot) UnmarshalJSON(data []byte) error {
-	type unmarshaler BatchActivationSlot
+func (b *BatchActivationPlacementRelationships) UnmarshalJSON(data []byte) error {
+	type unmarshaler BatchActivationPlacementRelationships
 	var value unmarshaler
 	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*b = BatchActivationSlot(value)
+	*b = BatchActivationPlacementRelationships(value)
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
@@ -445,8 +411,8 @@ func (b *BatchActivationSlot) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (b *BatchActivationSlot) MarshalJSON() ([]byte, error) {
-	type embed BatchActivationSlot
+func (b *BatchActivationPlacementRelationships) MarshalJSON() ([]byte, error) {
+	type embed BatchActivationPlacementRelationships
 	var marshaler = struct {
 		embed
 	}{
@@ -456,7 +422,313 @@ func (b *BatchActivationSlot) MarshalJSON() ([]byte, error) {
 	return json.Marshal(explicitMarshaler)
 }
 
-func (b *BatchActivationSlot) String() string {
+func (b *BatchActivationPlacementRelationships) String() string {
+	if b == nil {
+		return "<nil>"
+	}
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Attributes block for a `batchActivationSlot` resource.
+var (
+	batchActivationSlotAttributesFieldAlias            = big.NewInt(1 << 0)
+	batchActivationSlotAttributesFieldShortDescription = big.NewInt(1 << 1)
+)
+
+type BatchActivationSlotAttributes struct {
+	// Customer-defined alias for the slot, unique within the placement.
+	Alias string `json:"alias" url:"alias"`
+	// Optional short description of the slot, limited to 50 characters.
+	ShortDescription *string `json:"shortDescription,omitempty" url:"shortDescription,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (b *BatchActivationSlotAttributes) GetAlias() string {
+	if b == nil {
+		return ""
+	}
+	return b.Alias
+}
+
+func (b *BatchActivationSlotAttributes) GetShortDescription() *string {
+	if b == nil {
+		return nil
+	}
+	return b.ShortDescription
+}
+
+func (b *BatchActivationSlotAttributes) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
+	return b.extraProperties
+}
+
+func (b *BatchActivationSlotAttributes) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetAlias sets the Alias field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchActivationSlotAttributes) SetAlias(alias string) {
+	b.Alias = alias
+	b.require(batchActivationSlotAttributesFieldAlias)
+}
+
+// SetShortDescription sets the ShortDescription field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchActivationSlotAttributes) SetShortDescription(shortDescription *string) {
+	b.ShortDescription = shortDescription
+	b.require(batchActivationSlotAttributesFieldShortDescription)
+}
+
+func (b *BatchActivationSlotAttributes) UnmarshalJSON(data []byte) error {
+	type unmarshaler BatchActivationSlotAttributes
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BatchActivationSlotAttributes(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+	b.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BatchActivationSlotAttributes) MarshalJSON() ([]byte, error) {
+	type embed BatchActivationSlotAttributes
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (b *BatchActivationSlotAttributes) String() string {
+	if b == nil {
+		return "<nil>"
+	}
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Slot resource as it appears in the `included` array.
+var (
+	batchActivationSlotInclusionFieldId            = big.NewInt(1 << 0)
+	batchActivationSlotInclusionFieldAttributes    = big.NewInt(1 << 1)
+	batchActivationSlotInclusionFieldRelationships = big.NewInt(1 << 2)
+)
+
+type BatchActivationSlotInclusion struct {
+	Id            string                            `json:"id" url:"id"`
+	Attributes    *BatchActivationSlotAttributes    `json:"attributes" url:"attributes"`
+	Relationships *BatchActivationSlotRelationships `json:"relationships" url:"relationships"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (b *BatchActivationSlotInclusion) GetId() string {
+	if b == nil {
+		return ""
+	}
+	return b.Id
+}
+
+func (b *BatchActivationSlotInclusion) GetAttributes() *BatchActivationSlotAttributes {
+	if b == nil {
+		return nil
+	}
+	return b.Attributes
+}
+
+func (b *BatchActivationSlotInclusion) GetRelationships() *BatchActivationSlotRelationships {
+	if b == nil {
+		return nil
+	}
+	return b.Relationships
+}
+
+func (b *BatchActivationSlotInclusion) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
+	return b.extraProperties
+}
+
+func (b *BatchActivationSlotInclusion) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetId sets the Id field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchActivationSlotInclusion) SetId(id string) {
+	b.Id = id
+	b.require(batchActivationSlotInclusionFieldId)
+}
+
+// SetAttributes sets the Attributes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchActivationSlotInclusion) SetAttributes(attributes *BatchActivationSlotAttributes) {
+	b.Attributes = attributes
+	b.require(batchActivationSlotInclusionFieldAttributes)
+}
+
+// SetRelationships sets the Relationships field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchActivationSlotInclusion) SetRelationships(relationships *BatchActivationSlotRelationships) {
+	b.Relationships = relationships
+	b.require(batchActivationSlotInclusionFieldRelationships)
+}
+
+func (b *BatchActivationSlotInclusion) UnmarshalJSON(data []byte) error {
+	type unmarshaler BatchActivationSlotInclusion
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BatchActivationSlotInclusion(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+	b.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BatchActivationSlotInclusion) MarshalJSON() ([]byte, error) {
+	type embed BatchActivationSlotInclusion
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (b *BatchActivationSlotInclusion) String() string {
+	if b == nil {
+		return "<nil>"
+	}
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Relationship block for a `batchActivationSlot` resource.
+var (
+	batchActivationSlotRelationshipsFieldPlacement = big.NewInt(1 << 0)
+)
+
+type BatchActivationSlotRelationships struct {
+	// Reference to the placement that fills this slot. The referenced placement provides the slot's content strategy and offer-count cap; request `?include=slots.placement` to embed it in `included`.
+	Placement *ToOneRelationship `json:"placement" url:"placement"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (b *BatchActivationSlotRelationships) GetPlacement() *ToOneRelationship {
+	if b == nil {
+		return nil
+	}
+	return b.Placement
+}
+
+func (b *BatchActivationSlotRelationships) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
+	return b.extraProperties
+}
+
+func (b *BatchActivationSlotRelationships) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetPlacement sets the Placement field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchActivationSlotRelationships) SetPlacement(placement *ToOneRelationship) {
+	b.Placement = placement
+	b.require(batchActivationSlotRelationshipsFieldPlacement)
+}
+
+func (b *BatchActivationSlotRelationships) UnmarshalJSON(data []byte) error {
+	type unmarshaler BatchActivationSlotRelationships
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BatchActivationSlotRelationships(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+	b.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BatchActivationSlotRelationships) MarshalJSON() ([]byte, error) {
+	type embed BatchActivationSlotRelationships
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (b *BatchActivationSlotRelationships) String() string {
 	if b == nil {
 		return "<nil>"
 	}
@@ -632,6 +904,107 @@ func NewCadenceFrequencyFromString(s string) (CadenceFrequency, error) {
 
 func (c CadenceFrequency) Ptr() *CadenceFrequency {
 	return &c
+}
+
+// Content strategy as it appears in the `included` array.
+var (
+	contentStrategyInclusionFieldId         = big.NewInt(1 << 0)
+	contentStrategyInclusionFieldAttributes = big.NewInt(1 << 1)
+)
+
+type ContentStrategyInclusion struct {
+	Id         string                     `json:"id" url:"id"`
+	Attributes *ContentStrategyAttributes `json:"attributes" url:"attributes"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *ContentStrategyInclusion) GetId() string {
+	if c == nil {
+		return ""
+	}
+	return c.Id
+}
+
+func (c *ContentStrategyInclusion) GetAttributes() *ContentStrategyAttributes {
+	if c == nil {
+		return nil
+	}
+	return c.Attributes
+}
+
+func (c *ContentStrategyInclusion) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
+	return c.extraProperties
+}
+
+func (c *ContentStrategyInclusion) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetId sets the Id field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *ContentStrategyInclusion) SetId(id string) {
+	c.Id = id
+	c.require(contentStrategyInclusionFieldId)
+}
+
+// SetAttributes sets the Attributes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *ContentStrategyInclusion) SetAttributes(attributes *ContentStrategyAttributes) {
+	c.Attributes = attributes
+	c.require(contentStrategyInclusionFieldAttributes)
+}
+
+func (c *ContentStrategyInclusion) UnmarshalJSON(data []byte) error {
+	type unmarshaler ContentStrategyInclusion
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = ContentStrategyInclusion(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *ContentStrategyInclusion) MarshalJSON() ([]byte, error) {
+	type embed ContentStrategyInclusion
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (c *ContentStrategyInclusion) String() string {
+	if c == nil {
+		return "<nil>"
+	}
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
 }
 
 // Attributes for creating a batch-activation placement
@@ -842,15 +1215,18 @@ func (c *CreateBatchActivationPlacementData) String() string {
 
 // A slot in a batch-activation placement at creation time
 var (
-	createBatchActivationSlotFieldContentStrategyId = big.NewInt(1 << 0)
-	createBatchActivationSlotFieldAlias             = big.NewInt(1 << 1)
+	createBatchActivationSlotFieldPlacementId      = big.NewInt(1 << 0)
+	createBatchActivationSlotFieldAlias            = big.NewInt(1 << 1)
+	createBatchActivationSlotFieldShortDescription = big.NewInt(1 << 2)
 )
 
 type CreateBatchActivationSlot struct {
-	// ID of the content strategy that fills this slot
-	ContentStrategyId string `json:"contentStrategyId" url:"contentStrategyId"`
+	// ID of another placement that fills this slot. The referenced placement provides both the content strategy and the limit on the number of offers available to the slot.
+	PlacementId string `json:"placementId" url:"placementId"`
 	// Customer-defined alias for the slot, unique within the placement
 	Alias string `json:"alias" url:"alias"`
+	// Optional short description of the slot, limited to 50 characters
+	ShortDescription *string `json:"shortDescription,omitempty" url:"shortDescription,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -859,11 +1235,11 @@ type CreateBatchActivationSlot struct {
 	rawJSON         json.RawMessage
 }
 
-func (c *CreateBatchActivationSlot) GetContentStrategyId() string {
+func (c *CreateBatchActivationSlot) GetPlacementId() string {
 	if c == nil {
 		return ""
 	}
-	return c.ContentStrategyId
+	return c.PlacementId
 }
 
 func (c *CreateBatchActivationSlot) GetAlias() string {
@@ -871,6 +1247,13 @@ func (c *CreateBatchActivationSlot) GetAlias() string {
 		return ""
 	}
 	return c.Alias
+}
+
+func (c *CreateBatchActivationSlot) GetShortDescription() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ShortDescription
 }
 
 func (c *CreateBatchActivationSlot) GetExtraProperties() map[string]interface{} {
@@ -887,11 +1270,11 @@ func (c *CreateBatchActivationSlot) require(field *big.Int) {
 	c.explicitFields.Or(c.explicitFields, field)
 }
 
-// SetContentStrategyId sets the ContentStrategyId field and marks it as non-optional;
+// SetPlacementId sets the PlacementId field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateBatchActivationSlot) SetContentStrategyId(contentStrategyId string) {
-	c.ContentStrategyId = contentStrategyId
-	c.require(createBatchActivationSlotFieldContentStrategyId)
+func (c *CreateBatchActivationSlot) SetPlacementId(placementId string) {
+	c.PlacementId = placementId
+	c.require(createBatchActivationSlotFieldPlacementId)
 }
 
 // SetAlias sets the Alias field and marks it as non-optional;
@@ -899,6 +1282,13 @@ func (c *CreateBatchActivationSlot) SetContentStrategyId(contentStrategyId strin
 func (c *CreateBatchActivationSlot) SetAlias(alias string) {
 	c.Alias = alias
 	c.require(createBatchActivationSlotFieldAlias)
+}
+
+// SetShortDescription sets the ShortDescription field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateBatchActivationSlot) SetShortDescription(shortDescription *string) {
+	c.ShortDescription = shortDescription
+	c.require(createBatchActivationSlotFieldShortDescription)
 }
 
 func (c *CreateBatchActivationSlot) UnmarshalJSON(data []byte) error {
@@ -1621,6 +2011,172 @@ func (d DayOfWeek) Ptr() *DayOfWeek {
 	return &d
 }
 
+// Discriminated union of every resource type that can appear in the `included` array. The shape of each branch matches the corresponding primary-data resource (same attributes and relationships), keyed on the JSON:API `type` discriminant.
+type IncludedResource struct {
+	Type                      string
+	ContentStrategy           *ContentStrategyInclusion
+	BatchActivationSlot       *BatchActivationSlotInclusion
+	PlacementMainPage         *MainPagePlacementData
+	PlacementPushNotification *PushNotificationPlacementData
+}
+
+func (i *IncludedResource) GetType() string {
+	if i == nil {
+		return ""
+	}
+	return i.Type
+}
+
+func (i *IncludedResource) GetContentStrategy() *ContentStrategyInclusion {
+	if i == nil {
+		return nil
+	}
+	return i.ContentStrategy
+}
+
+func (i *IncludedResource) GetBatchActivationSlot() *BatchActivationSlotInclusion {
+	if i == nil {
+		return nil
+	}
+	return i.BatchActivationSlot
+}
+
+func (i *IncludedResource) GetPlacementMainPage() *MainPagePlacementData {
+	if i == nil {
+		return nil
+	}
+	return i.PlacementMainPage
+}
+
+func (i *IncludedResource) GetPlacementPushNotification() *PushNotificationPlacementData {
+	if i == nil {
+		return nil
+	}
+	return i.PlacementPushNotification
+}
+
+func (i *IncludedResource) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		Type string `json:"type"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	i.Type = unmarshaler.Type
+	if unmarshaler.Type == "" {
+		return fmt.Errorf("%T did not include discriminant type", i)
+	}
+	switch unmarshaler.Type {
+	case "contentStrategy":
+		value := new(ContentStrategyInclusion)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		i.ContentStrategy = value
+	case "batchActivationSlot":
+		value := new(BatchActivationSlotInclusion)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		i.BatchActivationSlot = value
+	case "placementMainPage":
+		value := new(MainPagePlacementData)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		i.PlacementMainPage = value
+	case "placementPushNotification":
+		value := new(PushNotificationPlacementData)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		i.PlacementPushNotification = value
+	}
+	return nil
+}
+
+func (i IncludedResource) MarshalJSON() ([]byte, error) {
+	if err := i.validate(); err != nil {
+		return nil, err
+	}
+	if i.ContentStrategy != nil {
+		return internal.MarshalJSONWithExtraProperty(i.ContentStrategy, "type", "contentStrategy")
+	}
+	if i.BatchActivationSlot != nil {
+		return internal.MarshalJSONWithExtraProperty(i.BatchActivationSlot, "type", "batchActivationSlot")
+	}
+	if i.PlacementMainPage != nil {
+		return internal.MarshalJSONWithExtraProperty(i.PlacementMainPage, "type", "placementMainPage")
+	}
+	if i.PlacementPushNotification != nil {
+		return internal.MarshalJSONWithExtraProperty(i.PlacementPushNotification, "type", "placementPushNotification")
+	}
+	return nil, fmt.Errorf("type %T does not define a non-empty union type", i)
+}
+
+type IncludedResourceVisitor interface {
+	VisitContentStrategy(*ContentStrategyInclusion) error
+	VisitBatchActivationSlot(*BatchActivationSlotInclusion) error
+	VisitPlacementMainPage(*MainPagePlacementData) error
+	VisitPlacementPushNotification(*PushNotificationPlacementData) error
+}
+
+func (i *IncludedResource) Accept(visitor IncludedResourceVisitor) error {
+	if i.ContentStrategy != nil {
+		return visitor.VisitContentStrategy(i.ContentStrategy)
+	}
+	if i.BatchActivationSlot != nil {
+		return visitor.VisitBatchActivationSlot(i.BatchActivationSlot)
+	}
+	if i.PlacementMainPage != nil {
+		return visitor.VisitPlacementMainPage(i.PlacementMainPage)
+	}
+	if i.PlacementPushNotification != nil {
+		return visitor.VisitPlacementPushNotification(i.PlacementPushNotification)
+	}
+	return fmt.Errorf("type %T does not define a non-empty union type", i)
+}
+
+func (i *IncludedResource) validate() error {
+	if i == nil {
+		return fmt.Errorf("type %T is nil", i)
+	}
+	var fields []string
+	if i.ContentStrategy != nil {
+		fields = append(fields, "contentStrategy")
+	}
+	if i.BatchActivationSlot != nil {
+		fields = append(fields, "batchActivationSlot")
+	}
+	if i.PlacementMainPage != nil {
+		fields = append(fields, "placementMainPage")
+	}
+	if i.PlacementPushNotification != nil {
+		fields = append(fields, "placementPushNotification")
+	}
+	if len(fields) == 0 {
+		if i.Type != "" {
+			return fmt.Errorf("type %T defines a discriminant set to %q but the field is not set", i, i.Type)
+		}
+		return fmt.Errorf("type %T is empty", i)
+	}
+	if len(fields) > 1 {
+		return fmt.Errorf("type %T defines values for %s, but only one value is allowed", i, fields)
+	}
+	if i.Type != "" {
+		field := fields[0]
+		if i.Type != field {
+			return fmt.Errorf(
+				"type %T defines a discriminant set to %q, but it does not match the %T field; either remove or update the discriminant to match",
+				i,
+				i.Type,
+				i,
+			)
+		}
+	}
+	return nil
+}
+
 // Attributes for a main-page placement
 var (
 	mainPagePlacementAttributesFieldName              = big.NewInt(1 << 0)
@@ -1636,7 +2192,7 @@ type MainPagePlacementAttributes struct {
 	OrganizationId string `json:"organizationId" url:"organizationId"`
 	// Number of available slots
 	AvailableSlots int `json:"availableSlots" url:"availableSlots"`
-	// ID of the content strategy linked to this placement, if any
+	// ID of the content strategy linked to this placement, if any. Retained alongside `relationships.contentStrategy` for backward compatibility.
 	ContentStrategyId *string `json:"contentStrategyId,omitempty" url:"contentStrategyId,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
@@ -1760,14 +2316,17 @@ func (m *MainPagePlacementAttributes) String() string {
 
 // Main-page placement resource data
 var (
-	mainPagePlacementDataFieldId         = big.NewInt(1 << 0)
-	mainPagePlacementDataFieldAttributes = big.NewInt(1 << 1)
+	mainPagePlacementDataFieldId            = big.NewInt(1 << 0)
+	mainPagePlacementDataFieldAttributes    = big.NewInt(1 << 1)
+	mainPagePlacementDataFieldRelationships = big.NewInt(1 << 2)
 )
 
 type MainPagePlacementData struct {
 	// Unique identifier of the placement (UUID v7)
 	Id         string                       `json:"id" url:"id"`
 	Attributes *MainPagePlacementAttributes `json:"attributes" url:"attributes"`
+	// JSON:API relationships for the placement. Omitted entirely when the placement has no linked resources.
+	Relationships *PlacementRelationships `json:"relationships,omitempty" url:"relationships,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -1788,6 +2347,13 @@ func (m *MainPagePlacementData) GetAttributes() *MainPagePlacementAttributes {
 		return nil
 	}
 	return m.Attributes
+}
+
+func (m *MainPagePlacementData) GetRelationships() *PlacementRelationships {
+	if m == nil {
+		return nil
+	}
+	return m.Relationships
 }
 
 func (m *MainPagePlacementData) GetExtraProperties() map[string]interface{} {
@@ -1816,6 +2382,13 @@ func (m *MainPagePlacementData) SetId(id string) {
 func (m *MainPagePlacementData) SetAttributes(attributes *MainPagePlacementAttributes) {
 	m.Attributes = attributes
 	m.require(mainPagePlacementDataFieldAttributes)
+}
+
+// SetRelationships sets the Relationships field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (m *MainPagePlacementData) SetRelationships(relationships *PlacementRelationships) {
+	m.Relationships = relationships
+	m.require(mainPagePlacementDataFieldRelationships)
 }
 
 func (m *MainPagePlacementData) UnmarshalJSON(data []byte) error {
@@ -2013,9 +2586,9 @@ var (
 type PlacementListResponse struct {
 	// Array of placement resources
 	Data []*PlacementFormatUnion `json:"data" url:"data"`
-	// Related resources requested via the `include` query parameter. Only populated when `include=contentStrategy` is supplied and at least one placement in `data` is linked to a content strategy.
-	Included []*ContentStrategyResponse `json:"included,omitempty" url:"included,omitempty"`
-	Links    *kardgosdk.Links           `json:"links,omitempty" url:"links,omitempty"`
+	// Related resources requested via the `include` query parameter. Each entry is keyed by its `type` discriminant (`contentStrategy`, `batchActivationSlot`, `placementMainPage`, `placementPushNotification`).
+	Included []*IncludedResource `json:"included,omitempty" url:"included,omitempty"`
+	Links    *kardgosdk.Links    `json:"links,omitempty" url:"links,omitempty"`
 	// Pagination metadata
 	Meta *kardgosdk.OrganizationPaginationMetadata `json:"meta,omitempty" url:"meta,omitempty"`
 
@@ -2033,7 +2606,7 @@ func (p *PlacementListResponse) GetData() []*PlacementFormatUnion {
 	return p.Data
 }
 
-func (p *PlacementListResponse) GetIncluded() []*ContentStrategyResponse {
+func (p *PlacementListResponse) GetIncluded() []*IncludedResource {
 	if p == nil {
 		return nil
 	}
@@ -2077,7 +2650,7 @@ func (p *PlacementListResponse) SetData(data []*PlacementFormatUnion) {
 
 // SetIncluded sets the Included field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (p *PlacementListResponse) SetIncluded(included []*ContentStrategyResponse) {
+func (p *PlacementListResponse) SetIncluded(included []*IncludedResource) {
 	p.Included = included
 	p.require(placementListResponseFieldIncluded)
 }
@@ -2138,6 +2711,92 @@ func (p *PlacementListResponse) String() string {
 	return fmt.Sprintf("%#v", p)
 }
 
+// Relationship block for non-batch placements. Mirrors the `contentStrategyId` attribute so JSON:API clients can walk the graph.
+var (
+	placementRelationshipsFieldContentStrategy = big.NewInt(1 << 0)
+)
+
+type PlacementRelationships struct {
+	// Relationship to the content strategy that powers this placement. Present whenever the placement has been linked to a content strategy (`data.id` will be set). Omitted entirely when no content strategy is linked.
+	ContentStrategy *ToOneRelationship `json:"contentStrategy,omitempty" url:"contentStrategy,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PlacementRelationships) GetContentStrategy() *ToOneRelationship {
+	if p == nil {
+		return nil
+	}
+	return p.ContentStrategy
+}
+
+func (p *PlacementRelationships) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *PlacementRelationships) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetContentStrategy sets the ContentStrategy field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlacementRelationships) SetContentStrategy(contentStrategy *ToOneRelationship) {
+	p.ContentStrategy = contentStrategy
+	p.require(placementRelationshipsFieldContentStrategy)
+}
+
+func (p *PlacementRelationships) UnmarshalJSON(data []byte) error {
+	type unmarshaler PlacementRelationships
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PlacementRelationships(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PlacementRelationships) MarshalJSON() ([]byte, error) {
+	type embed PlacementRelationships
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *PlacementRelationships) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
 // Single placement document, optionally with embedded related resources
 var (
 	placementResourceFieldData     = big.NewInt(1 << 0)
@@ -2147,8 +2806,8 @@ var (
 type PlacementResource struct {
 	// Placement resource
 	Data *PlacementFormatUnion `json:"data" url:"data"`
-	// Related resources requested via the `include` query parameter. Only populated when `include=contentStrategy` is supplied and the placement is linked to a content strategy.
-	Included []*ContentStrategyResponse `json:"included,omitempty" url:"included,omitempty"`
+	// Related resources requested via the `include` query parameter. Each entry is keyed by its `type` discriminant (`contentStrategy`, `batchActivationSlot`, `placementMainPage`, `placementPushNotification`).
+	Included []*IncludedResource `json:"included,omitempty" url:"included,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -2164,7 +2823,7 @@ func (p *PlacementResource) GetData() *PlacementFormatUnion {
 	return p.Data
 }
 
-func (p *PlacementResource) GetIncluded() []*ContentStrategyResponse {
+func (p *PlacementResource) GetIncluded() []*IncludedResource {
 	if p == nil {
 		return nil
 	}
@@ -2194,7 +2853,7 @@ func (p *PlacementResource) SetData(data *PlacementFormatUnion) {
 
 // SetIncluded sets the Included field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (p *PlacementResource) SetIncluded(included []*ContentStrategyResponse) {
+func (p *PlacementResource) SetIncluded(included []*IncludedResource) {
 	p.Included = included
 	p.require(placementResourceFieldIncluded)
 }
@@ -2282,7 +2941,7 @@ type PushNotificationPlacementAttributes struct {
 	OrganizationId string `json:"organizationId" url:"organizationId"`
 	// Delivery cadence for the notification
 	Cadence *Cadence `json:"cadence" url:"cadence"`
-	// ID of the content strategy linked to this placement, if any
+	// ID of the content strategy linked to this placement, if any. Retained alongside `relationships.contentStrategy` for backward compatibility.
 	ContentStrategyId *string `json:"contentStrategyId,omitempty" url:"contentStrategyId,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
@@ -2406,14 +3065,17 @@ func (p *PushNotificationPlacementAttributes) String() string {
 
 // Push-notification placement resource data
 var (
-	pushNotificationPlacementDataFieldId         = big.NewInt(1 << 0)
-	pushNotificationPlacementDataFieldAttributes = big.NewInt(1 << 1)
+	pushNotificationPlacementDataFieldId            = big.NewInt(1 << 0)
+	pushNotificationPlacementDataFieldAttributes    = big.NewInt(1 << 1)
+	pushNotificationPlacementDataFieldRelationships = big.NewInt(1 << 2)
 )
 
 type PushNotificationPlacementData struct {
 	// Unique identifier of the placement (UUID v7)
 	Id         string                               `json:"id" url:"id"`
 	Attributes *PushNotificationPlacementAttributes `json:"attributes" url:"attributes"`
+	// JSON:API relationships for the placement. Omitted entirely when the placement has no linked resources.
+	Relationships *PlacementRelationships `json:"relationships,omitempty" url:"relationships,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -2434,6 +3096,13 @@ func (p *PushNotificationPlacementData) GetAttributes() *PushNotificationPlaceme
 		return nil
 	}
 	return p.Attributes
+}
+
+func (p *PushNotificationPlacementData) GetRelationships() *PlacementRelationships {
+	if p == nil {
+		return nil
+	}
+	return p.Relationships
 }
 
 func (p *PushNotificationPlacementData) GetExtraProperties() map[string]interface{} {
@@ -2462,6 +3131,13 @@ func (p *PushNotificationPlacementData) SetId(id string) {
 func (p *PushNotificationPlacementData) SetAttributes(attributes *PushNotificationPlacementAttributes) {
 	p.Attributes = attributes
 	p.require(pushNotificationPlacementDataFieldAttributes)
+}
+
+// SetRelationships sets the Relationships field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PushNotificationPlacementData) SetRelationships(relationships *PlacementRelationships) {
+	p.Relationships = relationships
+	p.require(pushNotificationPlacementDataFieldRelationships)
 }
 
 func (p *PushNotificationPlacementData) UnmarshalJSON(data []byte) error {
@@ -2504,6 +3180,281 @@ func (p *PushNotificationPlacementData) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", p)
+}
+
+// A reference to another resource by type and id.
+var (
+	resourceIdentifierFieldType = big.NewInt(1 << 0)
+	resourceIdentifierFieldId   = big.NewInt(1 << 1)
+)
+
+type ResourceIdentifier struct {
+	// Discriminant of the referenced resource (e.g. `contentStrategy`).
+	Type string `json:"type" url:"type"`
+	// Identifier of the referenced resource.
+	Id string `json:"id" url:"id"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (r *ResourceIdentifier) GetType() string {
+	if r == nil {
+		return ""
+	}
+	return r.Type
+}
+
+func (r *ResourceIdentifier) GetId() string {
+	if r == nil {
+		return ""
+	}
+	return r.Id
+}
+
+func (r *ResourceIdentifier) GetExtraProperties() map[string]interface{} {
+	if r == nil {
+		return nil
+	}
+	return r.extraProperties
+}
+
+func (r *ResourceIdentifier) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetType sets the Type field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *ResourceIdentifier) SetType(type_ string) {
+	r.Type = type_
+	r.require(resourceIdentifierFieldType)
+}
+
+// SetId sets the Id field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *ResourceIdentifier) SetId(id string) {
+	r.Id = id
+	r.require(resourceIdentifierFieldId)
+}
+
+func (r *ResourceIdentifier) UnmarshalJSON(data []byte) error {
+	type unmarshaler ResourceIdentifier
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = ResourceIdentifier(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+	r.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *ResourceIdentifier) MarshalJSON() ([]byte, error) {
+	type embed ResourceIdentifier
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*r),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, r.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (r *ResourceIdentifier) String() string {
+	if r == nil {
+		return "<nil>"
+	}
+	if len(r.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+// A JSON:API to-many relationship payload.
+var (
+	toManyRelationshipFieldData = big.NewInt(1 << 0)
+)
+
+type ToManyRelationship struct {
+	// The linked resource identifiers.
+	Data []*ResourceIdentifier `json:"data" url:"data"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (t *ToManyRelationship) GetData() []*ResourceIdentifier {
+	if t == nil {
+		return nil
+	}
+	return t.Data
+}
+
+func (t *ToManyRelationship) GetExtraProperties() map[string]interface{} {
+	if t == nil {
+		return nil
+	}
+	return t.extraProperties
+}
+
+func (t *ToManyRelationship) require(field *big.Int) {
+	if t.explicitFields == nil {
+		t.explicitFields = big.NewInt(0)
+	}
+	t.explicitFields.Or(t.explicitFields, field)
+}
+
+// SetData sets the Data field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *ToManyRelationship) SetData(data []*ResourceIdentifier) {
+	t.Data = data
+	t.require(toManyRelationshipFieldData)
+}
+
+func (t *ToManyRelationship) UnmarshalJSON(data []byte) error {
+	type unmarshaler ToManyRelationship
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = ToManyRelationship(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+	t.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *ToManyRelationship) MarshalJSON() ([]byte, error) {
+	type embed ToManyRelationship
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*t),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, t.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (t *ToManyRelationship) String() string {
+	if t == nil {
+		return "<nil>"
+	}
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// A JSON:API to-one relationship payload.
+var (
+	toOneRelationshipFieldData = big.NewInt(1 << 0)
+)
+
+type ToOneRelationship struct {
+	// The linked resource identifier, or null when the relationship is present but unlinked.
+	Data *ResourceIdentifier `json:"data,omitempty" url:"data,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (t *ToOneRelationship) GetData() *ResourceIdentifier {
+	if t == nil {
+		return nil
+	}
+	return t.Data
+}
+
+func (t *ToOneRelationship) GetExtraProperties() map[string]interface{} {
+	if t == nil {
+		return nil
+	}
+	return t.extraProperties
+}
+
+func (t *ToOneRelationship) require(field *big.Int) {
+	if t.explicitFields == nil {
+		t.explicitFields = big.NewInt(0)
+	}
+	t.explicitFields.Or(t.explicitFields, field)
+}
+
+// SetData sets the Data field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *ToOneRelationship) SetData(data *ResourceIdentifier) {
+	t.Data = data
+	t.require(toOneRelationshipFieldData)
+}
+
+func (t *ToOneRelationship) UnmarshalJSON(data []byte) error {
+	type unmarshaler ToOneRelationship
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = ToOneRelationship(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+	t.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *ToOneRelationship) MarshalJSON() ([]byte, error) {
+	type embed ToOneRelationship
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*t),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, t.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (t *ToOneRelationship) String() string {
+	if t == nil {
+		return "<nil>"
+	}
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
 }
 
 // Attributes for updating a batch-activation placement. All fields are required.
@@ -2714,18 +3665,21 @@ func (u *UpdateBatchActivationPlacementData) String() string {
 
 // A slot in a batch-activation placement at update time
 var (
-	updateBatchActivationSlotFieldSlotId            = big.NewInt(1 << 0)
-	updateBatchActivationSlotFieldContentStrategyId = big.NewInt(1 << 1)
-	updateBatchActivationSlotFieldAlias             = big.NewInt(1 << 2)
+	updateBatchActivationSlotFieldSlotId           = big.NewInt(1 << 0)
+	updateBatchActivationSlotFieldPlacementId      = big.NewInt(1 << 1)
+	updateBatchActivationSlotFieldAlias            = big.NewInt(1 << 2)
+	updateBatchActivationSlotFieldShortDescription = big.NewInt(1 << 3)
 )
 
 type UpdateBatchActivationSlot struct {
-	// Existing slot identifier. Echo the value from a prior GET to keep the slot stable; omit to mint a fresh slot. If the contentStrategyId changes, the slotId is regenerated regardless of what was echoed.
+	// Existing slot identifier. Echo the value from a prior GET to keep the slot stable; omit to mint a fresh slot. If the placementId changes, the slotId is regenerated regardless of what was echoed.
 	SlotId *string `json:"slotId,omitempty" url:"slotId,omitempty"`
-	// ID of the content strategy that fills this slot
-	ContentStrategyId string `json:"contentStrategyId" url:"contentStrategyId"`
+	// ID of another placement that fills this slot. The referenced placement provides both the content strategy and the limit on the number of offers available to the slot.
+	PlacementId string `json:"placementId" url:"placementId"`
 	// Customer-defined alias for the slot, unique within the placement
 	Alias string `json:"alias" url:"alias"`
+	// Optional short description of the slot, limited to 50 characters
+	ShortDescription *string `json:"shortDescription,omitempty" url:"shortDescription,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -2741,11 +3695,11 @@ func (u *UpdateBatchActivationSlot) GetSlotId() *string {
 	return u.SlotId
 }
 
-func (u *UpdateBatchActivationSlot) GetContentStrategyId() string {
+func (u *UpdateBatchActivationSlot) GetPlacementId() string {
 	if u == nil {
 		return ""
 	}
-	return u.ContentStrategyId
+	return u.PlacementId
 }
 
 func (u *UpdateBatchActivationSlot) GetAlias() string {
@@ -2753,6 +3707,13 @@ func (u *UpdateBatchActivationSlot) GetAlias() string {
 		return ""
 	}
 	return u.Alias
+}
+
+func (u *UpdateBatchActivationSlot) GetShortDescription() *string {
+	if u == nil {
+		return nil
+	}
+	return u.ShortDescription
 }
 
 func (u *UpdateBatchActivationSlot) GetExtraProperties() map[string]interface{} {
@@ -2776,11 +3737,11 @@ func (u *UpdateBatchActivationSlot) SetSlotId(slotId *string) {
 	u.require(updateBatchActivationSlotFieldSlotId)
 }
 
-// SetContentStrategyId sets the ContentStrategyId field and marks it as non-optional;
+// SetPlacementId sets the PlacementId field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpdateBatchActivationSlot) SetContentStrategyId(contentStrategyId string) {
-	u.ContentStrategyId = contentStrategyId
-	u.require(updateBatchActivationSlotFieldContentStrategyId)
+func (u *UpdateBatchActivationSlot) SetPlacementId(placementId string) {
+	u.PlacementId = placementId
+	u.require(updateBatchActivationSlotFieldPlacementId)
 }
 
 // SetAlias sets the Alias field and marks it as non-optional;
@@ -2788,6 +3749,13 @@ func (u *UpdateBatchActivationSlot) SetContentStrategyId(contentStrategyId strin
 func (u *UpdateBatchActivationSlot) SetAlias(alias string) {
 	u.Alias = alias
 	u.require(updateBatchActivationSlotFieldAlias)
+}
+
+// SetShortDescription sets the ShortDescription field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateBatchActivationSlot) SetShortDescription(shortDescription *string) {
+	u.ShortDescription = shortDescription
+	u.require(updateBatchActivationSlotFieldShortDescription)
 }
 
 func (u *UpdateBatchActivationSlot) UnmarshalJSON(data []byte) error {

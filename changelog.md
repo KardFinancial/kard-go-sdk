@@ -1,3 +1,23 @@
+## v8.0.0 - 2026-06-01
+* feat!: replace BatchActivationSlot with JSON:API relationship model
+* Refactor the batch-activation placement API surface to align with the
+* JSON:API specification. Slots are no longer embedded directly inside
+* `BatchActivationPlacementAttributes`; instead they are exposed via a
+* `relationships.slots` to-many relationship on `BatchActivationPlacementData`
+* and returned as `batchActivationSlot` entries in the `included` array.
+* The `included` field on `PlacementListResponse` and `PlacementResource`
+* changes from `[]*ContentStrategyResponse` to `[]*IncludedResource`, a
+* new discriminated union that can carry content strategies, batch-activation
+* slots, and referenced placements. Slot creation/update fields rename
+* `ContentStrategyId` → `PlacementId` throughout.
+* Key changes:
+* `BatchActivationPlacementAttributes.Slots` field and `GetSlots`/`SetSlots` methods removed; slot detail now lives in `BatchActivationPlacementData.Relationships` (`*BatchActivationPlacementRelationships`)
+* `BatchActivationSlot` struct renamed/replaced by `BatchActivationSlotInclusion` (with `BatchActivationSlotAttributes` and `BatchActivationSlotRelationships`); old `SlotId`/`ContentStrategyId` fields removed
+* `CreateBatchActivationSlot.ContentStrategyId` renamed to `PlacementId`; `UpdateBatchActivationSlot.ContentStrategyId` renamed to `PlacementId`
+* `PlacementListResponse.Included` and `PlacementResource.Included` type changed from `[]*ContentStrategyResponse` to `[]*IncludedResource`
+* New exported types added: `BatchActivationPlacementRelationships`, `BatchActivationSlotAttributes`, `BatchActivationSlotInclusion`, `BatchActivationSlotRelationships`, `ContentStrategyInclusion`, `IncludedResource`, `IncludedResourceVisitor`, `PlacementRelationships`, `ResourceIdentifier`, `ToManyRelationship`, `ToOneRelationship`
+* 🌿 Generated with Fern
+
 ## v7.3.0 - 2026-05-28
 ### Added
 * **`BatchSlotData.Components`** — new optional `*OfferComponents` field exposing slot-level UI components (a `cta` when the slot has no active activation, or a `logoFlare` decoration when it does), accessible via `GetComponents` and `SetComponents`.

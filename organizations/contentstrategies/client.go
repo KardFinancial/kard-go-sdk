@@ -6,11 +6,11 @@ import (
 	context "context"
 	os "os"
 
-	kard "github.com/KardFinancial/kard-go-sdk/v7"
-	core "github.com/KardFinancial/kard-go-sdk/v7/core"
-	internal "github.com/KardFinancial/kard-go-sdk/v7/internal"
-	option "github.com/KardFinancial/kard-go-sdk/v7/option"
-	organizations "github.com/KardFinancial/kard-go-sdk/v7/organizations"
+	kard "github.com/KardFinancial/kard-go-sdk/v8"
+	core "github.com/KardFinancial/kard-go-sdk/v8/core"
+	internal "github.com/KardFinancial/kard-go-sdk/v8/internal"
+	option "github.com/KardFinancial/kard-go-sdk/v8/option"
+	organizations "github.com/KardFinancial/kard-go-sdk/v8/organizations"
 )
 
 type Client struct {

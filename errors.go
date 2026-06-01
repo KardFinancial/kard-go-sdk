@@ -4,7 +4,7 @@ package kard
 
 import (
 	json "encoding/json"
-	core "github.com/KardFinancial/kard-go-sdk/v8/core"
+	core "github.com/KardFinancial/kard-go-sdk/v9/core"
 )
 
 type ConflictError struct {

@@ -5,8 +5,8 @@ package users
 import (
 	json "encoding/json"
 	fmt "fmt"
-	kardgosdk "github.com/KardFinancial/kard-go-sdk/v8"
-	internal "github.com/KardFinancial/kard-go-sdk/v8/internal"
+	kardgosdk "github.com/KardFinancial/kard-go-sdk/v9"
+	internal "github.com/KardFinancial/kard-go-sdk/v9/internal"
 	big "math/big"
 	time "time"
 )
@@ -602,230 +602,13 @@ func (a *Asset) String() string {
 	return fmt.Sprintf("%#v", a)
 }
 
-// One slot in a batch-activation placement, with freshness fields and the offers that resolve under the slot's content strategy.
-var (
-	batchSlotDataFieldSlotId          = big.NewInt(1 << 0)
-	batchSlotDataFieldAlias           = big.NewInt(1 << 1)
-	batchSlotDataFieldIsActive        = big.NewInt(1 << 2)
-	batchSlotDataFieldLastActivatedAt = big.NewInt(1 << 3)
-	batchSlotDataFieldExpiresAt       = big.NewInt(1 << 4)
-	batchSlotDataFieldComponents      = big.NewInt(1 << 5)
-	batchSlotDataFieldAssets          = big.NewInt(1 << 6)
-	batchSlotDataFieldOffers          = big.NewInt(1 << 7)
-)
-
-type BatchSlotData struct {
-	// Stable identifier for the slot within the placement
-	SlotId string `json:"slotId" url:"slotId"`
-	// Customer-defined alias for the slot, unique within the placement
-	Alias string `json:"alias" url:"alias"`
-	// Whether the slot is still considered "fresh" for the user. Set to false only when the slot's `expiresAt` is in the past AND the slot resolves to a non-empty offer set; an empty offer set keeps the slot active so partner UIs do not promote "tap to refresh" with nothing to show.
-	IsActive bool `json:"isActive" url:"isActive"`
-	// Timestamp of the most recent placementSlotAttribution ACTIVATE event for this (user, placement, slot). Absent for cold slots that have never been activated.
-	LastActivatedAt *time.Time `json:"lastActivatedAt,omitempty" url:"lastActivatedAt,omitempty"`
-	// Computed as `lastActivatedAt + placement.refreshInterval`. Absent for cold slots that have never been activated.
-	ExpiresAt *time.Time `json:"expiresAt,omitempty" url:"expiresAt,omitempty"`
-	// Slot-level UI components. Carries a `cta` (POST to the slot's activate endpoint) when the slot has no active (non-expired) activation, or a `logoFlare` decoration when it does — mutually exclusive on a single slot.
-	Components *OfferComponents `json:"components,omitempty" url:"components,omitempty"`
-	// Slot-level visual assets. Currently a single `IMG_VIEW` SVG showing the slot's initials, themed via the `--icon-fill` CSS custom property.
-	Assets []*Asset `json:"assets,omitempty" url:"assets,omitempty"`
-	// The set of offers eligible for the user under this slot's content strategy.
-	Offers []*OfferDataUnion `json:"offers" url:"offers"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (b *BatchSlotData) GetSlotId() string {
-	if b == nil {
-		return ""
-	}
-	return b.SlotId
-}
-
-func (b *BatchSlotData) GetAlias() string {
-	if b == nil {
-		return ""
-	}
-	return b.Alias
-}
-
-func (b *BatchSlotData) GetIsActive() bool {
-	if b == nil {
-		return false
-	}
-	return b.IsActive
-}
-
-func (b *BatchSlotData) GetLastActivatedAt() *time.Time {
-	if b == nil {
-		return nil
-	}
-	return b.LastActivatedAt
-}
-
-func (b *BatchSlotData) GetExpiresAt() *time.Time {
-	if b == nil {
-		return nil
-	}
-	return b.ExpiresAt
-}
-
-func (b *BatchSlotData) GetComponents() *OfferComponents {
-	if b == nil {
-		return nil
-	}
-	return b.Components
-}
-
-func (b *BatchSlotData) GetAssets() []*Asset {
-	if b == nil {
-		return nil
-	}
-	return b.Assets
-}
-
-func (b *BatchSlotData) GetOffers() []*OfferDataUnion {
-	if b == nil {
-		return nil
-	}
-	return b.Offers
-}
-
-func (b *BatchSlotData) GetExtraProperties() map[string]interface{} {
-	if b == nil {
-		return nil
-	}
-	return b.extraProperties
-}
-
-func (b *BatchSlotData) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
-	}
-	b.explicitFields.Or(b.explicitFields, field)
-}
-
-// SetSlotId sets the SlotId field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (b *BatchSlotData) SetSlotId(slotId string) {
-	b.SlotId = slotId
-	b.require(batchSlotDataFieldSlotId)
-}
-
-// SetAlias sets the Alias field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (b *BatchSlotData) SetAlias(alias string) {
-	b.Alias = alias
-	b.require(batchSlotDataFieldAlias)
-}
-
-// SetIsActive sets the IsActive field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (b *BatchSlotData) SetIsActive(isActive bool) {
-	b.IsActive = isActive
-	b.require(batchSlotDataFieldIsActive)
-}
-
-// SetLastActivatedAt sets the LastActivatedAt field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (b *BatchSlotData) SetLastActivatedAt(lastActivatedAt *time.Time) {
-	b.LastActivatedAt = lastActivatedAt
-	b.require(batchSlotDataFieldLastActivatedAt)
-}
-
-// SetExpiresAt sets the ExpiresAt field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (b *BatchSlotData) SetExpiresAt(expiresAt *time.Time) {
-	b.ExpiresAt = expiresAt
-	b.require(batchSlotDataFieldExpiresAt)
-}
-
-// SetComponents sets the Components field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (b *BatchSlotData) SetComponents(components *OfferComponents) {
-	b.Components = components
-	b.require(batchSlotDataFieldComponents)
-}
-
-// SetAssets sets the Assets field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (b *BatchSlotData) SetAssets(assets []*Asset) {
-	b.Assets = assets
-	b.require(batchSlotDataFieldAssets)
-}
-
-// SetOffers sets the Offers field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (b *BatchSlotData) SetOffers(offers []*OfferDataUnion) {
-	b.Offers = offers
-	b.require(batchSlotDataFieldOffers)
-}
-
-func (b *BatchSlotData) UnmarshalJSON(data []byte) error {
-	type embed BatchSlotData
-	var unmarshaler = struct {
-		embed
-		LastActivatedAt *internal.DateTime `json:"lastActivatedAt,omitempty"`
-		ExpiresAt       *internal.DateTime `json:"expiresAt,omitempty"`
-	}{
-		embed: embed(*b),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
-		return err
-	}
-	*b = BatchSlotData(unmarshaler.embed)
-	b.LastActivatedAt = unmarshaler.LastActivatedAt.TimePtr()
-	b.ExpiresAt = unmarshaler.ExpiresAt.TimePtr()
-	extraProperties, err := internal.ExtractExtraProperties(data, *b)
-	if err != nil {
-		return err
-	}
-	b.extraProperties = extraProperties
-	b.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (b *BatchSlotData) MarshalJSON() ([]byte, error) {
-	type embed BatchSlotData
-	var marshaler = struct {
-		embed
-		LastActivatedAt *internal.DateTime `json:"lastActivatedAt,omitempty"`
-		ExpiresAt       *internal.DateTime `json:"expiresAt,omitempty"`
-	}{
-		embed:           embed(*b),
-		LastActivatedAt: internal.NewOptionalDateTime(b.LastActivatedAt),
-		ExpiresAt:       internal.NewOptionalDateTime(b.ExpiresAt),
-	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (b *BatchSlotData) String() string {
-	if b == nil {
-		return "<nil>"
-	}
-	if len(b.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(b); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", b)
-}
-
 // Ordered list of slots for a batch-activation placement, with freshness fields and per-slot offer sets.
 var (
 	batchesResponseObjectFieldData = big.NewInt(1 << 0)
 )
 
 type BatchesResponseObject struct {
-	Data []*BatchSlotData `json:"data" url:"data"`
+	Data []*PlacementBatchData `json:"data" url:"data"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -834,7 +617,7 @@ type BatchesResponseObject struct {
 	rawJSON         json.RawMessage
 }
 
-func (b *BatchesResponseObject) GetData() []*BatchSlotData {
+func (b *BatchesResponseObject) GetData() []*PlacementBatchData {
 	if b == nil {
 		return nil
 	}
@@ -857,7 +640,7 @@ func (b *BatchesResponseObject) require(field *big.Int) {
 
 // SetData sets the Data field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (b *BatchesResponseObject) SetData(data []*BatchSlotData) {
+func (b *BatchesResponseObject) SetData(data []*PlacementBatchData) {
 	b.Data = data
 	b.require(batchesResponseObjectFieldData)
 }
@@ -4491,6 +4274,324 @@ func (o *OperationTime) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", o)
+}
+
+// Attributes of a placement batch slot.
+var (
+	placementBatchAttributesFieldName            = big.NewInt(1 << 0)
+	placementBatchAttributesFieldIsActive        = big.NewInt(1 << 1)
+	placementBatchAttributesFieldLastActivatedAt = big.NewInt(1 << 2)
+	placementBatchAttributesFieldExpiresAt       = big.NewInt(1 << 3)
+	placementBatchAttributesFieldComponents      = big.NewInt(1 << 4)
+	placementBatchAttributesFieldAssets          = big.NewInt(1 << 5)
+	placementBatchAttributesFieldOffers          = big.NewInt(1 << 6)
+)
+
+type PlacementBatchAttributes struct {
+	// Display name for the slot. Falls back to the slot's customer-defined alias, or — when the alias is absent — the name of the placement referenced by the slot.
+	Name string `json:"name" url:"name"`
+	// Whether the slot is still considered "fresh" for the user. Set to false only when the slot's `expiresAt` is in the past AND the slot resolves to a non-empty offer set; an empty offer set keeps the slot active so partner UIs do not promote "tap to refresh" with nothing to show.
+	IsActive bool `json:"isActive" url:"isActive"`
+	// Timestamp of the most recent placementSlotAttribution ACTIVATE event for this (user, placement, slot). Absent for cold slots that have never been activated.
+	LastActivatedAt *time.Time `json:"lastActivatedAt,omitempty" url:"lastActivatedAt,omitempty"`
+	// Computed as `lastActivatedAt + placement.refreshInterval`. Absent for cold slots that have never been activated.
+	ExpiresAt *time.Time `json:"expiresAt,omitempty" url:"expiresAt,omitempty"`
+	// Slot-level UI components. Carries a `cta` (POST to the slot's activate endpoint) when the slot has no active (non-expired) activation, or a `logoFlare` decoration when it does — mutually exclusive on a single slot.
+	Components *OfferComponents `json:"components,omitempty" url:"components,omitempty"`
+	// Slot-level visual assets. Currently a single `IMG_VIEW` SVG showing the slot's initials, themed via the `--icon-fill` CSS custom property.
+	Assets []*Asset `json:"assets,omitempty" url:"assets,omitempty"`
+	// The set of offers eligible for the user under this slot's content strategy.
+	Offers []*OfferDataUnion `json:"offers" url:"offers"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PlacementBatchAttributes) GetName() string {
+	if p == nil {
+		return ""
+	}
+	return p.Name
+}
+
+func (p *PlacementBatchAttributes) GetIsActive() bool {
+	if p == nil {
+		return false
+	}
+	return p.IsActive
+}
+
+func (p *PlacementBatchAttributes) GetLastActivatedAt() *time.Time {
+	if p == nil {
+		return nil
+	}
+	return p.LastActivatedAt
+}
+
+func (p *PlacementBatchAttributes) GetExpiresAt() *time.Time {
+	if p == nil {
+		return nil
+	}
+	return p.ExpiresAt
+}
+
+func (p *PlacementBatchAttributes) GetComponents() *OfferComponents {
+	if p == nil {
+		return nil
+	}
+	return p.Components
+}
+
+func (p *PlacementBatchAttributes) GetAssets() []*Asset {
+	if p == nil {
+		return nil
+	}
+	return p.Assets
+}
+
+func (p *PlacementBatchAttributes) GetOffers() []*OfferDataUnion {
+	if p == nil {
+		return nil
+	}
+	return p.Offers
+}
+
+func (p *PlacementBatchAttributes) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *PlacementBatchAttributes) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetName sets the Name field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlacementBatchAttributes) SetName(name string) {
+	p.Name = name
+	p.require(placementBatchAttributesFieldName)
+}
+
+// SetIsActive sets the IsActive field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlacementBatchAttributes) SetIsActive(isActive bool) {
+	p.IsActive = isActive
+	p.require(placementBatchAttributesFieldIsActive)
+}
+
+// SetLastActivatedAt sets the LastActivatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlacementBatchAttributes) SetLastActivatedAt(lastActivatedAt *time.Time) {
+	p.LastActivatedAt = lastActivatedAt
+	p.require(placementBatchAttributesFieldLastActivatedAt)
+}
+
+// SetExpiresAt sets the ExpiresAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlacementBatchAttributes) SetExpiresAt(expiresAt *time.Time) {
+	p.ExpiresAt = expiresAt
+	p.require(placementBatchAttributesFieldExpiresAt)
+}
+
+// SetComponents sets the Components field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlacementBatchAttributes) SetComponents(components *OfferComponents) {
+	p.Components = components
+	p.require(placementBatchAttributesFieldComponents)
+}
+
+// SetAssets sets the Assets field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlacementBatchAttributes) SetAssets(assets []*Asset) {
+	p.Assets = assets
+	p.require(placementBatchAttributesFieldAssets)
+}
+
+// SetOffers sets the Offers field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlacementBatchAttributes) SetOffers(offers []*OfferDataUnion) {
+	p.Offers = offers
+	p.require(placementBatchAttributesFieldOffers)
+}
+
+func (p *PlacementBatchAttributes) UnmarshalJSON(data []byte) error {
+	type embed PlacementBatchAttributes
+	var unmarshaler = struct {
+		embed
+		LastActivatedAt *internal.DateTime `json:"lastActivatedAt,omitempty"`
+		ExpiresAt       *internal.DateTime `json:"expiresAt,omitempty"`
+	}{
+		embed: embed(*p),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*p = PlacementBatchAttributes(unmarshaler.embed)
+	p.LastActivatedAt = unmarshaler.LastActivatedAt.TimePtr()
+	p.ExpiresAt = unmarshaler.ExpiresAt.TimePtr()
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PlacementBatchAttributes) MarshalJSON() ([]byte, error) {
+	type embed PlacementBatchAttributes
+	var marshaler = struct {
+		embed
+		LastActivatedAt *internal.DateTime `json:"lastActivatedAt,omitempty"`
+		ExpiresAt       *internal.DateTime `json:"expiresAt,omitempty"`
+	}{
+		embed:           embed(*p),
+		LastActivatedAt: internal.NewOptionalDateTime(p.LastActivatedAt),
+		ExpiresAt:       internal.NewOptionalDateTime(p.ExpiresAt),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *PlacementBatchAttributes) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+// One slot in a batch-activation placement, with freshness fields and the offers that resolve under the slot's content strategy.
+var (
+	placementBatchDataFieldId         = big.NewInt(1 << 0)
+	placementBatchDataFieldAttributes = big.NewInt(1 << 1)
+)
+
+type PlacementBatchData struct {
+	// Stable identifier for the slot within the placement
+	Id         string                    `json:"id" url:"id"`
+	Attributes *PlacementBatchAttributes `json:"attributes" url:"attributes"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+	type_          string
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PlacementBatchData) GetId() string {
+	if p == nil {
+		return ""
+	}
+	return p.Id
+}
+
+func (p *PlacementBatchData) GetAttributes() *PlacementBatchAttributes {
+	if p == nil {
+		return nil
+	}
+	return p.Attributes
+}
+
+func (p *PlacementBatchData) Type() string {
+	return p.type_
+}
+
+func (p *PlacementBatchData) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *PlacementBatchData) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetId sets the Id field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlacementBatchData) SetId(id string) {
+	p.Id = id
+	p.require(placementBatchDataFieldId)
+}
+
+// SetAttributes sets the Attributes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlacementBatchData) SetAttributes(attributes *PlacementBatchAttributes) {
+	p.Attributes = attributes
+	p.require(placementBatchDataFieldAttributes)
+}
+
+func (p *PlacementBatchData) UnmarshalJSON(data []byte) error {
+	type embed PlacementBatchData
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*p),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*p = PlacementBatchData(unmarshaler.embed)
+	if unmarshaler.Type != "placementBatch" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", p, "placementBatch", unmarshaler.Type)
+	}
+	p.type_ = unmarshaler.Type
+	extraProperties, err := internal.ExtractExtraProperties(data, *p, "type")
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PlacementBatchData) MarshalJSON() ([]byte, error) {
+	type embed PlacementBatchData
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*p),
+		Type:  "placementBatch",
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *PlacementBatchData) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
 }
 
 // Progress bar component for tracking offer redemption progress

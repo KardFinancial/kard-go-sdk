@@ -1,3 +1,11 @@
+## v9.0.0 - 2026-06-01
+### Breaking Changes
+* **`BatchSlotData`** struct is removed; migrate by using the new `PlacementBatchData` (which exposes `Id` and `Attributes`) and `PlacementBatchAttributes` (which carries `Name`, `IsActive`, `LastActivatedAt`, `ExpiresAt`, `Components`, `Assets`, and `Offers`) instead.
+* **`BatchesResponseObject.Data`** type changed from `[]*BatchSlotData` to `[]*PlacementBatchData`; update all call sites that read or write this field, including `GetData()` and `SetData()`.
+### Added
+* **`PlacementBatchData`** — new JSON:API resource struct representing a batch-activation slot, with `Id` (stable slot identifier), a `type` literal of `"placementBatch"`, and an `Attributes` field pointing to `PlacementBatchAttributes`.
+* **`PlacementBatchAttributes`** — new struct holding slot-level detail: `Name`, `IsActive`, `LastActivatedAt`, `ExpiresAt`, `Components`, `Assets`, and `Offers`, with corresponding getters and setters.
+
 ## v8.0.0 - 2026-06-01
 * feat!: replace BatchActivationSlot with JSON:API relationship model
 * Refactor the batch-activation placement API surface to align with the

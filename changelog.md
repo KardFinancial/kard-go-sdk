@@ -1,3 +1,8 @@
+## v9.1.0 - 2026-06-01
+### Added
+* **`PlacementBatchAttributes.ShortDescription`** — new string field with a brief, human-readable label describing how long a slot stays activated after a user taps activate (e.g. `"Activated for 24 hours"`), accessible via `GetShortDescription` and `SetShortDescription`.
+* **`PlacementBatchAttributes.LongDescription`** — new string field with a fuller description of the slot's activation behavior, clarifying which offers are activated and for how long, accessible via `GetLongDescription` and `SetLongDescription`.
+
 ## v9.0.0 - 2026-06-01
 ### Breaking Changes
 * **`BatchSlotData`** struct is removed; migrate by using the new `PlacementBatchData` (which exposes `Id` and `Attributes`) and `PlacementBatchAttributes` (which carries `Name`, `IsActive`, `LastActivatedAt`, `ExpiresAt`, `Components`, `Assets`, and `Offers`) instead.

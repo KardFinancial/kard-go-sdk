@@ -4,7 +4,7 @@ package users
 
 import (
 	json "encoding/json"
-	kardgosdk "github.com/KardFinancial/kard-go-sdk/v9"
+	kardgosdk "github.com/KardFinancial/kard-go-sdk/v10"
 	assert "github.com/stretchr/testify/assert"
 	require "github.com/stretchr/testify/require"
 	testing "testing"
@@ -7474,22 +7474,6 @@ func TestSettersPlacementBatchAttributes(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
-	t.Run("SetShortDescription", func(t *testing.T) {
-		obj := &PlacementBatchAttributes{}
-		var fernTestValueShortDescription string
-		obj.SetShortDescription(fernTestValueShortDescription)
-		assert.Equal(t, fernTestValueShortDescription, obj.ShortDescription)
-		assert.NotNil(t, obj.explicitFields)
-	})
-
-	t.Run("SetLongDescription", func(t *testing.T) {
-		obj := &PlacementBatchAttributes{}
-		var fernTestValueLongDescription string
-		obj.SetLongDescription(fernTestValueLongDescription)
-		assert.Equal(t, fernTestValueLongDescription, obj.LongDescription)
-		assert.NotNil(t, obj.explicitFields)
-	})
-
 	t.Run("SetIsActive", func(t *testing.T) {
 		obj := &PlacementBatchAttributes{}
 		var fernTestValueIsActive bool
@@ -7562,52 +7546,6 @@ func TestGettersPlacementBatchAttributes(t *testing.T) {
 			}
 		}()
 		_ = obj.GetName() // Should return zero value
-	})
-
-	t.Run("GetShortDescription", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &PlacementBatchAttributes{}
-		var expected string
-		obj.ShortDescription = expected
-
-		// Act & Assert
-		assert.Equal(t, expected, obj.GetShortDescription(), "getter should return the property value")
-	})
-
-	t.Run("GetShortDescription_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *PlacementBatchAttributes
-		// Should not panic - getters should handle nil receiver gracefully
-		defer func() {
-			if r := recover(); r != nil {
-				t.Errorf("Getter panicked on nil receiver: %v", r)
-			}
-		}()
-		_ = obj.GetShortDescription() // Should return zero value
-	})
-
-	t.Run("GetLongDescription", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &PlacementBatchAttributes{}
-		var expected string
-		obj.LongDescription = expected
-
-		// Act & Assert
-		assert.Equal(t, expected, obj.GetLongDescription(), "getter should return the property value")
-	})
-
-	t.Run("GetLongDescription_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *PlacementBatchAttributes
-		// Should not panic - getters should handle nil receiver gracefully
-		defer func() {
-			if r := recover(); r != nil {
-				t.Errorf("Getter panicked on nil receiver: %v", r)
-			}
-		}()
-		_ = obj.GetLongDescription() // Should return zero value
 	})
 
 	t.Run("GetIsActive", func(t *testing.T) {
@@ -7809,68 +7747,6 @@ func TestSettersMarkExplicitPlacementBatchAttributes(t *testing.T) {
 
 		// Act
 		obj.SetName(fernTestValueName)
-
-		// Assert - object with explicitly set field can be marshaled/unmarshaled
-		bytes, err := json.Marshal(obj)
-		require.NoError(t, err, "marshaling should succeed for test setup")
-
-		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
-		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
-		if len(bytes) > 0 && bytes[0] == '{' {
-			// JSON object - unmarshal into map
-			var unmarshaled map[string]interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		} else {
-			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
-			var unmarshaled interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		}
-
-		// Note: This does not explicitly assert the presence of a specific JSON field
-		// It verifies that setting a field via setter allows successful JSON round-trip
-	})
-
-	t.Run("SetShortDescription_MarksExplicit", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &PlacementBatchAttributes{}
-		var fernTestValueShortDescription string
-
-		// Act
-		obj.SetShortDescription(fernTestValueShortDescription)
-
-		// Assert - object with explicitly set field can be marshaled/unmarshaled
-		bytes, err := json.Marshal(obj)
-		require.NoError(t, err, "marshaling should succeed for test setup")
-
-		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
-		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
-		if len(bytes) > 0 && bytes[0] == '{' {
-			// JSON object - unmarshal into map
-			var unmarshaled map[string]interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		} else {
-			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
-			var unmarshaled interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		}
-
-		// Note: This does not explicitly assert the presence of a specific JSON field
-		// It verifies that setting a field via setter allows successful JSON round-trip
-	})
-
-	t.Run("SetLongDescription_MarksExplicit", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &PlacementBatchAttributes{}
-		var fernTestValueLongDescription string
-
-		// Act
-		obj.SetLongDescription(fernTestValueLongDescription)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)

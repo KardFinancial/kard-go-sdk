@@ -5,8 +5,8 @@ package users
 import (
 	json "encoding/json"
 	fmt "fmt"
-	kardgosdk "github.com/KardFinancial/kard-go-sdk/v9"
-	internal "github.com/KardFinancial/kard-go-sdk/v9/internal"
+	kardgosdk "github.com/KardFinancial/kard-go-sdk/v10"
+	internal "github.com/KardFinancial/kard-go-sdk/v10/internal"
 	big "math/big"
 	time "time"
 )
@@ -4278,31 +4278,25 @@ func (o *OperationTime) String() string {
 
 // Attributes of a placement batch slot.
 var (
-	placementBatchAttributesFieldName             = big.NewInt(1 << 0)
-	placementBatchAttributesFieldShortDescription = big.NewInt(1 << 1)
-	placementBatchAttributesFieldLongDescription  = big.NewInt(1 << 2)
-	placementBatchAttributesFieldIsActive         = big.NewInt(1 << 3)
-	placementBatchAttributesFieldLastActivatedAt  = big.NewInt(1 << 4)
-	placementBatchAttributesFieldExpiresAt        = big.NewInt(1 << 5)
-	placementBatchAttributesFieldComponents       = big.NewInt(1 << 6)
-	placementBatchAttributesFieldAssets           = big.NewInt(1 << 7)
-	placementBatchAttributesFieldOffers           = big.NewInt(1 << 8)
+	placementBatchAttributesFieldName            = big.NewInt(1 << 0)
+	placementBatchAttributesFieldIsActive        = big.NewInt(1 << 1)
+	placementBatchAttributesFieldLastActivatedAt = big.NewInt(1 << 2)
+	placementBatchAttributesFieldExpiresAt       = big.NewInt(1 << 3)
+	placementBatchAttributesFieldComponents      = big.NewInt(1 << 4)
+	placementBatchAttributesFieldAssets          = big.NewInt(1 << 5)
+	placementBatchAttributesFieldOffers          = big.NewInt(1 << 6)
 )
 
 type PlacementBatchAttributes struct {
 	// Display name for the slot. Falls back to the slot's customer-defined alias, or — when the alias is absent — the name of the placement referenced by the slot.
 	Name string `json:"name" url:"name"`
-	// Short, human-readable description of how long the slot stays activated after a user taps activate. Derived from the parent placement's `refreshInterval` (e.g. `"Activated for 24 hours"`).
-	ShortDescription string `json:"shortDescription" url:"shortDescription"`
-	// Longer, human-readable description of the slot's activation behavior: clarifies that the offers displayed under this slot are the ones that will be activated for the user when they tap activate, and for how long they will remain active.
-	LongDescription string `json:"longDescription" url:"longDescription"`
 	// Whether the slot is still considered "fresh" for the user. Set to false only when the slot's `expiresAt` is in the past AND the slot resolves to a non-empty offer set; an empty offer set keeps the slot active so partner UIs do not promote "tap to refresh" with nothing to show.
 	IsActive bool `json:"isActive" url:"isActive"`
 	// Timestamp of the most recent placementSlotAttribution ACTIVATE event for this (user, placement, slot). Absent for cold slots that have never been activated.
 	LastActivatedAt *time.Time `json:"lastActivatedAt,omitempty" url:"lastActivatedAt,omitempty"`
 	// Computed as `lastActivatedAt + placement.refreshInterval`. Absent for cold slots that have never been activated.
 	ExpiresAt *time.Time `json:"expiresAt,omitempty" url:"expiresAt,omitempty"`
-	// Slot-level UI components. Carries a `cta` (POST to the slot's activate endpoint) when the slot has no active (non-expired) activation, or a `logoFlare` decoration when it does — mutually exclusive on a single slot.
+	// Slot-level UI components. Carries `shortDescription` and `longDescription` (activation copy derived from the parent placement's `refreshInterval`), plus either a `cta` (POST to the slot's activate endpoint) when the slot has no active (non-expired) activation, or a `logoFlare` decoration when it does — `cta` and `logoFlare` are mutually exclusive on a single slot.
 	Components *OfferComponents `json:"components,omitempty" url:"components,omitempty"`
 	// Slot-level visual assets. Currently a single `IMG_VIEW` SVG showing the slot's initials, themed via the `--icon-fill` CSS custom property.
 	Assets []*Asset `json:"assets,omitempty" url:"assets,omitempty"`
@@ -4321,20 +4315,6 @@ func (p *PlacementBatchAttributes) GetName() string {
 		return ""
 	}
 	return p.Name
-}
-
-func (p *PlacementBatchAttributes) GetShortDescription() string {
-	if p == nil {
-		return ""
-	}
-	return p.ShortDescription
-}
-
-func (p *PlacementBatchAttributes) GetLongDescription() string {
-	if p == nil {
-		return ""
-	}
-	return p.LongDescription
 }
 
 func (p *PlacementBatchAttributes) GetIsActive() bool {
@@ -4398,20 +4378,6 @@ func (p *PlacementBatchAttributes) require(field *big.Int) {
 func (p *PlacementBatchAttributes) SetName(name string) {
 	p.Name = name
 	p.require(placementBatchAttributesFieldName)
-}
-
-// SetShortDescription sets the ShortDescription field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (p *PlacementBatchAttributes) SetShortDescription(shortDescription string) {
-	p.ShortDescription = shortDescription
-	p.require(placementBatchAttributesFieldShortDescription)
-}
-
-// SetLongDescription sets the LongDescription field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (p *PlacementBatchAttributes) SetLongDescription(longDescription string) {
-	p.LongDescription = longDescription
-	p.require(placementBatchAttributesFieldLongDescription)
 }
 
 // SetIsActive sets the IsActive field and marks it as non-optional;

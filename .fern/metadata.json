@@ -6,10 +6,10 @@
     "packageName": "kard",
     "enableWireTests": true
   },
-  "originGitCommit": "06b5b0a9b4fedea7474e2f95cfb06f0410dcc022",
+  "originGitCommit": "ae42e90abeaad55856e875c8d5487dc15ce8b1b7",
   "originGitCommitIsDirty": true,
   "invokedBy": "ci",
   "requestedVersion": "AUTO",
   "ciProvider": "unknown",
-  "sdkVersion": "v9.1.0"
+  "sdkVersion": "v10.0.0"
 }

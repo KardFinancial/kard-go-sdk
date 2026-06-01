@@ -1,3 +1,8 @@
+## v10.0.0 - 2026-06-01
+### Breaking Changes
+* **`PlacementBatchAttributes.ShortDescription`** — field and its `GetShortDescription`/`SetShortDescription` methods are removed; migrate by reading `shortDescription` from the `Components` (`*OfferComponents`) field instead.
+* **`PlacementBatchAttributes.LongDescription`** — field and its `GetLongDescription`/`SetLongDescription` methods are removed; migrate by reading `longDescription` from the `Components` (`*OfferComponents`) field instead.
+
 ## v9.1.0 - 2026-06-01
 ### Added
 * **`PlacementBatchAttributes.ShortDescription`** — new string field with a brief, human-readable label describing how long a slot stays activated after a user taps activate (e.g. `"Activated for 24 hours"`), accessible via `GetShortDescription` and `SetShortDescription`.

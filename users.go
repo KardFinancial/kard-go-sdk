@@ -362,12 +362,13 @@ func (u *UpdateUserObject) String() string {
 }
 
 var (
-	updateUserRequestAttributesFieldEnrolledRewards = big.NewInt(1 << 0)
-	updateUserRequestAttributesFieldZipCode         = big.NewInt(1 << 1)
-	updateUserRequestAttributesFieldEmail           = big.NewInt(1 << 2)
-	updateUserRequestAttributesFieldHashedEmail     = big.NewInt(1 << 3)
-	updateUserRequestAttributesFieldPhoneNumber     = big.NewInt(1 << 4)
-	updateUserRequestAttributesFieldBirthYear       = big.NewInt(1 << 5)
+	updateUserRequestAttributesFieldEnrolledRewards            = big.NewInt(1 << 0)
+	updateUserRequestAttributesFieldZipCode                    = big.NewInt(1 << 1)
+	updateUserRequestAttributesFieldEmail                      = big.NewInt(1 << 2)
+	updateUserRequestAttributesFieldHashedEmail                = big.NewInt(1 << 3)
+	updateUserRequestAttributesFieldPhoneNumber                = big.NewInt(1 << 4)
+	updateUserRequestAttributesFieldBirthYear                  = big.NewInt(1 << 5)
+	updateUserRequestAttributesFieldHistoricalTransactionsSent = big.NewInt(1 << 6)
 )
 
 type UpdateUserRequestAttributes struct {
@@ -383,6 +384,8 @@ type UpdateUserRequestAttributes struct {
 	PhoneNumber *string `json:"phoneNumber,omitempty" url:"phoneNumber,omitempty"`
 	// Birth year of user
 	BirthYear *string `json:"birthYear,omitempty" url:"birthYear,omitempty"`
+	// Set to `true` to confirm that historical transactions have been sent for this user. This is a one-way flag: once `true` it cannot be set back to `false`, and a request attempting to do so is rejected.
+	HistoricalTransactionsSent *bool `json:"historicalTransactionsSent,omitempty" url:"historicalTransactionsSent,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -431,6 +434,13 @@ func (u *UpdateUserRequestAttributes) GetBirthYear() *string {
 		return nil
 	}
 	return u.BirthYear
+}
+
+func (u *UpdateUserRequestAttributes) GetHistoricalTransactionsSent() *bool {
+	if u == nil {
+		return nil
+	}
+	return u.HistoricalTransactionsSent
 }
 
 func (u *UpdateUserRequestAttributes) GetExtraProperties() map[string]interface{} {
@@ -487,6 +497,13 @@ func (u *UpdateUserRequestAttributes) SetPhoneNumber(phoneNumber *string) {
 func (u *UpdateUserRequestAttributes) SetBirthYear(birthYear *string) {
 	u.BirthYear = birthYear
 	u.require(updateUserRequestAttributesFieldBirthYear)
+}
+
+// SetHistoricalTransactionsSent sets the HistoricalTransactionsSent field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateUserRequestAttributes) SetHistoricalTransactionsSent(historicalTransactionsSent *bool) {
+	u.HistoricalTransactionsSent = historicalTransactionsSent
+	u.require(updateUserRequestAttributesFieldHistoricalTransactionsSent)
 }
 
 func (u *UpdateUserRequestAttributes) UnmarshalJSON(data []byte) error {

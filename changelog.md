@@ -1,3 +1,7 @@
+## v10.1.0 - 2026-06-10
+### Added
+* **`UpdateUserRequestAttributes.HistoricalTransactionsSent`** — new optional `*bool` field that confirms historical transactions have been sent for a user; once set to `true` it cannot be reverted, accessible via `GetHistoricalTransactionsSent` and `SetHistoricalTransactionsSent`.
+
 ## v10.0.0 - 2026-06-01
 ### Breaking Changes
 * **`PlacementBatchAttributes.ShortDescription`** — field and its `GetShortDescription`/`SetShortDescription` methods are removed; migrate by reading `shortDescription` from the `Components` (`*OfferComponents`) field instead.

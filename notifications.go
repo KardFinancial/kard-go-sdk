@@ -5,7 +5,7 @@ package kard
 import (
 	json "encoding/json"
 	fmt "fmt"
-	internal "github.com/KardFinancial/kard-go-sdk/v10/internal"
+	internal "github.com/KardFinancial/kard-go-sdk/v11/internal"
 	big "math/big"
 	time "time"
 )
@@ -1159,6 +1159,376 @@ func (e *EarnedRewardSettledData) String() string {
 }
 
 var (
+	emailNotificationPlacementFileAttributesFieldName           = big.NewInt(1 << 0)
+	emailNotificationPlacementFileAttributesFieldOrganizationId = big.NewInt(1 << 1)
+	emailNotificationPlacementFileAttributesFieldAvailableSlots = big.NewInt(1 << 2)
+	emailNotificationPlacementFileAttributesFieldCadence        = big.NewInt(1 << 3)
+	emailNotificationPlacementFileAttributesFieldDownloadUrl    = big.NewInt(1 << 4)
+)
+
+type EmailNotificationPlacementFileAttributes struct {
+	// The display name of the placement
+	Name string `json:"name" url:"name"`
+	// The issuer organization ID the placement belongs to
+	OrganizationId string `json:"organizationId" url:"organizationId"`
+	// The number of offer slots available in the placement
+	AvailableSlots int `json:"availableSlots" url:"availableSlots"`
+	// The delivery cadence of the placement (e.g. MONTHLY)
+	Cadence string `json:"cadence" url:"cadence"`
+	// Presigned URL to download the generated placement file (gzipped JSONL)
+	DownloadUrl string `json:"downloadUrl" url:"downloadUrl"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (e *EmailNotificationPlacementFileAttributes) GetName() string {
+	if e == nil {
+		return ""
+	}
+	return e.Name
+}
+
+func (e *EmailNotificationPlacementFileAttributes) GetOrganizationId() string {
+	if e == nil {
+		return ""
+	}
+	return e.OrganizationId
+}
+
+func (e *EmailNotificationPlacementFileAttributes) GetAvailableSlots() int {
+	if e == nil {
+		return 0
+	}
+	return e.AvailableSlots
+}
+
+func (e *EmailNotificationPlacementFileAttributes) GetCadence() string {
+	if e == nil {
+		return ""
+	}
+	return e.Cadence
+}
+
+func (e *EmailNotificationPlacementFileAttributes) GetDownloadUrl() string {
+	if e == nil {
+		return ""
+	}
+	return e.DownloadUrl
+}
+
+func (e *EmailNotificationPlacementFileAttributes) GetExtraProperties() map[string]interface{} {
+	if e == nil {
+		return nil
+	}
+	return e.extraProperties
+}
+
+func (e *EmailNotificationPlacementFileAttributes) require(field *big.Int) {
+	if e.explicitFields == nil {
+		e.explicitFields = big.NewInt(0)
+	}
+	e.explicitFields.Or(e.explicitFields, field)
+}
+
+// SetName sets the Name field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EmailNotificationPlacementFileAttributes) SetName(name string) {
+	e.Name = name
+	e.require(emailNotificationPlacementFileAttributesFieldName)
+}
+
+// SetOrganizationId sets the OrganizationId field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EmailNotificationPlacementFileAttributes) SetOrganizationId(organizationId string) {
+	e.OrganizationId = organizationId
+	e.require(emailNotificationPlacementFileAttributesFieldOrganizationId)
+}
+
+// SetAvailableSlots sets the AvailableSlots field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EmailNotificationPlacementFileAttributes) SetAvailableSlots(availableSlots int) {
+	e.AvailableSlots = availableSlots
+	e.require(emailNotificationPlacementFileAttributesFieldAvailableSlots)
+}
+
+// SetCadence sets the Cadence field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EmailNotificationPlacementFileAttributes) SetCadence(cadence string) {
+	e.Cadence = cadence
+	e.require(emailNotificationPlacementFileAttributesFieldCadence)
+}
+
+// SetDownloadUrl sets the DownloadUrl field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EmailNotificationPlacementFileAttributes) SetDownloadUrl(downloadUrl string) {
+	e.DownloadUrl = downloadUrl
+	e.require(emailNotificationPlacementFileAttributesFieldDownloadUrl)
+}
+
+func (e *EmailNotificationPlacementFileAttributes) UnmarshalJSON(data []byte) error {
+	type unmarshaler EmailNotificationPlacementFileAttributes
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*e = EmailNotificationPlacementFileAttributes(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *e)
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+	e.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *EmailNotificationPlacementFileAttributes) MarshalJSON() ([]byte, error) {
+	type embed EmailNotificationPlacementFileAttributes
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*e),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, e.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (e *EmailNotificationPlacementFileAttributes) String() string {
+	if e == nil {
+		return "<nil>"
+	}
+	if len(e.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(e.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
+}
+
+var (
+	emailNotificationPlacementFileDataFieldId            = big.NewInt(1 << 0)
+	emailNotificationPlacementFileDataFieldAttributes    = big.NewInt(1 << 1)
+	emailNotificationPlacementFileDataFieldRelationships = big.NewInt(1 << 2)
+)
+
+type EmailNotificationPlacementFileData struct {
+	// The placement ID, also used as the notification resource ID
+	Id            string                                       `json:"id" url:"id"`
+	Attributes    *EmailNotificationPlacementFileAttributes    `json:"attributes" url:"attributes"`
+	Relationships *EmailNotificationPlacementFileRelationships `json:"relationships" url:"relationships"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (e *EmailNotificationPlacementFileData) GetId() string {
+	if e == nil {
+		return ""
+	}
+	return e.Id
+}
+
+func (e *EmailNotificationPlacementFileData) GetAttributes() *EmailNotificationPlacementFileAttributes {
+	if e == nil {
+		return nil
+	}
+	return e.Attributes
+}
+
+func (e *EmailNotificationPlacementFileData) GetRelationships() *EmailNotificationPlacementFileRelationships {
+	if e == nil {
+		return nil
+	}
+	return e.Relationships
+}
+
+func (e *EmailNotificationPlacementFileData) GetExtraProperties() map[string]interface{} {
+	if e == nil {
+		return nil
+	}
+	return e.extraProperties
+}
+
+func (e *EmailNotificationPlacementFileData) require(field *big.Int) {
+	if e.explicitFields == nil {
+		e.explicitFields = big.NewInt(0)
+	}
+	e.explicitFields.Or(e.explicitFields, field)
+}
+
+// SetId sets the Id field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EmailNotificationPlacementFileData) SetId(id string) {
+	e.Id = id
+	e.require(emailNotificationPlacementFileDataFieldId)
+}
+
+// SetAttributes sets the Attributes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EmailNotificationPlacementFileData) SetAttributes(attributes *EmailNotificationPlacementFileAttributes) {
+	e.Attributes = attributes
+	e.require(emailNotificationPlacementFileDataFieldAttributes)
+}
+
+// SetRelationships sets the Relationships field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EmailNotificationPlacementFileData) SetRelationships(relationships *EmailNotificationPlacementFileRelationships) {
+	e.Relationships = relationships
+	e.require(emailNotificationPlacementFileDataFieldRelationships)
+}
+
+func (e *EmailNotificationPlacementFileData) UnmarshalJSON(data []byte) error {
+	type unmarshaler EmailNotificationPlacementFileData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*e = EmailNotificationPlacementFileData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *e)
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+	e.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *EmailNotificationPlacementFileData) MarshalJSON() ([]byte, error) {
+	type embed EmailNotificationPlacementFileData
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*e),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, e.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (e *EmailNotificationPlacementFileData) String() string {
+	if e == nil {
+		return "<nil>"
+	}
+	if len(e.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(e.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
+}
+
+var (
+	emailNotificationPlacementFileRelationshipsFieldPlacement       = big.NewInt(1 << 0)
+	emailNotificationPlacementFileRelationshipsFieldContentStrategy = big.NewInt(1 << 1)
+)
+
+type EmailNotificationPlacementFileRelationships struct {
+	Placement       *RelationshipSingle `json:"placement" url:"placement"`
+	ContentStrategy *RelationshipSingle `json:"contentStrategy,omitempty" url:"contentStrategy,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (e *EmailNotificationPlacementFileRelationships) GetPlacement() *RelationshipSingle {
+	if e == nil {
+		return nil
+	}
+	return e.Placement
+}
+
+func (e *EmailNotificationPlacementFileRelationships) GetContentStrategy() *RelationshipSingle {
+	if e == nil {
+		return nil
+	}
+	return e.ContentStrategy
+}
+
+func (e *EmailNotificationPlacementFileRelationships) GetExtraProperties() map[string]interface{} {
+	if e == nil {
+		return nil
+	}
+	return e.extraProperties
+}
+
+func (e *EmailNotificationPlacementFileRelationships) require(field *big.Int) {
+	if e.explicitFields == nil {
+		e.explicitFields = big.NewInt(0)
+	}
+	e.explicitFields.Or(e.explicitFields, field)
+}
+
+// SetPlacement sets the Placement field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EmailNotificationPlacementFileRelationships) SetPlacement(placement *RelationshipSingle) {
+	e.Placement = placement
+	e.require(emailNotificationPlacementFileRelationshipsFieldPlacement)
+}
+
+// SetContentStrategy sets the ContentStrategy field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EmailNotificationPlacementFileRelationships) SetContentStrategy(contentStrategy *RelationshipSingle) {
+	e.ContentStrategy = contentStrategy
+	e.require(emailNotificationPlacementFileRelationshipsFieldContentStrategy)
+}
+
+func (e *EmailNotificationPlacementFileRelationships) UnmarshalJSON(data []byte) error {
+	type unmarshaler EmailNotificationPlacementFileRelationships
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*e = EmailNotificationPlacementFileRelationships(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *e)
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+	e.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *EmailNotificationPlacementFileRelationships) MarshalJSON() ([]byte, error) {
+	type embed EmailNotificationPlacementFileRelationships
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*e),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, e.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (e *EmailNotificationPlacementFileRelationships) String() string {
+	if e == nil {
+		return "<nil>"
+	}
+	if len(e.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(e.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
+}
+
+var (
 	failedTransactionAttributesFieldMessage       = big.NewInt(1 << 0)
 	failedTransactionAttributesFieldReason        = big.NewInt(1 << 1)
 	failedTransactionAttributesFieldName          = big.NewInt(1 << 2)
@@ -1629,14 +1999,16 @@ func (f *FileResultData) String() string {
 }
 
 type NotificationDataUnion struct {
-	Type                 string
-	EarnedRewardApproved *EarnedRewardApprovedData
-	EarnedRewardSettled  *EarnedRewardSettledData
-	ValidTransaction     *ValidTransactionData
-	FailedTransaction    *FailedTransactionData
-	Clawback             *ClawbackData
-	AuditUpdate          *AuditUpdateData
-	FileProcessingResult *FileResultData
+	Type                           string
+	EarnedRewardApproved           *EarnedRewardApprovedData
+	EarnedRewardSettled            *EarnedRewardSettledData
+	ValidTransaction               *ValidTransactionData
+	FailedTransaction              *FailedTransactionData
+	Clawback                       *ClawbackData
+	AuditUpdate                    *AuditUpdateData
+	FileProcessingResult           *FileResultData
+	PushNotificationPlacementFile  *PushNotificationPlacementFileData
+	EmailNotificationPlacementFile *EmailNotificationPlacementFileData
 }
 
 func (n *NotificationDataUnion) GetType() string {
@@ -1695,6 +2067,20 @@ func (n *NotificationDataUnion) GetFileProcessingResult() *FileResultData {
 	return n.FileProcessingResult
 }
 
+func (n *NotificationDataUnion) GetPushNotificationPlacementFile() *PushNotificationPlacementFileData {
+	if n == nil {
+		return nil
+	}
+	return n.PushNotificationPlacementFile
+}
+
+func (n *NotificationDataUnion) GetEmailNotificationPlacementFile() *EmailNotificationPlacementFileData {
+	if n == nil {
+		return nil
+	}
+	return n.EmailNotificationPlacementFile
+}
+
 func (n *NotificationDataUnion) UnmarshalJSON(data []byte) error {
 	var unmarshaler struct {
 		Type string `json:"type"`
@@ -1749,6 +2135,18 @@ func (n *NotificationDataUnion) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		n.FileProcessingResult = value
+	case "pushNotificationPlacementFile":
+		value := new(PushNotificationPlacementFileData)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		n.PushNotificationPlacementFile = value
+	case "emailNotificationPlacementFile":
+		value := new(EmailNotificationPlacementFileData)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		n.EmailNotificationPlacementFile = value
 	}
 	return nil
 }
@@ -1778,6 +2176,12 @@ func (n NotificationDataUnion) MarshalJSON() ([]byte, error) {
 	if n.FileProcessingResult != nil {
 		return internal.MarshalJSONWithExtraProperty(n.FileProcessingResult, "type", "fileProcessingResult")
 	}
+	if n.PushNotificationPlacementFile != nil {
+		return internal.MarshalJSONWithExtraProperty(n.PushNotificationPlacementFile, "type", "pushNotificationPlacementFile")
+	}
+	if n.EmailNotificationPlacementFile != nil {
+		return internal.MarshalJSONWithExtraProperty(n.EmailNotificationPlacementFile, "type", "emailNotificationPlacementFile")
+	}
 	return nil, fmt.Errorf("type %T does not define a non-empty union type", n)
 }
 
@@ -1789,6 +2193,8 @@ type NotificationDataUnionVisitor interface {
 	VisitClawback(*ClawbackData) error
 	VisitAuditUpdate(*AuditUpdateData) error
 	VisitFileProcessingResult(*FileResultData) error
+	VisitPushNotificationPlacementFile(*PushNotificationPlacementFileData) error
+	VisitEmailNotificationPlacementFile(*EmailNotificationPlacementFileData) error
 }
 
 func (n *NotificationDataUnion) Accept(visitor NotificationDataUnionVisitor) error {
@@ -1812,6 +2218,12 @@ func (n *NotificationDataUnion) Accept(visitor NotificationDataUnionVisitor) err
 	}
 	if n.FileProcessingResult != nil {
 		return visitor.VisitFileProcessingResult(n.FileProcessingResult)
+	}
+	if n.PushNotificationPlacementFile != nil {
+		return visitor.VisitPushNotificationPlacementFile(n.PushNotificationPlacementFile)
+	}
+	if n.EmailNotificationPlacementFile != nil {
+		return visitor.VisitEmailNotificationPlacementFile(n.EmailNotificationPlacementFile)
 	}
 	return fmt.Errorf("type %T does not define a non-empty union type", n)
 }
@@ -1841,6 +2253,12 @@ func (n *NotificationDataUnion) validate() error {
 	}
 	if n.FileProcessingResult != nil {
 		fields = append(fields, "fileProcessingResult")
+	}
+	if n.PushNotificationPlacementFile != nil {
+		fields = append(fields, "pushNotificationPlacementFile")
+	}
+	if n.EmailNotificationPlacementFile != nil {
+		fields = append(fields, "emailNotificationPlacementFile")
 	}
 	if len(fields) == 0 {
 		if n.Type != "" {
@@ -2079,6 +2497,359 @@ func (n *NotificationPayload) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", n)
+}
+
+var (
+	pushNotificationPlacementFileAttributesFieldPlacementName  = big.NewInt(1 << 0)
+	pushNotificationPlacementFileAttributesFieldAvailableSlots = big.NewInt(1 << 1)
+	pushNotificationPlacementFileAttributesFieldCadence        = big.NewInt(1 << 2)
+	pushNotificationPlacementFileAttributesFieldDownloadUrl    = big.NewInt(1 << 3)
+)
+
+type PushNotificationPlacementFileAttributes struct {
+	// The display name of the placement
+	PlacementName string `json:"placementName" url:"placementName"`
+	// The number of offer slots available in the placement
+	AvailableSlots int `json:"availableSlots" url:"availableSlots"`
+	// The delivery cadence of the placement (e.g. WEEKLY)
+	Cadence string `json:"cadence" url:"cadence"`
+	// Presigned URL to download the generated placement file (gzipped JSONL)
+	DownloadUrl string `json:"downloadUrl" url:"downloadUrl"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PushNotificationPlacementFileAttributes) GetPlacementName() string {
+	if p == nil {
+		return ""
+	}
+	return p.PlacementName
+}
+
+func (p *PushNotificationPlacementFileAttributes) GetAvailableSlots() int {
+	if p == nil {
+		return 0
+	}
+	return p.AvailableSlots
+}
+
+func (p *PushNotificationPlacementFileAttributes) GetCadence() string {
+	if p == nil {
+		return ""
+	}
+	return p.Cadence
+}
+
+func (p *PushNotificationPlacementFileAttributes) GetDownloadUrl() string {
+	if p == nil {
+		return ""
+	}
+	return p.DownloadUrl
+}
+
+func (p *PushNotificationPlacementFileAttributes) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *PushNotificationPlacementFileAttributes) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetPlacementName sets the PlacementName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PushNotificationPlacementFileAttributes) SetPlacementName(placementName string) {
+	p.PlacementName = placementName
+	p.require(pushNotificationPlacementFileAttributesFieldPlacementName)
+}
+
+// SetAvailableSlots sets the AvailableSlots field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PushNotificationPlacementFileAttributes) SetAvailableSlots(availableSlots int) {
+	p.AvailableSlots = availableSlots
+	p.require(pushNotificationPlacementFileAttributesFieldAvailableSlots)
+}
+
+// SetCadence sets the Cadence field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PushNotificationPlacementFileAttributes) SetCadence(cadence string) {
+	p.Cadence = cadence
+	p.require(pushNotificationPlacementFileAttributesFieldCadence)
+}
+
+// SetDownloadUrl sets the DownloadUrl field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PushNotificationPlacementFileAttributes) SetDownloadUrl(downloadUrl string) {
+	p.DownloadUrl = downloadUrl
+	p.require(pushNotificationPlacementFileAttributesFieldDownloadUrl)
+}
+
+func (p *PushNotificationPlacementFileAttributes) UnmarshalJSON(data []byte) error {
+	type unmarshaler PushNotificationPlacementFileAttributes
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PushNotificationPlacementFileAttributes(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PushNotificationPlacementFileAttributes) MarshalJSON() ([]byte, error) {
+	type embed PushNotificationPlacementFileAttributes
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *PushNotificationPlacementFileAttributes) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+var (
+	pushNotificationPlacementFileDataFieldId            = big.NewInt(1 << 0)
+	pushNotificationPlacementFileDataFieldAttributes    = big.NewInt(1 << 1)
+	pushNotificationPlacementFileDataFieldRelationships = big.NewInt(1 << 2)
+)
+
+type PushNotificationPlacementFileData struct {
+	// The placement ID, also used as the notification resource ID
+	Id            string                                      `json:"id" url:"id"`
+	Attributes    *PushNotificationPlacementFileAttributes    `json:"attributes" url:"attributes"`
+	Relationships *PushNotificationPlacementFileRelationships `json:"relationships" url:"relationships"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PushNotificationPlacementFileData) GetId() string {
+	if p == nil {
+		return ""
+	}
+	return p.Id
+}
+
+func (p *PushNotificationPlacementFileData) GetAttributes() *PushNotificationPlacementFileAttributes {
+	if p == nil {
+		return nil
+	}
+	return p.Attributes
+}
+
+func (p *PushNotificationPlacementFileData) GetRelationships() *PushNotificationPlacementFileRelationships {
+	if p == nil {
+		return nil
+	}
+	return p.Relationships
+}
+
+func (p *PushNotificationPlacementFileData) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *PushNotificationPlacementFileData) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetId sets the Id field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PushNotificationPlacementFileData) SetId(id string) {
+	p.Id = id
+	p.require(pushNotificationPlacementFileDataFieldId)
+}
+
+// SetAttributes sets the Attributes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PushNotificationPlacementFileData) SetAttributes(attributes *PushNotificationPlacementFileAttributes) {
+	p.Attributes = attributes
+	p.require(pushNotificationPlacementFileDataFieldAttributes)
+}
+
+// SetRelationships sets the Relationships field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PushNotificationPlacementFileData) SetRelationships(relationships *PushNotificationPlacementFileRelationships) {
+	p.Relationships = relationships
+	p.require(pushNotificationPlacementFileDataFieldRelationships)
+}
+
+func (p *PushNotificationPlacementFileData) UnmarshalJSON(data []byte) error {
+	type unmarshaler PushNotificationPlacementFileData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PushNotificationPlacementFileData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PushNotificationPlacementFileData) MarshalJSON() ([]byte, error) {
+	type embed PushNotificationPlacementFileData
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *PushNotificationPlacementFileData) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+var (
+	pushNotificationPlacementFileRelationshipsFieldPlacement       = big.NewInt(1 << 0)
+	pushNotificationPlacementFileRelationshipsFieldContentStrategy = big.NewInt(1 << 1)
+)
+
+type PushNotificationPlacementFileRelationships struct {
+	Placement       *RelationshipSingle `json:"placement" url:"placement"`
+	ContentStrategy *RelationshipSingle `json:"contentStrategy,omitempty" url:"contentStrategy,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PushNotificationPlacementFileRelationships) GetPlacement() *RelationshipSingle {
+	if p == nil {
+		return nil
+	}
+	return p.Placement
+}
+
+func (p *PushNotificationPlacementFileRelationships) GetContentStrategy() *RelationshipSingle {
+	if p == nil {
+		return nil
+	}
+	return p.ContentStrategy
+}
+
+func (p *PushNotificationPlacementFileRelationships) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *PushNotificationPlacementFileRelationships) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetPlacement sets the Placement field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PushNotificationPlacementFileRelationships) SetPlacement(placement *RelationshipSingle) {
+	p.Placement = placement
+	p.require(pushNotificationPlacementFileRelationshipsFieldPlacement)
+}
+
+// SetContentStrategy sets the ContentStrategy field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PushNotificationPlacementFileRelationships) SetContentStrategy(contentStrategy *RelationshipSingle) {
+	p.ContentStrategy = contentStrategy
+	p.require(pushNotificationPlacementFileRelationshipsFieldContentStrategy)
+}
+
+func (p *PushNotificationPlacementFileRelationships) UnmarshalJSON(data []byte) error {
+	type unmarshaler PushNotificationPlacementFileRelationships
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PushNotificationPlacementFileRelationships(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PushNotificationPlacementFileRelationships) MarshalJSON() ([]byte, error) {
+	type embed PushNotificationPlacementFileRelationships
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *PushNotificationPlacementFileRelationships) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
 }
 
 var (

@@ -14,7 +14,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/KardFinancial/kard-go-sdk/v10/core"
+	"github.com/KardFinancial/kard-go-sdk/v11/core"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

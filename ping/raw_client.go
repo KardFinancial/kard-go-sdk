@@ -6,10 +6,10 @@ import (
 	context "context"
 	http "net/http"
 
-	kard "github.com/KardFinancial/kard-go-sdk/v10"
-	core "github.com/KardFinancial/kard-go-sdk/v10/core"
-	internal "github.com/KardFinancial/kard-go-sdk/v10/internal"
-	option "github.com/KardFinancial/kard-go-sdk/v10/option"
+	kard "github.com/KardFinancial/kard-go-sdk/v11"
+	core "github.com/KardFinancial/kard-go-sdk/v11/core"
+	internal "github.com/KardFinancial/kard-go-sdk/v11/internal"
+	option "github.com/KardFinancial/kard-go-sdk/v11/option"
 )
 
 type RawClient struct {

@@ -1,3 +1,12 @@
+## v11.0.0 - 2026-06-10
+### Breaking Changes
+* **`NotificationDataUnionVisitor`** — two new required methods `VisitPushNotificationPlacementFile(*PushNotificationPlacementFileData) error` and `VisitEmailNotificationPlacementFile(*EmailNotificationPlacementFileData) error` have been added to the interface; all existing implementations must add these methods to continue compiling.
+### Added
+* **`NotificationTypePushNotificationPlacementFile`** and **`NotificationTypeEmailNotificationPlacementFile`** — new `NotificationType` constants for placement file webhook notifications.
+* **`PushNotificationPlacementFileData`**, **`PushNotificationPlacementFileAttributes`**, and **`PushNotificationPlacementFileRelationships`** — new types representing a push-notification placement file notification payload, including presigned download URL, cadence, and available slot count.
+* **`EmailNotificationPlacementFileData`**, **`EmailNotificationPlacementFileAttributes`**, and **`EmailNotificationPlacementFileRelationships`** — new types representing an email placement file notification payload, including organization ID, presigned download URL, cadence, and available slot count.
+* **`NotificationDataUnion.PushNotificationPlacementFile`** and **`NotificationDataUnion.EmailNotificationPlacementFile`** — new union fields with corresponding `GetPushNotificationPlacementFile()` and `GetEmailNotificationPlacementFile()` accessors.
+
 ## v10.1.0 - 2026-06-10
 ### Added
 * **`UpdateUserRequestAttributes.HistoricalTransactionsSent`** — new optional `*bool` field that confirms historical transactions have been sent for a user; once set to `true` it cannot be reverted, accessible via `GetHistoricalTransactionsSent` and `SetHistoricalTransactionsSent`.

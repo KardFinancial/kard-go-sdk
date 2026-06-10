@@ -5,7 +5,7 @@ package kard
 import (
 	json "encoding/json"
 	fmt "fmt"
-	internal "github.com/KardFinancial/kard-go-sdk/v10/internal"
+	internal "github.com/KardFinancial/kard-go-sdk/v11/internal"
 	big "math/big"
 )
 
@@ -1053,13 +1053,15 @@ type MongoId = string
 type NotificationType string
 
 const (
-	NotificationTypeEarnedRewardApproved NotificationType = "earnedRewardApproved"
-	NotificationTypeEarnedRewardSettled  NotificationType = "earnedRewardSettled"
-	NotificationTypeValidTransaction     NotificationType = "validTransaction"
-	NotificationTypeFailedTransaction    NotificationType = "failedTransaction"
-	NotificationTypeClawback             NotificationType = "clawback"
-	NotificationTypeAuditUpdate          NotificationType = "auditUpdate"
-	NotificationTypeFileProcessingResult NotificationType = "fileProcessingResult"
+	NotificationTypeEarnedRewardApproved           NotificationType = "earnedRewardApproved"
+	NotificationTypeEarnedRewardSettled            NotificationType = "earnedRewardSettled"
+	NotificationTypeValidTransaction               NotificationType = "validTransaction"
+	NotificationTypeFailedTransaction              NotificationType = "failedTransaction"
+	NotificationTypeClawback                       NotificationType = "clawback"
+	NotificationTypeAuditUpdate                    NotificationType = "auditUpdate"
+	NotificationTypeFileProcessingResult           NotificationType = "fileProcessingResult"
+	NotificationTypePushNotificationPlacementFile  NotificationType = "pushNotificationPlacementFile"
+	NotificationTypeEmailNotificationPlacementFile NotificationType = "emailNotificationPlacementFile"
 )
 
 func NewNotificationTypeFromString(s string) (NotificationType, error) {
@@ -1078,6 +1080,10 @@ func NewNotificationTypeFromString(s string) (NotificationType, error) {
 		return NotificationTypeAuditUpdate, nil
 	case "fileProcessingResult":
 		return NotificationTypeFileProcessingResult, nil
+	case "pushNotificationPlacementFile":
+		return NotificationTypePushNotificationPlacementFile, nil
+	case "emailNotificationPlacementFile":
+		return NotificationTypeEmailNotificationPlacementFile, nil
 	}
 	var t NotificationType
 	return "", fmt.Errorf("%s is not a valid %T", s, t)

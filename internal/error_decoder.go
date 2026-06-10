@@ -8,7 +8,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/KardFinancial/kard-go-sdk/v10/core"
+	"github.com/KardFinancial/kard-go-sdk/v11/core"
 )
 
 // ErrorCodes maps HTTP status codes to error constructors.

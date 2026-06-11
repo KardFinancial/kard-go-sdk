@@ -5,7 +5,7 @@ package kard
 import (
 	json "encoding/json"
 	fmt "fmt"
-	internal "github.com/KardFinancial/kard-go-sdk/v11/internal"
+	internal "github.com/KardFinancial/kard-go-sdk/v12/internal"
 	big "math/big"
 )
 

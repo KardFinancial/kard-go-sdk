@@ -1261,7 +1261,7 @@ client.Organizations.ContentStrategies.Delete(
 <dl>
 <dd>
 
-Create a placement for the organization. Use type "placementMainPage" for main-page placements (requires name and availableSlots) or "placementPushNotification" for push-notification placements (requires name and cadence; availableSlots is automatically set to 1).
+Create a placement for the organization. Use type "placement" for standard placements (requires name and availableSlots), "placementPushNotification" for push-notification placements (requires name and cadence; availableSlots is automatically set to 1), "placementEmail" for email placements (requires name, cadence, and availableSlots), "placementBatchActivation" for batch-activation placements (requires name, refreshInterval, and slots), or "placementGroup" for group placements (requires name and slots).
 </dd>
 </dl>
 </dd>
@@ -1278,8 +1278,8 @@ Create a placement for the organization. Use type "placementMainPage" for main-p
 ```go
 request := &organizations.CreatePlacementRequestBody{
         Data: &organizations.CreatePlacementDataUnion{
-            PlacementMainPage: &organizations.CreateMainPagePlacementData{
-                Attributes: &organizations.CreateMainPageAttributes{
+            Placement: &organizations.CreateStandardPlacementData{
+                Attributes: &organizations.CreateStandardAttributes{
                     Name: "Homepage Banner",
                     AvailableSlots: 5,
                 },
@@ -1382,7 +1382,7 @@ client.Organizations.Placements.List(
 <dl>
 <dd>
 
-**filterType:** `*organizations.PlacementTypeFilter` — Filter by placement type (placementMainPage or placementPushNotification)
+**filterType:** `*organizations.PlacementTypeFilter` — Filter by placement type (placement, placementPushNotification, placementEmail, placementBatchActivation, or placementGroup)
     
 </dd>
 </dl>
@@ -1406,7 +1406,7 @@ client.Organizations.Placements.List(
 <dl>
 <dd>
 
-**include:** `*string` — CSV list of related resources to embed in the `included` array. Supported paths: `contentStrategy` (the direct content strategy of a non-batch placement), `slots` (the slot resources of a batch-activation placement), `slots.placement` (and the placement each slot references), and `slots.placement.contentStrategy` (and the content strategy of each referenced placement). Dotted paths implicitly include all intermediate resources.
+**include:** `*string` — CSV list of related resources to embed in the `included` array. Supported paths: `contentStrategy` (the direct content strategy of a non-batch placement), `slots` (the slot resources of a batch-activation or group placement), `slots.placement` (and the placement each slot references), and `slots.placement.contentStrategy` (and the content strategy of each referenced placement). Dotted paths implicitly include all intermediate resources.
     
 </dd>
 </dl>
@@ -1499,7 +1499,7 @@ client.Organizations.Placements.Get(
 <dl>
 <dd>
 
-**include:** `*string` — CSV list of related resources to embed in the `included` array. Supported paths: `contentStrategy` (the direct content strategy of a non-batch placement), `slots` (the slot resources of a batch-activation placement), `slots.placement` (and the placement each slot references), and `slots.placement.contentStrategy` (and the content strategy of each referenced placement). Dotted paths implicitly include all intermediate resources.
+**include:** `*string` — CSV list of related resources to embed in the `included` array. Supported paths: `contentStrategy` (the direct content strategy of a non-batch placement), `slots` (the slot resources of a batch-activation or group placement), `slots.placement` (and the placement each slot references), and `slots.placement.contentStrategy` (and the content strategy of each referenced placement). Dotted paths implicitly include all intermediate resources.
     
 </dd>
 </dl>
@@ -1523,7 +1523,7 @@ client.Organizations.Placements.Get(
 <dl>
 <dd>
 
-Replace a placement. All fields must be provided. Use type "placementMainPage" or "placementPushNotification" to set the placement kind. If the type is "placementPushNotification", availableSlots is automatically set to 1.
+Replace a placement. All fields must be provided. Use type "placement", "placementPushNotification", "placementEmail", "placementBatchActivation", or "placementGroup" to set the placement kind. If the type is "placementPushNotification", availableSlots is automatically set to 1.
 </dd>
 </dl>
 </dd>
@@ -1540,8 +1540,8 @@ Replace a placement. All fields must be provided. Use type "placementMainPage" o
 ```go
 request := &organizations.UpdatePlacementRequestBody{
         Data: &organizations.UpdatePlacementDataUnion{
-            PlacementMainPage: &organizations.UpdateMainPagePlacementData{
-                Attributes: &organizations.UpdateMainPageAttributes{
+            Placement: &organizations.UpdateStandardPlacementData{
+                Attributes: &organizations.UpdateStandardAttributes{
                     Name: "name",
                     AvailableSlots: 1,
                 },
@@ -3375,14 +3375,18 @@ client.Users.Rewards.PlacementOffers(
 <dl>
 <dd>
 
-Retrieve batches for a batch-activation placement. Returns each slot in slot
-order with its current offer set, alias, and freshness fields (`isActive`,
-`lastActivatedAt`, `expiresAt`). Applies the same per-user eligibility and
-per-slot content-strategy filter as Get Offers By Placement, independently
-per slot. A slot only flips to `isActive: false` when its refresh interval
-has elapsed AND its post-eligibility `offers[]` is non-empty; otherwise the
-slot is still returned and stays active so the partner UI does not promote
-"refresh" with nothing to show.<br/>
+Retrieve batches for a batch-activation or group placement. Returns each
+slot in slot order with its current offer set, alias, and freshness fields
+(`isActive`, `lastActivatedAt`, `expiresAt`). Applies the same per-user
+eligibility and per-slot content-strategy filter as Get Offers By
+Placement, independently per slot. For a batch-activation placement, a
+slot only flips to `isActive: false` when its refresh interval has elapsed
+AND its post-eligibility `offers[]` is non-empty; otherwise the slot is
+still returned and stays active so the partner UI does not promote
+"refresh" with nothing to show. For a group placement, slots are always
+active and each slot returns its offers regardless of activation state,
+hiding only offers that require activation (`requiredInBatch`) and have
+no activation record.<br/>
 <b>Required scopes:</b> `rewards:read`
 </dd>
 </dl>

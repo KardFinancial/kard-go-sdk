@@ -1,3 +1,19 @@
+## v12.0.0 - 2026-06-11
+* feat!: rename MainPage/BatchActivationRelationships types and add email/group placement support
+* This release introduces two new placement types (email and group), renames
+* the `placementMainPage` discriminant to `placement` across all union types,
+* and replaces several `MainPage`-prefixed types with more generic equivalents.
+* Existing implementations of `CreatePlacementDataUnionVisitor`,
+* `UpdatePlacementDataUnionVisitor`, `PlacementFormatUnionVisitor`, and
+* `IncludedResourceVisitor` must be updated to satisfy the revised interfaces.
+* Key changes:
+* Removed `BatchActivationPlacementRelationships`; replaced by new `SlottedPlacementRelationships` (used by both batch-activation and group placements)
+* Renamed `MainPagePlacementAttributes` → `PlacementAttributes`, `MainPagePlacementData` → `PlacementData`, `CreateMainPageAttributes` → `CreateStandardAttributes`, `CreateMainPagePlacementData` → `CreateStandardPlacementData`, `UpdateMainPageAttributes` → `UpdateStandardAttributes`, `UpdateMainPagePlacementData` → `UpdateStandardPlacementData`
+* Renamed visitor methods `VisitPlacementMainPage` → `VisitPlacement` and union fields `PlacementMainPage` → `Placement` across `CreatePlacementDataUnion`, `UpdatePlacementDataUnion`, `PlacementFormatUnion`, and `IncludedResource`
+* Added new `placementEmail` and `placementGroup` placement types with full create/update/read type families (`CreateEmailAttributes`, `CreateEmailPlacementData`, `EmailPlacementAttributes`, `EmailPlacementData`, `UpdateEmailAttributes`, `UpdateEmailPlacementData`, `CreateGroupAttributes`, `CreateGroupPlacementData`, `GroupPlacementAttributes`, `GroupPlacementData`, `UpdateGroupAttributes`, `UpdateGroupPlacementData`)
+* Added `PlacementTypeFilterPlacementEmail` and `PlacementTypeFilterPlacementGroup` constants; renamed `PlacementTypeFilterPlacementMainPage` → `PlacementTypeFilterPlacement`
+* 🌿 Generated with Fern
+
 ## v11.0.0 - 2026-06-10
 ### Breaking Changes
 * **`NotificationDataUnionVisitor`** — two new required methods `VisitPushNotificationPlacementFile(*PushNotificationPlacementFileData) error` and `VisitEmailNotificationPlacementFile(*EmailNotificationPlacementFileData) error` have been added to the interface; all existing implementations must add these methods to continue compiling.

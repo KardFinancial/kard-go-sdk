@@ -6,11 +6,11 @@ import (
 	context "context"
 	os "os"
 
-	kard "github.com/KardFinancial/kard-go-sdk/v11"
-	core "github.com/KardFinancial/kard-go-sdk/v11/core"
-	internal "github.com/KardFinancial/kard-go-sdk/v11/internal"
-	option "github.com/KardFinancial/kard-go-sdk/v11/option"
-	organizations "github.com/KardFinancial/kard-go-sdk/v11/organizations"
+	kard "github.com/KardFinancial/kard-go-sdk/v12"
+	core "github.com/KardFinancial/kard-go-sdk/v12/core"
+	internal "github.com/KardFinancial/kard-go-sdk/v12/internal"
+	option "github.com/KardFinancial/kard-go-sdk/v12/option"
+	organizations "github.com/KardFinancial/kard-go-sdk/v12/organizations"
 )
 
 type Client struct {
@@ -41,7 +41,7 @@ func NewClient(options *core.RequestOptions) *Client {
 	}
 }
 
-// Create a placement for the organization. Use type "placementMainPage" for main-page placements (requires name and availableSlots) or "placementPushNotification" for push-notification placements (requires name and cadence; availableSlots is automatically set to 1).
+// Create a placement for the organization. Use type "placement" for standard placements (requires name and availableSlots), "placementPushNotification" for push-notification placements (requires name and cadence; availableSlots is automatically set to 1), "placementEmail" for email placements (requires name, cadence, and availableSlots), "placementBatchActivation" for batch-activation placements (requires name, refreshInterval, and slots), or "placementGroup" for group placements (requires name and slots).
 func (c *Client) Create(
 	ctx context.Context,
 	// Unique identifier of the organization
@@ -104,7 +104,7 @@ func (c *Client) Get(
 	return response.Body, nil
 }
 
-// Replace a placement. All fields must be provided. Use type "placementMainPage" or "placementPushNotification" to set the placement kind. If the type is "placementPushNotification", availableSlots is automatically set to 1.
+// Replace a placement. All fields must be provided. Use type "placement", "placementPushNotification", "placementEmail", "placementBatchActivation", or "placementGroup" to set the placement kind. If the type is "placementPushNotification", availableSlots is automatically set to 1.
 func (c *Client) Update(
 	ctx context.Context,
 	// Unique identifier of the organization

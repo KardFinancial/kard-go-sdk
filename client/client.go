@@ -7,17 +7,17 @@ import (
 	errors "errors"
 	os "os"
 
-	kard "github.com/KardFinancial/kard-go-sdk/v11"
-	auth "github.com/KardFinancial/kard-go-sdk/v11/auth"
-	core "github.com/KardFinancial/kard-go-sdk/v11/core"
-	files "github.com/KardFinancial/kard-go-sdk/v11/files"
-	internal "github.com/KardFinancial/kard-go-sdk/v11/internal"
-	client "github.com/KardFinancial/kard-go-sdk/v11/notifications/client"
-	option "github.com/KardFinancial/kard-go-sdk/v11/option"
-	organizationsclient "github.com/KardFinancial/kard-go-sdk/v11/organizations/client"
-	ping "github.com/KardFinancial/kard-go-sdk/v11/ping"
-	transactions "github.com/KardFinancial/kard-go-sdk/v11/transactions"
-	usersclient "github.com/KardFinancial/kard-go-sdk/v11/users/client"
+	kard "github.com/KardFinancial/kard-go-sdk/v12"
+	auth "github.com/KardFinancial/kard-go-sdk/v12/auth"
+	core "github.com/KardFinancial/kard-go-sdk/v12/core"
+	files "github.com/KardFinancial/kard-go-sdk/v12/files"
+	internal "github.com/KardFinancial/kard-go-sdk/v12/internal"
+	client "github.com/KardFinancial/kard-go-sdk/v12/notifications/client"
+	option "github.com/KardFinancial/kard-go-sdk/v12/option"
+	organizationsclient "github.com/KardFinancial/kard-go-sdk/v12/organizations/client"
+	ping "github.com/KardFinancial/kard-go-sdk/v12/ping"
+	transactions "github.com/KardFinancial/kard-go-sdk/v12/transactions"
+	usersclient "github.com/KardFinancial/kard-go-sdk/v12/users/client"
 )
 
 type Client struct {

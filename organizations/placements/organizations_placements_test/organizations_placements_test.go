@@ -10,9 +10,9 @@ import (
 	os "os"
 	testing "testing"
 
-	client "github.com/KardFinancial/kard-go-sdk/v11/client"
-	option "github.com/KardFinancial/kard-go-sdk/v11/option"
-	organizations "github.com/KardFinancial/kard-go-sdk/v11/organizations"
+	client "github.com/KardFinancial/kard-go-sdk/v12/client"
+	option "github.com/KardFinancial/kard-go-sdk/v12/option"
+	organizations "github.com/KardFinancial/kard-go-sdk/v12/organizations"
 	require "github.com/stretchr/testify/require"
 )
 
@@ -89,8 +89,8 @@ func TestOrganizationsPlacementsCreateWithWireMock(
 	)
 	request := &organizations.CreatePlacementRequestBody{
 		Data: &organizations.CreatePlacementDataUnion{
-			PlacementMainPage: &organizations.CreateMainPagePlacementData{
-				Attributes: &organizations.CreateMainPageAttributes{
+			Placement: &organizations.CreateStandardPlacementData{
+				Attributes: &organizations.CreateStandardAttributes{
 					Name:           "Homepage Banner",
 					AvailableSlots: 5,
 				},
@@ -171,8 +171,8 @@ func TestOrganizationsPlacementsUpdateWithWireMock(
 	)
 	request := &organizations.UpdatePlacementRequestBody{
 		Data: &organizations.UpdatePlacementDataUnion{
-			PlacementMainPage: &organizations.UpdateMainPagePlacementData{
-				Attributes: &organizations.UpdateMainPageAttributes{
+			Placement: &organizations.UpdateStandardPlacementData{
+				Attributes: &organizations.UpdateStandardAttributes{
 					Name:           "name",
 					AvailableSlots: 1,
 				},

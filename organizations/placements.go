@@ -5,8 +5,8 @@ package organizations
 import (
 	json "encoding/json"
 	fmt "fmt"
-	kardgosdk "github.com/KardFinancial/kard-go-sdk/v11"
-	internal "github.com/KardFinancial/kard-go-sdk/v11/internal"
+	kardgosdk "github.com/KardFinancial/kard-go-sdk/v12"
+	internal "github.com/KardFinancial/kard-go-sdk/v12/internal"
 	big "math/big"
 )
 
@@ -15,7 +15,7 @@ var (
 )
 
 type GetPlacementRequest struct {
-	// CSV list of related resources to embed in the `included` array. Supported paths: `contentStrategy` (the direct content strategy of a non-batch placement), `slots` (the slot resources of a batch-activation placement), `slots.placement` (and the placement each slot references), and `slots.placement.contentStrategy` (and the content strategy of each referenced placement). Dotted paths implicitly include all intermediate resources.
+	// CSV list of related resources to embed in the `included` array. Supported paths: `contentStrategy` (the direct content strategy of a non-batch placement), `slots` (the slot resources of a batch-activation or group placement), `slots.placement` (and the placement each slot references), and `slots.placement.contentStrategy` (and the content strategy of each referenced placement). Dotted paths implicitly include all intermediate resources.
 	Include *string `json:"-" url:"include,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
@@ -46,13 +46,13 @@ var (
 )
 
 type ListPlacementsRequest struct {
-	// Filter by placement type (placementMainPage or placementPushNotification)
+	// Filter by placement type (placement, placementPushNotification, placementEmail, placementBatchActivation, or placementGroup)
 	FilterType *PlacementTypeFilter `json:"-" url:"filter[type],omitempty"`
 	// Filter by exact placement name (unique within an organization per type)
 	FilterName *string `json:"-" url:"filter[name],omitempty"`
 	// Filter by the ID of the content strategy linked to the placement
 	FilterContentStrategyId *string `json:"-" url:"filter[contentStrategyId],omitempty"`
-	// CSV list of related resources to embed in the `included` array. Supported paths: `contentStrategy` (the direct content strategy of a non-batch placement), `slots` (the slot resources of a batch-activation placement), `slots.placement` (and the placement each slot references), and `slots.placement.contentStrategy` (and the content strategy of each referenced placement). Dotted paths implicitly include all intermediate resources.
+	// CSV list of related resources to embed in the `included` array. Supported paths: `contentStrategy` (the direct content strategy of a non-batch placement), `slots` (the slot resources of a batch-activation or group placement), `slots.placement` (and the placement each slot references), and `slots.placement.contentStrategy` (and the content strategy of each referenced placement). Dotted paths implicitly include all intermediate resources.
 	Include *string `json:"-" url:"include,omitempty"`
 	// Cursor value for the next page of results
 	PageAfter *string `json:"-" url:"page[after],omitempty"`
@@ -244,7 +244,7 @@ type BatchActivationPlacementData struct {
 	Id         string                              `json:"id" url:"id"`
 	Attributes *BatchActivationPlacementAttributes `json:"attributes" url:"attributes"`
 	// JSON:API relationships for the placement. Always present on a batch-activation placement; the `slots` to-many relationship lists the slot resource identifiers.
-	Relationships *BatchActivationPlacementRelationships `json:"relationships" url:"relationships"`
+	Relationships *SlottedPlacementRelationships `json:"relationships" url:"relationships"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -267,7 +267,7 @@ func (b *BatchActivationPlacementData) GetAttributes() *BatchActivationPlacement
 	return b.Attributes
 }
 
-func (b *BatchActivationPlacementData) GetRelationships() *BatchActivationPlacementRelationships {
+func (b *BatchActivationPlacementData) GetRelationships() *SlottedPlacementRelationships {
 	if b == nil {
 		return nil
 	}
@@ -304,7 +304,7 @@ func (b *BatchActivationPlacementData) SetAttributes(attributes *BatchActivation
 
 // SetRelationships sets the Relationships field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (b *BatchActivationPlacementData) SetRelationships(relationships *BatchActivationPlacementRelationships) {
+func (b *BatchActivationPlacementData) SetRelationships(relationships *SlottedPlacementRelationships) {
 	b.Relationships = relationships
 	b.require(batchActivationPlacementDataFieldRelationships)
 }
@@ -337,92 +337,6 @@ func (b *BatchActivationPlacementData) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BatchActivationPlacementData) String() string {
-	if b == nil {
-		return "<nil>"
-	}
-	if len(b.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(b); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", b)
-}
-
-// Relationship block for a batch-activation placement.
-var (
-	batchActivationPlacementRelationshipsFieldSlots = big.NewInt(1 << 0)
-)
-
-type BatchActivationPlacementRelationships struct {
-	// Resource identifiers for the slots that make up the activation cohort. Each entry corresponds to a `batchActivationSlot` resource that appears in `included` when the request asks for `slots` (or any deeper path that implies it).
-	Slots *ToManyRelationship `json:"slots" url:"slots"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (b *BatchActivationPlacementRelationships) GetSlots() *ToManyRelationship {
-	if b == nil {
-		return nil
-	}
-	return b.Slots
-}
-
-func (b *BatchActivationPlacementRelationships) GetExtraProperties() map[string]interface{} {
-	if b == nil {
-		return nil
-	}
-	return b.extraProperties
-}
-
-func (b *BatchActivationPlacementRelationships) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
-	}
-	b.explicitFields.Or(b.explicitFields, field)
-}
-
-// SetSlots sets the Slots field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (b *BatchActivationPlacementRelationships) SetSlots(slots *ToManyRelationship) {
-	b.Slots = slots
-	b.require(batchActivationPlacementRelationshipsFieldSlots)
-}
-
-func (b *BatchActivationPlacementRelationships) UnmarshalJSON(data []byte) error {
-	type unmarshaler BatchActivationPlacementRelationships
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*b = BatchActivationPlacementRelationships(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *b)
-	if err != nil {
-		return err
-	}
-	b.extraProperties = extraProperties
-	b.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (b *BatchActivationPlacementRelationships) MarshalJSON() ([]byte, error) {
-	type embed BatchActivationPlacementRelationships
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*b),
-	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (b *BatchActivationPlacementRelationships) String() string {
 	if b == nil {
 		return "<nil>"
 	}
@@ -743,7 +657,7 @@ func (b *BatchActivationSlotRelationships) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Cadence schedule for push notification placements
+// Cadence schedule for push notification and email placements
 var (
 	cadenceFieldFrequency  = big.NewInt(1 << 0)
 	cadenceFieldTimeOfDay  = big.NewInt(1 << 1)
@@ -880,7 +794,7 @@ func (c *Cadence) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// How often a push notification placement delivers
+// How often a push notification or email placement delivers
 type CadenceFrequency string
 
 const (
@@ -1213,7 +1127,7 @@ func (c *CreateBatchActivationPlacementData) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// A slot in a batch-activation placement at creation time
+// A slot in a batch-activation or group placement at creation time
 var (
 	createBatchActivationSlotFieldPlacementId      = big.NewInt(1 << 0)
 	createBatchActivationSlotFieldAlias            = big.NewInt(1 << 1)
@@ -1333,18 +1247,21 @@ func (c *CreateBatchActivationSlot) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Attributes for creating a main-page placement
+// Attributes for creating an email placement
 var (
-	createMainPageAttributesFieldName              = big.NewInt(1 << 0)
-	createMainPageAttributesFieldAvailableSlots    = big.NewInt(1 << 1)
-	createMainPageAttributesFieldContentStrategyId = big.NewInt(1 << 2)
+	createEmailAttributesFieldName              = big.NewInt(1 << 0)
+	createEmailAttributesFieldAvailableSlots    = big.NewInt(1 << 1)
+	createEmailAttributesFieldCadence           = big.NewInt(1 << 2)
+	createEmailAttributesFieldContentStrategyId = big.NewInt(1 << 3)
 )
 
-type CreateMainPageAttributes struct {
+type CreateEmailAttributes struct {
 	// Name of the placement
 	Name string `json:"name" url:"name"`
 	// Number of available slots (minimum 1)
 	AvailableSlots int `json:"availableSlots" url:"availableSlots"`
+	// Delivery cadence for the email
+	Cadence *Cadence `json:"cadence" url:"cadence"`
 	// ID of the content strategy to link this placement to
 	ContentStrategyId *string `json:"contentStrategyId,omitempty" url:"contentStrategyId,omitempty"`
 
@@ -1355,35 +1272,42 @@ type CreateMainPageAttributes struct {
 	rawJSON         json.RawMessage
 }
 
-func (c *CreateMainPageAttributes) GetName() string {
+func (c *CreateEmailAttributes) GetName() string {
 	if c == nil {
 		return ""
 	}
 	return c.Name
 }
 
-func (c *CreateMainPageAttributes) GetAvailableSlots() int {
+func (c *CreateEmailAttributes) GetAvailableSlots() int {
 	if c == nil {
 		return 0
 	}
 	return c.AvailableSlots
 }
 
-func (c *CreateMainPageAttributes) GetContentStrategyId() *string {
+func (c *CreateEmailAttributes) GetCadence() *Cadence {
+	if c == nil {
+		return nil
+	}
+	return c.Cadence
+}
+
+func (c *CreateEmailAttributes) GetContentStrategyId() *string {
 	if c == nil {
 		return nil
 	}
 	return c.ContentStrategyId
 }
 
-func (c *CreateMainPageAttributes) GetExtraProperties() map[string]interface{} {
+func (c *CreateEmailAttributes) GetExtraProperties() map[string]interface{} {
 	if c == nil {
 		return nil
 	}
 	return c.extraProperties
 }
 
-func (c *CreateMainPageAttributes) require(field *big.Int) {
+func (c *CreateEmailAttributes) require(field *big.Int) {
 	if c.explicitFields == nil {
 		c.explicitFields = big.NewInt(0)
 	}
@@ -1392,32 +1316,39 @@ func (c *CreateMainPageAttributes) require(field *big.Int) {
 
 // SetName sets the Name field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateMainPageAttributes) SetName(name string) {
+func (c *CreateEmailAttributes) SetName(name string) {
 	c.Name = name
-	c.require(createMainPageAttributesFieldName)
+	c.require(createEmailAttributesFieldName)
 }
 
 // SetAvailableSlots sets the AvailableSlots field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateMainPageAttributes) SetAvailableSlots(availableSlots int) {
+func (c *CreateEmailAttributes) SetAvailableSlots(availableSlots int) {
 	c.AvailableSlots = availableSlots
-	c.require(createMainPageAttributesFieldAvailableSlots)
+	c.require(createEmailAttributesFieldAvailableSlots)
+}
+
+// SetCadence sets the Cadence field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateEmailAttributes) SetCadence(cadence *Cadence) {
+	c.Cadence = cadence
+	c.require(createEmailAttributesFieldCadence)
 }
 
 // SetContentStrategyId sets the ContentStrategyId field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateMainPageAttributes) SetContentStrategyId(contentStrategyId *string) {
+func (c *CreateEmailAttributes) SetContentStrategyId(contentStrategyId *string) {
 	c.ContentStrategyId = contentStrategyId
-	c.require(createMainPageAttributesFieldContentStrategyId)
+	c.require(createEmailAttributesFieldContentStrategyId)
 }
 
-func (c *CreateMainPageAttributes) UnmarshalJSON(data []byte) error {
-	type unmarshaler CreateMainPageAttributes
+func (c *CreateEmailAttributes) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateEmailAttributes
 	var value unmarshaler
 	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*c = CreateMainPageAttributes(value)
+	*c = CreateEmailAttributes(value)
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
@@ -1427,8 +1358,8 @@ func (c *CreateMainPageAttributes) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (c *CreateMainPageAttributes) MarshalJSON() ([]byte, error) {
-	type embed CreateMainPageAttributes
+func (c *CreateEmailAttributes) MarshalJSON() ([]byte, error) {
+	type embed CreateEmailAttributes
 	var marshaler = struct {
 		embed
 	}{
@@ -1438,7 +1369,7 @@ func (c *CreateMainPageAttributes) MarshalJSON() ([]byte, error) {
 	return json.Marshal(explicitMarshaler)
 }
 
-func (c *CreateMainPageAttributes) String() string {
+func (c *CreateEmailAttributes) String() string {
 	if c == nil {
 		return "<nil>"
 	}
@@ -1453,14 +1384,14 @@ func (c *CreateMainPageAttributes) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Data for creating a main-page placement
+// Data for creating an email placement
 var (
-	createMainPagePlacementDataFieldAttributes = big.NewInt(1 << 0)
+	createEmailPlacementDataFieldAttributes = big.NewInt(1 << 0)
 )
 
-type CreateMainPagePlacementData struct {
-	// Main-page placement attributes for creation
-	Attributes *CreateMainPageAttributes `json:"attributes" url:"attributes"`
+type CreateEmailPlacementData struct {
+	// Email placement attributes for creation
+	Attributes *CreateEmailAttributes `json:"attributes" url:"attributes"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -1469,21 +1400,21 @@ type CreateMainPagePlacementData struct {
 	rawJSON         json.RawMessage
 }
 
-func (c *CreateMainPagePlacementData) GetAttributes() *CreateMainPageAttributes {
+func (c *CreateEmailPlacementData) GetAttributes() *CreateEmailAttributes {
 	if c == nil {
 		return nil
 	}
 	return c.Attributes
 }
 
-func (c *CreateMainPagePlacementData) GetExtraProperties() map[string]interface{} {
+func (c *CreateEmailPlacementData) GetExtraProperties() map[string]interface{} {
 	if c == nil {
 		return nil
 	}
 	return c.extraProperties
 }
 
-func (c *CreateMainPagePlacementData) require(field *big.Int) {
+func (c *CreateEmailPlacementData) require(field *big.Int) {
 	if c.explicitFields == nil {
 		c.explicitFields = big.NewInt(0)
 	}
@@ -1492,18 +1423,18 @@ func (c *CreateMainPagePlacementData) require(field *big.Int) {
 
 // SetAttributes sets the Attributes field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateMainPagePlacementData) SetAttributes(attributes *CreateMainPageAttributes) {
+func (c *CreateEmailPlacementData) SetAttributes(attributes *CreateEmailAttributes) {
 	c.Attributes = attributes
-	c.require(createMainPagePlacementDataFieldAttributes)
+	c.require(createEmailPlacementDataFieldAttributes)
 }
 
-func (c *CreateMainPagePlacementData) UnmarshalJSON(data []byte) error {
-	type unmarshaler CreateMainPagePlacementData
+func (c *CreateEmailPlacementData) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateEmailPlacementData
 	var value unmarshaler
 	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*c = CreateMainPagePlacementData(value)
+	*c = CreateEmailPlacementData(value)
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
@@ -1513,8 +1444,8 @@ func (c *CreateMainPagePlacementData) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (c *CreateMainPagePlacementData) MarshalJSON() ([]byte, error) {
-	type embed CreateMainPagePlacementData
+func (c *CreateEmailPlacementData) MarshalJSON() ([]byte, error) {
+	type embed CreateEmailPlacementData
 	var marshaler = struct {
 		embed
 	}{
@@ -1524,7 +1455,196 @@ func (c *CreateMainPagePlacementData) MarshalJSON() ([]byte, error) {
 	return json.Marshal(explicitMarshaler)
 }
 
-func (c *CreateMainPagePlacementData) String() string {
+func (c *CreateEmailPlacementData) String() string {
+	if c == nil {
+		return "<nil>"
+	}
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Attributes for creating a group placement
+var (
+	createGroupAttributesFieldName  = big.NewInt(1 << 0)
+	createGroupAttributesFieldSlots = big.NewInt(1 << 1)
+)
+
+type CreateGroupAttributes struct {
+	// Name of the placement
+	Name string `json:"name" url:"name"`
+	// Slots that make up the group
+	Slots []*CreateBatchActivationSlot `json:"slots" url:"slots"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CreateGroupAttributes) GetName() string {
+	if c == nil {
+		return ""
+	}
+	return c.Name
+}
+
+func (c *CreateGroupAttributes) GetSlots() []*CreateBatchActivationSlot {
+	if c == nil {
+		return nil
+	}
+	return c.Slots
+}
+
+func (c *CreateGroupAttributes) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
+	return c.extraProperties
+}
+
+func (c *CreateGroupAttributes) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetName sets the Name field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateGroupAttributes) SetName(name string) {
+	c.Name = name
+	c.require(createGroupAttributesFieldName)
+}
+
+// SetSlots sets the Slots field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateGroupAttributes) SetSlots(slots []*CreateBatchActivationSlot) {
+	c.Slots = slots
+	c.require(createGroupAttributesFieldSlots)
+}
+
+func (c *CreateGroupAttributes) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateGroupAttributes
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CreateGroupAttributes(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CreateGroupAttributes) MarshalJSON() ([]byte, error) {
+	type embed CreateGroupAttributes
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (c *CreateGroupAttributes) String() string {
+	if c == nil {
+		return "<nil>"
+	}
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Data for creating a group placement
+var (
+	createGroupPlacementDataFieldAttributes = big.NewInt(1 << 0)
+)
+
+type CreateGroupPlacementData struct {
+	// Group placement attributes for creation
+	Attributes *CreateGroupAttributes `json:"attributes" url:"attributes"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CreateGroupPlacementData) GetAttributes() *CreateGroupAttributes {
+	if c == nil {
+		return nil
+	}
+	return c.Attributes
+}
+
+func (c *CreateGroupPlacementData) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
+	return c.extraProperties
+}
+
+func (c *CreateGroupPlacementData) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetAttributes sets the Attributes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateGroupPlacementData) SetAttributes(attributes *CreateGroupAttributes) {
+	c.Attributes = attributes
+	c.require(createGroupPlacementDataFieldAttributes)
+}
+
+func (c *CreateGroupPlacementData) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateGroupPlacementData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CreateGroupPlacementData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CreateGroupPlacementData) MarshalJSON() ([]byte, error) {
+	type embed CreateGroupPlacementData
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (c *CreateGroupPlacementData) String() string {
 	if c == nil {
 		return "<nil>"
 	}
@@ -1542,9 +1662,11 @@ func (c *CreateMainPagePlacementData) String() string {
 // Discriminated union for creating a placement
 type CreatePlacementDataUnion struct {
 	Type                      string
-	PlacementMainPage         *CreateMainPagePlacementData
+	Placement                 *CreateStandardPlacementData
 	PlacementPushNotification *CreatePushNotificationPlacementData
+	PlacementEmail            *CreateEmailPlacementData
 	PlacementBatchActivation  *CreateBatchActivationPlacementData
+	PlacementGroup            *CreateGroupPlacementData
 }
 
 func (c *CreatePlacementDataUnion) GetType() string {
@@ -1554,11 +1676,11 @@ func (c *CreatePlacementDataUnion) GetType() string {
 	return c.Type
 }
 
-func (c *CreatePlacementDataUnion) GetPlacementMainPage() *CreateMainPagePlacementData {
+func (c *CreatePlacementDataUnion) GetPlacement() *CreateStandardPlacementData {
 	if c == nil {
 		return nil
 	}
-	return c.PlacementMainPage
+	return c.Placement
 }
 
 func (c *CreatePlacementDataUnion) GetPlacementPushNotification() *CreatePushNotificationPlacementData {
@@ -1568,11 +1690,25 @@ func (c *CreatePlacementDataUnion) GetPlacementPushNotification() *CreatePushNot
 	return c.PlacementPushNotification
 }
 
+func (c *CreatePlacementDataUnion) GetPlacementEmail() *CreateEmailPlacementData {
+	if c == nil {
+		return nil
+	}
+	return c.PlacementEmail
+}
+
 func (c *CreatePlacementDataUnion) GetPlacementBatchActivation() *CreateBatchActivationPlacementData {
 	if c == nil {
 		return nil
 	}
 	return c.PlacementBatchActivation
+}
+
+func (c *CreatePlacementDataUnion) GetPlacementGroup() *CreateGroupPlacementData {
+	if c == nil {
+		return nil
+	}
+	return c.PlacementGroup
 }
 
 func (c *CreatePlacementDataUnion) UnmarshalJSON(data []byte) error {
@@ -1587,24 +1723,36 @@ func (c *CreatePlacementDataUnion) UnmarshalJSON(data []byte) error {
 		return fmt.Errorf("%T did not include discriminant type", c)
 	}
 	switch unmarshaler.Type {
-	case "placementMainPage":
-		value := new(CreateMainPagePlacementData)
+	case "placement":
+		value := new(CreateStandardPlacementData)
 		if err := json.Unmarshal(data, &value); err != nil {
 			return err
 		}
-		c.PlacementMainPage = value
+		c.Placement = value
 	case "placementPushNotification":
 		value := new(CreatePushNotificationPlacementData)
 		if err := json.Unmarshal(data, &value); err != nil {
 			return err
 		}
 		c.PlacementPushNotification = value
+	case "placementEmail":
+		value := new(CreateEmailPlacementData)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		c.PlacementEmail = value
 	case "placementBatchActivation":
 		value := new(CreateBatchActivationPlacementData)
 		if err := json.Unmarshal(data, &value); err != nil {
 			return err
 		}
 		c.PlacementBatchActivation = value
+	case "placementGroup":
+		value := new(CreateGroupPlacementData)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		c.PlacementGroup = value
 	}
 	return nil
 }
@@ -1613,33 +1761,47 @@ func (c CreatePlacementDataUnion) MarshalJSON() ([]byte, error) {
 	if err := c.validate(); err != nil {
 		return nil, err
 	}
-	if c.PlacementMainPage != nil {
-		return internal.MarshalJSONWithExtraProperty(c.PlacementMainPage, "type", "placementMainPage")
+	if c.Placement != nil {
+		return internal.MarshalJSONWithExtraProperty(c.Placement, "type", "placement")
 	}
 	if c.PlacementPushNotification != nil {
 		return internal.MarshalJSONWithExtraProperty(c.PlacementPushNotification, "type", "placementPushNotification")
 	}
+	if c.PlacementEmail != nil {
+		return internal.MarshalJSONWithExtraProperty(c.PlacementEmail, "type", "placementEmail")
+	}
 	if c.PlacementBatchActivation != nil {
 		return internal.MarshalJSONWithExtraProperty(c.PlacementBatchActivation, "type", "placementBatchActivation")
+	}
+	if c.PlacementGroup != nil {
+		return internal.MarshalJSONWithExtraProperty(c.PlacementGroup, "type", "placementGroup")
 	}
 	return nil, fmt.Errorf("type %T does not define a non-empty union type", c)
 }
 
 type CreatePlacementDataUnionVisitor interface {
-	VisitPlacementMainPage(*CreateMainPagePlacementData) error
+	VisitPlacement(*CreateStandardPlacementData) error
 	VisitPlacementPushNotification(*CreatePushNotificationPlacementData) error
+	VisitPlacementEmail(*CreateEmailPlacementData) error
 	VisitPlacementBatchActivation(*CreateBatchActivationPlacementData) error
+	VisitPlacementGroup(*CreateGroupPlacementData) error
 }
 
 func (c *CreatePlacementDataUnion) Accept(visitor CreatePlacementDataUnionVisitor) error {
-	if c.PlacementMainPage != nil {
-		return visitor.VisitPlacementMainPage(c.PlacementMainPage)
+	if c.Placement != nil {
+		return visitor.VisitPlacement(c.Placement)
 	}
 	if c.PlacementPushNotification != nil {
 		return visitor.VisitPlacementPushNotification(c.PlacementPushNotification)
 	}
+	if c.PlacementEmail != nil {
+		return visitor.VisitPlacementEmail(c.PlacementEmail)
+	}
 	if c.PlacementBatchActivation != nil {
 		return visitor.VisitPlacementBatchActivation(c.PlacementBatchActivation)
+	}
+	if c.PlacementGroup != nil {
+		return visitor.VisitPlacementGroup(c.PlacementGroup)
 	}
 	return fmt.Errorf("type %T does not define a non-empty union type", c)
 }
@@ -1649,14 +1811,20 @@ func (c *CreatePlacementDataUnion) validate() error {
 		return fmt.Errorf("type %T is nil", c)
 	}
 	var fields []string
-	if c.PlacementMainPage != nil {
-		fields = append(fields, "placementMainPage")
+	if c.Placement != nil {
+		fields = append(fields, "placement")
 	}
 	if c.PlacementPushNotification != nil {
 		fields = append(fields, "placementPushNotification")
 	}
+	if c.PlacementEmail != nil {
+		fields = append(fields, "placementEmail")
+	}
 	if c.PlacementBatchActivation != nil {
 		fields = append(fields, "placementBatchActivation")
+	}
+	if c.PlacementGroup != nil {
+		fields = append(fields, "placementGroup")
 	}
 	if len(fields) == 0 {
 		if c.Type != "" {
@@ -1973,6 +2141,212 @@ func (c *CreatePushNotificationPlacementData) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
+// Attributes for creating a standard placement
+var (
+	createStandardAttributesFieldName              = big.NewInt(1 << 0)
+	createStandardAttributesFieldAvailableSlots    = big.NewInt(1 << 1)
+	createStandardAttributesFieldContentStrategyId = big.NewInt(1 << 2)
+)
+
+type CreateStandardAttributes struct {
+	// Name of the placement
+	Name string `json:"name" url:"name"`
+	// Number of available slots (minimum 1)
+	AvailableSlots int `json:"availableSlots" url:"availableSlots"`
+	// ID of the content strategy to link this placement to
+	ContentStrategyId *string `json:"contentStrategyId,omitempty" url:"contentStrategyId,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CreateStandardAttributes) GetName() string {
+	if c == nil {
+		return ""
+	}
+	return c.Name
+}
+
+func (c *CreateStandardAttributes) GetAvailableSlots() int {
+	if c == nil {
+		return 0
+	}
+	return c.AvailableSlots
+}
+
+func (c *CreateStandardAttributes) GetContentStrategyId() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ContentStrategyId
+}
+
+func (c *CreateStandardAttributes) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
+	return c.extraProperties
+}
+
+func (c *CreateStandardAttributes) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetName sets the Name field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateStandardAttributes) SetName(name string) {
+	c.Name = name
+	c.require(createStandardAttributesFieldName)
+}
+
+// SetAvailableSlots sets the AvailableSlots field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateStandardAttributes) SetAvailableSlots(availableSlots int) {
+	c.AvailableSlots = availableSlots
+	c.require(createStandardAttributesFieldAvailableSlots)
+}
+
+// SetContentStrategyId sets the ContentStrategyId field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateStandardAttributes) SetContentStrategyId(contentStrategyId *string) {
+	c.ContentStrategyId = contentStrategyId
+	c.require(createStandardAttributesFieldContentStrategyId)
+}
+
+func (c *CreateStandardAttributes) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateStandardAttributes
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CreateStandardAttributes(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CreateStandardAttributes) MarshalJSON() ([]byte, error) {
+	type embed CreateStandardAttributes
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (c *CreateStandardAttributes) String() string {
+	if c == nil {
+		return "<nil>"
+	}
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Data for creating a standard placement
+var (
+	createStandardPlacementDataFieldAttributes = big.NewInt(1 << 0)
+)
+
+type CreateStandardPlacementData struct {
+	// Standard placement attributes for creation
+	Attributes *CreateStandardAttributes `json:"attributes" url:"attributes"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CreateStandardPlacementData) GetAttributes() *CreateStandardAttributes {
+	if c == nil {
+		return nil
+	}
+	return c.Attributes
+}
+
+func (c *CreateStandardPlacementData) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
+	return c.extraProperties
+}
+
+func (c *CreateStandardPlacementData) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetAttributes sets the Attributes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateStandardPlacementData) SetAttributes(attributes *CreateStandardAttributes) {
+	c.Attributes = attributes
+	c.require(createStandardPlacementDataFieldAttributes)
+}
+
+func (c *CreateStandardPlacementData) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateStandardPlacementData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CreateStandardPlacementData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CreateStandardPlacementData) MarshalJSON() ([]byte, error) {
+	type embed CreateStandardPlacementData
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (c *CreateStandardPlacementData) String() string {
+	if c == nil {
+		return "<nil>"
+	}
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
 // Day of the week (used when frequency is WEEKLY)
 type DayOfWeek string
 
@@ -2011,13 +2385,509 @@ func (d DayOfWeek) Ptr() *DayOfWeek {
 	return &d
 }
 
+// Attributes for an email placement
+var (
+	emailPlacementAttributesFieldName              = big.NewInt(1 << 0)
+	emailPlacementAttributesFieldOrganizationId    = big.NewInt(1 << 1)
+	emailPlacementAttributesFieldAvailableSlots    = big.NewInt(1 << 2)
+	emailPlacementAttributesFieldCadence           = big.NewInt(1 << 3)
+	emailPlacementAttributesFieldContentStrategyId = big.NewInt(1 << 4)
+)
+
+type EmailPlacementAttributes struct {
+	// Name of the placement
+	Name string `json:"name" url:"name"`
+	// ID of the organization this placement belongs to
+	OrganizationId string `json:"organizationId" url:"organizationId"`
+	// Number of available slots
+	AvailableSlots int `json:"availableSlots" url:"availableSlots"`
+	// Delivery cadence for the email
+	Cadence *Cadence `json:"cadence" url:"cadence"`
+	// ID of the content strategy linked to this placement, if any. Retained alongside `relationships.contentStrategy` for backward compatibility.
+	ContentStrategyId *string `json:"contentStrategyId,omitempty" url:"contentStrategyId,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (e *EmailPlacementAttributes) GetName() string {
+	if e == nil {
+		return ""
+	}
+	return e.Name
+}
+
+func (e *EmailPlacementAttributes) GetOrganizationId() string {
+	if e == nil {
+		return ""
+	}
+	return e.OrganizationId
+}
+
+func (e *EmailPlacementAttributes) GetAvailableSlots() int {
+	if e == nil {
+		return 0
+	}
+	return e.AvailableSlots
+}
+
+func (e *EmailPlacementAttributes) GetCadence() *Cadence {
+	if e == nil {
+		return nil
+	}
+	return e.Cadence
+}
+
+func (e *EmailPlacementAttributes) GetContentStrategyId() *string {
+	if e == nil {
+		return nil
+	}
+	return e.ContentStrategyId
+}
+
+func (e *EmailPlacementAttributes) GetExtraProperties() map[string]interface{} {
+	if e == nil {
+		return nil
+	}
+	return e.extraProperties
+}
+
+func (e *EmailPlacementAttributes) require(field *big.Int) {
+	if e.explicitFields == nil {
+		e.explicitFields = big.NewInt(0)
+	}
+	e.explicitFields.Or(e.explicitFields, field)
+}
+
+// SetName sets the Name field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EmailPlacementAttributes) SetName(name string) {
+	e.Name = name
+	e.require(emailPlacementAttributesFieldName)
+}
+
+// SetOrganizationId sets the OrganizationId field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EmailPlacementAttributes) SetOrganizationId(organizationId string) {
+	e.OrganizationId = organizationId
+	e.require(emailPlacementAttributesFieldOrganizationId)
+}
+
+// SetAvailableSlots sets the AvailableSlots field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EmailPlacementAttributes) SetAvailableSlots(availableSlots int) {
+	e.AvailableSlots = availableSlots
+	e.require(emailPlacementAttributesFieldAvailableSlots)
+}
+
+// SetCadence sets the Cadence field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EmailPlacementAttributes) SetCadence(cadence *Cadence) {
+	e.Cadence = cadence
+	e.require(emailPlacementAttributesFieldCadence)
+}
+
+// SetContentStrategyId sets the ContentStrategyId field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EmailPlacementAttributes) SetContentStrategyId(contentStrategyId *string) {
+	e.ContentStrategyId = contentStrategyId
+	e.require(emailPlacementAttributesFieldContentStrategyId)
+}
+
+func (e *EmailPlacementAttributes) UnmarshalJSON(data []byte) error {
+	type unmarshaler EmailPlacementAttributes
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*e = EmailPlacementAttributes(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *e)
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+	e.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *EmailPlacementAttributes) MarshalJSON() ([]byte, error) {
+	type embed EmailPlacementAttributes
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*e),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, e.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (e *EmailPlacementAttributes) String() string {
+	if e == nil {
+		return "<nil>"
+	}
+	if len(e.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(e.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
+}
+
+// Email placement resource data
+var (
+	emailPlacementDataFieldId            = big.NewInt(1 << 0)
+	emailPlacementDataFieldAttributes    = big.NewInt(1 << 1)
+	emailPlacementDataFieldRelationships = big.NewInt(1 << 2)
+)
+
+type EmailPlacementData struct {
+	// Unique identifier of the placement (UUID v7)
+	Id         string                    `json:"id" url:"id"`
+	Attributes *EmailPlacementAttributes `json:"attributes" url:"attributes"`
+	// JSON:API relationships for the placement. Omitted entirely when the placement has no linked resources.
+	Relationships *PlacementRelationships `json:"relationships,omitempty" url:"relationships,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (e *EmailPlacementData) GetId() string {
+	if e == nil {
+		return ""
+	}
+	return e.Id
+}
+
+func (e *EmailPlacementData) GetAttributes() *EmailPlacementAttributes {
+	if e == nil {
+		return nil
+	}
+	return e.Attributes
+}
+
+func (e *EmailPlacementData) GetRelationships() *PlacementRelationships {
+	if e == nil {
+		return nil
+	}
+	return e.Relationships
+}
+
+func (e *EmailPlacementData) GetExtraProperties() map[string]interface{} {
+	if e == nil {
+		return nil
+	}
+	return e.extraProperties
+}
+
+func (e *EmailPlacementData) require(field *big.Int) {
+	if e.explicitFields == nil {
+		e.explicitFields = big.NewInt(0)
+	}
+	e.explicitFields.Or(e.explicitFields, field)
+}
+
+// SetId sets the Id field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EmailPlacementData) SetId(id string) {
+	e.Id = id
+	e.require(emailPlacementDataFieldId)
+}
+
+// SetAttributes sets the Attributes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EmailPlacementData) SetAttributes(attributes *EmailPlacementAttributes) {
+	e.Attributes = attributes
+	e.require(emailPlacementDataFieldAttributes)
+}
+
+// SetRelationships sets the Relationships field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EmailPlacementData) SetRelationships(relationships *PlacementRelationships) {
+	e.Relationships = relationships
+	e.require(emailPlacementDataFieldRelationships)
+}
+
+func (e *EmailPlacementData) UnmarshalJSON(data []byte) error {
+	type unmarshaler EmailPlacementData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*e = EmailPlacementData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *e)
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+	e.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *EmailPlacementData) MarshalJSON() ([]byte, error) {
+	type embed EmailPlacementData
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*e),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, e.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (e *EmailPlacementData) String() string {
+	if e == nil {
+		return "<nil>"
+	}
+	if len(e.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(e.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
+}
+
+// Attributes for a group placement. A group is configured like a batch-activation placement but has no refreshInterval. Slot detail is exposed via `relationships.slots` (resource identifiers) and the `batchActivationSlot` entries in `included`; request `?include=slots` (or a deeper path) to get the slot details.
+var (
+	groupPlacementAttributesFieldName           = big.NewInt(1 << 0)
+	groupPlacementAttributesFieldOrganizationId = big.NewInt(1 << 1)
+)
+
+type GroupPlacementAttributes struct {
+	// Name of the placement
+	Name string `json:"name" url:"name"`
+	// ID of the organization this placement belongs to
+	OrganizationId string `json:"organizationId" url:"organizationId"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (g *GroupPlacementAttributes) GetName() string {
+	if g == nil {
+		return ""
+	}
+	return g.Name
+}
+
+func (g *GroupPlacementAttributes) GetOrganizationId() string {
+	if g == nil {
+		return ""
+	}
+	return g.OrganizationId
+}
+
+func (g *GroupPlacementAttributes) GetExtraProperties() map[string]interface{} {
+	if g == nil {
+		return nil
+	}
+	return g.extraProperties
+}
+
+func (g *GroupPlacementAttributes) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetName sets the Name field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GroupPlacementAttributes) SetName(name string) {
+	g.Name = name
+	g.require(groupPlacementAttributesFieldName)
+}
+
+// SetOrganizationId sets the OrganizationId field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GroupPlacementAttributes) SetOrganizationId(organizationId string) {
+	g.OrganizationId = organizationId
+	g.require(groupPlacementAttributesFieldOrganizationId)
+}
+
+func (g *GroupPlacementAttributes) UnmarshalJSON(data []byte) error {
+	type unmarshaler GroupPlacementAttributes
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GroupPlacementAttributes(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+	g.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GroupPlacementAttributes) MarshalJSON() ([]byte, error) {
+	type embed GroupPlacementAttributes
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*g),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (g *GroupPlacementAttributes) String() string {
+	if g == nil {
+		return "<nil>"
+	}
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// Group placement resource data
+var (
+	groupPlacementDataFieldId            = big.NewInt(1 << 0)
+	groupPlacementDataFieldAttributes    = big.NewInt(1 << 1)
+	groupPlacementDataFieldRelationships = big.NewInt(1 << 2)
+)
+
+type GroupPlacementData struct {
+	// Unique identifier of the placement (UUID v7)
+	Id         string                    `json:"id" url:"id"`
+	Attributes *GroupPlacementAttributes `json:"attributes" url:"attributes"`
+	// JSON:API relationships for the placement. Always present on a group placement; the `slots` to-many relationship lists the slot resource identifiers.
+	Relationships *SlottedPlacementRelationships `json:"relationships" url:"relationships"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (g *GroupPlacementData) GetId() string {
+	if g == nil {
+		return ""
+	}
+	return g.Id
+}
+
+func (g *GroupPlacementData) GetAttributes() *GroupPlacementAttributes {
+	if g == nil {
+		return nil
+	}
+	return g.Attributes
+}
+
+func (g *GroupPlacementData) GetRelationships() *SlottedPlacementRelationships {
+	if g == nil {
+		return nil
+	}
+	return g.Relationships
+}
+
+func (g *GroupPlacementData) GetExtraProperties() map[string]interface{} {
+	if g == nil {
+		return nil
+	}
+	return g.extraProperties
+}
+
+func (g *GroupPlacementData) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetId sets the Id field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GroupPlacementData) SetId(id string) {
+	g.Id = id
+	g.require(groupPlacementDataFieldId)
+}
+
+// SetAttributes sets the Attributes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GroupPlacementData) SetAttributes(attributes *GroupPlacementAttributes) {
+	g.Attributes = attributes
+	g.require(groupPlacementDataFieldAttributes)
+}
+
+// SetRelationships sets the Relationships field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GroupPlacementData) SetRelationships(relationships *SlottedPlacementRelationships) {
+	g.Relationships = relationships
+	g.require(groupPlacementDataFieldRelationships)
+}
+
+func (g *GroupPlacementData) UnmarshalJSON(data []byte) error {
+	type unmarshaler GroupPlacementData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GroupPlacementData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+	g.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GroupPlacementData) MarshalJSON() ([]byte, error) {
+	type embed GroupPlacementData
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*g),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (g *GroupPlacementData) String() string {
+	if g == nil {
+		return "<nil>"
+	}
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
 // Discriminated union of every resource type that can appear in the `included` array. The shape of each branch matches the corresponding primary-data resource (same attributes and relationships), keyed on the JSON:API `type` discriminant.
 type IncludedResource struct {
 	Type                      string
 	ContentStrategy           *ContentStrategyInclusion
 	BatchActivationSlot       *BatchActivationSlotInclusion
-	PlacementMainPage         *MainPagePlacementData
+	Placement                 *PlacementData
 	PlacementPushNotification *PushNotificationPlacementData
+	PlacementEmail            *EmailPlacementData
 }
 
 func (i *IncludedResource) GetType() string {
@@ -2041,11 +2911,11 @@ func (i *IncludedResource) GetBatchActivationSlot() *BatchActivationSlotInclusio
 	return i.BatchActivationSlot
 }
 
-func (i *IncludedResource) GetPlacementMainPage() *MainPagePlacementData {
+func (i *IncludedResource) GetPlacement() *PlacementData {
 	if i == nil {
 		return nil
 	}
-	return i.PlacementMainPage
+	return i.Placement
 }
 
 func (i *IncludedResource) GetPlacementPushNotification() *PushNotificationPlacementData {
@@ -2053,6 +2923,13 @@ func (i *IncludedResource) GetPlacementPushNotification() *PushNotificationPlace
 		return nil
 	}
 	return i.PlacementPushNotification
+}
+
+func (i *IncludedResource) GetPlacementEmail() *EmailPlacementData {
+	if i == nil {
+		return nil
+	}
+	return i.PlacementEmail
 }
 
 func (i *IncludedResource) UnmarshalJSON(data []byte) error {
@@ -2079,18 +2956,24 @@ func (i *IncludedResource) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		i.BatchActivationSlot = value
-	case "placementMainPage":
-		value := new(MainPagePlacementData)
+	case "placement":
+		value := new(PlacementData)
 		if err := json.Unmarshal(data, &value); err != nil {
 			return err
 		}
-		i.PlacementMainPage = value
+		i.Placement = value
 	case "placementPushNotification":
 		value := new(PushNotificationPlacementData)
 		if err := json.Unmarshal(data, &value); err != nil {
 			return err
 		}
 		i.PlacementPushNotification = value
+	case "placementEmail":
+		value := new(EmailPlacementData)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		i.PlacementEmail = value
 	}
 	return nil
 }
@@ -2105,11 +2988,14 @@ func (i IncludedResource) MarshalJSON() ([]byte, error) {
 	if i.BatchActivationSlot != nil {
 		return internal.MarshalJSONWithExtraProperty(i.BatchActivationSlot, "type", "batchActivationSlot")
 	}
-	if i.PlacementMainPage != nil {
-		return internal.MarshalJSONWithExtraProperty(i.PlacementMainPage, "type", "placementMainPage")
+	if i.Placement != nil {
+		return internal.MarshalJSONWithExtraProperty(i.Placement, "type", "placement")
 	}
 	if i.PlacementPushNotification != nil {
 		return internal.MarshalJSONWithExtraProperty(i.PlacementPushNotification, "type", "placementPushNotification")
+	}
+	if i.PlacementEmail != nil {
+		return internal.MarshalJSONWithExtraProperty(i.PlacementEmail, "type", "placementEmail")
 	}
 	return nil, fmt.Errorf("type %T does not define a non-empty union type", i)
 }
@@ -2117,8 +3003,9 @@ func (i IncludedResource) MarshalJSON() ([]byte, error) {
 type IncludedResourceVisitor interface {
 	VisitContentStrategy(*ContentStrategyInclusion) error
 	VisitBatchActivationSlot(*BatchActivationSlotInclusion) error
-	VisitPlacementMainPage(*MainPagePlacementData) error
+	VisitPlacement(*PlacementData) error
 	VisitPlacementPushNotification(*PushNotificationPlacementData) error
+	VisitPlacementEmail(*EmailPlacementData) error
 }
 
 func (i *IncludedResource) Accept(visitor IncludedResourceVisitor) error {
@@ -2128,11 +3015,14 @@ func (i *IncludedResource) Accept(visitor IncludedResourceVisitor) error {
 	if i.BatchActivationSlot != nil {
 		return visitor.VisitBatchActivationSlot(i.BatchActivationSlot)
 	}
-	if i.PlacementMainPage != nil {
-		return visitor.VisitPlacementMainPage(i.PlacementMainPage)
+	if i.Placement != nil {
+		return visitor.VisitPlacement(i.Placement)
 	}
 	if i.PlacementPushNotification != nil {
 		return visitor.VisitPlacementPushNotification(i.PlacementPushNotification)
+	}
+	if i.PlacementEmail != nil {
+		return visitor.VisitPlacementEmail(i.PlacementEmail)
 	}
 	return fmt.Errorf("type %T does not define a non-empty union type", i)
 }
@@ -2148,11 +3038,14 @@ func (i *IncludedResource) validate() error {
 	if i.BatchActivationSlot != nil {
 		fields = append(fields, "batchActivationSlot")
 	}
-	if i.PlacementMainPage != nil {
-		fields = append(fields, "placementMainPage")
+	if i.Placement != nil {
+		fields = append(fields, "placement")
 	}
 	if i.PlacementPushNotification != nil {
 		fields = append(fields, "placementPushNotification")
+	}
+	if i.PlacementEmail != nil {
+		fields = append(fields, "placementEmail")
 	}
 	if len(fields) == 0 {
 		if i.Type != "" {
@@ -2177,15 +3070,15 @@ func (i *IncludedResource) validate() error {
 	return nil
 }
 
-// Attributes for a main-page placement
+// Attributes for a standard placement
 var (
-	mainPagePlacementAttributesFieldName              = big.NewInt(1 << 0)
-	mainPagePlacementAttributesFieldOrganizationId    = big.NewInt(1 << 1)
-	mainPagePlacementAttributesFieldAvailableSlots    = big.NewInt(1 << 2)
-	mainPagePlacementAttributesFieldContentStrategyId = big.NewInt(1 << 3)
+	placementAttributesFieldName              = big.NewInt(1 << 0)
+	placementAttributesFieldOrganizationId    = big.NewInt(1 << 1)
+	placementAttributesFieldAvailableSlots    = big.NewInt(1 << 2)
+	placementAttributesFieldContentStrategyId = big.NewInt(1 << 3)
 )
 
-type MainPagePlacementAttributes struct {
+type PlacementAttributes struct {
 	// Name of the placement
 	Name string `json:"name" url:"name"`
 	// ID of the organization this placement belongs to
@@ -2202,129 +3095,129 @@ type MainPagePlacementAttributes struct {
 	rawJSON         json.RawMessage
 }
 
-func (m *MainPagePlacementAttributes) GetName() string {
-	if m == nil {
+func (p *PlacementAttributes) GetName() string {
+	if p == nil {
 		return ""
 	}
-	return m.Name
+	return p.Name
 }
 
-func (m *MainPagePlacementAttributes) GetOrganizationId() string {
-	if m == nil {
+func (p *PlacementAttributes) GetOrganizationId() string {
+	if p == nil {
 		return ""
 	}
-	return m.OrganizationId
+	return p.OrganizationId
 }
 
-func (m *MainPagePlacementAttributes) GetAvailableSlots() int {
-	if m == nil {
+func (p *PlacementAttributes) GetAvailableSlots() int {
+	if p == nil {
 		return 0
 	}
-	return m.AvailableSlots
+	return p.AvailableSlots
 }
 
-func (m *MainPagePlacementAttributes) GetContentStrategyId() *string {
-	if m == nil {
+func (p *PlacementAttributes) GetContentStrategyId() *string {
+	if p == nil {
 		return nil
 	}
-	return m.ContentStrategyId
+	return p.ContentStrategyId
 }
 
-func (m *MainPagePlacementAttributes) GetExtraProperties() map[string]interface{} {
-	if m == nil {
+func (p *PlacementAttributes) GetExtraProperties() map[string]interface{} {
+	if p == nil {
 		return nil
 	}
-	return m.extraProperties
+	return p.extraProperties
 }
 
-func (m *MainPagePlacementAttributes) require(field *big.Int) {
-	if m.explicitFields == nil {
-		m.explicitFields = big.NewInt(0)
+func (p *PlacementAttributes) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
 	}
-	m.explicitFields.Or(m.explicitFields, field)
+	p.explicitFields.Or(p.explicitFields, field)
 }
 
 // SetName sets the Name field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MainPagePlacementAttributes) SetName(name string) {
-	m.Name = name
-	m.require(mainPagePlacementAttributesFieldName)
+func (p *PlacementAttributes) SetName(name string) {
+	p.Name = name
+	p.require(placementAttributesFieldName)
 }
 
 // SetOrganizationId sets the OrganizationId field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MainPagePlacementAttributes) SetOrganizationId(organizationId string) {
-	m.OrganizationId = organizationId
-	m.require(mainPagePlacementAttributesFieldOrganizationId)
+func (p *PlacementAttributes) SetOrganizationId(organizationId string) {
+	p.OrganizationId = organizationId
+	p.require(placementAttributesFieldOrganizationId)
 }
 
 // SetAvailableSlots sets the AvailableSlots field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MainPagePlacementAttributes) SetAvailableSlots(availableSlots int) {
-	m.AvailableSlots = availableSlots
-	m.require(mainPagePlacementAttributesFieldAvailableSlots)
+func (p *PlacementAttributes) SetAvailableSlots(availableSlots int) {
+	p.AvailableSlots = availableSlots
+	p.require(placementAttributesFieldAvailableSlots)
 }
 
 // SetContentStrategyId sets the ContentStrategyId field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MainPagePlacementAttributes) SetContentStrategyId(contentStrategyId *string) {
-	m.ContentStrategyId = contentStrategyId
-	m.require(mainPagePlacementAttributesFieldContentStrategyId)
+func (p *PlacementAttributes) SetContentStrategyId(contentStrategyId *string) {
+	p.ContentStrategyId = contentStrategyId
+	p.require(placementAttributesFieldContentStrategyId)
 }
 
-func (m *MainPagePlacementAttributes) UnmarshalJSON(data []byte) error {
-	type unmarshaler MainPagePlacementAttributes
+func (p *PlacementAttributes) UnmarshalJSON(data []byte) error {
+	type unmarshaler PlacementAttributes
 	var value unmarshaler
 	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*m = MainPagePlacementAttributes(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *m)
+	*p = PlacementAttributes(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
 	if err != nil {
 		return err
 	}
-	m.extraProperties = extraProperties
-	m.rawJSON = json.RawMessage(data)
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
 	return nil
 }
 
-func (m *MainPagePlacementAttributes) MarshalJSON() ([]byte, error) {
-	type embed MainPagePlacementAttributes
+func (p *PlacementAttributes) MarshalJSON() ([]byte, error) {
+	type embed PlacementAttributes
 	var marshaler = struct {
 		embed
 	}{
-		embed: embed(*m),
+		embed: embed(*p),
 	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, m.explicitFields)
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
 	return json.Marshal(explicitMarshaler)
 }
 
-func (m *MainPagePlacementAttributes) String() string {
-	if m == nil {
+func (p *PlacementAttributes) String() string {
+	if p == nil {
 		return "<nil>"
 	}
-	if len(m.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(m.rawJSON); err == nil {
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
 		}
 	}
-	if value, err := internal.StringifyJSON(m); err == nil {
+	if value, err := internal.StringifyJSON(p); err == nil {
 		return value
 	}
-	return fmt.Sprintf("%#v", m)
+	return fmt.Sprintf("%#v", p)
 }
 
-// Main-page placement resource data
+// Standard placement resource data
 var (
-	mainPagePlacementDataFieldId            = big.NewInt(1 << 0)
-	mainPagePlacementDataFieldAttributes    = big.NewInt(1 << 1)
-	mainPagePlacementDataFieldRelationships = big.NewInt(1 << 2)
+	placementDataFieldId            = big.NewInt(1 << 0)
+	placementDataFieldAttributes    = big.NewInt(1 << 1)
+	placementDataFieldRelationships = big.NewInt(1 << 2)
 )
 
-type MainPagePlacementData struct {
+type PlacementData struct {
 	// Unique identifier of the placement (UUID v7)
-	Id         string                       `json:"id" url:"id"`
-	Attributes *MainPagePlacementAttributes `json:"attributes" url:"attributes"`
+	Id         string               `json:"id" url:"id"`
+	Attributes *PlacementAttributes `json:"attributes" url:"attributes"`
 	// JSON:API relationships for the placement. Omitted entirely when the placement has no linked resources.
 	Relationships *PlacementRelationships `json:"relationships,omitempty" url:"relationships,omitempty"`
 
@@ -2335,110 +3228,112 @@ type MainPagePlacementData struct {
 	rawJSON         json.RawMessage
 }
 
-func (m *MainPagePlacementData) GetId() string {
-	if m == nil {
+func (p *PlacementData) GetId() string {
+	if p == nil {
 		return ""
 	}
-	return m.Id
+	return p.Id
 }
 
-func (m *MainPagePlacementData) GetAttributes() *MainPagePlacementAttributes {
-	if m == nil {
+func (p *PlacementData) GetAttributes() *PlacementAttributes {
+	if p == nil {
 		return nil
 	}
-	return m.Attributes
+	return p.Attributes
 }
 
-func (m *MainPagePlacementData) GetRelationships() *PlacementRelationships {
-	if m == nil {
+func (p *PlacementData) GetRelationships() *PlacementRelationships {
+	if p == nil {
 		return nil
 	}
-	return m.Relationships
+	return p.Relationships
 }
 
-func (m *MainPagePlacementData) GetExtraProperties() map[string]interface{} {
-	if m == nil {
+func (p *PlacementData) GetExtraProperties() map[string]interface{} {
+	if p == nil {
 		return nil
 	}
-	return m.extraProperties
+	return p.extraProperties
 }
 
-func (m *MainPagePlacementData) require(field *big.Int) {
-	if m.explicitFields == nil {
-		m.explicitFields = big.NewInt(0)
+func (p *PlacementData) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
 	}
-	m.explicitFields.Or(m.explicitFields, field)
+	p.explicitFields.Or(p.explicitFields, field)
 }
 
 // SetId sets the Id field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MainPagePlacementData) SetId(id string) {
-	m.Id = id
-	m.require(mainPagePlacementDataFieldId)
+func (p *PlacementData) SetId(id string) {
+	p.Id = id
+	p.require(placementDataFieldId)
 }
 
 // SetAttributes sets the Attributes field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MainPagePlacementData) SetAttributes(attributes *MainPagePlacementAttributes) {
-	m.Attributes = attributes
-	m.require(mainPagePlacementDataFieldAttributes)
+func (p *PlacementData) SetAttributes(attributes *PlacementAttributes) {
+	p.Attributes = attributes
+	p.require(placementDataFieldAttributes)
 }
 
 // SetRelationships sets the Relationships field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MainPagePlacementData) SetRelationships(relationships *PlacementRelationships) {
-	m.Relationships = relationships
-	m.require(mainPagePlacementDataFieldRelationships)
+func (p *PlacementData) SetRelationships(relationships *PlacementRelationships) {
+	p.Relationships = relationships
+	p.require(placementDataFieldRelationships)
 }
 
-func (m *MainPagePlacementData) UnmarshalJSON(data []byte) error {
-	type unmarshaler MainPagePlacementData
+func (p *PlacementData) UnmarshalJSON(data []byte) error {
+	type unmarshaler PlacementData
 	var value unmarshaler
 	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*m = MainPagePlacementData(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *m)
+	*p = PlacementData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
 	if err != nil {
 		return err
 	}
-	m.extraProperties = extraProperties
-	m.rawJSON = json.RawMessage(data)
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
 	return nil
 }
 
-func (m *MainPagePlacementData) MarshalJSON() ([]byte, error) {
-	type embed MainPagePlacementData
+func (p *PlacementData) MarshalJSON() ([]byte, error) {
+	type embed PlacementData
 	var marshaler = struct {
 		embed
 	}{
-		embed: embed(*m),
+		embed: embed(*p),
 	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, m.explicitFields)
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
 	return json.Marshal(explicitMarshaler)
 }
 
-func (m *MainPagePlacementData) String() string {
-	if m == nil {
+func (p *PlacementData) String() string {
+	if p == nil {
 		return "<nil>"
 	}
-	if len(m.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(m.rawJSON); err == nil {
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
 		}
 	}
-	if value, err := internal.StringifyJSON(m); err == nil {
+	if value, err := internal.StringifyJSON(p); err == nil {
 		return value
 	}
-	return fmt.Sprintf("%#v", m)
+	return fmt.Sprintf("%#v", p)
 }
 
 // Discriminated union for placement resources keyed on type
 type PlacementFormatUnion struct {
 	Type                      string
-	PlacementMainPage         *MainPagePlacementData
+	Placement                 *PlacementData
 	PlacementPushNotification *PushNotificationPlacementData
+	PlacementEmail            *EmailPlacementData
 	PlacementBatchActivation  *BatchActivationPlacementData
+	PlacementGroup            *GroupPlacementData
 }
 
 func (p *PlacementFormatUnion) GetType() string {
@@ -2448,11 +3343,11 @@ func (p *PlacementFormatUnion) GetType() string {
 	return p.Type
 }
 
-func (p *PlacementFormatUnion) GetPlacementMainPage() *MainPagePlacementData {
+func (p *PlacementFormatUnion) GetPlacement() *PlacementData {
 	if p == nil {
 		return nil
 	}
-	return p.PlacementMainPage
+	return p.Placement
 }
 
 func (p *PlacementFormatUnion) GetPlacementPushNotification() *PushNotificationPlacementData {
@@ -2462,11 +3357,25 @@ func (p *PlacementFormatUnion) GetPlacementPushNotification() *PushNotificationP
 	return p.PlacementPushNotification
 }
 
+func (p *PlacementFormatUnion) GetPlacementEmail() *EmailPlacementData {
+	if p == nil {
+		return nil
+	}
+	return p.PlacementEmail
+}
+
 func (p *PlacementFormatUnion) GetPlacementBatchActivation() *BatchActivationPlacementData {
 	if p == nil {
 		return nil
 	}
 	return p.PlacementBatchActivation
+}
+
+func (p *PlacementFormatUnion) GetPlacementGroup() *GroupPlacementData {
+	if p == nil {
+		return nil
+	}
+	return p.PlacementGroup
 }
 
 func (p *PlacementFormatUnion) UnmarshalJSON(data []byte) error {
@@ -2481,24 +3390,36 @@ func (p *PlacementFormatUnion) UnmarshalJSON(data []byte) error {
 		return fmt.Errorf("%T did not include discriminant type", p)
 	}
 	switch unmarshaler.Type {
-	case "placementMainPage":
-		value := new(MainPagePlacementData)
+	case "placement":
+		value := new(PlacementData)
 		if err := json.Unmarshal(data, &value); err != nil {
 			return err
 		}
-		p.PlacementMainPage = value
+		p.Placement = value
 	case "placementPushNotification":
 		value := new(PushNotificationPlacementData)
 		if err := json.Unmarshal(data, &value); err != nil {
 			return err
 		}
 		p.PlacementPushNotification = value
+	case "placementEmail":
+		value := new(EmailPlacementData)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.PlacementEmail = value
 	case "placementBatchActivation":
 		value := new(BatchActivationPlacementData)
 		if err := json.Unmarshal(data, &value); err != nil {
 			return err
 		}
 		p.PlacementBatchActivation = value
+	case "placementGroup":
+		value := new(GroupPlacementData)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.PlacementGroup = value
 	}
 	return nil
 }
@@ -2507,33 +3428,47 @@ func (p PlacementFormatUnion) MarshalJSON() ([]byte, error) {
 	if err := p.validate(); err != nil {
 		return nil, err
 	}
-	if p.PlacementMainPage != nil {
-		return internal.MarshalJSONWithExtraProperty(p.PlacementMainPage, "type", "placementMainPage")
+	if p.Placement != nil {
+		return internal.MarshalJSONWithExtraProperty(p.Placement, "type", "placement")
 	}
 	if p.PlacementPushNotification != nil {
 		return internal.MarshalJSONWithExtraProperty(p.PlacementPushNotification, "type", "placementPushNotification")
 	}
+	if p.PlacementEmail != nil {
+		return internal.MarshalJSONWithExtraProperty(p.PlacementEmail, "type", "placementEmail")
+	}
 	if p.PlacementBatchActivation != nil {
 		return internal.MarshalJSONWithExtraProperty(p.PlacementBatchActivation, "type", "placementBatchActivation")
+	}
+	if p.PlacementGroup != nil {
+		return internal.MarshalJSONWithExtraProperty(p.PlacementGroup, "type", "placementGroup")
 	}
 	return nil, fmt.Errorf("type %T does not define a non-empty union type", p)
 }
 
 type PlacementFormatUnionVisitor interface {
-	VisitPlacementMainPage(*MainPagePlacementData) error
+	VisitPlacement(*PlacementData) error
 	VisitPlacementPushNotification(*PushNotificationPlacementData) error
+	VisitPlacementEmail(*EmailPlacementData) error
 	VisitPlacementBatchActivation(*BatchActivationPlacementData) error
+	VisitPlacementGroup(*GroupPlacementData) error
 }
 
 func (p *PlacementFormatUnion) Accept(visitor PlacementFormatUnionVisitor) error {
-	if p.PlacementMainPage != nil {
-		return visitor.VisitPlacementMainPage(p.PlacementMainPage)
+	if p.Placement != nil {
+		return visitor.VisitPlacement(p.Placement)
 	}
 	if p.PlacementPushNotification != nil {
 		return visitor.VisitPlacementPushNotification(p.PlacementPushNotification)
 	}
+	if p.PlacementEmail != nil {
+		return visitor.VisitPlacementEmail(p.PlacementEmail)
+	}
 	if p.PlacementBatchActivation != nil {
 		return visitor.VisitPlacementBatchActivation(p.PlacementBatchActivation)
+	}
+	if p.PlacementGroup != nil {
+		return visitor.VisitPlacementGroup(p.PlacementGroup)
 	}
 	return fmt.Errorf("type %T does not define a non-empty union type", p)
 }
@@ -2543,14 +3478,20 @@ func (p *PlacementFormatUnion) validate() error {
 		return fmt.Errorf("type %T is nil", p)
 	}
 	var fields []string
-	if p.PlacementMainPage != nil {
-		fields = append(fields, "placementMainPage")
+	if p.Placement != nil {
+		fields = append(fields, "placement")
 	}
 	if p.PlacementPushNotification != nil {
 		fields = append(fields, "placementPushNotification")
 	}
+	if p.PlacementEmail != nil {
+		fields = append(fields, "placementEmail")
+	}
 	if p.PlacementBatchActivation != nil {
 		fields = append(fields, "placementBatchActivation")
+	}
+	if p.PlacementGroup != nil {
+		fields = append(fields, "placementGroup")
 	}
 	if len(fields) == 0 {
 		if p.Type != "" {
@@ -2586,7 +3527,7 @@ var (
 type PlacementListResponse struct {
 	// Array of placement resources
 	Data []*PlacementFormatUnion `json:"data" url:"data"`
-	// Related resources requested via the `include` query parameter. Each entry is keyed by its `type` discriminant (`contentStrategy`, `batchActivationSlot`, `placementMainPage`, `placementPushNotification`).
+	// Related resources requested via the `include` query parameter. Each entry is keyed by its `type` discriminant (`contentStrategy`, `batchActivationSlot`, `placement`, `placementPushNotification`, `placementEmail`).
 	Included []*IncludedResource `json:"included,omitempty" url:"included,omitempty"`
 	Links    *kardgosdk.Links    `json:"links,omitempty" url:"links,omitempty"`
 	// Pagination metadata
@@ -2806,7 +3747,7 @@ var (
 type PlacementResource struct {
 	// Placement resource
 	Data *PlacementFormatUnion `json:"data" url:"data"`
-	// Related resources requested via the `include` query parameter. Each entry is keyed by its `type` discriminant (`contentStrategy`, `batchActivationSlot`, `placementMainPage`, `placementPushNotification`).
+	// Related resources requested via the `include` query parameter. Each entry is keyed by its `type` discriminant (`contentStrategy`, `batchActivationSlot`, `placement`, `placementPushNotification`, `placementEmail`).
 	Included []*IncludedResource `json:"included,omitempty" url:"included,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
@@ -2904,19 +3845,25 @@ func (p *PlacementResource) String() string {
 type PlacementTypeFilter string
 
 const (
-	PlacementTypeFilterPlacementMainPage         PlacementTypeFilter = "placementMainPage"
+	PlacementTypeFilterPlacement                 PlacementTypeFilter = "placement"
 	PlacementTypeFilterPlacementPushNotification PlacementTypeFilter = "placementPushNotification"
+	PlacementTypeFilterPlacementEmail            PlacementTypeFilter = "placementEmail"
 	PlacementTypeFilterPlacementBatchActivation  PlacementTypeFilter = "placementBatchActivation"
+	PlacementTypeFilterPlacementGroup            PlacementTypeFilter = "placementGroup"
 )
 
 func NewPlacementTypeFilterFromString(s string) (PlacementTypeFilter, error) {
 	switch s {
-	case "placementMainPage":
-		return PlacementTypeFilterPlacementMainPage, nil
+	case "placement":
+		return PlacementTypeFilterPlacement, nil
 	case "placementPushNotification":
 		return PlacementTypeFilterPlacementPushNotification, nil
+	case "placementEmail":
+		return PlacementTypeFilterPlacementEmail, nil
 	case "placementBatchActivation":
 		return PlacementTypeFilterPlacementBatchActivation, nil
+	case "placementGroup":
+		return PlacementTypeFilterPlacementGroup, nil
 	}
 	var t PlacementTypeFilter
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -3283,6 +4230,92 @@ func (r *ResourceIdentifier) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", r)
+}
+
+// Relationship block for a batch-activation or group placement.
+var (
+	slottedPlacementRelationshipsFieldSlots = big.NewInt(1 << 0)
+)
+
+type SlottedPlacementRelationships struct {
+	// Resource identifiers for the slots that make up the placement. Each entry corresponds to a `batchActivationSlot` resource that appears in `included` when the request asks for `slots` (or any deeper path that implies it).
+	Slots *ToManyRelationship `json:"slots" url:"slots"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (s *SlottedPlacementRelationships) GetSlots() *ToManyRelationship {
+	if s == nil {
+		return nil
+	}
+	return s.Slots
+}
+
+func (s *SlottedPlacementRelationships) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
+	return s.extraProperties
+}
+
+func (s *SlottedPlacementRelationships) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetSlots sets the Slots field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SlottedPlacementRelationships) SetSlots(slots *ToManyRelationship) {
+	s.Slots = slots
+	s.require(slottedPlacementRelationshipsFieldSlots)
+}
+
+func (s *SlottedPlacementRelationships) UnmarshalJSON(data []byte) error {
+	type unmarshaler SlottedPlacementRelationships
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SlottedPlacementRelationships(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+	s.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SlottedPlacementRelationships) MarshalJSON() ([]byte, error) {
+	type embed SlottedPlacementRelationships
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (s *SlottedPlacementRelationships) String() string {
+	if s == nil {
+		return "<nil>"
+	}
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
 }
 
 // A JSON:API to-many relationship payload.
@@ -3663,7 +4696,7 @@ func (u *UpdateBatchActivationPlacementData) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
-// A slot in a batch-activation placement at update time
+// A slot in a batch-activation or group placement at update time
 var (
 	updateBatchActivationSlotFieldSlotId           = big.NewInt(1 << 0)
 	updateBatchActivationSlotFieldPlacementId      = big.NewInt(1 << 1)
@@ -3800,18 +4833,21 @@ func (u *UpdateBatchActivationSlot) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
-// Attributes for updating a main-page placement. All fields are required.
+// Attributes for updating an email placement. All fields are required.
 var (
-	updateMainPageAttributesFieldName              = big.NewInt(1 << 0)
-	updateMainPageAttributesFieldAvailableSlots    = big.NewInt(1 << 1)
-	updateMainPageAttributesFieldContentStrategyId = big.NewInt(1 << 2)
+	updateEmailAttributesFieldName              = big.NewInt(1 << 0)
+	updateEmailAttributesFieldAvailableSlots    = big.NewInt(1 << 1)
+	updateEmailAttributesFieldCadence           = big.NewInt(1 << 2)
+	updateEmailAttributesFieldContentStrategyId = big.NewInt(1 << 3)
 )
 
-type UpdateMainPageAttributes struct {
+type UpdateEmailAttributes struct {
 	// Name of the placement
 	Name string `json:"name" url:"name"`
 	// Number of available slots (minimum 1)
 	AvailableSlots int `json:"availableSlots" url:"availableSlots"`
+	// Delivery cadence for the email
+	Cadence *Cadence `json:"cadence" url:"cadence"`
 	// ID of the content strategy to link this placement to. Omit to clear any existing link (PUT requires the full attribute set, so a missing value unlinks the placement).
 	ContentStrategyId *string `json:"contentStrategyId,omitempty" url:"contentStrategyId,omitempty"`
 
@@ -3822,35 +4858,42 @@ type UpdateMainPageAttributes struct {
 	rawJSON         json.RawMessage
 }
 
-func (u *UpdateMainPageAttributes) GetName() string {
+func (u *UpdateEmailAttributes) GetName() string {
 	if u == nil {
 		return ""
 	}
 	return u.Name
 }
 
-func (u *UpdateMainPageAttributes) GetAvailableSlots() int {
+func (u *UpdateEmailAttributes) GetAvailableSlots() int {
 	if u == nil {
 		return 0
 	}
 	return u.AvailableSlots
 }
 
-func (u *UpdateMainPageAttributes) GetContentStrategyId() *string {
+func (u *UpdateEmailAttributes) GetCadence() *Cadence {
+	if u == nil {
+		return nil
+	}
+	return u.Cadence
+}
+
+func (u *UpdateEmailAttributes) GetContentStrategyId() *string {
 	if u == nil {
 		return nil
 	}
 	return u.ContentStrategyId
 }
 
-func (u *UpdateMainPageAttributes) GetExtraProperties() map[string]interface{} {
+func (u *UpdateEmailAttributes) GetExtraProperties() map[string]interface{} {
 	if u == nil {
 		return nil
 	}
 	return u.extraProperties
 }
 
-func (u *UpdateMainPageAttributes) require(field *big.Int) {
+func (u *UpdateEmailAttributes) require(field *big.Int) {
 	if u.explicitFields == nil {
 		u.explicitFields = big.NewInt(0)
 	}
@@ -3859,32 +4902,39 @@ func (u *UpdateMainPageAttributes) require(field *big.Int) {
 
 // SetName sets the Name field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpdateMainPageAttributes) SetName(name string) {
+func (u *UpdateEmailAttributes) SetName(name string) {
 	u.Name = name
-	u.require(updateMainPageAttributesFieldName)
+	u.require(updateEmailAttributesFieldName)
 }
 
 // SetAvailableSlots sets the AvailableSlots field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpdateMainPageAttributes) SetAvailableSlots(availableSlots int) {
+func (u *UpdateEmailAttributes) SetAvailableSlots(availableSlots int) {
 	u.AvailableSlots = availableSlots
-	u.require(updateMainPageAttributesFieldAvailableSlots)
+	u.require(updateEmailAttributesFieldAvailableSlots)
+}
+
+// SetCadence sets the Cadence field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateEmailAttributes) SetCadence(cadence *Cadence) {
+	u.Cadence = cadence
+	u.require(updateEmailAttributesFieldCadence)
 }
 
 // SetContentStrategyId sets the ContentStrategyId field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpdateMainPageAttributes) SetContentStrategyId(contentStrategyId *string) {
+func (u *UpdateEmailAttributes) SetContentStrategyId(contentStrategyId *string) {
 	u.ContentStrategyId = contentStrategyId
-	u.require(updateMainPageAttributesFieldContentStrategyId)
+	u.require(updateEmailAttributesFieldContentStrategyId)
 }
 
-func (u *UpdateMainPageAttributes) UnmarshalJSON(data []byte) error {
-	type unmarshaler UpdateMainPageAttributes
+func (u *UpdateEmailAttributes) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateEmailAttributes
 	var value unmarshaler
 	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*u = UpdateMainPageAttributes(value)
+	*u = UpdateEmailAttributes(value)
 	extraProperties, err := internal.ExtractExtraProperties(data, *u)
 	if err != nil {
 		return err
@@ -3894,8 +4944,8 @@ func (u *UpdateMainPageAttributes) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (u *UpdateMainPageAttributes) MarshalJSON() ([]byte, error) {
-	type embed UpdateMainPageAttributes
+func (u *UpdateEmailAttributes) MarshalJSON() ([]byte, error) {
+	type embed UpdateEmailAttributes
 	var marshaler = struct {
 		embed
 	}{
@@ -3905,7 +4955,7 @@ func (u *UpdateMainPageAttributes) MarshalJSON() ([]byte, error) {
 	return json.Marshal(explicitMarshaler)
 }
 
-func (u *UpdateMainPageAttributes) String() string {
+func (u *UpdateEmailAttributes) String() string {
 	if u == nil {
 		return "<nil>"
 	}
@@ -3920,14 +4970,14 @@ func (u *UpdateMainPageAttributes) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
-// Data for updating a main-page placement
+// Data for updating an email placement
 var (
-	updateMainPagePlacementDataFieldAttributes = big.NewInt(1 << 0)
+	updateEmailPlacementDataFieldAttributes = big.NewInt(1 << 0)
 )
 
-type UpdateMainPagePlacementData struct {
-	// Main-page placement attributes for update
-	Attributes *UpdateMainPageAttributes `json:"attributes" url:"attributes"`
+type UpdateEmailPlacementData struct {
+	// Email placement attributes for update
+	Attributes *UpdateEmailAttributes `json:"attributes" url:"attributes"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -3936,21 +4986,21 @@ type UpdateMainPagePlacementData struct {
 	rawJSON         json.RawMessage
 }
 
-func (u *UpdateMainPagePlacementData) GetAttributes() *UpdateMainPageAttributes {
+func (u *UpdateEmailPlacementData) GetAttributes() *UpdateEmailAttributes {
 	if u == nil {
 		return nil
 	}
 	return u.Attributes
 }
 
-func (u *UpdateMainPagePlacementData) GetExtraProperties() map[string]interface{} {
+func (u *UpdateEmailPlacementData) GetExtraProperties() map[string]interface{} {
 	if u == nil {
 		return nil
 	}
 	return u.extraProperties
 }
 
-func (u *UpdateMainPagePlacementData) require(field *big.Int) {
+func (u *UpdateEmailPlacementData) require(field *big.Int) {
 	if u.explicitFields == nil {
 		u.explicitFields = big.NewInt(0)
 	}
@@ -3959,18 +5009,18 @@ func (u *UpdateMainPagePlacementData) require(field *big.Int) {
 
 // SetAttributes sets the Attributes field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpdateMainPagePlacementData) SetAttributes(attributes *UpdateMainPageAttributes) {
+func (u *UpdateEmailPlacementData) SetAttributes(attributes *UpdateEmailAttributes) {
 	u.Attributes = attributes
-	u.require(updateMainPagePlacementDataFieldAttributes)
+	u.require(updateEmailPlacementDataFieldAttributes)
 }
 
-func (u *UpdateMainPagePlacementData) UnmarshalJSON(data []byte) error {
-	type unmarshaler UpdateMainPagePlacementData
+func (u *UpdateEmailPlacementData) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateEmailPlacementData
 	var value unmarshaler
 	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*u = UpdateMainPagePlacementData(value)
+	*u = UpdateEmailPlacementData(value)
 	extraProperties, err := internal.ExtractExtraProperties(data, *u)
 	if err != nil {
 		return err
@@ -3980,8 +5030,8 @@ func (u *UpdateMainPagePlacementData) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (u *UpdateMainPagePlacementData) MarshalJSON() ([]byte, error) {
-	type embed UpdateMainPagePlacementData
+func (u *UpdateEmailPlacementData) MarshalJSON() ([]byte, error) {
+	type embed UpdateEmailPlacementData
 	var marshaler = struct {
 		embed
 	}{
@@ -3991,7 +5041,196 @@ func (u *UpdateMainPagePlacementData) MarshalJSON() ([]byte, error) {
 	return json.Marshal(explicitMarshaler)
 }
 
-func (u *UpdateMainPagePlacementData) String() string {
+func (u *UpdateEmailPlacementData) String() string {
+	if u == nil {
+		return "<nil>"
+	}
+	if len(u.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(u); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", u)
+}
+
+// Attributes for updating a group placement. All fields are required.
+var (
+	updateGroupAttributesFieldName  = big.NewInt(1 << 0)
+	updateGroupAttributesFieldSlots = big.NewInt(1 << 1)
+)
+
+type UpdateGroupAttributes struct {
+	// Name of the placement
+	Name string `json:"name" url:"name"`
+	// Slots that make up the group. Slots present in the prior state but absent from this list are removed.
+	Slots []*UpdateBatchActivationSlot `json:"slots" url:"slots"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (u *UpdateGroupAttributes) GetName() string {
+	if u == nil {
+		return ""
+	}
+	return u.Name
+}
+
+func (u *UpdateGroupAttributes) GetSlots() []*UpdateBatchActivationSlot {
+	if u == nil {
+		return nil
+	}
+	return u.Slots
+}
+
+func (u *UpdateGroupAttributes) GetExtraProperties() map[string]interface{} {
+	if u == nil {
+		return nil
+	}
+	return u.extraProperties
+}
+
+func (u *UpdateGroupAttributes) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetName sets the Name field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateGroupAttributes) SetName(name string) {
+	u.Name = name
+	u.require(updateGroupAttributesFieldName)
+}
+
+// SetSlots sets the Slots field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateGroupAttributes) SetSlots(slots []*UpdateBatchActivationSlot) {
+	u.Slots = slots
+	u.require(updateGroupAttributesFieldSlots)
+}
+
+func (u *UpdateGroupAttributes) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateGroupAttributes
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*u = UpdateGroupAttributes(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *u)
+	if err != nil {
+		return err
+	}
+	u.extraProperties = extraProperties
+	u.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (u *UpdateGroupAttributes) MarshalJSON() ([]byte, error) {
+	type embed UpdateGroupAttributes
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (u *UpdateGroupAttributes) String() string {
+	if u == nil {
+		return "<nil>"
+	}
+	if len(u.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(u); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", u)
+}
+
+// Data for updating a group placement
+var (
+	updateGroupPlacementDataFieldAttributes = big.NewInt(1 << 0)
+)
+
+type UpdateGroupPlacementData struct {
+	// Group placement attributes for update
+	Attributes *UpdateGroupAttributes `json:"attributes" url:"attributes"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (u *UpdateGroupPlacementData) GetAttributes() *UpdateGroupAttributes {
+	if u == nil {
+		return nil
+	}
+	return u.Attributes
+}
+
+func (u *UpdateGroupPlacementData) GetExtraProperties() map[string]interface{} {
+	if u == nil {
+		return nil
+	}
+	return u.extraProperties
+}
+
+func (u *UpdateGroupPlacementData) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetAttributes sets the Attributes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateGroupPlacementData) SetAttributes(attributes *UpdateGroupAttributes) {
+	u.Attributes = attributes
+	u.require(updateGroupPlacementDataFieldAttributes)
+}
+
+func (u *UpdateGroupPlacementData) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateGroupPlacementData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*u = UpdateGroupPlacementData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *u)
+	if err != nil {
+		return err
+	}
+	u.extraProperties = extraProperties
+	u.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (u *UpdateGroupPlacementData) MarshalJSON() ([]byte, error) {
+	type embed UpdateGroupPlacementData
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (u *UpdateGroupPlacementData) String() string {
 	if u == nil {
 		return "<nil>"
 	}
@@ -4009,9 +5248,11 @@ func (u *UpdateMainPagePlacementData) String() string {
 // Discriminated union for updating a placement
 type UpdatePlacementDataUnion struct {
 	Type                      string
-	PlacementMainPage         *UpdateMainPagePlacementData
+	Placement                 *UpdateStandardPlacementData
 	PlacementPushNotification *UpdatePushNotificationPlacementData
+	PlacementEmail            *UpdateEmailPlacementData
 	PlacementBatchActivation  *UpdateBatchActivationPlacementData
+	PlacementGroup            *UpdateGroupPlacementData
 }
 
 func (u *UpdatePlacementDataUnion) GetType() string {
@@ -4021,11 +5262,11 @@ func (u *UpdatePlacementDataUnion) GetType() string {
 	return u.Type
 }
 
-func (u *UpdatePlacementDataUnion) GetPlacementMainPage() *UpdateMainPagePlacementData {
+func (u *UpdatePlacementDataUnion) GetPlacement() *UpdateStandardPlacementData {
 	if u == nil {
 		return nil
 	}
-	return u.PlacementMainPage
+	return u.Placement
 }
 
 func (u *UpdatePlacementDataUnion) GetPlacementPushNotification() *UpdatePushNotificationPlacementData {
@@ -4035,11 +5276,25 @@ func (u *UpdatePlacementDataUnion) GetPlacementPushNotification() *UpdatePushNot
 	return u.PlacementPushNotification
 }
 
+func (u *UpdatePlacementDataUnion) GetPlacementEmail() *UpdateEmailPlacementData {
+	if u == nil {
+		return nil
+	}
+	return u.PlacementEmail
+}
+
 func (u *UpdatePlacementDataUnion) GetPlacementBatchActivation() *UpdateBatchActivationPlacementData {
 	if u == nil {
 		return nil
 	}
 	return u.PlacementBatchActivation
+}
+
+func (u *UpdatePlacementDataUnion) GetPlacementGroup() *UpdateGroupPlacementData {
+	if u == nil {
+		return nil
+	}
+	return u.PlacementGroup
 }
 
 func (u *UpdatePlacementDataUnion) UnmarshalJSON(data []byte) error {
@@ -4054,24 +5309,36 @@ func (u *UpdatePlacementDataUnion) UnmarshalJSON(data []byte) error {
 		return fmt.Errorf("%T did not include discriminant type", u)
 	}
 	switch unmarshaler.Type {
-	case "placementMainPage":
-		value := new(UpdateMainPagePlacementData)
+	case "placement":
+		value := new(UpdateStandardPlacementData)
 		if err := json.Unmarshal(data, &value); err != nil {
 			return err
 		}
-		u.PlacementMainPage = value
+		u.Placement = value
 	case "placementPushNotification":
 		value := new(UpdatePushNotificationPlacementData)
 		if err := json.Unmarshal(data, &value); err != nil {
 			return err
 		}
 		u.PlacementPushNotification = value
+	case "placementEmail":
+		value := new(UpdateEmailPlacementData)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		u.PlacementEmail = value
 	case "placementBatchActivation":
 		value := new(UpdateBatchActivationPlacementData)
 		if err := json.Unmarshal(data, &value); err != nil {
 			return err
 		}
 		u.PlacementBatchActivation = value
+	case "placementGroup":
+		value := new(UpdateGroupPlacementData)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		u.PlacementGroup = value
 	}
 	return nil
 }
@@ -4080,33 +5347,47 @@ func (u UpdatePlacementDataUnion) MarshalJSON() ([]byte, error) {
 	if err := u.validate(); err != nil {
 		return nil, err
 	}
-	if u.PlacementMainPage != nil {
-		return internal.MarshalJSONWithExtraProperty(u.PlacementMainPage, "type", "placementMainPage")
+	if u.Placement != nil {
+		return internal.MarshalJSONWithExtraProperty(u.Placement, "type", "placement")
 	}
 	if u.PlacementPushNotification != nil {
 		return internal.MarshalJSONWithExtraProperty(u.PlacementPushNotification, "type", "placementPushNotification")
 	}
+	if u.PlacementEmail != nil {
+		return internal.MarshalJSONWithExtraProperty(u.PlacementEmail, "type", "placementEmail")
+	}
 	if u.PlacementBatchActivation != nil {
 		return internal.MarshalJSONWithExtraProperty(u.PlacementBatchActivation, "type", "placementBatchActivation")
+	}
+	if u.PlacementGroup != nil {
+		return internal.MarshalJSONWithExtraProperty(u.PlacementGroup, "type", "placementGroup")
 	}
 	return nil, fmt.Errorf("type %T does not define a non-empty union type", u)
 }
 
 type UpdatePlacementDataUnionVisitor interface {
-	VisitPlacementMainPage(*UpdateMainPagePlacementData) error
+	VisitPlacement(*UpdateStandardPlacementData) error
 	VisitPlacementPushNotification(*UpdatePushNotificationPlacementData) error
+	VisitPlacementEmail(*UpdateEmailPlacementData) error
 	VisitPlacementBatchActivation(*UpdateBatchActivationPlacementData) error
+	VisitPlacementGroup(*UpdateGroupPlacementData) error
 }
 
 func (u *UpdatePlacementDataUnion) Accept(visitor UpdatePlacementDataUnionVisitor) error {
-	if u.PlacementMainPage != nil {
-		return visitor.VisitPlacementMainPage(u.PlacementMainPage)
+	if u.Placement != nil {
+		return visitor.VisitPlacement(u.Placement)
 	}
 	if u.PlacementPushNotification != nil {
 		return visitor.VisitPlacementPushNotification(u.PlacementPushNotification)
 	}
+	if u.PlacementEmail != nil {
+		return visitor.VisitPlacementEmail(u.PlacementEmail)
+	}
 	if u.PlacementBatchActivation != nil {
 		return visitor.VisitPlacementBatchActivation(u.PlacementBatchActivation)
+	}
+	if u.PlacementGroup != nil {
+		return visitor.VisitPlacementGroup(u.PlacementGroup)
 	}
 	return fmt.Errorf("type %T does not define a non-empty union type", u)
 }
@@ -4116,14 +5397,20 @@ func (u *UpdatePlacementDataUnion) validate() error {
 		return fmt.Errorf("type %T is nil", u)
 	}
 	var fields []string
-	if u.PlacementMainPage != nil {
-		fields = append(fields, "placementMainPage")
+	if u.Placement != nil {
+		fields = append(fields, "placement")
 	}
 	if u.PlacementPushNotification != nil {
 		fields = append(fields, "placementPushNotification")
 	}
+	if u.PlacementEmail != nil {
+		fields = append(fields, "placementEmail")
+	}
 	if u.PlacementBatchActivation != nil {
 		fields = append(fields, "placementBatchActivation")
+	}
+	if u.PlacementGroup != nil {
+		fields = append(fields, "placementGroup")
 	}
 	if len(fields) == 0 {
 		if u.Type != "" {
@@ -4426,6 +5713,212 @@ func (u *UpdatePushNotificationPlacementData) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdatePushNotificationPlacementData) String() string {
+	if u == nil {
+		return "<nil>"
+	}
+	if len(u.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(u); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", u)
+}
+
+// Attributes for updating a standard placement. All fields are required.
+var (
+	updateStandardAttributesFieldName              = big.NewInt(1 << 0)
+	updateStandardAttributesFieldAvailableSlots    = big.NewInt(1 << 1)
+	updateStandardAttributesFieldContentStrategyId = big.NewInt(1 << 2)
+)
+
+type UpdateStandardAttributes struct {
+	// Name of the placement
+	Name string `json:"name" url:"name"`
+	// Number of available slots (minimum 1)
+	AvailableSlots int `json:"availableSlots" url:"availableSlots"`
+	// ID of the content strategy to link this placement to. Omit to clear any existing link (PUT requires the full attribute set, so a missing value unlinks the placement).
+	ContentStrategyId *string `json:"contentStrategyId,omitempty" url:"contentStrategyId,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (u *UpdateStandardAttributes) GetName() string {
+	if u == nil {
+		return ""
+	}
+	return u.Name
+}
+
+func (u *UpdateStandardAttributes) GetAvailableSlots() int {
+	if u == nil {
+		return 0
+	}
+	return u.AvailableSlots
+}
+
+func (u *UpdateStandardAttributes) GetContentStrategyId() *string {
+	if u == nil {
+		return nil
+	}
+	return u.ContentStrategyId
+}
+
+func (u *UpdateStandardAttributes) GetExtraProperties() map[string]interface{} {
+	if u == nil {
+		return nil
+	}
+	return u.extraProperties
+}
+
+func (u *UpdateStandardAttributes) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetName sets the Name field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateStandardAttributes) SetName(name string) {
+	u.Name = name
+	u.require(updateStandardAttributesFieldName)
+}
+
+// SetAvailableSlots sets the AvailableSlots field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateStandardAttributes) SetAvailableSlots(availableSlots int) {
+	u.AvailableSlots = availableSlots
+	u.require(updateStandardAttributesFieldAvailableSlots)
+}
+
+// SetContentStrategyId sets the ContentStrategyId field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateStandardAttributes) SetContentStrategyId(contentStrategyId *string) {
+	u.ContentStrategyId = contentStrategyId
+	u.require(updateStandardAttributesFieldContentStrategyId)
+}
+
+func (u *UpdateStandardAttributes) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateStandardAttributes
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*u = UpdateStandardAttributes(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *u)
+	if err != nil {
+		return err
+	}
+	u.extraProperties = extraProperties
+	u.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (u *UpdateStandardAttributes) MarshalJSON() ([]byte, error) {
+	type embed UpdateStandardAttributes
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (u *UpdateStandardAttributes) String() string {
+	if u == nil {
+		return "<nil>"
+	}
+	if len(u.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(u); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", u)
+}
+
+// Data for updating a standard placement
+var (
+	updateStandardPlacementDataFieldAttributes = big.NewInt(1 << 0)
+)
+
+type UpdateStandardPlacementData struct {
+	// Standard placement attributes for update
+	Attributes *UpdateStandardAttributes `json:"attributes" url:"attributes"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (u *UpdateStandardPlacementData) GetAttributes() *UpdateStandardAttributes {
+	if u == nil {
+		return nil
+	}
+	return u.Attributes
+}
+
+func (u *UpdateStandardPlacementData) GetExtraProperties() map[string]interface{} {
+	if u == nil {
+		return nil
+	}
+	return u.extraProperties
+}
+
+func (u *UpdateStandardPlacementData) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetAttributes sets the Attributes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateStandardPlacementData) SetAttributes(attributes *UpdateStandardAttributes) {
+	u.Attributes = attributes
+	u.require(updateStandardPlacementDataFieldAttributes)
+}
+
+func (u *UpdateStandardPlacementData) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateStandardPlacementData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*u = UpdateStandardPlacementData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *u)
+	if err != nil {
+		return err
+	}
+	u.extraProperties = extraProperties
+	u.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (u *UpdateStandardPlacementData) MarshalJSON() ([]byte, error) {
+	type embed UpdateStandardPlacementData
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (u *UpdateStandardPlacementData) String() string {
 	if u == nil {
 		return "<nil>"
 	}

@@ -1,3 +1,7 @@
+## v12.1.0 - 2026-06-17
+### Added
+* **`TransactionsAttributes.AccountId`** — new optional `*string` field representing an account identifier associated with a transaction, accessible via `GetAccountId()` and settable via `SetAccountId()`.
+
 ## v12.0.0 - 2026-06-11
 * feat!: rename MainPage/BatchActivationRelationships types and add email/group placement support
 * This release introduces two new placement types (email and group), renames

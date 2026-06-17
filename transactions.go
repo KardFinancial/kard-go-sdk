@@ -5571,6 +5571,7 @@ var (
 	transactionsAttributesFieldCardProductId            = big.NewInt(1 << 25)
 	transactionsAttributesFieldUserZipCode              = big.NewInt(1 << 26)
 	transactionsAttributesFieldProcessorMids            = big.NewInt(1 << 27)
+	transactionsAttributesFieldAccountId                = big.NewInt(1 << 28)
 )
 
 type TransactionsAttributes struct {
@@ -5630,6 +5631,8 @@ type TransactionsAttributes struct {
 	UserZipCode *string `json:"userZipCode,omitempty" url:"userZipCode,omitempty"`
 	// Network specific merchant IDs (MIDs) associated with the transaction
 	ProcessorMids *ProcessorMid `json:"processorMids,omitempty" url:"processorMids,omitempty"`
+	// An account identifier associated to transaction
+	AccountId *string `json:"accountId,omitempty" url:"accountId,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -5832,6 +5835,13 @@ func (t *TransactionsAttributes) GetProcessorMids() *ProcessorMid {
 		return nil
 	}
 	return t.ProcessorMids
+}
+
+func (t *TransactionsAttributes) GetAccountId() *string {
+	if t == nil {
+		return nil
+	}
+	return t.AccountId
 }
 
 func (t *TransactionsAttributes) GetExtraProperties() map[string]interface{} {
@@ -6042,6 +6052,13 @@ func (t *TransactionsAttributes) SetUserZipCode(userZipCode *string) {
 func (t *TransactionsAttributes) SetProcessorMids(processorMids *ProcessorMid) {
 	t.ProcessorMids = processorMids
 	t.require(transactionsAttributesFieldProcessorMids)
+}
+
+// SetAccountId sets the AccountId field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TransactionsAttributes) SetAccountId(accountId *string) {
+	t.AccountId = accountId
+	t.require(transactionsAttributesFieldAccountId)
 }
 
 func (t *TransactionsAttributes) UnmarshalJSON(data []byte) error {

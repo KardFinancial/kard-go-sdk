@@ -1,3 +1,10 @@
+## v12.2.0 - 2026-06-22
+### Added
+* **`Client.PlacementContent`** — new method that retrieves placement content for a given organization, user, and placement ID; the server resolves the placement type automatically, returning `standardOffer` resources for standard placements and `placementBatch` slot resources for batch-activation or group placements.
+* **`GetPlacementContentRequest`** — new request type with optional `Include` and `SupportedComponents` fields (and `SetInclude`/`SetSupportedComponents` setters) used to parameterize the `PlacementContent` call.
+* **`PlacementContentData`** — new union type that wraps either an `OfferDataUnion` or a `PlacementBatchData` resource, with `GetOfferDataUnion()`, `GetPlacementBatchData()`, and `Accept(PlacementContentDataVisitor)` for exhaustive dispatch.
+* **`PlacementContentResponse`** — new JSON:API response envelope with `Data`, `Links`, `Included`, and `Meta` fields, mirroring the shape of the existing offers and batches responses.
+
 ## v12.1.0 - 2026-06-17
 ### Added
 * **`TransactionsAttributes.AccountId`** — new optional `*string` field representing an account identifier associated with a transaction, accessible via `GetAccountId()` and settable via `SetAccountId()`.

@@ -165,6 +165,38 @@ func TestUsersRewardsPlacementBatchesWithWireMock(
 	VerifyRequestCount(t, "TestUsersRewardsPlacementBatchesWithWireMock", "GET", "/v2/issuers/organizationId/users/userId/placements/placementId/batches", nil, 1)
 }
 
+func TestUsersRewardsPlacementContentWithWireMock(
+	t *testing.T,
+) {
+	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
+	if WireMockBaseURL == "" {
+		WireMockBaseURL = "http://localhost:8080"
+	}
+	client := client.NewClient(
+		option.WithBaseURL(WireMockBaseURL),
+	)
+	request := &users.GetPlacementContentRequest{
+		Include: []*string{
+			kard.String(
+				"categories",
+			),
+		},
+	}
+	_, invocationErr := client.Users.Rewards.PlacementContent(
+		context.TODO(),
+		"organization-123",
+		"user-123",
+		"placement-homepage-banner",
+		request,
+		option.WithHTTPHeader(
+			http.Header{"X-Test-Id": []string{"TestUsersRewardsPlacementContentWithWireMock"}},
+		),
+	)
+
+	require.NoError(t, invocationErr, "Client method call should succeed")
+	VerifyRequestCount(t, "TestUsersRewardsPlacementContentWithWireMock", "GET", "/v2/issuers/organization-123/users/user-123/placements/placement-homepage-banner/content", map[string]interface{}{"include": "categories"}, 1)
+}
+
 func TestUsersRewardsLocationsWithWireMock(
 	t *testing.T,
 ) {

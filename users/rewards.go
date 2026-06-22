@@ -293,6 +293,42 @@ func (g *GetBatchesByPlacementRequest) SetSupportedComponents(supportedComponent
 }
 
 var (
+	getPlacementContentRequestFieldInclude             = big.NewInt(1 << 0)
+	getPlacementContentRequestFieldSupportedComponents = big.NewInt(1 << 1)
+)
+
+type GetPlacementContentRequest struct {
+	// CSV list of included resources in the response (e.g "categories"). Allowed value is `categories`. Only applies to standard placements (those returning `standardOffer` resources).
+	Include []*string `json:"-" url:"include,omitempty"`
+	// UI component types to include in the response.
+	SupportedComponents []*ComponentType `json:"-" url:"supportedComponents,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (g *GetPlacementContentRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetInclude sets the Include field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetPlacementContentRequest) SetInclude(include []*string) {
+	g.Include = include
+	g.require(getPlacementContentRequestFieldInclude)
+}
+
+// SetSupportedComponents sets the SupportedComponents field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetPlacementContentRequest) SetSupportedComponents(supportedComponents []*ComponentType) {
+	g.SupportedComponents = supportedComponents
+	g.require(getPlacementContentRequestFieldSupportedComponents)
+}
+
+var (
 	getOffersByPlacementRequestFieldFilterSearch          = big.NewInt(1 << 0)
 	getOffersByPlacementRequestFieldFilterPurchaseChannel = big.NewInt(1 << 1)
 	getOffersByPlacementRequestFieldFilterCategory        = big.NewInt(1 << 2)
@@ -4580,6 +4616,202 @@ func (p *PlacementBatchData) MarshalJSON() ([]byte, error) {
 }
 
 func (p *PlacementBatchData) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+// A single placement-content resource: a `standardOffer` (returned for a standard placement) or a `placementBatch` slot (returned for a batch-activation or group placement). Discriminate on the resource `type`.
+type PlacementContentData struct {
+	OfferDataUnion     *OfferDataUnion
+	PlacementBatchData *PlacementBatchData
+
+	typ string
+}
+
+func (p *PlacementContentData) GetOfferDataUnion() *OfferDataUnion {
+	if p == nil {
+		return nil
+	}
+	return p.OfferDataUnion
+}
+
+func (p *PlacementContentData) GetPlacementBatchData() *PlacementBatchData {
+	if p == nil {
+		return nil
+	}
+	return p.PlacementBatchData
+}
+
+func (p *PlacementContentData) UnmarshalJSON(data []byte) error {
+	valueOfferDataUnion := new(OfferDataUnion)
+	if err := json.Unmarshal(data, &valueOfferDataUnion); err == nil {
+		p.typ = "OfferDataUnion"
+		p.OfferDataUnion = valueOfferDataUnion
+		return nil
+	}
+	valuePlacementBatchData := new(PlacementBatchData)
+	if err := json.Unmarshal(data, &valuePlacementBatchData); err == nil {
+		p.typ = "PlacementBatchData"
+		p.PlacementBatchData = valuePlacementBatchData
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, p)
+}
+
+func (p PlacementContentData) MarshalJSON() ([]byte, error) {
+	if p.typ == "OfferDataUnion" || p.OfferDataUnion != nil {
+		return json.Marshal(p.OfferDataUnion)
+	}
+	if p.typ == "PlacementBatchData" || p.PlacementBatchData != nil {
+		return json.Marshal(p.PlacementBatchData)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", p)
+}
+
+type PlacementContentDataVisitor interface {
+	VisitOfferDataUnion(*OfferDataUnion) error
+	VisitPlacementBatchData(*PlacementBatchData) error
+}
+
+func (p *PlacementContentData) Accept(visitor PlacementContentDataVisitor) error {
+	if p.typ == "OfferDataUnion" || p.OfferDataUnion != nil {
+		return visitor.VisitOfferDataUnion(p.OfferDataUnion)
+	}
+	if p.typ == "PlacementBatchData" || p.PlacementBatchData != nil {
+		return visitor.VisitPlacementBatchData(p.PlacementBatchData)
+	}
+	return fmt.Errorf("type %T does not include a non-empty union type", p)
+}
+
+// Combined placement-content response, shaped as a JSON:API document. The placement is resolved server-side: a standard placement yields `standardOffer` resources (with `links`, optional `included` categories, and `meta`), while a batch-activation or group placement yields `placementBatch` slot resources. Callers distinguish the two by each resource's `type` rather than a separate discriminator, and the payload mirrors Get Offers By Placement / Get Batches By Placement exactly.
+var (
+	placementContentResponseFieldData     = big.NewInt(1 << 0)
+	placementContentResponseFieldLinks    = big.NewInt(1 << 1)
+	placementContentResponseFieldIncluded = big.NewInt(1 << 2)
+	placementContentResponseFieldMeta     = big.NewInt(1 << 3)
+)
+
+type PlacementContentResponse struct {
+	Data     []*PlacementContentData     `json:"data" url:"data"`
+	Links    *kardgosdk.Links            `json:"links,omitempty" url:"links,omitempty"`
+	Included []*EligibilityOfferIncluded `json:"included,omitempty" url:"included,omitempty"`
+	Meta     *OffersMeta                 `json:"meta,omitempty" url:"meta,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PlacementContentResponse) GetData() []*PlacementContentData {
+	if p == nil {
+		return nil
+	}
+	return p.Data
+}
+
+func (p *PlacementContentResponse) GetLinks() *kardgosdk.Links {
+	if p == nil {
+		return nil
+	}
+	return p.Links
+}
+
+func (p *PlacementContentResponse) GetIncluded() []*EligibilityOfferIncluded {
+	if p == nil {
+		return nil
+	}
+	return p.Included
+}
+
+func (p *PlacementContentResponse) GetMeta() *OffersMeta {
+	if p == nil {
+		return nil
+	}
+	return p.Meta
+}
+
+func (p *PlacementContentResponse) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *PlacementContentResponse) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetData sets the Data field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlacementContentResponse) SetData(data []*PlacementContentData) {
+	p.Data = data
+	p.require(placementContentResponseFieldData)
+}
+
+// SetLinks sets the Links field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlacementContentResponse) SetLinks(links *kardgosdk.Links) {
+	p.Links = links
+	p.require(placementContentResponseFieldLinks)
+}
+
+// SetIncluded sets the Included field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlacementContentResponse) SetIncluded(included []*EligibilityOfferIncluded) {
+	p.Included = included
+	p.require(placementContentResponseFieldIncluded)
+}
+
+// SetMeta sets the Meta field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlacementContentResponse) SetMeta(meta *OffersMeta) {
+	p.Meta = meta
+	p.require(placementContentResponseFieldMeta)
+}
+
+func (p *PlacementContentResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler PlacementContentResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PlacementContentResponse(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PlacementContentResponse) MarshalJSON() ([]byte, error) {
+	type embed PlacementContentResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *PlacementContentResponse) String() string {
 	if p == nil {
 		return "<nil>"
 	}

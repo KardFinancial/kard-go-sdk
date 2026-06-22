@@ -3461,6 +3461,116 @@ client.Users.Rewards.PlacementBatches(
 </dl>
 </details>
 
+<details><summary><code>client.Users.Rewards.PlacementContent(OrganizationId, UserId, PlacementId) -> *users.PlacementContentResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve the content for a placement. The placement type is resolved
+server-side so callers no longer pick an endpoint by placement type.
+Returns a JSON:API document whose `data` resources are self-describing
+by `type`: a standard placement returns `standardOffer` resources (the
+same payload as Get Offers By Placement — with `links`, optional
+`included` categories, and `meta`); a batch-activation or group
+placement returns `placementBatch` slot resources (the same payload as
+Get Batches By Placement). Distinguish the two by each resource's
+`type`. Email and push-notification placements are not servable through
+this endpoint and respond with a `400`.<br/>
+<b>Required scopes:</b> `rewards:read`
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```go
+request := &users.GetPlacementContentRequest{
+        Include: []*string{
+            kard.String(
+                "categories",
+            ),
+        },
+    }
+client.Users.Rewards.PlacementContent(
+        context.TODO(),
+        "organization-123",
+        "user-123",
+        "placement-homepage-banner",
+        request,
+    )
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**organizationId:** `kard.OrganizationId` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**userId:** `kard.UserId` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**placementId:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**include:** `*string` — CSV list of included resources in the response (e.g "categories"). Allowed value is `categories`. Only applies to standard placements (those returning `standardOffer` resources).
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**supportedComponents:** `*users.ComponentType` — UI component types to include in the response.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.Users.Rewards.Locations(OrganizationId, UserId) -> *users.LocationsResponseObject</code></summary>
 <dl>
 <dd>

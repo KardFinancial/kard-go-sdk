@@ -198,6 +198,62 @@ func (r *RawClient) PlacementBatches(
 	}, nil
 }
 
+func (r *RawClient) PlacementContent(
+	ctx context.Context,
+	organizationId kard.OrganizationId,
+	userId kard.UserId,
+	placementId string,
+	request *users.GetPlacementContentRequest,
+	opts ...option.RequestOption,
+) (*core.Response[*users.PlacementContentResponse], error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		r.baseURL,
+		"https://rewards-api.getkard.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/issuers/%v/users/%v/placements/%v/content",
+		organizationId,
+		userId,
+		placementId,
+	)
+	queryParams, err := internal.QueryValues(request)
+	if err != nil {
+		return nil, err
+	}
+	if len(queryParams) > 0 {
+		endpointURL += "?" + queryParams.Encode()
+	}
+	headers := internal.MergeHeaders(
+		r.options.ToHeader(),
+		options.ToHeader(),
+	)
+	var response *users.PlacementContentResponse
+	raw, err := r.caller.Call(
+		ctx,
+		&internal.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodGet,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Response:        &response,
+			ErrorDecoder:    internal.NewErrorDecoder(users.ErrorCodes),
+		},
+	)
+	if err != nil {
+		return nil, err
+	}
+	return &core.Response[*users.PlacementContentResponse]{
+		StatusCode: raw.StatusCode,
+		Header:     raw.Header,
+		Body:       response,
+	}, nil
+}
+
 func (r *RawClient) Locations(
 	ctx context.Context,
 	organizationId kard.OrganizationId,

@@ -539,13 +539,101 @@ func (a *Asset) String() string {
 	return fmt.Sprintf("%#v", a)
 }
 
+// Metadata about the placement.
+var (
+	batchesMetaFieldPlacementName = big.NewInt(1 << 0)
+)
+
+type BatchesMeta struct {
+	// Display name of the placement, resolved server-side from its id.
+	PlacementName *string `json:"placementName,omitempty" url:"placementName,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (b *BatchesMeta) GetPlacementName() *string {
+	if b == nil {
+		return nil
+	}
+	return b.PlacementName
+}
+
+func (b *BatchesMeta) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
+	return b.extraProperties
+}
+
+func (b *BatchesMeta) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetPlacementName sets the PlacementName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchesMeta) SetPlacementName(placementName *string) {
+	b.PlacementName = placementName
+	b.require(batchesMetaFieldPlacementName)
+}
+
+func (b *BatchesMeta) UnmarshalJSON(data []byte) error {
+	type unmarshaler BatchesMeta
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BatchesMeta(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+	b.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BatchesMeta) MarshalJSON() ([]byte, error) {
+	type embed BatchesMeta
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (b *BatchesMeta) String() string {
+	if b == nil {
+		return "<nil>"
+	}
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
 // Ordered list of slots for a batch-activation or group placement, with freshness fields and per-slot offer sets.
 var (
 	batchesResponseObjectFieldData = big.NewInt(1 << 0)
+	batchesResponseObjectFieldMeta = big.NewInt(1 << 1)
 )
 
 type BatchesResponseObject struct {
 	Data []*PlacementBatchData `json:"data" url:"data"`
+	Meta *BatchesMeta          `json:"meta,omitempty" url:"meta,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -559,6 +647,13 @@ func (b *BatchesResponseObject) GetData() []*PlacementBatchData {
 		return nil
 	}
 	return b.Data
+}
+
+func (b *BatchesResponseObject) GetMeta() *BatchesMeta {
+	if b == nil {
+		return nil
+	}
+	return b.Meta
 }
 
 func (b *BatchesResponseObject) GetExtraProperties() map[string]interface{} {
@@ -580,6 +675,13 @@ func (b *BatchesResponseObject) require(field *big.Int) {
 func (b *BatchesResponseObject) SetData(data []*PlacementBatchData) {
 	b.Data = data
 	b.require(batchesResponseObjectFieldData)
+}
+
+// SetMeta sets the Meta field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchesResponseObject) SetMeta(meta *BatchesMeta) {
+	b.Meta = meta
+	b.require(batchesResponseObjectFieldMeta)
 }
 
 func (b *BatchesResponseObject) UnmarshalJSON(data []byte) error {
@@ -3698,11 +3800,14 @@ func (o OfferSortOptions) Ptr() *OfferSortOptions {
 // Metadata about the full result set across all pages
 var (
 	offersMetaFieldAvailableCategories = big.NewInt(1 << 0)
+	offersMetaFieldPlacementName       = big.NewInt(1 << 1)
 )
 
 type OffersMeta struct {
 	// All distinct categories available across the entire filtered result set, not just the current page
 	AvailableCategories []*CategoryIncluded `json:"availableCategories,omitempty" url:"availableCategories,omitempty"`
+	// Display name of the placement, resolved server-side from its id. Populated only on the Get Placement Content endpoint; absent on the Get Offers By User endpoint.
+	PlacementName *string `json:"placementName,omitempty" url:"placementName,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -3716,6 +3821,13 @@ func (o *OffersMeta) GetAvailableCategories() []*CategoryIncluded {
 		return nil
 	}
 	return o.AvailableCategories
+}
+
+func (o *OffersMeta) GetPlacementName() *string {
+	if o == nil {
+		return nil
+	}
+	return o.PlacementName
 }
 
 func (o *OffersMeta) GetExtraProperties() map[string]interface{} {
@@ -3737,6 +3849,13 @@ func (o *OffersMeta) require(field *big.Int) {
 func (o *OffersMeta) SetAvailableCategories(availableCategories []*CategoryIncluded) {
 	o.AvailableCategories = availableCategories
 	o.require(offersMetaFieldAvailableCategories)
+}
+
+// SetPlacementName sets the PlacementName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *OffersMeta) SetPlacementName(placementName *string) {
+	o.PlacementName = placementName
+	o.require(offersMetaFieldPlacementName)
 }
 
 func (o *OffersMeta) UnmarshalJSON(data []byte) error {

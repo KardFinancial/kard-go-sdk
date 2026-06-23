@@ -1,3 +1,9 @@
+## v13.1.0 - 2026-06-23
+### Added
+* **`BatchesMeta`** — new type representing metadata about a batch placement, with `PlacementName` field and getter/setter methods.
+* **`BatchesResponseObject.Meta`** — new optional field of type `BatchesMeta` providing placement metadata in batch responses.
+* **`OffersMeta.PlacementName`** — new optional field exposing the display name of the placement resolved server-side; populated on the Get Placement Content endpoint.
+
 ## v13.0.0 - 2026-06-23
 ### Breaking Changes
 * **`Client.PlacementOffers`** and **`Client.PlacementBatches`** methods (and their `RawClient` counterparts) have been removed; migrate to the unified **`Client.PlacementContent`** endpoint, which resolves the placement type server-side and returns either offers or batches automatically.

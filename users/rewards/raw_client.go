@@ -6,11 +6,11 @@ import (
 	context "context"
 	http "net/http"
 
-	kard "github.com/KardFinancial/kard-go-sdk/v12"
-	core "github.com/KardFinancial/kard-go-sdk/v12/core"
-	internal "github.com/KardFinancial/kard-go-sdk/v12/internal"
-	option "github.com/KardFinancial/kard-go-sdk/v12/option"
-	users "github.com/KardFinancial/kard-go-sdk/v12/users"
+	kard "github.com/KardFinancial/kard-go-sdk/v13"
+	core "github.com/KardFinancial/kard-go-sdk/v13/core"
+	internal "github.com/KardFinancial/kard-go-sdk/v13/internal"
+	option "github.com/KardFinancial/kard-go-sdk/v13/option"
+	users "github.com/KardFinancial/kard-go-sdk/v13/users"
 )
 
 type RawClient struct {
@@ -80,118 +80,6 @@ func (r *RawClient) Offers(
 		return nil, err
 	}
 	return &core.Response[*users.OffersResponseObject]{
-		StatusCode: raw.StatusCode,
-		Header:     raw.Header,
-		Body:       response,
-	}, nil
-}
-
-func (r *RawClient) PlacementOffers(
-	ctx context.Context,
-	organizationId kard.OrganizationId,
-	userId kard.UserId,
-	placementId string,
-	request *users.GetOffersByPlacementRequest,
-	opts ...option.RequestOption,
-) (*core.Response[*users.OffersResponseObject], error) {
-	options := core.NewRequestOptions(opts...)
-	baseURL := internal.ResolveBaseURL(
-		options.BaseURL,
-		r.baseURL,
-		"https://rewards-api.getkard.com",
-	)
-	endpointURL := internal.EncodeURL(
-		baseURL+"/v2/issuers/%v/users/%v/placements/%v/offers",
-		organizationId,
-		userId,
-		placementId,
-	)
-	queryParams, err := internal.QueryValues(request)
-	if err != nil {
-		return nil, err
-	}
-	if len(queryParams) > 0 {
-		endpointURL += "?" + queryParams.Encode()
-	}
-	headers := internal.MergeHeaders(
-		r.options.ToHeader(),
-		options.ToHeader(),
-	)
-	var response *users.OffersResponseObject
-	raw, err := r.caller.Call(
-		ctx,
-		&internal.CallParams{
-			URL:             endpointURL,
-			Method:          http.MethodGet,
-			Headers:         headers,
-			MaxAttempts:     options.MaxAttempts,
-			BodyProperties:  options.BodyProperties,
-			QueryParameters: options.QueryParameters,
-			Client:          options.HTTPClient,
-			Response:        &response,
-			ErrorDecoder:    internal.NewErrorDecoder(users.ErrorCodes),
-		},
-	)
-	if err != nil {
-		return nil, err
-	}
-	return &core.Response[*users.OffersResponseObject]{
-		StatusCode: raw.StatusCode,
-		Header:     raw.Header,
-		Body:       response,
-	}, nil
-}
-
-func (r *RawClient) PlacementBatches(
-	ctx context.Context,
-	organizationId kard.OrganizationId,
-	userId kard.UserId,
-	placementId string,
-	request *users.GetBatchesByPlacementRequest,
-	opts ...option.RequestOption,
-) (*core.Response[*users.BatchesResponseObject], error) {
-	options := core.NewRequestOptions(opts...)
-	baseURL := internal.ResolveBaseURL(
-		options.BaseURL,
-		r.baseURL,
-		"https://rewards-api.getkard.com",
-	)
-	endpointURL := internal.EncodeURL(
-		baseURL+"/v2/issuers/%v/users/%v/placements/%v/batches",
-		organizationId,
-		userId,
-		placementId,
-	)
-	queryParams, err := internal.QueryValues(request)
-	if err != nil {
-		return nil, err
-	}
-	if len(queryParams) > 0 {
-		endpointURL += "?" + queryParams.Encode()
-	}
-	headers := internal.MergeHeaders(
-		r.options.ToHeader(),
-		options.ToHeader(),
-	)
-	var response *users.BatchesResponseObject
-	raw, err := r.caller.Call(
-		ctx,
-		&internal.CallParams{
-			URL:             endpointURL,
-			Method:          http.MethodGet,
-			Headers:         headers,
-			MaxAttempts:     options.MaxAttempts,
-			BodyProperties:  options.BodyProperties,
-			QueryParameters: options.QueryParameters,
-			Client:          options.HTTPClient,
-			Response:        &response,
-			ErrorDecoder:    internal.NewErrorDecoder(users.ErrorCodes),
-		},
-	)
-	if err != nil {
-		return nil, err
-	}
-	return &core.Response[*users.BatchesResponseObject]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

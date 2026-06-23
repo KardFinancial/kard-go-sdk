@@ -5,8 +5,8 @@ package organizations
 import (
 	json "encoding/json"
 	fmt "fmt"
-	kardgosdk "github.com/KardFinancial/kard-go-sdk/v12"
-	internal "github.com/KardFinancial/kard-go-sdk/v12/internal"
+	kardgosdk "github.com/KardFinancial/kard-go-sdk/v13"
+	internal "github.com/KardFinancial/kard-go-sdk/v13/internal"
 	big "math/big"
 )
 

@@ -10,10 +10,10 @@ import (
 	os "os"
 	testing "testing"
 
-	kard "github.com/KardFinancial/kard-go-sdk/v12"
-	client "github.com/KardFinancial/kard-go-sdk/v12/client"
-	option "github.com/KardFinancial/kard-go-sdk/v12/option"
-	users "github.com/KardFinancial/kard-go-sdk/v12/users"
+	kard "github.com/KardFinancial/kard-go-sdk/v13"
+	client "github.com/KardFinancial/kard-go-sdk/v13/client"
+	option "github.com/KardFinancial/kard-go-sdk/v13/option"
+	users "github.com/KardFinancial/kard-go-sdk/v13/users"
 	require "github.com/stretchr/testify/require"
 )
 
@@ -111,58 +111,6 @@ func TestUsersRewardsOffersWithWireMock(
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
 	VerifyRequestCount(t, "TestUsersRewardsOffersWithWireMock", "GET", "/v2/issuers/organization-123/users/user-123/offers", map[string]interface{}{"page[size]": "1", "filter[isTargeted]": "true", "sort": "-startDate"}, 1)
-}
-
-func TestUsersRewardsPlacementOffersWithWireMock(
-	t *testing.T,
-) {
-	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
-	if WireMockBaseURL == "" {
-		WireMockBaseURL = "http://localhost:8080"
-	}
-	client := client.NewClient(
-		option.WithBaseURL(WireMockBaseURL),
-	)
-	request := &users.GetOffersByPlacementRequest{}
-	_, invocationErr := client.Users.Rewards.PlacementOffers(
-		context.TODO(),
-		"organizationId",
-		"userId",
-		"placementId",
-		request,
-		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestUsersRewardsPlacementOffersWithWireMock"}},
-		),
-	)
-
-	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestUsersRewardsPlacementOffersWithWireMock", "GET", "/v2/issuers/organizationId/users/userId/placements/placementId/offers", nil, 1)
-}
-
-func TestUsersRewardsPlacementBatchesWithWireMock(
-	t *testing.T,
-) {
-	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
-	if WireMockBaseURL == "" {
-		WireMockBaseURL = "http://localhost:8080"
-	}
-	client := client.NewClient(
-		option.WithBaseURL(WireMockBaseURL),
-	)
-	request := &users.GetBatchesByPlacementRequest{}
-	_, invocationErr := client.Users.Rewards.PlacementBatches(
-		context.TODO(),
-		"organizationId",
-		"userId",
-		"placementId",
-		request,
-		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestUsersRewardsPlacementBatchesWithWireMock"}},
-		),
-	)
-
-	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestUsersRewardsPlacementBatchesWithWireMock", "GET", "/v2/issuers/organizationId/users/userId/placements/placementId/batches", nil, 1)
 }
 
 func TestUsersRewardsPlacementContentWithWireMock(

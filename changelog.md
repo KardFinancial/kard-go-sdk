@@ -1,3 +1,9 @@
+## v13.0.0 - 2026-06-23
+### Breaking Changes
+* **`Client.PlacementOffers`** and **`Client.PlacementBatches`** methods (and their `RawClient` counterparts) have been removed; migrate to the unified **`Client.PlacementContent`** endpoint, which resolves the placement type server-side and returns either offers or batches automatically.
+* **`GetOffersByPlacementRequest`** and **`GetBatchesByPlacementRequest`** types have been removed; use **`GetPlacementContentRequest`** with `PlacementContent` instead.
+* **`PlacementContentData`** union type and **`PlacementContentDataVisitor`** interface have been removed and replaced by **`PlacementContentResponse`** (a union of `OffersResponseObject` / `BatchesResponseObject`) and **`PlacementContentResponseVisitor`** (with `VisitOffersResponseObject` / `VisitBatchesResponseObject` methods); update all type assertions, visitor implementations, and `Accept` call sites accordingly.
+
 ## v12.2.0 - 2026-06-22
 ### Added
 * **`Client.PlacementContent`** — new method that retrieves placement content for a given organization, user, and placement ID; the server resolves the placement type automatically, returning `standardOffer` resources for standard placements and `placementBatch` slot resources for batch-activation or group placements.

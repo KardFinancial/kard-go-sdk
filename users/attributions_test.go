@@ -5247,6 +5247,13 @@ func TestEnumOfferMedium(t *testing.T) {
 		assert.Equal(t, OfferMedium("CTA"), val, "enum value should match expected wire value")
 	})
 
+	t.Run("NewFromString_PUSH", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewOfferMediumFromString("PUSH")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, OfferMedium("PUSH"), val, "enum value should match expected wire value")
+	})
+
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
 		_, err := NewOfferMediumFromString("invalid_value_that_does_not_exist")
 		assert.Error(t, err)

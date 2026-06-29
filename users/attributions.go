@@ -2433,6 +2433,7 @@ const (
 	OfferMediumMap    OfferMedium = "MAP"
 	OfferMediumSearch OfferMedium = "SEARCH"
 	OfferMediumCta    OfferMedium = "CTA"
+	OfferMediumPush   OfferMedium = "PUSH"
 )
 
 func NewOfferMediumFromString(s string) (OfferMedium, error) {
@@ -2447,6 +2448,8 @@ func NewOfferMediumFromString(s string) (OfferMedium, error) {
 		return OfferMediumSearch, nil
 	case "CTA":
 		return OfferMediumCta, nil
+	case "PUSH":
+		return OfferMediumPush, nil
 	}
 	var t OfferMedium
 	return "", fmt.Errorf("%s is not a valid %T", s, t)

@@ -1,3 +1,7 @@
+## v13.2.0 - 2026-06-29
+### Added
+* **`OfferMediumPush`** — new `OfferMedium` enum value (`"PUSH"`) representing the push channel; recognized by `NewOfferMediumFromString` for round-trip serialization.
+
 ## v13.1.0 - 2026-06-23
 ### Added
 * **`BatchesMeta`** — new type representing metadata about a batch placement, with `PlacementName` field and getter/setter methods.

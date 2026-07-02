@@ -5373,6 +5373,109 @@ func (p ProgressBarSegmentPosition) Ptr() *ProgressBarSegmentPosition {
 	return &p
 }
 
+// Fill state of a single segment node, expressed as completed of total.
+var (
+	progressBarSegmentProgressFieldCompleted = big.NewInt(1 << 0)
+	progressBarSegmentProgressFieldTotal     = big.NewInt(1 << 1)
+)
+
+type ProgressBarSegmentProgress struct {
+	// Units completed within the current segment.
+	Completed int `json:"completed" url:"completed"`
+	// Total units required to complete the current segment.
+	Total int `json:"total" url:"total"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *ProgressBarSegmentProgress) GetCompleted() int {
+	if p == nil {
+		return 0
+	}
+	return p.Completed
+}
+
+func (p *ProgressBarSegmentProgress) GetTotal() int {
+	if p == nil {
+		return 0
+	}
+	return p.Total
+}
+
+func (p *ProgressBarSegmentProgress) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *ProgressBarSegmentProgress) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetCompleted sets the Completed field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *ProgressBarSegmentProgress) SetCompleted(completed int) {
+	p.Completed = completed
+	p.require(progressBarSegmentProgressFieldCompleted)
+}
+
+// SetTotal sets the Total field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *ProgressBarSegmentProgress) SetTotal(total int) {
+	p.Total = total
+	p.require(progressBarSegmentProgressFieldTotal)
+}
+
+func (p *ProgressBarSegmentProgress) UnmarshalJSON(data []byte) error {
+	type unmarshaler ProgressBarSegmentProgress
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = ProgressBarSegmentProgress(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *ProgressBarSegmentProgress) MarshalJSON() ([]byte, error) {
+	type embed ProgressBarSegmentProgress
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *ProgressBarSegmentProgress) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
 // Supported selection strategies for highlighting segment nodes.
 // - CURRENT: select only the segment at currentProgress
 // - CURRENT_AND_BELOW: select the segment at currentProgress and all segments below it
@@ -5420,8 +5523,9 @@ func (p ProgressBarSegmentSeparator) Ptr() *ProgressBarSegmentSeparator {
 
 // Segment configuration for the progress bar in different layouts
 var (
-	progressBarSegmentsFieldDetails = big.NewInt(1 << 0)
-	progressBarSegmentsFieldDefault = big.NewInt(1 << 1)
+	progressBarSegmentsFieldDetails  = big.NewInt(1 << 0)
+	progressBarSegmentsFieldDefault  = big.NewInt(1 << 1)
+	progressBarSegmentsFieldProgress = big.NewInt(1 << 2)
 )
 
 type ProgressBarSegments struct {
@@ -5429,6 +5533,8 @@ type ProgressBarSegments struct {
 	Details *ProgressBarSegment `json:"details,omitempty" url:"details,omitempty"`
 	// Segment configuration for the default view
 	Default *ProgressBarSegment `json:"default" url:"default"`
+	// Per-segment fill state: one entry per segment node, index-aligned with the nodes (length equals the progress bar total). Reached nodes report 1 of 1 and not-yet-reached nodes 0 of 1; for a punch-card offer the in-progress node reports qualifying-purchase progress toward the next reward (Q mod N of N).
+	Progress []*ProgressBarSegmentProgress `json:"progress" url:"progress"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -5449,6 +5555,13 @@ func (p *ProgressBarSegments) GetDefault() *ProgressBarSegment {
 		return nil
 	}
 	return p.Default
+}
+
+func (p *ProgressBarSegments) GetProgress() []*ProgressBarSegmentProgress {
+	if p == nil {
+		return nil
+	}
+	return p.Progress
 }
 
 func (p *ProgressBarSegments) GetExtraProperties() map[string]interface{} {
@@ -5477,6 +5590,13 @@ func (p *ProgressBarSegments) SetDetails(details *ProgressBarSegment) {
 func (p *ProgressBarSegments) SetDefault(default_ *ProgressBarSegment) {
 	p.Default = default_
 	p.require(progressBarSegmentsFieldDefault)
+}
+
+// SetProgress sets the Progress field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *ProgressBarSegments) SetProgress(progress []*ProgressBarSegmentProgress) {
+	p.Progress = progress
+	p.require(progressBarSegmentsFieldProgress)
 }
 
 func (p *ProgressBarSegments) UnmarshalJSON(data []byte) error {

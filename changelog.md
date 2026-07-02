@@ -1,3 +1,8 @@
+## v13.3.0 - 2026-07-02
+### Added
+* **`ProgressBarSegmentProgress`** — new type representing the fill state of a single progress bar segment node, with `Completed` and `Total` integer fields and full JSON serialization support.
+* **`ProgressBarSegments.Progress`** — new field (`[]*ProgressBarSegmentProgress`) exposing per-segment fill state, index-aligned with the segment nodes array; accessible via `GetProgress` and `SetProgress`.
+
 ## v13.2.1 - 2026-07-02
 * chore: update User-Agent header placeholder and clarify FilterSearch doc
 * Update the User-Agent header value to the Fern version placeholder and

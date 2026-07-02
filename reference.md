@@ -3175,7 +3175,7 @@ client.Users.Rewards.Offers(
 <dl>
 <dd>
 
-**filterSearch:** `*string` — Case-insensitive search string to filter offers by merchant name
+**filterSearch:** `*string` — Case-insensitive substring search. Returns offers whose offer name or category name contains the search string.
     
 </dd>
 </dl>

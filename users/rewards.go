@@ -173,7 +173,7 @@ type GetOffersByUserRequest struct {
 	PageSize   *int    `json:"-" url:"page[size],omitempty"`
 	PageAfter  *string `json:"-" url:"page[after],omitempty"`
 	PageBefore *string `json:"-" url:"page[before],omitempty"`
-	// Case-insensitive search string to filter offers by merchant name
+	// Case-insensitive substring search. Returns offers whose offer name or category name contains the search string.
 	FilterSearch          *string                     `json:"-" url:"filter[search],omitempty"`
 	FilterPurchaseChannel []kardgosdk.PurchaseChannel `json:"-" url:"filter[purchaseChannel],omitempty"`
 	FilterCategory        *kardgosdk.CategoryOption   `json:"-" url:"filter[category],omitempty"`

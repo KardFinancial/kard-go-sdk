@@ -1,3 +1,13 @@
+## v13.2.1 - 2026-07-02
+* chore: update User-Agent header placeholder and clarify FilterSearch doc
+* Update the User-Agent header value to the Fern version placeholder and
+* improve the godoc comment for the FilterSearch field on
+* GetOffersByUserRequest to more accurately describe its matching behavior.
+* Key changes:
+* Replace versioned User-Agent string with "0.0.0-fern-placeholder" in request_option.go
+* Clarify FilterSearch comment: now documents substring matching on offer name or category name, not just merchant name
+* 🌿 Generated with Fern
+
 ## v13.2.0 - 2026-06-29
 ### Added
 * **`OfferMediumPush`** — new `OfferMedium` enum value (`"PUSH"`) representing the push channel; recognized by `NewOfferMediumFromString` for round-trip serialization.

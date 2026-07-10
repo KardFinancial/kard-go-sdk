@@ -1,3 +1,7 @@
+## v13.4.0 - 2026-07-10
+### Added
+* **`ContentStrategySortOffersNearYou`** — new `ContentStrategySort` enum value (`"OFFERS_NEAR_YOU"`) representing a location-based offers sort; recognized by `NewContentStrategySortFromString` for round-trip serialization.
+
 ## v13.3.0 - 2026-07-02
 ### Added
 * **`ProgressBarSegmentProgress`** — new type representing the fill state of a single progress bar segment node, with `Completed` and `Total` integer fields and full JSON serialization support.

@@ -2416,6 +2416,13 @@ func TestEnumContentStrategySort(t *testing.T) {
 		assert.Equal(t, ContentStrategySort("PERSONALIZED"), val, "enum value should match expected wire value")
 	})
 
+	t.Run("NewFromString_OFFERS_NEAR_YOU", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewContentStrategySortFromString("OFFERS_NEAR_YOU")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, ContentStrategySort("OFFERS_NEAR_YOU"), val, "enum value should match expected wire value")
+	})
+
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
 		_, err := NewContentStrategySortFromString("invalid_value_that_does_not_exist")
 		assert.Error(t, err)

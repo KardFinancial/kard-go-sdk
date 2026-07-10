@@ -464,7 +464,7 @@ func (c *ContentStrategyResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Sort applied to the offers selected by a content strategy. A strategy may have at most one sort. The v1 starter set covers newly-live, expiring-soon, highest-cashback, and personalized selections.
+// Sort applied to the offers selected by a content strategy. A strategy may have at most one sort. The v1 starter set covers newly-live, expiring-soon, highest-cashback, personalized, and offers-near-you selections.
 type ContentStrategySort string
 
 const (
@@ -472,6 +472,7 @@ const (
 	ContentStrategySortExpiringSoon    ContentStrategySort = "EXPIRING_SOON"
 	ContentStrategySortHighestCashback ContentStrategySort = "HIGHEST_CASHBACK"
 	ContentStrategySortPersonalized    ContentStrategySort = "PERSONALIZED"
+	ContentStrategySortOffersNearYou   ContentStrategySort = "OFFERS_NEAR_YOU"
 )
 
 func NewContentStrategySortFromString(s string) (ContentStrategySort, error) {
@@ -484,6 +485,8 @@ func NewContentStrategySortFromString(s string) (ContentStrategySort, error) {
 		return ContentStrategySortHighestCashback, nil
 	case "PERSONALIZED":
 		return ContentStrategySortPersonalized, nil
+	case "OFFERS_NEAR_YOU":
+		return ContentStrategySortOffersNearYou, nil
 	}
 	var t ContentStrategySort
 	return "", fmt.Errorf("%s is not a valid %T", s, t)

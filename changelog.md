@@ -1,3 +1,9 @@
+## v15.1.0 - 2026-07-15
+### Added
+* **`ContentStrategyFilters`** — new struct consolidating offer-filtering options (`Categories`, `CategoryExclusions`, `MerchantExclusions`, `OfferFeatures`) for content strategies, with full getter, setter, and JSON marshal/unmarshal support.
+* **`Filters`** field on `ContentStrategyAttributes`, `CreateContentStrategyAttributes`, and `UpdateContentStrategyAttributes` — exposes a `*ContentStrategyFilters` value with corresponding `GetFilters()` and `SetFilters()` methods.
+* **`OfferFeatures`** — new string enum type representing offer features that can be used to filter offers in a content strategy; includes the `OfferFeaturesInteractive` constant and `NewOfferFeaturesFromString` constructor.
+
 ## v15.0.0 - 2026-07-15
 ### Breaking Changes
 * **`EarnedRewardApprovedData.Attributes`** — type changed from `*RewardNotificationAttributes` to `*EarnedRewardNotificationAttributes`; update all type references and any variables typed as `*RewardNotificationAttributes` to use `*EarnedRewardNotificationAttributes` instead.

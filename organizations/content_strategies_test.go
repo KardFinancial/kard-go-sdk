@@ -158,6 +158,14 @@ func TestSettersContentStrategyAttributes(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
+	t.Run("SetFilters", func(t *testing.T) {
+		obj := &ContentStrategyAttributes{}
+		var fernTestValueFilters *ContentStrategyFilters
+		obj.SetFilters(fernTestValueFilters)
+		assert.Equal(t, fernTestValueFilters, obj.Filters)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
 	t.Run("SetCategories", func(t *testing.T) {
 		obj := &ContentStrategyAttributes{}
 		var fernTestValueCategories []kardgosdk.CategoryOption
@@ -262,6 +270,39 @@ func TestGettersContentStrategyAttributes(t *testing.T) {
 			}
 		}()
 		_ = obj.GetSort() // Should return zero value
+	})
+
+	t.Run("GetFilters", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &ContentStrategyAttributes{}
+		var expected *ContentStrategyFilters
+		obj.Filters = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetFilters(), "getter should return the property value")
+	})
+
+	t.Run("GetFilters_NilValue", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &ContentStrategyAttributes{}
+		obj.Filters = nil
+
+		// Act & Assert
+		assert.Nil(t, obj.GetFilters(), "getter should return nil when property is nil")
+	})
+
+	t.Run("GetFilters_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *ContentStrategyAttributes
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetFilters() // Should return zero value
 	})
 
 	t.Run("GetCategories", func(t *testing.T) {
@@ -459,6 +500,37 @@ func TestSettersMarkExplicitContentStrategyAttributes(t *testing.T) {
 		// It verifies that setting a field via setter allows successful JSON round-trip
 	})
 
+	t.Run("SetFilters_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &ContentStrategyAttributes{}
+		var fernTestValueFilters *ContentStrategyFilters
+
+		// Act
+		obj.SetFilters(fernTestValueFilters)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
 	t.Run("SetCategories_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
@@ -529,6 +601,303 @@ func TestSettersMarkExplicitContentStrategyAttributes(t *testing.T) {
 
 		// Act
 		obj.SetMerchantExclusions(fernTestValueMerchantExclusions)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+}
+
+func TestSettersContentStrategyFilters(t *testing.T) {
+	t.Run("SetCategories", func(t *testing.T) {
+		obj := &ContentStrategyFilters{}
+		var fernTestValueCategories []string
+		obj.SetCategories(fernTestValueCategories)
+		assert.Equal(t, fernTestValueCategories, obj.Categories)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
+	t.Run("SetCategoryExclusions", func(t *testing.T) {
+		obj := &ContentStrategyFilters{}
+		var fernTestValueCategoryExclusions []string
+		obj.SetCategoryExclusions(fernTestValueCategoryExclusions)
+		assert.Equal(t, fernTestValueCategoryExclusions, obj.CategoryExclusions)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
+	t.Run("SetMerchantExclusions", func(t *testing.T) {
+		obj := &ContentStrategyFilters{}
+		var fernTestValueMerchantExclusions []string
+		obj.SetMerchantExclusions(fernTestValueMerchantExclusions)
+		assert.Equal(t, fernTestValueMerchantExclusions, obj.MerchantExclusions)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
+	t.Run("SetOfferFeatures", func(t *testing.T) {
+		obj := &ContentStrategyFilters{}
+		var fernTestValueOfferFeatures []OfferFeatures
+		obj.SetOfferFeatures(fernTestValueOfferFeatures)
+		assert.Equal(t, fernTestValueOfferFeatures, obj.OfferFeatures)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
+}
+
+func TestGettersContentStrategyFilters(t *testing.T) {
+	t.Run("GetCategories", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &ContentStrategyFilters{}
+		var expected []string
+		obj.Categories = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetCategories(), "getter should return the property value")
+	})
+
+	t.Run("GetCategories_NilValue", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &ContentStrategyFilters{}
+		obj.Categories = nil
+
+		// Act & Assert
+		assert.Nil(t, obj.GetCategories(), "getter should return nil when property is nil")
+	})
+
+	t.Run("GetCategories_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *ContentStrategyFilters
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetCategories() // Should return zero value
+	})
+
+	t.Run("GetCategoryExclusions", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &ContentStrategyFilters{}
+		var expected []string
+		obj.CategoryExclusions = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetCategoryExclusions(), "getter should return the property value")
+	})
+
+	t.Run("GetCategoryExclusions_NilValue", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &ContentStrategyFilters{}
+		obj.CategoryExclusions = nil
+
+		// Act & Assert
+		assert.Nil(t, obj.GetCategoryExclusions(), "getter should return nil when property is nil")
+	})
+
+	t.Run("GetCategoryExclusions_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *ContentStrategyFilters
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetCategoryExclusions() // Should return zero value
+	})
+
+	t.Run("GetMerchantExclusions", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &ContentStrategyFilters{}
+		var expected []string
+		obj.MerchantExclusions = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetMerchantExclusions(), "getter should return the property value")
+	})
+
+	t.Run("GetMerchantExclusions_NilValue", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &ContentStrategyFilters{}
+		obj.MerchantExclusions = nil
+
+		// Act & Assert
+		assert.Nil(t, obj.GetMerchantExclusions(), "getter should return nil when property is nil")
+	})
+
+	t.Run("GetMerchantExclusions_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *ContentStrategyFilters
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetMerchantExclusions() // Should return zero value
+	})
+
+	t.Run("GetOfferFeatures", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &ContentStrategyFilters{}
+		var expected []OfferFeatures
+		obj.OfferFeatures = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetOfferFeatures(), "getter should return the property value")
+	})
+
+	t.Run("GetOfferFeatures_NilValue", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &ContentStrategyFilters{}
+		obj.OfferFeatures = nil
+
+		// Act & Assert
+		assert.Nil(t, obj.GetOfferFeatures(), "getter should return nil when property is nil")
+	})
+
+	t.Run("GetOfferFeatures_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *ContentStrategyFilters
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetOfferFeatures() // Should return zero value
+	})
+
+}
+
+func TestSettersMarkExplicitContentStrategyFilters(t *testing.T) {
+	t.Run("SetCategories_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &ContentStrategyFilters{}
+		var fernTestValueCategories []string
+
+		// Act
+		obj.SetCategories(fernTestValueCategories)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+	t.Run("SetCategoryExclusions_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &ContentStrategyFilters{}
+		var fernTestValueCategoryExclusions []string
+
+		// Act
+		obj.SetCategoryExclusions(fernTestValueCategoryExclusions)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+	t.Run("SetMerchantExclusions_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &ContentStrategyFilters{}
+		var fernTestValueMerchantExclusions []string
+
+		// Act
+		obj.SetMerchantExclusions(fernTestValueMerchantExclusions)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+	t.Run("SetOfferFeatures_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &ContentStrategyFilters{}
+		var fernTestValueOfferFeatures []OfferFeatures
+
+		// Act
+		obj.SetOfferFeatures(fernTestValueOfferFeatures)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -939,6 +1308,14 @@ func TestSettersCreateContentStrategyAttributes(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
+	t.Run("SetFilters", func(t *testing.T) {
+		obj := &CreateContentStrategyAttributes{}
+		var fernTestValueFilters *ContentStrategyFilters
+		obj.SetFilters(fernTestValueFilters)
+		assert.Equal(t, fernTestValueFilters, obj.Filters)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
 	t.Run("SetCategories", func(t *testing.T) {
 		obj := &CreateContentStrategyAttributes{}
 		var fernTestValueCategories []kardgosdk.CategoryOption
@@ -1020,6 +1397,39 @@ func TestGettersCreateContentStrategyAttributes(t *testing.T) {
 			}
 		}()
 		_ = obj.GetSort() // Should return zero value
+	})
+
+	t.Run("GetFilters", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &CreateContentStrategyAttributes{}
+		var expected *ContentStrategyFilters
+		obj.Filters = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetFilters(), "getter should return the property value")
+	})
+
+	t.Run("GetFilters_NilValue", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &CreateContentStrategyAttributes{}
+		obj.Filters = nil
+
+		// Act & Assert
+		assert.Nil(t, obj.GetFilters(), "getter should return nil when property is nil")
+	})
+
+	t.Run("GetFilters_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *CreateContentStrategyAttributes
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetFilters() // Should return zero value
 	})
 
 	t.Run("GetCategories", func(t *testing.T) {
@@ -1163,6 +1573,37 @@ func TestSettersMarkExplicitCreateContentStrategyAttributes(t *testing.T) {
 
 		// Act
 		obj.SetSort(fernTestValueSort)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+	t.Run("SetFilters_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &CreateContentStrategyAttributes{}
+		var fernTestValueFilters *ContentStrategyFilters
+
+		// Act
+		obj.SetFilters(fernTestValueFilters)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -1460,6 +1901,14 @@ func TestSettersUpdateContentStrategyAttributes(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
+	t.Run("SetFilters", func(t *testing.T) {
+		obj := &UpdateContentStrategyAttributes{}
+		var fernTestValueFilters *ContentStrategyFilters
+		obj.SetFilters(fernTestValueFilters)
+		assert.Equal(t, fernTestValueFilters, obj.Filters)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
 	t.Run("SetCategories", func(t *testing.T) {
 		obj := &UpdateContentStrategyAttributes{}
 		var fernTestValueCategories []kardgosdk.CategoryOption
@@ -1541,6 +1990,39 @@ func TestGettersUpdateContentStrategyAttributes(t *testing.T) {
 			}
 		}()
 		_ = obj.GetSort() // Should return zero value
+	})
+
+	t.Run("GetFilters", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &UpdateContentStrategyAttributes{}
+		var expected *ContentStrategyFilters
+		obj.Filters = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetFilters(), "getter should return the property value")
+	})
+
+	t.Run("GetFilters_NilValue", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &UpdateContentStrategyAttributes{}
+		obj.Filters = nil
+
+		// Act & Assert
+		assert.Nil(t, obj.GetFilters(), "getter should return nil when property is nil")
+	})
+
+	t.Run("GetFilters_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *UpdateContentStrategyAttributes
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetFilters() // Should return zero value
 	})
 
 	t.Run("GetCategories", func(t *testing.T) {
@@ -1684,6 +2166,37 @@ func TestSettersMarkExplicitUpdateContentStrategyAttributes(t *testing.T) {
 
 		// Act
 		obj.SetSort(fernTestValueSort)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+	t.Run("SetFilters_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &UpdateContentStrategyAttributes{}
+		var fernTestValueFilters *ContentStrategyFilters
+
+		// Act
+		obj.SetFilters(fernTestValueFilters)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -1997,6 +2510,39 @@ func TestJSONMarshalingContentStrategyAttributes(t *testing.T) {
 	})
 }
 
+func TestJSONMarshalingContentStrategyFilters(t *testing.T) {
+	t.Run("MarshalUnmarshal", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &ContentStrategyFilters{}
+
+		// Act - Marshal to JSON
+		data, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed")
+		assert.NotNil(t, data, "marshaled data should not be nil")
+		assert.NotEmpty(t, data, "marshaled data should not be empty")
+
+		// Unmarshal back and verify round-trip
+		var unmarshaled ContentStrategyFilters
+		err = json.Unmarshal(data, &unmarshaled)
+		assert.NoError(t, err, "round-trip unmarshal should succeed")
+	})
+
+	t.Run("UnmarshalInvalidJSON", func(t *testing.T) {
+		t.Parallel()
+		var obj ContentStrategyFilters
+		err := json.Unmarshal([]byte(`{invalid json}`), &obj)
+		assert.Error(t, err, "unmarshaling invalid JSON should return an error")
+	})
+
+	t.Run("UnmarshalEmptyObject", func(t *testing.T) {
+		t.Parallel()
+		var obj ContentStrategyFilters
+		err := json.Unmarshal([]byte(`{}`), &obj)
+		assert.NoError(t, err, "unmarshaling empty object should succeed")
+	})
+}
+
 func TestJSONMarshalingContentStrategyListResponse(t *testing.T) {
 	t.Run("MarshalUnmarshal", func(t *testing.T) {
 		t.Parallel()
@@ -2259,6 +2805,22 @@ func TestStringContentStrategyAttributes(t *testing.T) {
 	})
 }
 
+func TestStringContentStrategyFilters(t *testing.T) {
+	t.Run("StringMethod", func(t *testing.T) {
+		t.Parallel()
+		obj := &ContentStrategyFilters{}
+		result := obj.String()
+		assert.NotEmpty(t, result, "String() should return a non-empty representation")
+	})
+
+	t.Run("StringMethod_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *ContentStrategyFilters
+		result := obj.String()
+		assert.Equal(t, "<nil>", result, "String() should return <nil> for nil receiver")
+	})
+}
+
 func TestStringContentStrategyListResponse(t *testing.T) {
 	t.Run("StringMethod", func(t *testing.T) {
 		t.Parallel()
@@ -2437,6 +2999,28 @@ func TestEnumContentStrategySort(t *testing.T) {
 	})
 }
 
+func TestEnumOfferFeatures(t *testing.T) {
+	t.Run("NewFromString_INTERACTIVE", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewOfferFeaturesFromString("INTERACTIVE")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, OfferFeatures("INTERACTIVE"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Invalid", func(t *testing.T) {
+		_, err := NewOfferFeaturesFromString("invalid_value_that_does_not_exist")
+		assert.Error(t, err)
+	})
+
+	t.Run("Ptr", func(t *testing.T) {
+		val, err := NewOfferFeaturesFromString("INTERACTIVE")
+		assert.NoError(t, err)
+		ptr := val.Ptr()
+		assert.NotNil(t, ptr)
+		assert.Equal(t, val, *ptr)
+	})
+}
+
 func TestExtraPropertiesContentStrategyAttributes(t *testing.T) {
 	t.Run("GetExtraProperties", func(t *testing.T) {
 		t.Parallel()
@@ -2455,6 +3039,29 @@ func TestExtraPropertiesContentStrategyAttributes(t *testing.T) {
 	t.Run("GetExtraProperties_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *ContentStrategyAttributes
+		extraProps := obj.GetExtraProperties()
+		assert.Nil(t, extraProps, "nil receiver should return nil without panicking")
+	})
+}
+
+func TestExtraPropertiesContentStrategyFilters(t *testing.T) {
+	t.Run("GetExtraProperties", func(t *testing.T) {
+		t.Parallel()
+		obj := &ContentStrategyFilters{}
+		// Should not panic when calling GetExtraProperties()
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("GetExtraProperties() panicked: %v", r)
+			}
+		}()
+		extraProps := obj.GetExtraProperties()
+		// Result can be nil or an empty/non-empty map
+		_ = extraProps
+	})
+
+	t.Run("GetExtraProperties_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *ContentStrategyFilters
 		extraProps := obj.GetExtraProperties()
 		assert.Nil(t, extraProps, "nil receiver should return nil without panicking")
 	})

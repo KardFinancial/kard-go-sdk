@@ -61,9 +61,10 @@ var (
 	contentStrategyAttributesFieldName               = big.NewInt(1 << 0)
 	contentStrategyAttributesFieldOrganizationId     = big.NewInt(1 << 1)
 	contentStrategyAttributesFieldSort               = big.NewInt(1 << 2)
-	contentStrategyAttributesFieldCategories         = big.NewInt(1 << 3)
-	contentStrategyAttributesFieldCategoryExclusions = big.NewInt(1 << 4)
-	contentStrategyAttributesFieldMerchantExclusions = big.NewInt(1 << 5)
+	contentStrategyAttributesFieldFilters            = big.NewInt(1 << 3)
+	contentStrategyAttributesFieldCategories         = big.NewInt(1 << 4)
+	contentStrategyAttributesFieldCategoryExclusions = big.NewInt(1 << 5)
+	contentStrategyAttributesFieldMerchantExclusions = big.NewInt(1 << 6)
 )
 
 type ContentStrategyAttributes struct {
@@ -73,6 +74,8 @@ type ContentStrategyAttributes struct {
 	OrganizationId string `json:"organizationId" url:"organizationId"`
 	// Sort applied when selecting offers for the strategy
 	Sort *ContentStrategySort `json:"sort,omitempty" url:"sort,omitempty"`
+	// Filters applied when selecting offers for the strategy
+	Filters *ContentStrategyFilters `json:"filters" url:"filters"`
 	// Merchant categories to include
 	Categories []kardgosdk.CategoryOption `json:"categories" url:"categories"`
 	// Merchant categories to exclude
@@ -106,6 +109,13 @@ func (c *ContentStrategyAttributes) GetSort() *ContentStrategySort {
 		return nil
 	}
 	return c.Sort
+}
+
+func (c *ContentStrategyAttributes) GetFilters() *ContentStrategyFilters {
+	if c == nil {
+		return nil
+	}
+	return c.Filters
 }
 
 func (c *ContentStrategyAttributes) GetCategories() []kardgosdk.CategoryOption {
@@ -164,6 +174,13 @@ func (c *ContentStrategyAttributes) SetSort(sort *ContentStrategySort) {
 	c.require(contentStrategyAttributesFieldSort)
 }
 
+// SetFilters sets the Filters field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *ContentStrategyAttributes) SetFilters(filters *ContentStrategyFilters) {
+	c.Filters = filters
+	c.require(contentStrategyAttributesFieldFilters)
+}
+
 // SetCategories sets the Categories field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
 func (c *ContentStrategyAttributes) SetCategories(categories []kardgosdk.CategoryOption) {
@@ -213,6 +230,143 @@ func (c *ContentStrategyAttributes) MarshalJSON() ([]byte, error) {
 }
 
 func (c *ContentStrategyAttributes) String() string {
+	if c == nil {
+		return "<nil>"
+	}
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Filters applied when selecting offers for a content strategy
+var (
+	contentStrategyFiltersFieldCategories         = big.NewInt(1 << 0)
+	contentStrategyFiltersFieldCategoryExclusions = big.NewInt(1 << 1)
+	contentStrategyFiltersFieldMerchantExclusions = big.NewInt(1 << 2)
+	contentStrategyFiltersFieldOfferFeatures      = big.NewInt(1 << 3)
+)
+
+type ContentStrategyFilters struct {
+	// Merchant categories to include
+	Categories []string `json:"categories,omitempty" url:"categories,omitempty"`
+	// Merchant categories to exclude
+	CategoryExclusions []string `json:"categoryExclusions,omitempty" url:"categoryExclusions,omitempty"`
+	// Merchant IDs to exclude
+	MerchantExclusions []string `json:"merchantExclusions,omitempty" url:"merchantExclusions,omitempty"`
+	// Offer features to filter by
+	OfferFeatures []OfferFeatures `json:"offerFeatures,omitempty" url:"offerFeatures,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *ContentStrategyFilters) GetCategories() []string {
+	if c == nil {
+		return nil
+	}
+	return c.Categories
+}
+
+func (c *ContentStrategyFilters) GetCategoryExclusions() []string {
+	if c == nil {
+		return nil
+	}
+	return c.CategoryExclusions
+}
+
+func (c *ContentStrategyFilters) GetMerchantExclusions() []string {
+	if c == nil {
+		return nil
+	}
+	return c.MerchantExclusions
+}
+
+func (c *ContentStrategyFilters) GetOfferFeatures() []OfferFeatures {
+	if c == nil {
+		return nil
+	}
+	return c.OfferFeatures
+}
+
+func (c *ContentStrategyFilters) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
+	return c.extraProperties
+}
+
+func (c *ContentStrategyFilters) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetCategories sets the Categories field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *ContentStrategyFilters) SetCategories(categories []string) {
+	c.Categories = categories
+	c.require(contentStrategyFiltersFieldCategories)
+}
+
+// SetCategoryExclusions sets the CategoryExclusions field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *ContentStrategyFilters) SetCategoryExclusions(categoryExclusions []string) {
+	c.CategoryExclusions = categoryExclusions
+	c.require(contentStrategyFiltersFieldCategoryExclusions)
+}
+
+// SetMerchantExclusions sets the MerchantExclusions field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *ContentStrategyFilters) SetMerchantExclusions(merchantExclusions []string) {
+	c.MerchantExclusions = merchantExclusions
+	c.require(contentStrategyFiltersFieldMerchantExclusions)
+}
+
+// SetOfferFeatures sets the OfferFeatures field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *ContentStrategyFilters) SetOfferFeatures(offerFeatures []OfferFeatures) {
+	c.OfferFeatures = offerFeatures
+	c.require(contentStrategyFiltersFieldOfferFeatures)
+}
+
+func (c *ContentStrategyFilters) UnmarshalJSON(data []byte) error {
+	type unmarshaler ContentStrategyFilters
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = ContentStrategyFilters(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *ContentStrategyFilters) MarshalJSON() ([]byte, error) {
+	type embed ContentStrategyFilters
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (c *ContentStrategyFilters) String() string {
 	if c == nil {
 		return "<nil>"
 	}
@@ -500,9 +654,10 @@ func (c ContentStrategySort) Ptr() *ContentStrategySort {
 var (
 	createContentStrategyAttributesFieldName               = big.NewInt(1 << 0)
 	createContentStrategyAttributesFieldSort               = big.NewInt(1 << 1)
-	createContentStrategyAttributesFieldCategories         = big.NewInt(1 << 2)
-	createContentStrategyAttributesFieldCategoryExclusions = big.NewInt(1 << 3)
-	createContentStrategyAttributesFieldMerchantExclusions = big.NewInt(1 << 4)
+	createContentStrategyAttributesFieldFilters            = big.NewInt(1 << 2)
+	createContentStrategyAttributesFieldCategories         = big.NewInt(1 << 3)
+	createContentStrategyAttributesFieldCategoryExclusions = big.NewInt(1 << 4)
+	createContentStrategyAttributesFieldMerchantExclusions = big.NewInt(1 << 5)
 )
 
 type CreateContentStrategyAttributes struct {
@@ -510,6 +665,8 @@ type CreateContentStrategyAttributes struct {
 	Name string `json:"name" url:"name"`
 	// Sort applied when selecting offers for the strategy
 	Sort *ContentStrategySort `json:"sort,omitempty" url:"sort,omitempty"`
+	// Filters applied when selecting offers for the strategy
+	Filters *ContentStrategyFilters `json:"filters" url:"filters"`
 	// Merchant categories to include
 	Categories []kardgosdk.CategoryOption `json:"categories" url:"categories"`
 	// Merchant categories to exclude
@@ -536,6 +693,13 @@ func (c *CreateContentStrategyAttributes) GetSort() *ContentStrategySort {
 		return nil
 	}
 	return c.Sort
+}
+
+func (c *CreateContentStrategyAttributes) GetFilters() *ContentStrategyFilters {
+	if c == nil {
+		return nil
+	}
+	return c.Filters
 }
 
 func (c *CreateContentStrategyAttributes) GetCategories() []kardgosdk.CategoryOption {
@@ -585,6 +749,13 @@ func (c *CreateContentStrategyAttributes) SetName(name string) {
 func (c *CreateContentStrategyAttributes) SetSort(sort *ContentStrategySort) {
 	c.Sort = sort
 	c.require(createContentStrategyAttributesFieldSort)
+}
+
+// SetFilters sets the Filters field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateContentStrategyAttributes) SetFilters(filters *ContentStrategyFilters) {
+	c.Filters = filters
+	c.require(createContentStrategyAttributesFieldFilters)
 }
 
 // SetCategories sets the Categories field and marks it as non-optional;
@@ -838,13 +1009,34 @@ func (c *CreateContentStrategyRequestData) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
+// Offer feature applied to the offers selected by a content strategy. A strategy may have any number of offer features.
+type OfferFeatures string
+
+const (
+	OfferFeaturesInteractive OfferFeatures = "INTERACTIVE"
+)
+
+func NewOfferFeaturesFromString(s string) (OfferFeatures, error) {
+	switch s {
+	case "INTERACTIVE":
+		return OfferFeaturesInteractive, nil
+	}
+	var t OfferFeatures
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (o OfferFeatures) Ptr() *OfferFeatures {
+	return &o
+}
+
 // Attributes for updating a content strategy. All fields are required.
 var (
 	updateContentStrategyAttributesFieldName               = big.NewInt(1 << 0)
 	updateContentStrategyAttributesFieldSort               = big.NewInt(1 << 1)
-	updateContentStrategyAttributesFieldCategories         = big.NewInt(1 << 2)
-	updateContentStrategyAttributesFieldCategoryExclusions = big.NewInt(1 << 3)
-	updateContentStrategyAttributesFieldMerchantExclusions = big.NewInt(1 << 4)
+	updateContentStrategyAttributesFieldFilters            = big.NewInt(1 << 2)
+	updateContentStrategyAttributesFieldCategories         = big.NewInt(1 << 3)
+	updateContentStrategyAttributesFieldCategoryExclusions = big.NewInt(1 << 4)
+	updateContentStrategyAttributesFieldMerchantExclusions = big.NewInt(1 << 5)
 )
 
 type UpdateContentStrategyAttributes struct {
@@ -852,6 +1044,8 @@ type UpdateContentStrategyAttributes struct {
 	Name string `json:"name" url:"name"`
 	// Sort applied when selecting offers for the strategy
 	Sort *ContentStrategySort `json:"sort,omitempty" url:"sort,omitempty"`
+	// Filters applied when selecting offers for the strategy
+	Filters *ContentStrategyFilters `json:"filters" url:"filters"`
 	// Merchant categories to include
 	Categories []kardgosdk.CategoryOption `json:"categories" url:"categories"`
 	// Merchant categories to exclude
@@ -878,6 +1072,13 @@ func (u *UpdateContentStrategyAttributes) GetSort() *ContentStrategySort {
 		return nil
 	}
 	return u.Sort
+}
+
+func (u *UpdateContentStrategyAttributes) GetFilters() *ContentStrategyFilters {
+	if u == nil {
+		return nil
+	}
+	return u.Filters
 }
 
 func (u *UpdateContentStrategyAttributes) GetCategories() []kardgosdk.CategoryOption {
@@ -927,6 +1128,13 @@ func (u *UpdateContentStrategyAttributes) SetName(name string) {
 func (u *UpdateContentStrategyAttributes) SetSort(sort *ContentStrategySort) {
 	u.Sort = sort
 	u.require(updateContentStrategyAttributesFieldSort)
+}
+
+// SetFilters sets the Filters field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateContentStrategyAttributes) SetFilters(filters *ContentStrategyFilters) {
+	u.Filters = filters
+	u.require(updateContentStrategyAttributesFieldFilters)
 }
 
 // SetCategories sets the Categories field and marks it as non-optional;

@@ -1,3 +1,12 @@
+## v14.0.0 - 2026-07-15
+### Breaking Changes
+* **`NotificationDataUnionVisitor`** — new required method `VisitEarnedRewardRejected(*EarnedRewardRejectedData) error` added to the interface; all existing implementations must add this method to continue compiling.
+### Added
+* **`NotificationTypeEarnedRewardRejected`** — new `NotificationType` enum constant (`"earnedRewardRejected"`) recognized by `NewNotificationTypeFromString`.
+* **`EarnedRewardRejectedAttributes`** — new struct carrying the reason code, display message, transaction ID, amount, and optional timestamp for a rejected reward notification.
+* **`EarnedRewardRejectedData`** — new struct wrapping `EarnedRewardRejectedAttributes` and `RejectedTransactionRelationships`, surfaced as the `EarnedRewardRejected` field on `NotificationDataUnion`.
+* **`RejectedTransactionRelationships`** — new struct linking the user and transaction relationship references for a rejected-reward notification.
+
 ## v13.4.0 - 2026-07-10
 ### Added
 * **`ContentStrategySortOffersNearYou`** — new `ContentStrategySort` enum value (`"OFFERS_NEAR_YOU"`) representing a location-based offers sort; recognized by `NewContentStrategySortFromString` for round-trip serialization.

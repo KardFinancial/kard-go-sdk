@@ -5,7 +5,7 @@ package kard
 import (
 	json "encoding/json"
 	fmt "fmt"
-	internal "github.com/KardFinancial/kard-go-sdk/v13/internal"
+	internal "github.com/KardFinancial/kard-go-sdk/v14/internal"
 	big "math/big"
 	time "time"
 )
@@ -683,6 +683,284 @@ func (e *EarnedRewardApprovedData) MarshalJSON() ([]byte, error) {
 }
 
 func (e *EarnedRewardApprovedData) String() string {
+	if e == nil {
+		return "<nil>"
+	}
+	if len(e.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(e.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
+}
+
+var (
+	earnedRewardRejectedAttributesFieldReason                   = big.NewInt(1 << 0)
+	earnedRewardRejectedAttributesFieldMessage                  = big.NewInt(1 << 1)
+	earnedRewardRejectedAttributesFieldTransactionId            = big.NewInt(1 << 2)
+	earnedRewardRejectedAttributesFieldTransactionAmountInCents = big.NewInt(1 << 3)
+	earnedRewardRejectedAttributesFieldTransactionTimestamp     = big.NewInt(1 << 4)
+)
+
+type EarnedRewardRejectedAttributes struct {
+	// The reason code for why the transaction did not result in a reward
+	Reason string `json:"reason" url:"reason"`
+	// The display message associated to the notification
+	Message string `json:"message" url:"message"`
+	// The transaction ID
+	TransactionId string `json:"transactionId" url:"transactionId"`
+	// The amount of the originating transaction in cents
+	TransactionAmountInCents int `json:"transactionAmountInCents" url:"transactionAmountInCents"`
+	// The timestamp of the originating transaction in ISO format
+	TransactionTimestamp *time.Time `json:"transactionTimestamp,omitempty" url:"transactionTimestamp,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (e *EarnedRewardRejectedAttributes) GetReason() string {
+	if e == nil {
+		return ""
+	}
+	return e.Reason
+}
+
+func (e *EarnedRewardRejectedAttributes) GetMessage() string {
+	if e == nil {
+		return ""
+	}
+	return e.Message
+}
+
+func (e *EarnedRewardRejectedAttributes) GetTransactionId() string {
+	if e == nil {
+		return ""
+	}
+	return e.TransactionId
+}
+
+func (e *EarnedRewardRejectedAttributes) GetTransactionAmountInCents() int {
+	if e == nil {
+		return 0
+	}
+	return e.TransactionAmountInCents
+}
+
+func (e *EarnedRewardRejectedAttributes) GetTransactionTimestamp() *time.Time {
+	if e == nil {
+		return nil
+	}
+	return e.TransactionTimestamp
+}
+
+func (e *EarnedRewardRejectedAttributes) GetExtraProperties() map[string]interface{} {
+	if e == nil {
+		return nil
+	}
+	return e.extraProperties
+}
+
+func (e *EarnedRewardRejectedAttributes) require(field *big.Int) {
+	if e.explicitFields == nil {
+		e.explicitFields = big.NewInt(0)
+	}
+	e.explicitFields.Or(e.explicitFields, field)
+}
+
+// SetReason sets the Reason field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EarnedRewardRejectedAttributes) SetReason(reason string) {
+	e.Reason = reason
+	e.require(earnedRewardRejectedAttributesFieldReason)
+}
+
+// SetMessage sets the Message field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EarnedRewardRejectedAttributes) SetMessage(message string) {
+	e.Message = message
+	e.require(earnedRewardRejectedAttributesFieldMessage)
+}
+
+// SetTransactionId sets the TransactionId field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EarnedRewardRejectedAttributes) SetTransactionId(transactionId string) {
+	e.TransactionId = transactionId
+	e.require(earnedRewardRejectedAttributesFieldTransactionId)
+}
+
+// SetTransactionAmountInCents sets the TransactionAmountInCents field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EarnedRewardRejectedAttributes) SetTransactionAmountInCents(transactionAmountInCents int) {
+	e.TransactionAmountInCents = transactionAmountInCents
+	e.require(earnedRewardRejectedAttributesFieldTransactionAmountInCents)
+}
+
+// SetTransactionTimestamp sets the TransactionTimestamp field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EarnedRewardRejectedAttributes) SetTransactionTimestamp(transactionTimestamp *time.Time) {
+	e.TransactionTimestamp = transactionTimestamp
+	e.require(earnedRewardRejectedAttributesFieldTransactionTimestamp)
+}
+
+func (e *EarnedRewardRejectedAttributes) UnmarshalJSON(data []byte) error {
+	type embed EarnedRewardRejectedAttributes
+	var unmarshaler = struct {
+		embed
+		TransactionTimestamp *internal.DateTime `json:"transactionTimestamp,omitempty"`
+	}{
+		embed: embed(*e),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*e = EarnedRewardRejectedAttributes(unmarshaler.embed)
+	e.TransactionTimestamp = unmarshaler.TransactionTimestamp.TimePtr()
+	extraProperties, err := internal.ExtractExtraProperties(data, *e)
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+	e.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *EarnedRewardRejectedAttributes) MarshalJSON() ([]byte, error) {
+	type embed EarnedRewardRejectedAttributes
+	var marshaler = struct {
+		embed
+		TransactionTimestamp *internal.DateTime `json:"transactionTimestamp,omitempty"`
+	}{
+		embed:                embed(*e),
+		TransactionTimestamp: internal.NewOptionalDateTime(e.TransactionTimestamp),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, e.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (e *EarnedRewardRejectedAttributes) String() string {
+	if e == nil {
+		return "<nil>"
+	}
+	if len(e.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(e.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
+}
+
+var (
+	earnedRewardRejectedDataFieldId            = big.NewInt(1 << 0)
+	earnedRewardRejectedDataFieldAttributes    = big.NewInt(1 << 1)
+	earnedRewardRejectedDataFieldRelationships = big.NewInt(1 << 2)
+)
+
+type EarnedRewardRejectedData struct {
+	// The internal ID of the notification
+	Id            string                            `json:"id" url:"id"`
+	Attributes    *EarnedRewardRejectedAttributes   `json:"attributes" url:"attributes"`
+	Relationships *RejectedTransactionRelationships `json:"relationships" url:"relationships"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (e *EarnedRewardRejectedData) GetId() string {
+	if e == nil {
+		return ""
+	}
+	return e.Id
+}
+
+func (e *EarnedRewardRejectedData) GetAttributes() *EarnedRewardRejectedAttributes {
+	if e == nil {
+		return nil
+	}
+	return e.Attributes
+}
+
+func (e *EarnedRewardRejectedData) GetRelationships() *RejectedTransactionRelationships {
+	if e == nil {
+		return nil
+	}
+	return e.Relationships
+}
+
+func (e *EarnedRewardRejectedData) GetExtraProperties() map[string]interface{} {
+	if e == nil {
+		return nil
+	}
+	return e.extraProperties
+}
+
+func (e *EarnedRewardRejectedData) require(field *big.Int) {
+	if e.explicitFields == nil {
+		e.explicitFields = big.NewInt(0)
+	}
+	e.explicitFields.Or(e.explicitFields, field)
+}
+
+// SetId sets the Id field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EarnedRewardRejectedData) SetId(id string) {
+	e.Id = id
+	e.require(earnedRewardRejectedDataFieldId)
+}
+
+// SetAttributes sets the Attributes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EarnedRewardRejectedData) SetAttributes(attributes *EarnedRewardRejectedAttributes) {
+	e.Attributes = attributes
+	e.require(earnedRewardRejectedDataFieldAttributes)
+}
+
+// SetRelationships sets the Relationships field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EarnedRewardRejectedData) SetRelationships(relationships *RejectedTransactionRelationships) {
+	e.Relationships = relationships
+	e.require(earnedRewardRejectedDataFieldRelationships)
+}
+
+func (e *EarnedRewardRejectedData) UnmarshalJSON(data []byte) error {
+	type unmarshaler EarnedRewardRejectedData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*e = EarnedRewardRejectedData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *e)
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+	e.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *EarnedRewardRejectedData) MarshalJSON() ([]byte, error) {
+	type embed EarnedRewardRejectedData
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*e),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, e.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (e *EarnedRewardRejectedData) String() string {
 	if e == nil {
 		return "<nil>"
 	}
@@ -2002,6 +2280,7 @@ type NotificationDataUnion struct {
 	Type                           string
 	EarnedRewardApproved           *EarnedRewardApprovedData
 	EarnedRewardSettled            *EarnedRewardSettledData
+	EarnedRewardRejected           *EarnedRewardRejectedData
 	ValidTransaction               *ValidTransactionData
 	FailedTransaction              *FailedTransactionData
 	Clawback                       *ClawbackData
@@ -2030,6 +2309,13 @@ func (n *NotificationDataUnion) GetEarnedRewardSettled() *EarnedRewardSettledDat
 		return nil
 	}
 	return n.EarnedRewardSettled
+}
+
+func (n *NotificationDataUnion) GetEarnedRewardRejected() *EarnedRewardRejectedData {
+	if n == nil {
+		return nil
+	}
+	return n.EarnedRewardRejected
 }
 
 func (n *NotificationDataUnion) GetValidTransaction() *ValidTransactionData {
@@ -2105,6 +2391,12 @@ func (n *NotificationDataUnion) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		n.EarnedRewardSettled = value
+	case "earnedRewardRejected":
+		value := new(EarnedRewardRejectedData)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		n.EarnedRewardRejected = value
 	case "validTransaction":
 		value := new(ValidTransactionData)
 		if err := json.Unmarshal(data, &value); err != nil {
@@ -2161,6 +2453,9 @@ func (n NotificationDataUnion) MarshalJSON() ([]byte, error) {
 	if n.EarnedRewardSettled != nil {
 		return internal.MarshalJSONWithExtraProperty(n.EarnedRewardSettled, "type", "earnedRewardSettled")
 	}
+	if n.EarnedRewardRejected != nil {
+		return internal.MarshalJSONWithExtraProperty(n.EarnedRewardRejected, "type", "earnedRewardRejected")
+	}
 	if n.ValidTransaction != nil {
 		return internal.MarshalJSONWithExtraProperty(n.ValidTransaction, "type", "validTransaction")
 	}
@@ -2188,6 +2483,7 @@ func (n NotificationDataUnion) MarshalJSON() ([]byte, error) {
 type NotificationDataUnionVisitor interface {
 	VisitEarnedRewardApproved(*EarnedRewardApprovedData) error
 	VisitEarnedRewardSettled(*EarnedRewardSettledData) error
+	VisitEarnedRewardRejected(*EarnedRewardRejectedData) error
 	VisitValidTransaction(*ValidTransactionData) error
 	VisitFailedTransaction(*FailedTransactionData) error
 	VisitClawback(*ClawbackData) error
@@ -2203,6 +2499,9 @@ func (n *NotificationDataUnion) Accept(visitor NotificationDataUnionVisitor) err
 	}
 	if n.EarnedRewardSettled != nil {
 		return visitor.VisitEarnedRewardSettled(n.EarnedRewardSettled)
+	}
+	if n.EarnedRewardRejected != nil {
+		return visitor.VisitEarnedRewardRejected(n.EarnedRewardRejected)
 	}
 	if n.ValidTransaction != nil {
 		return visitor.VisitValidTransaction(n.ValidTransaction)
@@ -2238,6 +2537,9 @@ func (n *NotificationDataUnion) validate() error {
 	}
 	if n.EarnedRewardSettled != nil {
 		fields = append(fields, "earnedRewardSettled")
+	}
+	if n.EarnedRewardRejected != nil {
+		fields = append(fields, "earnedRewardRejected")
 	}
 	if n.ValidTransaction != nil {
 		fields = append(fields, "validTransaction")
@@ -2850,6 +3152,106 @@ func (p *PushNotificationPlacementFileRelationships) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", p)
+}
+
+var (
+	rejectedTransactionRelationshipsFieldUser        = big.NewInt(1 << 0)
+	rejectedTransactionRelationshipsFieldTransaction = big.NewInt(1 << 1)
+)
+
+type RejectedTransactionRelationships struct {
+	User        *RelationshipSingle `json:"user" url:"user"`
+	Transaction *RelationshipSingle `json:"transaction" url:"transaction"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (r *RejectedTransactionRelationships) GetUser() *RelationshipSingle {
+	if r == nil {
+		return nil
+	}
+	return r.User
+}
+
+func (r *RejectedTransactionRelationships) GetTransaction() *RelationshipSingle {
+	if r == nil {
+		return nil
+	}
+	return r.Transaction
+}
+
+func (r *RejectedTransactionRelationships) GetExtraProperties() map[string]interface{} {
+	if r == nil {
+		return nil
+	}
+	return r.extraProperties
+}
+
+func (r *RejectedTransactionRelationships) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetUser sets the User field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RejectedTransactionRelationships) SetUser(user *RelationshipSingle) {
+	r.User = user
+	r.require(rejectedTransactionRelationshipsFieldUser)
+}
+
+// SetTransaction sets the Transaction field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RejectedTransactionRelationships) SetTransaction(transaction *RelationshipSingle) {
+	r.Transaction = transaction
+	r.require(rejectedTransactionRelationshipsFieldTransaction)
+}
+
+func (r *RejectedTransactionRelationships) UnmarshalJSON(data []byte) error {
+	type unmarshaler RejectedTransactionRelationships
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RejectedTransactionRelationships(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+	r.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RejectedTransactionRelationships) MarshalJSON() ([]byte, error) {
+	type embed RejectedTransactionRelationships
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*r),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, r.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (r *RejectedTransactionRelationships) String() string {
+	if r == nil {
+		return "<nil>"
+	}
+	if len(r.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
 }
 
 var (

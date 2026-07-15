@@ -5,7 +5,7 @@ package kard
 import (
 	json "encoding/json"
 	fmt "fmt"
-	internal "github.com/KardFinancial/kard-go-sdk/v14/internal"
+	internal "github.com/KardFinancial/kard-go-sdk/v15/internal"
 	big "math/big"
 	time "time"
 )
@@ -588,9 +588,9 @@ var (
 
 type EarnedRewardApprovedData struct {
 	// The internal ID of the notification
-	Id            string                        `json:"id" url:"id"`
-	Attributes    *RewardNotificationAttributes `json:"attributes" url:"attributes"`
-	Relationships *EarnedRewardRelationships    `json:"relationships" url:"relationships"`
+	Id            string                              `json:"id" url:"id"`
+	Attributes    *EarnedRewardNotificationAttributes `json:"attributes" url:"attributes"`
+	Relationships *EarnedRewardRelationships          `json:"relationships" url:"relationships"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -606,7 +606,7 @@ func (e *EarnedRewardApprovedData) GetId() string {
 	return e.Id
 }
 
-func (e *EarnedRewardApprovedData) GetAttributes() *RewardNotificationAttributes {
+func (e *EarnedRewardApprovedData) GetAttributes() *EarnedRewardNotificationAttributes {
 	if e == nil {
 		return nil
 	}
@@ -643,7 +643,7 @@ func (e *EarnedRewardApprovedData) SetId(id string) {
 
 // SetAttributes sets the Attributes field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (e *EarnedRewardApprovedData) SetAttributes(attributes *RewardNotificationAttributes) {
+func (e *EarnedRewardApprovedData) SetAttributes(attributes *EarnedRewardNotificationAttributes) {
 	e.Attributes = attributes
 	e.require(earnedRewardApprovedDataFieldAttributes)
 }
@@ -683,6 +683,288 @@ func (e *EarnedRewardApprovedData) MarshalJSON() ([]byte, error) {
 }
 
 func (e *EarnedRewardApprovedData) String() string {
+	if e == nil {
+		return "<nil>"
+	}
+	if len(e.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(e.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
+}
+
+var (
+	earnedRewardNotificationAttributesFieldMessage                  = big.NewInt(1 << 0)
+	earnedRewardNotificationAttributesFieldName                     = big.NewInt(1 << 1)
+	earnedRewardNotificationAttributesFieldAttributionUrl           = big.NewInt(1 << 2)
+	earnedRewardNotificationAttributesFieldSurveyUrl                = big.NewInt(1 << 3)
+	earnedRewardNotificationAttributesFieldCardProductId            = big.NewInt(1 << 4)
+	earnedRewardNotificationAttributesFieldTransactionTimestamp     = big.NewInt(1 << 5)
+	earnedRewardNotificationAttributesFieldTransactionId            = big.NewInt(1 << 6)
+	earnedRewardNotificationAttributesFieldTransactionAmountInCents = big.NewInt(1 << 7)
+	earnedRewardNotificationAttributesFieldCategoryName             = big.NewInt(1 << 8)
+	earnedRewardNotificationAttributesFieldUserReward               = big.NewInt(1 << 9)
+	earnedRewardNotificationAttributesFieldAssets                   = big.NewInt(1 << 10)
+	earnedRewardNotificationAttributesFieldPurchaseChannel          = big.NewInt(1 << 11)
+)
+
+type EarnedRewardNotificationAttributes struct {
+	// The display message associated to the notification
+	Message string `json:"message" url:"message"`
+	// The name of the merchant
+	Name string `json:"name" url:"name"`
+	// The attribution URL to track user's interactions with the notification
+	AttributionUrl string `json:"attributionUrl" url:"attributionUrl"`
+	// Post experience survey URL, if available. This will be present for rewards associated with local offers.
+	SurveyUrl *string `json:"surveyUrl,omitempty" url:"surveyUrl,omitempty"`
+	// The ID of the card product
+	CardProductId *string `json:"cardProductId,omitempty" url:"cardProductId,omitempty"`
+	// The timestamp of the originating transaction in ISO format
+	TransactionTimestamp *time.Time `json:"transactionTimestamp,omitempty" url:"transactionTimestamp,omitempty"`
+	// The transaction ID
+	TransactionId string `json:"transactionId" url:"transactionId"`
+	// The amount of the originating transaction in cents
+	TransactionAmountInCents int `json:"transactionAmountInCents" url:"transactionAmountInCents"`
+	// The category of the offer, e.g. "Food & Dining"
+	CategoryName *string `json:"categoryName,omitempty" url:"categoryName,omitempty"`
+	// Type of commission on offer (% or a flat $)
+	UserReward *UserReward `json:"userReward,omitempty" url:"userReward,omitempty"`
+	// Tracked asset images for the merchant. The asset
+	// URL is signed for attribution tracking and should be loaded as-is by the
+	// client.
+	Assets []*MerchantAsset `json:"assets,omitempty" url:"assets,omitempty"`
+	// The purchase channels the offer applies to
+	PurchaseChannel []PurchaseChannel `json:"purchaseChannel,omitempty" url:"purchaseChannel,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (e *EarnedRewardNotificationAttributes) GetMessage() string {
+	if e == nil {
+		return ""
+	}
+	return e.Message
+}
+
+func (e *EarnedRewardNotificationAttributes) GetName() string {
+	if e == nil {
+		return ""
+	}
+	return e.Name
+}
+
+func (e *EarnedRewardNotificationAttributes) GetAttributionUrl() string {
+	if e == nil {
+		return ""
+	}
+	return e.AttributionUrl
+}
+
+func (e *EarnedRewardNotificationAttributes) GetSurveyUrl() *string {
+	if e == nil {
+		return nil
+	}
+	return e.SurveyUrl
+}
+
+func (e *EarnedRewardNotificationAttributes) GetCardProductId() *string {
+	if e == nil {
+		return nil
+	}
+	return e.CardProductId
+}
+
+func (e *EarnedRewardNotificationAttributes) GetTransactionTimestamp() *time.Time {
+	if e == nil {
+		return nil
+	}
+	return e.TransactionTimestamp
+}
+
+func (e *EarnedRewardNotificationAttributes) GetTransactionId() string {
+	if e == nil {
+		return ""
+	}
+	return e.TransactionId
+}
+
+func (e *EarnedRewardNotificationAttributes) GetTransactionAmountInCents() int {
+	if e == nil {
+		return 0
+	}
+	return e.TransactionAmountInCents
+}
+
+func (e *EarnedRewardNotificationAttributes) GetCategoryName() *string {
+	if e == nil {
+		return nil
+	}
+	return e.CategoryName
+}
+
+func (e *EarnedRewardNotificationAttributes) GetUserReward() *UserReward {
+	if e == nil {
+		return nil
+	}
+	return e.UserReward
+}
+
+func (e *EarnedRewardNotificationAttributes) GetAssets() []*MerchantAsset {
+	if e == nil {
+		return nil
+	}
+	return e.Assets
+}
+
+func (e *EarnedRewardNotificationAttributes) GetPurchaseChannel() []PurchaseChannel {
+	if e == nil {
+		return nil
+	}
+	return e.PurchaseChannel
+}
+
+func (e *EarnedRewardNotificationAttributes) GetExtraProperties() map[string]interface{} {
+	if e == nil {
+		return nil
+	}
+	return e.extraProperties
+}
+
+func (e *EarnedRewardNotificationAttributes) require(field *big.Int) {
+	if e.explicitFields == nil {
+		e.explicitFields = big.NewInt(0)
+	}
+	e.explicitFields.Or(e.explicitFields, field)
+}
+
+// SetMessage sets the Message field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EarnedRewardNotificationAttributes) SetMessage(message string) {
+	e.Message = message
+	e.require(earnedRewardNotificationAttributesFieldMessage)
+}
+
+// SetName sets the Name field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EarnedRewardNotificationAttributes) SetName(name string) {
+	e.Name = name
+	e.require(earnedRewardNotificationAttributesFieldName)
+}
+
+// SetAttributionUrl sets the AttributionUrl field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EarnedRewardNotificationAttributes) SetAttributionUrl(attributionUrl string) {
+	e.AttributionUrl = attributionUrl
+	e.require(earnedRewardNotificationAttributesFieldAttributionUrl)
+}
+
+// SetSurveyUrl sets the SurveyUrl field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EarnedRewardNotificationAttributes) SetSurveyUrl(surveyUrl *string) {
+	e.SurveyUrl = surveyUrl
+	e.require(earnedRewardNotificationAttributesFieldSurveyUrl)
+}
+
+// SetCardProductId sets the CardProductId field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EarnedRewardNotificationAttributes) SetCardProductId(cardProductId *string) {
+	e.CardProductId = cardProductId
+	e.require(earnedRewardNotificationAttributesFieldCardProductId)
+}
+
+// SetTransactionTimestamp sets the TransactionTimestamp field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EarnedRewardNotificationAttributes) SetTransactionTimestamp(transactionTimestamp *time.Time) {
+	e.TransactionTimestamp = transactionTimestamp
+	e.require(earnedRewardNotificationAttributesFieldTransactionTimestamp)
+}
+
+// SetTransactionId sets the TransactionId field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EarnedRewardNotificationAttributes) SetTransactionId(transactionId string) {
+	e.TransactionId = transactionId
+	e.require(earnedRewardNotificationAttributesFieldTransactionId)
+}
+
+// SetTransactionAmountInCents sets the TransactionAmountInCents field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EarnedRewardNotificationAttributes) SetTransactionAmountInCents(transactionAmountInCents int) {
+	e.TransactionAmountInCents = transactionAmountInCents
+	e.require(earnedRewardNotificationAttributesFieldTransactionAmountInCents)
+}
+
+// SetCategoryName sets the CategoryName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EarnedRewardNotificationAttributes) SetCategoryName(categoryName *string) {
+	e.CategoryName = categoryName
+	e.require(earnedRewardNotificationAttributesFieldCategoryName)
+}
+
+// SetUserReward sets the UserReward field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EarnedRewardNotificationAttributes) SetUserReward(userReward *UserReward) {
+	e.UserReward = userReward
+	e.require(earnedRewardNotificationAttributesFieldUserReward)
+}
+
+// SetAssets sets the Assets field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EarnedRewardNotificationAttributes) SetAssets(assets []*MerchantAsset) {
+	e.Assets = assets
+	e.require(earnedRewardNotificationAttributesFieldAssets)
+}
+
+// SetPurchaseChannel sets the PurchaseChannel field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EarnedRewardNotificationAttributes) SetPurchaseChannel(purchaseChannel []PurchaseChannel) {
+	e.PurchaseChannel = purchaseChannel
+	e.require(earnedRewardNotificationAttributesFieldPurchaseChannel)
+}
+
+func (e *EarnedRewardNotificationAttributes) UnmarshalJSON(data []byte) error {
+	type embed EarnedRewardNotificationAttributes
+	var unmarshaler = struct {
+		embed
+		TransactionTimestamp *internal.DateTime `json:"transactionTimestamp,omitempty"`
+	}{
+		embed: embed(*e),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*e = EarnedRewardNotificationAttributes(unmarshaler.embed)
+	e.TransactionTimestamp = unmarshaler.TransactionTimestamp.TimePtr()
+	extraProperties, err := internal.ExtractExtraProperties(data, *e)
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+	e.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *EarnedRewardNotificationAttributes) MarshalJSON() ([]byte, error) {
+	type embed EarnedRewardNotificationAttributes
+	var marshaler = struct {
+		embed
+		TransactionTimestamp *internal.DateTime `json:"transactionTimestamp,omitempty"`
+	}{
+		embed:                embed(*e),
+		TransactionTimestamp: internal.NewOptionalDateTime(e.TransactionTimestamp),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, e.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (e *EarnedRewardNotificationAttributes) String() string {
 	if e == nil {
 		return "<nil>"
 	}
@@ -1100,7 +1382,11 @@ var (
 	earnedRewardSettledAttributesFieldTransactionTimestamp     = big.NewInt(1 << 5)
 	earnedRewardSettledAttributesFieldTransactionId            = big.NewInt(1 << 6)
 	earnedRewardSettledAttributesFieldTransactionAmountInCents = big.NewInt(1 << 7)
-	earnedRewardSettledAttributesFieldCommissionEarned         = big.NewInt(1 << 8)
+	earnedRewardSettledAttributesFieldCategoryName             = big.NewInt(1 << 8)
+	earnedRewardSettledAttributesFieldUserReward               = big.NewInt(1 << 9)
+	earnedRewardSettledAttributesFieldAssets                   = big.NewInt(1 << 10)
+	earnedRewardSettledAttributesFieldPurchaseChannel          = big.NewInt(1 << 11)
+	earnedRewardSettledAttributesFieldCommissionEarned         = big.NewInt(1 << 12)
 )
 
 type EarnedRewardSettledAttributes struct {
@@ -1119,8 +1405,18 @@ type EarnedRewardSettledAttributes struct {
 	// The transaction ID
 	TransactionId string `json:"transactionId" url:"transactionId"`
 	// The amount of the originating transaction in cents
-	TransactionAmountInCents int              `json:"transactionAmountInCents" url:"transactionAmountInCents"`
-	CommissionEarned         *CommissionValue `json:"commissionEarned" url:"commissionEarned"`
+	TransactionAmountInCents int `json:"transactionAmountInCents" url:"transactionAmountInCents"`
+	// The category of the offer, e.g. "Food & Dining"
+	CategoryName *string `json:"categoryName,omitempty" url:"categoryName,omitempty"`
+	// Type of commission on offer (% or a flat $)
+	UserReward *UserReward `json:"userReward,omitempty" url:"userReward,omitempty"`
+	// Tracked asset images for the merchant. The asset
+	// URL is signed for attribution tracking and should be loaded as-is by the
+	// client.
+	Assets []*MerchantAsset `json:"assets,omitempty" url:"assets,omitempty"`
+	// The purchase channels the offer applies to
+	PurchaseChannel  []PurchaseChannel `json:"purchaseChannel,omitempty" url:"purchaseChannel,omitempty"`
+	CommissionEarned *CommissionValue  `json:"commissionEarned" url:"commissionEarned"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -1183,6 +1479,34 @@ func (e *EarnedRewardSettledAttributes) GetTransactionAmountInCents() int {
 		return 0
 	}
 	return e.TransactionAmountInCents
+}
+
+func (e *EarnedRewardSettledAttributes) GetCategoryName() *string {
+	if e == nil {
+		return nil
+	}
+	return e.CategoryName
+}
+
+func (e *EarnedRewardSettledAttributes) GetUserReward() *UserReward {
+	if e == nil {
+		return nil
+	}
+	return e.UserReward
+}
+
+func (e *EarnedRewardSettledAttributes) GetAssets() []*MerchantAsset {
+	if e == nil {
+		return nil
+	}
+	return e.Assets
+}
+
+func (e *EarnedRewardSettledAttributes) GetPurchaseChannel() []PurchaseChannel {
+	if e == nil {
+		return nil
+	}
+	return e.PurchaseChannel
 }
 
 func (e *EarnedRewardSettledAttributes) GetCommissionEarned() *CommissionValue {
@@ -1260,6 +1584,34 @@ func (e *EarnedRewardSettledAttributes) SetTransactionId(transactionId string) {
 func (e *EarnedRewardSettledAttributes) SetTransactionAmountInCents(transactionAmountInCents int) {
 	e.TransactionAmountInCents = transactionAmountInCents
 	e.require(earnedRewardSettledAttributesFieldTransactionAmountInCents)
+}
+
+// SetCategoryName sets the CategoryName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EarnedRewardSettledAttributes) SetCategoryName(categoryName *string) {
+	e.CategoryName = categoryName
+	e.require(earnedRewardSettledAttributesFieldCategoryName)
+}
+
+// SetUserReward sets the UserReward field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EarnedRewardSettledAttributes) SetUserReward(userReward *UserReward) {
+	e.UserReward = userReward
+	e.require(earnedRewardSettledAttributesFieldUserReward)
+}
+
+// SetAssets sets the Assets field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EarnedRewardSettledAttributes) SetAssets(assets []*MerchantAsset) {
+	e.Assets = assets
+	e.require(earnedRewardSettledAttributesFieldAssets)
+}
+
+// SetPurchaseChannel sets the PurchaseChannel field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EarnedRewardSettledAttributes) SetPurchaseChannel(purchaseChannel []PurchaseChannel) {
+	e.PurchaseChannel = purchaseChannel
+	e.require(earnedRewardSettledAttributesFieldPurchaseChannel)
 }
 
 // SetCommissionEarned sets the CommissionEarned field and marks it as non-optional;
@@ -3580,6 +3932,108 @@ func (t *TransactionRelationships) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", t)
+}
+
+var (
+	userRewardFieldType  = big.NewInt(1 << 0)
+	userRewardFieldValue = big.NewInt(1 << 1)
+)
+
+type UserReward struct {
+	// The type of reward (% or a flat $)
+	Type CommissionType `json:"type" url:"type"`
+	// The reward value
+	Value float64 `json:"value" url:"value"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (u *UserReward) GetType() CommissionType {
+	if u == nil {
+		return ""
+	}
+	return u.Type
+}
+
+func (u *UserReward) GetValue() float64 {
+	if u == nil {
+		return 0
+	}
+	return u.Value
+}
+
+func (u *UserReward) GetExtraProperties() map[string]interface{} {
+	if u == nil {
+		return nil
+	}
+	return u.extraProperties
+}
+
+func (u *UserReward) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetType sets the Type field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UserReward) SetType(type_ CommissionType) {
+	u.Type = type_
+	u.require(userRewardFieldType)
+}
+
+// SetValue sets the Value field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UserReward) SetValue(value float64) {
+	u.Value = value
+	u.require(userRewardFieldValue)
+}
+
+func (u *UserReward) UnmarshalJSON(data []byte) error {
+	type unmarshaler UserReward
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*u = UserReward(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *u)
+	if err != nil {
+		return err
+	}
+	u.extraProperties = extraProperties
+	u.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (u *UserReward) MarshalJSON() ([]byte, error) {
+	type embed UserReward
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (u *UserReward) String() string {
+	if u == nil {
+		return "<nil>"
+	}
+	if len(u.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(u); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", u)
 }
 
 var (

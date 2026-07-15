@@ -4,7 +4,7 @@ package organizations
 
 import (
 	json "encoding/json"
-	kardgosdk "github.com/KardFinancial/kard-go-sdk/v14"
+	kardgosdk "github.com/KardFinancial/kard-go-sdk/v15"
 	assert "github.com/stretchr/testify/assert"
 	require "github.com/stretchr/testify/require"
 	testing "testing"

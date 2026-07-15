@@ -1,3 +1,12 @@
+## v15.0.0 - 2026-07-15
+### Breaking Changes
+* **`EarnedRewardApprovedData.Attributes`** — type changed from `*RewardNotificationAttributes` to `*EarnedRewardNotificationAttributes`; update all type references and any variables typed as `*RewardNotificationAttributes` to use `*EarnedRewardNotificationAttributes` instead.
+* **`EarnedRewardApprovedData.GetAttributes()`** and **`SetAttributes()`** — return/parameter type updated to `*EarnedRewardNotificationAttributes`; callers must update their type assertions and assignments.
+### Added
+* **`EarnedRewardNotificationAttributes`** — new struct replacing `RewardNotificationAttributes` for approved-reward notifications, carrying message, merchant name, attribution URL, transaction details, category, user reward, assets, and purchase channels.
+* **`UserReward`** — new struct representing the commission type (`CommissionType`) and value (`float64`) for an offer reward, surfaced on both `EarnedRewardNotificationAttributes` and `EarnedRewardSettledAttributes`.
+* **`EarnedRewardSettledAttributes`** — four new optional fields added: `CategoryName`, `UserReward`, `Assets`, and `PurchaseChannel`, with corresponding getters and setters.
+
 ## v14.0.0 - 2026-07-15
 ### Breaking Changes
 * **`NotificationDataUnionVisitor`** — new required method `VisitEarnedRewardRejected(*EarnedRewardRejectedData) error` added to the interface; all existing implementations must add this method to continue compiling.

@@ -1,3 +1,8 @@
+## v15.2.0 - 2026-07-28
+### Added
+* **`EarnedRewardsRange`** — new string enum type representing the time window for earned rewards queries; includes constants `EarnedRewardsRangeLast12Months` (`"12M"`), `EarnedRewardsRangeLast6Months` (`"6M"`), `EarnedRewardsRangeLast3Months` (`"3M"`), and `EarnedRewardsRangeYearToDate` (`"YTD"`), plus a `NewEarnedRewardsRangeFromString` constructor and `Ptr()` helper.
+* **`GetEarnedRewardsRequest.FilterRange`** — new optional `*EarnedRewardsRange` field (and corresponding `SetFilterRange()` method) that maps to the `filter[range]` query parameter, scoping both the returned transactions and `lifetimeRewardsInCents` to the chosen window.
+
 ## v15.1.0 - 2026-07-15
 ### Added
 * **`ContentStrategyFilters`** — new struct consolidating offer-filtering options (`Categories`, `CategoryExclusions`, `MerchantExclusions`, `OfferFeatures`) for content strategies, with full getter, setter, and JSON marshal/unmarshal support.

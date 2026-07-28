@@ -16,7 +16,8 @@ var (
 	getEarnedRewardsRequestFieldPageSize             = big.NewInt(1 << 2)
 	getEarnedRewardsRequestFieldFilterStatus         = big.NewInt(1 << 3)
 	getEarnedRewardsRequestFieldFilterPaidInFullOnly = big.NewInt(1 << 4)
-	getEarnedRewardsRequestFieldInclude              = big.NewInt(1 << 5)
+	getEarnedRewardsRequestFieldFilterRange          = big.NewInt(1 << 5)
+	getEarnedRewardsRequestFieldInclude              = big.NewInt(1 << 6)
 )
 
 type GetEarnedRewardsRequest struct {
@@ -30,6 +31,8 @@ type GetEarnedRewardsRequest struct {
 	FilterStatus *RewardedTransactionStatus `json:"-" url:"filter[status],omitempty"`
 	// When `true`, only return transactions that have been paid in full to the issuer (`paidToIssuer` is `PAID_IN_FULL`). By default (`false`), any matched transaction is returned regardless of payment status. This also controls whether unpaid transactions contribute to `lifetimeRewardsInCents`. Has no effect on `APPROVED` transactions, which are always returned when requested.
 	FilterPaidInFullOnly *bool `json:"-" url:"filter[paidInFullOnly],omitempty"`
+	// Time window for the returned transactions, ending now. Supported values are `12M`, `6M`, `3M`, and `YTD` (since January 1 of the current year). Defaults to `12M` when omitted. Also scopes `lifetimeRewardsInCents`, so the meta total always matches the returned rows.
+	FilterRange *EarnedRewardsRange `json:"-" url:"filter[range],omitempty"`
 	// Comma-separated list of related resources to include in the response. Supported values are `merchant` and `offer`.
 	Include *string `json:"-" url:"include,omitempty"`
 
@@ -77,6 +80,13 @@ func (g *GetEarnedRewardsRequest) SetFilterStatus(filterStatus *RewardedTransact
 func (g *GetEarnedRewardsRequest) SetFilterPaidInFullOnly(filterPaidInFullOnly *bool) {
 	g.FilterPaidInFullOnly = filterPaidInFullOnly
 	g.require(getEarnedRewardsRequestFieldFilterPaidInFullOnly)
+}
+
+// SetFilterRange sets the FilterRange field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetEarnedRewardsRequest) SetFilterRange(filterRange *EarnedRewardsRange) {
+	g.FilterRange = filterRange
+	g.require(getEarnedRewardsRequestFieldFilterRange)
 }
 
 // SetInclude sets the Include field and marks it as non-optional;
@@ -2074,6 +2084,35 @@ func (d DirectionType) Ptr() *DirectionType {
 	return &d
 }
 
+// Time window for earned rewards queries, ending now. `YTD` starts at January 1 of the current year (UTC).
+type EarnedRewardsRange string
+
+const (
+	EarnedRewardsRangeLast12Months EarnedRewardsRange = "12M"
+	EarnedRewardsRangeLast6Months  EarnedRewardsRange = "6M"
+	EarnedRewardsRangeLast3Months  EarnedRewardsRange = "3M"
+	EarnedRewardsRangeYearToDate   EarnedRewardsRange = "YTD"
+)
+
+func NewEarnedRewardsRangeFromString(s string) (EarnedRewardsRange, error) {
+	switch s {
+	case "12M":
+		return EarnedRewardsRangeLast12Months, nil
+	case "6M":
+		return EarnedRewardsRangeLast6Months, nil
+	case "3M":
+		return EarnedRewardsRangeLast3Months, nil
+	case "YTD":
+		return EarnedRewardsRangeYearToDate, nil
+	}
+	var t EarnedRewardsRange
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (e EarnedRewardsRange) Ptr() *EarnedRewardsRange {
+	return &e
+}
+
 // Specifies the category of transaction file being uploaded. Use `incomingTransactionsFile` for new, real-time transactions that need to be processed and matched as they arrive. Use `historicalTransactionsFile` for historical transaction ingestion.
 type FileUploadType string
 
@@ -2794,7 +2833,7 @@ var (
 )
 
 type GetEarnedRewardsMeta struct {
-	// Lifetime rewards earned by the user across matched transactions in cents. By default all matched transactions are included regardless of payment status; pass `filter[paidInFullOnly]=true` to restrict the total to transactions paid in full to the issuer (`paidToIssuer` is `PAID_IN_FULL`).
+	// Lifetime rewards earned by the user across matched transactions in cents, within the window selected by `filter[range]` (default last 12 months). By default all matched transactions are included regardless of payment status; pass `filter[paidInFullOnly]=true` to restrict the total to transactions paid in full to the issuer (`paidToIssuer` is `PAID_IN_FULL`).
 	LifetimeRewardsInCents int `json:"lifetimeRewardsInCents" url:"lifetimeRewardsInCents"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted

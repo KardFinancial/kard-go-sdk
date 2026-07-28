@@ -51,6 +51,14 @@ func TestSettersGetEarnedRewardsRequest(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
+	t.Run("SetFilterRange", func(t *testing.T) {
+		obj := &GetEarnedRewardsRequest{}
+		var fernTestValueFilterRange *EarnedRewardsRange
+		obj.SetFilterRange(fernTestValueFilterRange)
+		assert.Equal(t, fernTestValueFilterRange, obj.FilterRange)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
 	t.Run("SetInclude", func(t *testing.T) {
 		obj := &GetEarnedRewardsRequest{}
 		var fernTestValueInclude *string
@@ -194,6 +202,37 @@ func TestSettersMarkExplicitGetEarnedRewardsRequest(t *testing.T) {
 
 		// Act
 		obj.SetFilterPaidInFullOnly(fernTestValueFilterPaidInFullOnly)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+	t.Run("SetFilterRange_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &GetEarnedRewardsRequest{}
+		var fernTestValueFilterRange *EarnedRewardsRange
+
+		// Act
+		obj.SetFilterRange(fernTestValueFilterRange)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -13570,6 +13609,49 @@ func TestEnumDirectionType(t *testing.T) {
 
 	t.Run("Ptr", func(t *testing.T) {
 		val, err := NewDirectionTypeFromString("DEBIT")
+		assert.NoError(t, err)
+		ptr := val.Ptr()
+		assert.NotNil(t, ptr)
+		assert.Equal(t, val, *ptr)
+	})
+}
+
+func TestEnumEarnedRewardsRange(t *testing.T) {
+	t.Run("NewFromString_12M", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewEarnedRewardsRangeFromString("12M")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, EarnedRewardsRange("12M"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_6M", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewEarnedRewardsRangeFromString("6M")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, EarnedRewardsRange("6M"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_3M", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewEarnedRewardsRangeFromString("3M")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, EarnedRewardsRange("3M"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_YTD", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewEarnedRewardsRangeFromString("YTD")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, EarnedRewardsRange("YTD"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Invalid", func(t *testing.T) {
+		_, err := NewEarnedRewardsRangeFromString("invalid_value_that_does_not_exist")
+		assert.Error(t, err)
+	})
+
+	t.Run("Ptr", func(t *testing.T) {
+		val, err := NewEarnedRewardsRangeFromString("12M")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)

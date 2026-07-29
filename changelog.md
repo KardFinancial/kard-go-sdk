@@ -1,3 +1,10 @@
+## v16.0.0 - 2026-07-29
+### Breaking Changes
+* **`EarnedRewardRejectedAttributes.Reason`** — type changed from `string` to `RejectedReason`; update all assignments, comparisons, and variables typed as `string` to use `RejectedReason` (e.g. `RejectedReasonUserNotEnrolled`) or `NewRejectedReasonFromString`.
+* **`EarnedRewardRejectedAttributes.GetReason()`** and **`SetReason()`** — return/parameter type updated to `RejectedReason`; callers must update their type assertions and assignments accordingly.
+### Added
+* **`RejectedReason`** — new string enum type representing the reason a matched transaction was rejected; includes constants `RejectedReasonAggregatorCardOverlap`, `RejectedReasonSettlementRejected`, `RejectedReasonUserNotEnrolled`, and `RejectedReasonUserNotInAudienceSegment`, plus a `NewRejectedReasonFromString` constructor and `Ptr()` helper.
+
 ## v15.2.0 - 2026-07-28
 ### Added
 * **`EarnedRewardsRange`** — new string enum type representing the time window for earned rewards queries; includes constants `EarnedRewardsRangeLast12Months` (`"12M"`), `EarnedRewardsRangeLast6Months` (`"6M"`), `EarnedRewardsRangeLast3Months` (`"3M"`), and `EarnedRewardsRangeYearToDate` (`"YTD"`), plus a `NewEarnedRewardsRangeFromString` constructor and `Ptr()` helper.

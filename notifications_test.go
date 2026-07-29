@@ -2169,7 +2169,7 @@ func TestSettersMarkExplicitEarnedRewardNotificationAttributes(t *testing.T) {
 func TestSettersEarnedRewardRejectedAttributes(t *testing.T) {
 	t.Run("SetReason", func(t *testing.T) {
 		obj := &EarnedRewardRejectedAttributes{}
-		var fernTestValueReason string
+		var fernTestValueReason RejectedReason
 		obj.SetReason(fernTestValueReason)
 		assert.Equal(t, fernTestValueReason, obj.Reason)
 		assert.NotNil(t, obj.explicitFields)
@@ -2214,7 +2214,7 @@ func TestGettersEarnedRewardRejectedAttributes(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &EarnedRewardRejectedAttributes{}
-		var expected string
+		var expected RejectedReason
 		obj.Reason = expected
 
 		// Act & Assert
@@ -2342,7 +2342,7 @@ func TestSettersMarkExplicitEarnedRewardRejectedAttributes(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &EarnedRewardRejectedAttributes{}
-		var fernTestValueReason string
+		var fernTestValueReason RejectedReason
 
 		// Act
 		obj.SetReason(fernTestValueReason)

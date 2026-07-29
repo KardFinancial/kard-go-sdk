@@ -5,7 +5,7 @@ package kard
 import (
 	json "encoding/json"
 	fmt "fmt"
-	internal "github.com/KardFinancial/kard-go-sdk/v15/internal"
+	internal "github.com/KardFinancial/kard-go-sdk/v16/internal"
 	big "math/big"
 )
 
@@ -1120,6 +1120,35 @@ func NewPurchaseChannelFromString(s string) (PurchaseChannel, error) {
 
 func (p PurchaseChannel) Ptr() *PurchaseChannel {
 	return &p
+}
+
+// The reason a matched transaction was rejected and did not result in a reward
+type RejectedReason string
+
+const (
+	RejectedReasonAggregatorCardOverlap    RejectedReason = "AGGREGATOR_CARD_OVERLAP"
+	RejectedReasonSettlementRejected       RejectedReason = "SETTLEMENT_REJECTED"
+	RejectedReasonUserNotEnrolled          RejectedReason = "USER_NOT_ENROLLED"
+	RejectedReasonUserNotInAudienceSegment RejectedReason = "USER_NOT_IN_AUDIENCE_SEGMENT"
+)
+
+func NewRejectedReasonFromString(s string) (RejectedReason, error) {
+	switch s {
+	case "AGGREGATOR_CARD_OVERLAP":
+		return RejectedReasonAggregatorCardOverlap, nil
+	case "SETTLEMENT_REJECTED":
+		return RejectedReasonSettlementRejected, nil
+	case "USER_NOT_ENROLLED":
+		return RejectedReasonUserNotEnrolled, nil
+	case "USER_NOT_IN_AUDIENCE_SEGMENT":
+		return RejectedReasonUserNotInAudienceSegment, nil
+	}
+	var t RejectedReason
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (r RejectedReason) Ptr() *RejectedReason {
+	return &r
 }
 
 var (

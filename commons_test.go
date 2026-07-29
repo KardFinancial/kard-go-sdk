@@ -2560,6 +2560,49 @@ func TestEnumPurchaseChannel(t *testing.T) {
 	})
 }
 
+func TestEnumRejectedReason(t *testing.T) {
+	t.Run("NewFromString_AGGREGATOR_CARD_OVERLAP", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewRejectedReasonFromString("AGGREGATOR_CARD_OVERLAP")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, RejectedReason("AGGREGATOR_CARD_OVERLAP"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_SETTLEMENT_REJECTED", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewRejectedReasonFromString("SETTLEMENT_REJECTED")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, RejectedReason("SETTLEMENT_REJECTED"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_USER_NOT_ENROLLED", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewRejectedReasonFromString("USER_NOT_ENROLLED")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, RejectedReason("USER_NOT_ENROLLED"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_USER_NOT_IN_AUDIENCE_SEGMENT", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewRejectedReasonFromString("USER_NOT_IN_AUDIENCE_SEGMENT")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, RejectedReason("USER_NOT_IN_AUDIENCE_SEGMENT"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Invalid", func(t *testing.T) {
+		_, err := NewRejectedReasonFromString("invalid_value_that_does_not_exist")
+		assert.Error(t, err)
+	})
+
+	t.Run("Ptr", func(t *testing.T) {
+		val, err := NewRejectedReasonFromString("AGGREGATOR_CARD_OVERLAP")
+		assert.NoError(t, err)
+		ptr := val.Ptr()
+		assert.NotNil(t, ptr)
+		assert.Equal(t, val, *ptr)
+	})
+}
+
 func TestEnumState(t *testing.T) {
 	t.Run("NewFromString_AL", func(t *testing.T) {
 		t.Parallel()

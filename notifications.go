@@ -5,7 +5,7 @@ package kard
 import (
 	json "encoding/json"
 	fmt "fmt"
-	internal "github.com/KardFinancial/kard-go-sdk/v15/internal"
+	internal "github.com/KardFinancial/kard-go-sdk/v16/internal"
 	big "math/big"
 	time "time"
 )
@@ -989,7 +989,7 @@ var (
 
 type EarnedRewardRejectedAttributes struct {
 	// The reason code for why the transaction did not result in a reward
-	Reason string `json:"reason" url:"reason"`
+	Reason RejectedReason `json:"reason" url:"reason"`
 	// The display message associated to the notification
 	Message string `json:"message" url:"message"`
 	// The transaction ID
@@ -1006,7 +1006,7 @@ type EarnedRewardRejectedAttributes struct {
 	rawJSON         json.RawMessage
 }
 
-func (e *EarnedRewardRejectedAttributes) GetReason() string {
+func (e *EarnedRewardRejectedAttributes) GetReason() RejectedReason {
 	if e == nil {
 		return ""
 	}
@@ -1057,7 +1057,7 @@ func (e *EarnedRewardRejectedAttributes) require(field *big.Int) {
 
 // SetReason sets the Reason field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (e *EarnedRewardRejectedAttributes) SetReason(reason string) {
+func (e *EarnedRewardRejectedAttributes) SetReason(reason RejectedReason) {
 	e.Reason = reason
 	e.require(earnedRewardRejectedAttributesFieldReason)
 }

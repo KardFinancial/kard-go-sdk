@@ -1,3 +1,7 @@
+## v16.1.0 - 2026-08-03
+### Added
+* **`NotificationMediumEmail`** — new `NotificationMedium` enum constant (`"EMAIL"`) representing email as a notification delivery channel; `NewNotificationMediumFromString` now recognizes `"EMAIL"` as a valid input.
+
 ## v16.0.0 - 2026-07-29
 ### Breaking Changes
 * **`EarnedRewardRejectedAttributes.Reason`** — type changed from `string` to `RejectedReason`; update all assignments, comparisons, and variables typed as `string` to use `RejectedReason` (e.g. `RejectedReasonUserNotEnrolled`) or `NewRejectedReasonFromString`.

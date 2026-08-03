@@ -2164,13 +2164,16 @@ func (n *NotificationAttributionRequest) String() string {
 type NotificationMedium string
 
 const (
-	NotificationMediumPush NotificationMedium = "PUSH"
+	NotificationMediumPush  NotificationMedium = "PUSH"
+	NotificationMediumEmail NotificationMedium = "EMAIL"
 )
 
 func NewNotificationMediumFromString(s string) (NotificationMedium, error) {
 	switch s {
 	case "PUSH":
 		return NotificationMediumPush, nil
+	case "EMAIL":
+		return NotificationMediumEmail, nil
 	}
 	var t NotificationMedium
 	return "", fmt.Errorf("%s is not a valid %T", s, t)

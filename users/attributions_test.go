@@ -5197,6 +5197,13 @@ func TestEnumNotificationMedium(t *testing.T) {
 		assert.Equal(t, NotificationMedium("PUSH"), val, "enum value should match expected wire value")
 	})
 
+	t.Run("NewFromString_EMAIL", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewNotificationMediumFromString("EMAIL")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, NotificationMedium("EMAIL"), val, "enum value should match expected wire value")
+	})
+
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
 		_, err := NewNotificationMediumFromString("invalid_value_that_does_not_exist")
 		assert.Error(t, err)

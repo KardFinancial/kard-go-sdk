@@ -5,7 +5,7 @@ package kard
 import (
 	json "encoding/json"
 	fmt "fmt"
-	internal "github.com/KardFinancial/kard-go-sdk/v16/internal"
+	internal "github.com/KardFinancial/kard-go-sdk/v17/internal"
 	big "math/big"
 	time "time"
 )
@@ -6367,7 +6367,6 @@ type TransactionsRequestBody struct {
 	// Discriminated union representing the request body for submitting a transaction.
 	// Use `type` to distinguish between the two:
 	// - `transaction`: For transactions requiring processing and matching by the Kard system.
-	// - `matchedTransaction`: For pre-matched transactions that need validation on match by the Kard system.
 	// - `coreTransaction`: For transactions from core banking systems with limited card-level data.
 	Data []*Transactions `json:"data" url:"data"`
 

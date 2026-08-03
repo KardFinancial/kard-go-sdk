@@ -5,8 +5,8 @@ package users
 import (
 	json "encoding/json"
 	fmt "fmt"
-	kardgosdk "github.com/KardFinancial/kard-go-sdk/v16"
-	internal "github.com/KardFinancial/kard-go-sdk/v16/internal"
+	kardgosdk "github.com/KardFinancial/kard-go-sdk/v17"
+	internal "github.com/KardFinancial/kard-go-sdk/v17/internal"
 	big "math/big"
 )
 

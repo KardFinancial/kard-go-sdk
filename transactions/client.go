@@ -6,10 +6,10 @@ import (
 	context "context"
 	os "os"
 
-	kard "github.com/KardFinancial/kard-go-sdk/v16"
-	core "github.com/KardFinancial/kard-go-sdk/v16/core"
-	internal "github.com/KardFinancial/kard-go-sdk/v16/internal"
-	option "github.com/KardFinancial/kard-go-sdk/v16/option"
+	kard "github.com/KardFinancial/kard-go-sdk/v17"
+	core "github.com/KardFinancial/kard-go-sdk/v17/core"
+	internal "github.com/KardFinancial/kard-go-sdk/v17/internal"
+	option "github.com/KardFinancial/kard-go-sdk/v17/option"
 )
 
 type Client struct {
@@ -43,7 +43,6 @@ func NewClient(options *core.RequestOptions) *Client {
 // Call this endpoint to send all transactions made by all your enrolled users in your rewards program. The request body will depend on the transaction type.<br/>
 // Please use the correct type when calling the endpoint:
 // - `transaction`: These incoming transactions will be processed and matched by the Kard system. Learn more about the [Transaction CLO Matching](https://github.com/kard-financial/kard-postman#c-transaction-clo-matching) flow here.
-// - `matchedTransaction`: For pre-matched transactions that need validation on match by the Kard system.
 // - `coreTransaction`: For transactions from core banking systems with limited card-level data.<br/>
 //
 // <b>Required scopes:</b> `transaction:write`<br/>

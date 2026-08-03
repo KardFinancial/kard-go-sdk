@@ -3,8 +3,8 @@
 package kard
 
 import (
-	core "github.com/KardFinancial/kard-go-sdk/v16/core"
-	internal "github.com/KardFinancial/kard-go-sdk/v16/internal"
+	core "github.com/KardFinancial/kard-go-sdk/v17/core"
+	internal "github.com/KardFinancial/kard-go-sdk/v17/internal"
 )
 
 var ErrorCodes internal.ErrorCodes = internal.ErrorCodes{

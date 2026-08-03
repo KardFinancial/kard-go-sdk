@@ -5,7 +5,7 @@ package kard
 import (
 	json "encoding/json"
 	fmt "fmt"
-	internal "github.com/KardFinancial/kard-go-sdk/v16/internal"
+	internal "github.com/KardFinancial/kard-go-sdk/v17/internal"
 	big "math/big"
 )
 
@@ -1056,9 +1056,6 @@ const (
 	NotificationTypeEarnedRewardApproved           NotificationType = "earnedRewardApproved"
 	NotificationTypeEarnedRewardSettled            NotificationType = "earnedRewardSettled"
 	NotificationTypeEarnedRewardRejected           NotificationType = "earnedRewardRejected"
-	NotificationTypeValidTransaction               NotificationType = "validTransaction"
-	NotificationTypeFailedTransaction              NotificationType = "failedTransaction"
-	NotificationTypeClawback                       NotificationType = "clawback"
 	NotificationTypeAuditUpdate                    NotificationType = "auditUpdate"
 	NotificationTypeFileProcessingResult           NotificationType = "fileProcessingResult"
 	NotificationTypePushNotificationPlacementFile  NotificationType = "pushNotificationPlacementFile"
@@ -1073,12 +1070,6 @@ func NewNotificationTypeFromString(s string) (NotificationType, error) {
 		return NotificationTypeEarnedRewardSettled, nil
 	case "earnedRewardRejected":
 		return NotificationTypeEarnedRewardRejected, nil
-	case "validTransaction":
-		return NotificationTypeValidTransaction, nil
-	case "failedTransaction":
-		return NotificationTypeFailedTransaction, nil
-	case "clawback":
-		return NotificationTypeClawback, nil
 	case "auditUpdate":
 		return NotificationTypeAuditUpdate, nil
 	case "fileProcessingResult":

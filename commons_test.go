@@ -2468,27 +2468,6 @@ func TestEnumNotificationType(t *testing.T) {
 		assert.Equal(t, NotificationType("earnedRewardRejected"), val, "enum value should match expected wire value")
 	})
 
-	t.Run("NewFromString_validTransaction", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewNotificationTypeFromString("validTransaction")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, NotificationType("validTransaction"), val, "enum value should match expected wire value")
-	})
-
-	t.Run("NewFromString_failedTransaction", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewNotificationTypeFromString("failedTransaction")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, NotificationType("failedTransaction"), val, "enum value should match expected wire value")
-	})
-
-	t.Run("NewFromString_clawback", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewNotificationTypeFromString("clawback")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, NotificationType("clawback"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_auditUpdate", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewNotificationTypeFromString("auditUpdate")

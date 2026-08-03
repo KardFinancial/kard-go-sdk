@@ -1,3 +1,8 @@
+## v17.0.0 - 2026-08-03
+### Breaking Changes
+* **`NotificationTypeValidTransaction`**, **`NotificationTypeFailedTransaction`**, and **`NotificationTypeClawback`** — these three `NotificationType` enum constants have been removed; update any switch statements, comparisons, or assignments referencing these values, and remove handling for `"validTransaction"`, `"failedTransaction"`, and `"clawback"` strings passed to `NewNotificationTypeFromString`.
+* **`TransactionsRequestBody`** — the `matchedTransaction` variant is no longer a supported discriminator value in the `Data` union; callers submitting pre-matched transactions should migrate to the `transaction` or `coreTransaction` types as appropriate.
+
 ## v16.1.0 - 2026-08-03
 ### Added
 * **`NotificationMediumEmail`** — new `NotificationMedium` enum constant (`"EMAIL"`) representing email as a notification delivery channel; `NewNotificationMediumFromString` now recognizes `"EMAIL"` as a valid input.

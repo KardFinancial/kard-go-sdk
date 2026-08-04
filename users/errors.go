@@ -4,7 +4,7 @@ package users
 
 import (
 	json "encoding/json"
-	core "github.com/KardFinancial/kard-go-sdk/v18/core"
+	core "github.com/KardFinancial/kard-go-sdk/v19/core"
 )
 
 type UploadPartMultiStatus struct {

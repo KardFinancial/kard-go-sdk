@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/KardFinancial/kard-go-sdk/v18/core"
+	"github.com/KardFinancial/kard-go-sdk/v19/core"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -12,7 +12,7 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/KardFinancial/kard-go-sdk/v18/core"
+	"github.com/KardFinancial/kard-go-sdk/v19/core"
 )
 
 const (

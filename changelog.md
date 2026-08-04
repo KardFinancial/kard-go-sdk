@@ -1,3 +1,11 @@
+## v19.0.0 - 2026-08-04
+### Breaking Changes
+* **`ClawbackData`** — type and all its getter/setter methods have been removed; remove all references and usages.
+* **`FailedTransactionData`**, **`FailedTransactionAttributes`**, and **`FailedTransactionRelationships`** — types and all their getter/setter methods have been removed; remove all references and usages.
+* **`ValidTransactionData`**, **`ValidTransactionAttributes`**, **`ValidTransactionCommissionEarned`**, and **`TransactionRelationships`** — types and all their getter/setter methods have been removed; remove all references and usages.
+* **`NotificationDataUnion`** — the `ValidTransaction`, `FailedTransaction`, and `Clawback` fields and their corresponding `GetValidTransaction()`, `GetFailedTransaction()`, and `GetClawback()` methods have been removed; update any code reading or writing these fields.
+* **`NotificationDataUnionVisitor`** — `VisitValidTransaction()`, `VisitFailedTransaction()`, and `VisitClawback()` have been removed from the interface; remove these methods from all implementations of the interface.
+
 ## v18.0.0 - 2026-08-04
 ### Breaking Changes
 * **`MatchedTransactionsAttributes`** and **`MatchedTransactionsRequest`** — both types and all their getter/setter methods have been removed; migrate pre-matched transaction submissions to the `transaction` or `coreTransaction` variants of the `Transactions` union.

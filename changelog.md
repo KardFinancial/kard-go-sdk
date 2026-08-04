@@ -1,3 +1,11 @@
+## v18.0.0 - 2026-08-04
+### Breaking Changes
+* **`MatchedTransactionsAttributes`** and **`MatchedTransactionsRequest`** — both types and all their getter/setter methods have been removed; migrate pre-matched transaction submissions to the `transaction` or `coreTransaction` variants of the `Transactions` union.
+* **`Transactions.MatchedTransaction`** field and **`GetMatchedTransaction()`** method — removed from the `Transactions` struct; update any code reading or writing this field.
+* **`TransactionsVisitor.VisitMatchedTransaction()`** — removed from the `TransactionsVisitor` interface; remove this method from all implementations of the interface.
+* **`PaymentType`** — enum type and all constants (`PaymentTypeCard`, `PaymentTypeCash`, `PaymentTypeUnknown`) removed; remove all references and usages.
+* **`ReceiptMediumType`** — enum type and all constants (`ReceiptMediumTypeElectronic`, `ReceiptMediumTypePhysical`) removed; remove all references and usages.
+
 ## v17.0.0 - 2026-08-03
 ### Breaking Changes
 * **`NotificationTypeValidTransaction`**, **`NotificationTypeFailedTransaction`**, and **`NotificationTypeClawback`** — these three `NotificationType` enum constants have been removed; update any switch statements, comparisons, or assignments referencing these values, and remove handling for `"validTransaction"`, `"failedTransaction"`, and `"clawback"` strings passed to `NewNotificationTypeFromString`.

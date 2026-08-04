@@ -5,7 +5,7 @@ package kard
 import (
 	json "encoding/json"
 	fmt "fmt"
-	internal "github.com/KardFinancial/kard-go-sdk/v17/internal"
+	internal "github.com/KardFinancial/kard-go-sdk/v18/internal"
 	big "math/big"
 	time "time"
 )
@@ -3048,540 +3048,6 @@ func (g *GetEarnedRewardsResponse) String() string {
 }
 
 var (
-	matchedTransactionsAttributesFieldUserId                   = big.NewInt(1 << 0)
-	matchedTransactionsAttributesFieldAmount                   = big.NewInt(1 << 1)
-	matchedTransactionsAttributesFieldSubtotal                 = big.NewInt(1 << 2)
-	matchedTransactionsAttributesFieldDescription              = big.NewInt(1 << 3)
-	matchedTransactionsAttributesFieldAuthorizationDate        = big.NewInt(1 << 4)
-	matchedTransactionsAttributesFieldMatchedOfferId           = big.NewInt(1 << 5)
-	matchedTransactionsAttributesFieldMatchedLocationId        = big.NewInt(1 << 6)
-	matchedTransactionsAttributesFieldMerchant                 = big.NewInt(1 << 7)
-	matchedTransactionsAttributesFieldPaymentType              = big.NewInt(1 << 8)
-	matchedTransactionsAttributesFieldCardBin                  = big.NewInt(1 << 9)
-	matchedTransactionsAttributesFieldCardLastFour             = big.NewInt(1 << 10)
-	matchedTransactionsAttributesFieldAuthorizationCode        = big.NewInt(1 << 11)
-	matchedTransactionsAttributesFieldRetrievalReferenceNumber = big.NewInt(1 << 12)
-	matchedTransactionsAttributesFieldSystemTraceAuditNumber   = big.NewInt(1 << 13)
-	matchedTransactionsAttributesFieldAcquirerReferenceNumber  = big.NewInt(1 << 14)
-	matchedTransactionsAttributesFieldDirection                = big.NewInt(1 << 15)
-	matchedTransactionsAttributesFieldCardNetwork              = big.NewInt(1 << 16)
-	matchedTransactionsAttributesFieldTransactionId            = big.NewInt(1 << 17)
-	matchedTransactionsAttributesFieldCardProductId            = big.NewInt(1 << 18)
-	matchedTransactionsAttributesFieldOrderId                  = big.NewInt(1 << 19)
-	matchedTransactionsAttributesFieldReceiptMedium            = big.NewInt(1 << 20)
-)
-
-type MatchedTransactionsAttributes struct {
-	// The ID of the user as defined on the issuers system
-	UserId string `json:"userId" url:"userId"`
-	// Transaction amount in cents
-	Amount int `json:"amount" url:"amount"`
-	// The base amount in cents excluding additional charges (such as tips, taxes, and other fees).
-	Subtotal *int `json:"subtotal,omitempty" url:"subtotal,omitempty"`
-	// Description of transaction - usually includes merchant and other key details on transaction
-	Description string `json:"description" url:"description"`
-	// Timestamp for transaction event. Date string should be in ISO 8601 format i.e.`'YYYY-MM-DDThh:mm:ss.sTZD'` where TZD = time zone designator (Z or +hh:mm or -hh:mm) i.e. `1994-11-05T08:15:30-05:00 OR 1994-11-05T08:15:30Z`
-	AuthorizationDate time.Time `json:"authorizationDate" url:"authorizationDate"`
-	// The ID of the Kard offer to which the transaction was matched. If this field is omitted, the transaction will be considered unmatched to any Kard offer. This field **must** be omitted when the `paymentType` is `UNKNOWN` and neither an orderId nor a `cardLastFour` is supplied.
-	MatchedOfferId *string `json:"matchedOfferId,omitempty" url:"matchedOfferId,omitempty"`
-	// The unique Kard location ID where the transaction took place. This field **must** be omitted  when `paymentType` is `UNKNOWN`.
-	MatchedLocationId *string `json:"matchedLocationId,omitempty" url:"matchedLocationId,omitempty"`
-	// Merchant details
-	Merchant *Merchant `json:"merchant,omitempty" url:"merchant,omitempty"`
-	// The type of payment involved in the transaction.
-	PaymentType PaymentType `json:"paymentType" url:"paymentType"`
-	// Bank identification number (BIN). Must be a valid BIN of 6 digits. If over 6 digits, please send first 6. This field **must** be omitted when `paymentType` is `CASH` or `UNKNOWN`.
-	CardBin *string `json:"cardBIN,omitempty" url:"cardBIN,omitempty"`
-	// Card last four digits. This field is **required** when `paymentType` is `CARD` and `matchedOfferId` is provided. It **must** be omitted when `paymentType` is `CASH`.
-	CardLastFour *string `json:"cardLastFour,omitempty" url:"cardLastFour,omitempty"`
-	// Transaction approval code
-	AuthorizationCode *string `json:"authorizationCode,omitempty" url:"authorizationCode,omitempty"`
-	// Retrieval Reference Number
-	RetrievalReferenceNumber *string `json:"retrievalReferenceNumber,omitempty" url:"retrievalReferenceNumber,omitempty"`
-	// System Trace Audit Number
-	SystemTraceAuditNumber *string `json:"systemTraceAuditNumber,omitempty" url:"systemTraceAuditNumber,omitempty"`
-	// Acquirer Reference Number
-	AcquirerReferenceNumber *string `json:"acquirerReferenceNumber,omitempty" url:"acquirerReferenceNumber,omitempty"`
-	// The direction in which the funds flow - DEBIT or CREDIT
-	Direction DirectionType `json:"direction" url:"direction"`
-	// The card network associated with the transaction. This field **must** be omitted when `paymentType` is `CASH` or `UNKNOWN`.
-	CardNetwork *CardNetwork `json:"cardNetwork,omitempty" url:"cardNetwork,omitempty"`
-	// The transaction ID
-	TransactionId string `json:"transactionId" url:"transactionId"`
-	// The card product ID associated with the transaction. This field **must** be omitted when `paymentType` is `CASH` or `UNKNOWN`.
-	CardProductId *string `json:"cardProductId,omitempty" url:"cardProductId,omitempty"`
-	// The unique identifier for an online order linked to this transaction.
-	OrderId *string `json:"orderId,omitempty" url:"orderId,omitempty"`
-	// Indicates the format of the receipt from which the transaction is derived.
-	ReceiptMedium *ReceiptMediumType `json:"receiptMedium,omitempty" url:"receiptMedium,omitempty"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (m *MatchedTransactionsAttributes) GetUserId() string {
-	if m == nil {
-		return ""
-	}
-	return m.UserId
-}
-
-func (m *MatchedTransactionsAttributes) GetAmount() int {
-	if m == nil {
-		return 0
-	}
-	return m.Amount
-}
-
-func (m *MatchedTransactionsAttributes) GetSubtotal() *int {
-	if m == nil {
-		return nil
-	}
-	return m.Subtotal
-}
-
-func (m *MatchedTransactionsAttributes) GetDescription() string {
-	if m == nil {
-		return ""
-	}
-	return m.Description
-}
-
-func (m *MatchedTransactionsAttributes) GetAuthorizationDate() time.Time {
-	if m == nil {
-		return time.Time{}
-	}
-	return m.AuthorizationDate
-}
-
-func (m *MatchedTransactionsAttributes) GetMatchedOfferId() *string {
-	if m == nil {
-		return nil
-	}
-	return m.MatchedOfferId
-}
-
-func (m *MatchedTransactionsAttributes) GetMatchedLocationId() *string {
-	if m == nil {
-		return nil
-	}
-	return m.MatchedLocationId
-}
-
-func (m *MatchedTransactionsAttributes) GetMerchant() *Merchant {
-	if m == nil {
-		return nil
-	}
-	return m.Merchant
-}
-
-func (m *MatchedTransactionsAttributes) GetPaymentType() PaymentType {
-	if m == nil {
-		return ""
-	}
-	return m.PaymentType
-}
-
-func (m *MatchedTransactionsAttributes) GetCardBin() *string {
-	if m == nil {
-		return nil
-	}
-	return m.CardBin
-}
-
-func (m *MatchedTransactionsAttributes) GetCardLastFour() *string {
-	if m == nil {
-		return nil
-	}
-	return m.CardLastFour
-}
-
-func (m *MatchedTransactionsAttributes) GetAuthorizationCode() *string {
-	if m == nil {
-		return nil
-	}
-	return m.AuthorizationCode
-}
-
-func (m *MatchedTransactionsAttributes) GetRetrievalReferenceNumber() *string {
-	if m == nil {
-		return nil
-	}
-	return m.RetrievalReferenceNumber
-}
-
-func (m *MatchedTransactionsAttributes) GetSystemTraceAuditNumber() *string {
-	if m == nil {
-		return nil
-	}
-	return m.SystemTraceAuditNumber
-}
-
-func (m *MatchedTransactionsAttributes) GetAcquirerReferenceNumber() *string {
-	if m == nil {
-		return nil
-	}
-	return m.AcquirerReferenceNumber
-}
-
-func (m *MatchedTransactionsAttributes) GetDirection() DirectionType {
-	if m == nil {
-		return ""
-	}
-	return m.Direction
-}
-
-func (m *MatchedTransactionsAttributes) GetCardNetwork() *CardNetwork {
-	if m == nil {
-		return nil
-	}
-	return m.CardNetwork
-}
-
-func (m *MatchedTransactionsAttributes) GetTransactionId() string {
-	if m == nil {
-		return ""
-	}
-	return m.TransactionId
-}
-
-func (m *MatchedTransactionsAttributes) GetCardProductId() *string {
-	if m == nil {
-		return nil
-	}
-	return m.CardProductId
-}
-
-func (m *MatchedTransactionsAttributes) GetOrderId() *string {
-	if m == nil {
-		return nil
-	}
-	return m.OrderId
-}
-
-func (m *MatchedTransactionsAttributes) GetReceiptMedium() *ReceiptMediumType {
-	if m == nil {
-		return nil
-	}
-	return m.ReceiptMedium
-}
-
-func (m *MatchedTransactionsAttributes) GetExtraProperties() map[string]interface{} {
-	if m == nil {
-		return nil
-	}
-	return m.extraProperties
-}
-
-func (m *MatchedTransactionsAttributes) require(field *big.Int) {
-	if m.explicitFields == nil {
-		m.explicitFields = big.NewInt(0)
-	}
-	m.explicitFields.Or(m.explicitFields, field)
-}
-
-// SetUserId sets the UserId field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MatchedTransactionsAttributes) SetUserId(userId string) {
-	m.UserId = userId
-	m.require(matchedTransactionsAttributesFieldUserId)
-}
-
-// SetAmount sets the Amount field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MatchedTransactionsAttributes) SetAmount(amount int) {
-	m.Amount = amount
-	m.require(matchedTransactionsAttributesFieldAmount)
-}
-
-// SetSubtotal sets the Subtotal field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MatchedTransactionsAttributes) SetSubtotal(subtotal *int) {
-	m.Subtotal = subtotal
-	m.require(matchedTransactionsAttributesFieldSubtotal)
-}
-
-// SetDescription sets the Description field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MatchedTransactionsAttributes) SetDescription(description string) {
-	m.Description = description
-	m.require(matchedTransactionsAttributesFieldDescription)
-}
-
-// SetAuthorizationDate sets the AuthorizationDate field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MatchedTransactionsAttributes) SetAuthorizationDate(authorizationDate time.Time) {
-	m.AuthorizationDate = authorizationDate
-	m.require(matchedTransactionsAttributesFieldAuthorizationDate)
-}
-
-// SetMatchedOfferId sets the MatchedOfferId field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MatchedTransactionsAttributes) SetMatchedOfferId(matchedOfferId *string) {
-	m.MatchedOfferId = matchedOfferId
-	m.require(matchedTransactionsAttributesFieldMatchedOfferId)
-}
-
-// SetMatchedLocationId sets the MatchedLocationId field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MatchedTransactionsAttributes) SetMatchedLocationId(matchedLocationId *string) {
-	m.MatchedLocationId = matchedLocationId
-	m.require(matchedTransactionsAttributesFieldMatchedLocationId)
-}
-
-// SetMerchant sets the Merchant field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MatchedTransactionsAttributes) SetMerchant(merchant *Merchant) {
-	m.Merchant = merchant
-	m.require(matchedTransactionsAttributesFieldMerchant)
-}
-
-// SetPaymentType sets the PaymentType field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MatchedTransactionsAttributes) SetPaymentType(paymentType PaymentType) {
-	m.PaymentType = paymentType
-	m.require(matchedTransactionsAttributesFieldPaymentType)
-}
-
-// SetCardBin sets the CardBin field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MatchedTransactionsAttributes) SetCardBin(cardBin *string) {
-	m.CardBin = cardBin
-	m.require(matchedTransactionsAttributesFieldCardBin)
-}
-
-// SetCardLastFour sets the CardLastFour field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MatchedTransactionsAttributes) SetCardLastFour(cardLastFour *string) {
-	m.CardLastFour = cardLastFour
-	m.require(matchedTransactionsAttributesFieldCardLastFour)
-}
-
-// SetAuthorizationCode sets the AuthorizationCode field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MatchedTransactionsAttributes) SetAuthorizationCode(authorizationCode *string) {
-	m.AuthorizationCode = authorizationCode
-	m.require(matchedTransactionsAttributesFieldAuthorizationCode)
-}
-
-// SetRetrievalReferenceNumber sets the RetrievalReferenceNumber field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MatchedTransactionsAttributes) SetRetrievalReferenceNumber(retrievalReferenceNumber *string) {
-	m.RetrievalReferenceNumber = retrievalReferenceNumber
-	m.require(matchedTransactionsAttributesFieldRetrievalReferenceNumber)
-}
-
-// SetSystemTraceAuditNumber sets the SystemTraceAuditNumber field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MatchedTransactionsAttributes) SetSystemTraceAuditNumber(systemTraceAuditNumber *string) {
-	m.SystemTraceAuditNumber = systemTraceAuditNumber
-	m.require(matchedTransactionsAttributesFieldSystemTraceAuditNumber)
-}
-
-// SetAcquirerReferenceNumber sets the AcquirerReferenceNumber field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MatchedTransactionsAttributes) SetAcquirerReferenceNumber(acquirerReferenceNumber *string) {
-	m.AcquirerReferenceNumber = acquirerReferenceNumber
-	m.require(matchedTransactionsAttributesFieldAcquirerReferenceNumber)
-}
-
-// SetDirection sets the Direction field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MatchedTransactionsAttributes) SetDirection(direction DirectionType) {
-	m.Direction = direction
-	m.require(matchedTransactionsAttributesFieldDirection)
-}
-
-// SetCardNetwork sets the CardNetwork field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MatchedTransactionsAttributes) SetCardNetwork(cardNetwork *CardNetwork) {
-	m.CardNetwork = cardNetwork
-	m.require(matchedTransactionsAttributesFieldCardNetwork)
-}
-
-// SetTransactionId sets the TransactionId field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MatchedTransactionsAttributes) SetTransactionId(transactionId string) {
-	m.TransactionId = transactionId
-	m.require(matchedTransactionsAttributesFieldTransactionId)
-}
-
-// SetCardProductId sets the CardProductId field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MatchedTransactionsAttributes) SetCardProductId(cardProductId *string) {
-	m.CardProductId = cardProductId
-	m.require(matchedTransactionsAttributesFieldCardProductId)
-}
-
-// SetOrderId sets the OrderId field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MatchedTransactionsAttributes) SetOrderId(orderId *string) {
-	m.OrderId = orderId
-	m.require(matchedTransactionsAttributesFieldOrderId)
-}
-
-// SetReceiptMedium sets the ReceiptMedium field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MatchedTransactionsAttributes) SetReceiptMedium(receiptMedium *ReceiptMediumType) {
-	m.ReceiptMedium = receiptMedium
-	m.require(matchedTransactionsAttributesFieldReceiptMedium)
-}
-
-func (m *MatchedTransactionsAttributes) UnmarshalJSON(data []byte) error {
-	type embed MatchedTransactionsAttributes
-	var unmarshaler = struct {
-		embed
-		AuthorizationDate *internal.DateTime `json:"authorizationDate"`
-	}{
-		embed: embed(*m),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
-		return err
-	}
-	*m = MatchedTransactionsAttributes(unmarshaler.embed)
-	m.AuthorizationDate = unmarshaler.AuthorizationDate.Time()
-	extraProperties, err := internal.ExtractExtraProperties(data, *m)
-	if err != nil {
-		return err
-	}
-	m.extraProperties = extraProperties
-	m.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (m *MatchedTransactionsAttributes) MarshalJSON() ([]byte, error) {
-	type embed MatchedTransactionsAttributes
-	var marshaler = struct {
-		embed
-		AuthorizationDate *internal.DateTime `json:"authorizationDate"`
-	}{
-		embed:             embed(*m),
-		AuthorizationDate: internal.NewDateTime(m.AuthorizationDate),
-	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, m.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (m *MatchedTransactionsAttributes) String() string {
-	if m == nil {
-		return "<nil>"
-	}
-	if len(m.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(m.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(m); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", m)
-}
-
-var (
-	matchedTransactionsRequestFieldId         = big.NewInt(1 << 0)
-	matchedTransactionsRequestFieldAttributes = big.NewInt(1 << 1)
-)
-
-type MatchedTransactionsRequest struct {
-	// Unique identifier for the transaction event. This <b>must</b> be unique for each distinct event sent to the API.
-	Id         string                         `json:"id" url:"id"`
-	Attributes *MatchedTransactionsAttributes `json:"attributes" url:"attributes"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (m *MatchedTransactionsRequest) GetId() string {
-	if m == nil {
-		return ""
-	}
-	return m.Id
-}
-
-func (m *MatchedTransactionsRequest) GetAttributes() *MatchedTransactionsAttributes {
-	if m == nil {
-		return nil
-	}
-	return m.Attributes
-}
-
-func (m *MatchedTransactionsRequest) GetExtraProperties() map[string]interface{} {
-	if m == nil {
-		return nil
-	}
-	return m.extraProperties
-}
-
-func (m *MatchedTransactionsRequest) require(field *big.Int) {
-	if m.explicitFields == nil {
-		m.explicitFields = big.NewInt(0)
-	}
-	m.explicitFields.Or(m.explicitFields, field)
-}
-
-// SetId sets the Id field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MatchedTransactionsRequest) SetId(id string) {
-	m.Id = id
-	m.require(matchedTransactionsRequestFieldId)
-}
-
-// SetAttributes sets the Attributes field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MatchedTransactionsRequest) SetAttributes(attributes *MatchedTransactionsAttributes) {
-	m.Attributes = attributes
-	m.require(matchedTransactionsRequestFieldAttributes)
-}
-
-func (m *MatchedTransactionsRequest) UnmarshalJSON(data []byte) error {
-	type unmarshaler MatchedTransactionsRequest
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*m = MatchedTransactionsRequest(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *m)
-	if err != nil {
-		return err
-	}
-	m.extraProperties = extraProperties
-	m.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (m *MatchedTransactionsRequest) MarshalJSON() ([]byte, error) {
-	type embed MatchedTransactionsRequest
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*m),
-	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, m.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (m *MatchedTransactionsRequest) String() string {
-	if m == nil {
-		return "<nil>"
-	}
-	if len(m.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(m.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(m); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", m)
-}
-
-var (
 	merchantFieldId          = big.NewInt(1 << 0)
 	merchantFieldName        = big.NewInt(1 << 1)
 	merchantFieldAddrStreet  = big.NewInt(1 << 2)
@@ -3982,31 +3448,6 @@ func (p PaymentStatus) Ptr() *PaymentStatus {
 	return &p
 }
 
-type PaymentType string
-
-const (
-	PaymentTypeCard    PaymentType = "CARD"
-	PaymentTypeCash    PaymentType = "CASH"
-	PaymentTypeUnknown PaymentType = "UNKNOWN"
-)
-
-func NewPaymentTypeFromString(s string) (PaymentType, error) {
-	switch s {
-	case "CARD":
-		return PaymentTypeCard, nil
-	case "CASH":
-		return PaymentTypeCash, nil
-	case "UNKNOWN":
-		return PaymentTypeUnknown, nil
-	}
-	var t PaymentType
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (p PaymentType) Ptr() *PaymentType {
-	return &p
-}
-
 type ProcessorMid struct {
 	Processor string
 	Visa      *VisaMid
@@ -4098,28 +3539,6 @@ func (p *ProcessorMid) validate() error {
 		}
 	}
 	return nil
-}
-
-type ReceiptMediumType string
-
-const (
-	ReceiptMediumTypeElectronic ReceiptMediumType = "ELECTRONIC"
-	ReceiptMediumTypePhysical   ReceiptMediumType = "PHYSICAL"
-)
-
-func NewReceiptMediumTypeFromString(s string) (ReceiptMediumType, error) {
-	switch s {
-	case "ELECTRONIC":
-		return ReceiptMediumTypeElectronic, nil
-	case "PHYSICAL":
-		return ReceiptMediumTypePhysical, nil
-	}
-	var t ReceiptMediumType
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (r ReceiptMediumType) Ptr() *ReceiptMediumType {
-	return &r
 }
 
 var (
@@ -5441,10 +4860,9 @@ func (t TransactionStatus) Ptr() *TransactionStatus {
 }
 
 type Transactions struct {
-	Type               string
-	Transaction        *TransactionsRequest
-	MatchedTransaction *MatchedTransactionsRequest
-	CoreTransaction    *CoreTransactionRequest
+	Type            string
+	Transaction     *TransactionsRequest
+	CoreTransaction *CoreTransactionRequest
 }
 
 func (t *Transactions) GetType() string {
@@ -5459,13 +4877,6 @@ func (t *Transactions) GetTransaction() *TransactionsRequest {
 		return nil
 	}
 	return t.Transaction
-}
-
-func (t *Transactions) GetMatchedTransaction() *MatchedTransactionsRequest {
-	if t == nil {
-		return nil
-	}
-	return t.MatchedTransaction
 }
 
 func (t *Transactions) GetCoreTransaction() *CoreTransactionRequest {
@@ -5493,12 +4904,6 @@ func (t *Transactions) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		t.Transaction = value
-	case "matchedTransaction":
-		value := new(MatchedTransactionsRequest)
-		if err := json.Unmarshal(data, &value); err != nil {
-			return err
-		}
-		t.MatchedTransaction = value
 	case "coreTransaction":
 		value := new(CoreTransactionRequest)
 		if err := json.Unmarshal(data, &value); err != nil {
@@ -5516,9 +4921,6 @@ func (t Transactions) MarshalJSON() ([]byte, error) {
 	if t.Transaction != nil {
 		return internal.MarshalJSONWithExtraProperty(t.Transaction, "type", "transaction")
 	}
-	if t.MatchedTransaction != nil {
-		return internal.MarshalJSONWithExtraProperty(t.MatchedTransaction, "type", "matchedTransaction")
-	}
 	if t.CoreTransaction != nil {
 		return internal.MarshalJSONWithExtraProperty(t.CoreTransaction, "type", "coreTransaction")
 	}
@@ -5527,16 +4929,12 @@ func (t Transactions) MarshalJSON() ([]byte, error) {
 
 type TransactionsVisitor interface {
 	VisitTransaction(*TransactionsRequest) error
-	VisitMatchedTransaction(*MatchedTransactionsRequest) error
 	VisitCoreTransaction(*CoreTransactionRequest) error
 }
 
 func (t *Transactions) Accept(visitor TransactionsVisitor) error {
 	if t.Transaction != nil {
 		return visitor.VisitTransaction(t.Transaction)
-	}
-	if t.MatchedTransaction != nil {
-		return visitor.VisitMatchedTransaction(t.MatchedTransaction)
 	}
 	if t.CoreTransaction != nil {
 		return visitor.VisitCoreTransaction(t.CoreTransaction)
@@ -5551,9 +4949,6 @@ func (t *Transactions) validate() error {
 	var fields []string
 	if t.Transaction != nil {
 		fields = append(fields, "transaction")
-	}
-	if t.MatchedTransaction != nil {
-		fields = append(fields, "matchedTransaction")
 	}
 	if t.CoreTransaction != nil {
 		fields = append(fields, "coreTransaction")

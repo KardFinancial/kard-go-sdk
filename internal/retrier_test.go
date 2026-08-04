@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/KardFinancial/kard-go-sdk/v17/core"
+	"github.com/KardFinancial/kard-go-sdk/v18/core"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

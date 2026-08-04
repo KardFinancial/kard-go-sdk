@@ -3,7 +3,7 @@
 package client
 
 import (
-	option "github.com/KardFinancial/kard-go-sdk/v17/option"
+	option "github.com/KardFinancial/kard-go-sdk/v18/option"
 	assert "github.com/stretchr/testify/assert"
 	http "net/http"
 	testing "testing"

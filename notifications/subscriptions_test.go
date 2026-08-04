@@ -4,7 +4,7 @@ package notifications
 
 import (
 	json "encoding/json"
-	kardgosdk "github.com/KardFinancial/kard-go-sdk/v17"
+	kardgosdk "github.com/KardFinancial/kard-go-sdk/v18"
 	assert "github.com/stretchr/testify/assert"
 	require "github.com/stretchr/testify/require"
 	testing "testing"

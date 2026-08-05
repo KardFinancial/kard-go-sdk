@@ -1,4 +1,4 @@
-module github.com/KardFinancial/kard-go-sdk/v19
+module github.com/KardFinancial/kard-go-sdk/v20
 
 go 1.21
 

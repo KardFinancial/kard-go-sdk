@@ -5,9 +5,35 @@ package kard
 import (
 	json "encoding/json"
 	fmt "fmt"
-	internal "github.com/KardFinancial/kard-go-sdk/v19/internal"
+	internal "github.com/KardFinancial/kard-go-sdk/v20/internal"
 	big "math/big"
 )
+
+// Available button styles for CTA components
+type ButtonStyle string
+
+const (
+	ButtonStylePrimary   ButtonStyle = "PRIMARY"
+	ButtonStyleSecondary ButtonStyle = "SECONDARY"
+	ButtonStyleDisabled  ButtonStyle = "DISABLED"
+)
+
+func NewButtonStyleFromString(s string) (ButtonStyle, error) {
+	switch s {
+	case "PRIMARY":
+		return ButtonStylePrimary, nil
+	case "SECONDARY":
+		return ButtonStyleSecondary, nil
+	case "DISABLED":
+		return ButtonStyleDisabled, nil
+	}
+	var t ButtonStyle
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (b ButtonStyle) Ptr() *ButtonStyle {
+	return &b
+}
 
 // Supported card networks
 type CardNetwork string
@@ -249,6 +275,246 @@ func NewCommissionValueTypeFromString(s string) (CommissionValueType, error) {
 
 func (c CommissionValueType) Ptr() *CommissionValueType {
 	return &c
+}
+
+// Action configuration for CTA button
+var (
+	ctaActionFieldUrl    = big.NewInt(1 << 0)
+	ctaActionFieldMethod = big.NewInt(1 << 1)
+)
+
+type CtaAction struct {
+	// URL endpoint to call when button is clicked
+	Url string `json:"url" url:"url"`
+	// HTTP method to use (e.g., POST)
+	Method string `json:"method" url:"method"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CtaAction) GetUrl() string {
+	if c == nil {
+		return ""
+	}
+	return c.Url
+}
+
+func (c *CtaAction) GetMethod() string {
+	if c == nil {
+		return ""
+	}
+	return c.Method
+}
+
+func (c *CtaAction) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
+	return c.extraProperties
+}
+
+func (c *CtaAction) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetUrl sets the Url field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CtaAction) SetUrl(url string) {
+	c.Url = url
+	c.require(ctaActionFieldUrl)
+}
+
+// SetMethod sets the Method field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CtaAction) SetMethod(method string) {
+	c.Method = method
+	c.require(ctaActionFieldMethod)
+}
+
+func (c *CtaAction) UnmarshalJSON(data []byte) error {
+	type unmarshaler CtaAction
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CtaAction(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CtaAction) MarshalJSON() ([]byte, error) {
+	type embed CtaAction
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (c *CtaAction) String() string {
+	if c == nil {
+		return "<nil>"
+	}
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Call-to-action button component for offers
+var (
+	ctaComponentFieldButtonText  = big.NewInt(1 << 0)
+	ctaComponentFieldButtonStyle = big.NewInt(1 << 1)
+	ctaComponentFieldAction      = big.NewInt(1 << 2)
+	ctaComponentFieldStartIcon   = big.NewInt(1 << 3)
+)
+
+type CtaComponent struct {
+	// Text to display on the button
+	ButtonText string `json:"buttonText" url:"buttonText"`
+	// Style of the button
+	ButtonStyle ButtonStyle `json:"buttonStyle" url:"buttonStyle"`
+	// Action to perform when the button is clicked
+	Action *CtaAction `json:"action,omitempty" url:"action,omitempty"`
+	// Icon identifier to display on the button
+	StartIcon *string `json:"startIcon,omitempty" url:"startIcon,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CtaComponent) GetButtonText() string {
+	if c == nil {
+		return ""
+	}
+	return c.ButtonText
+}
+
+func (c *CtaComponent) GetButtonStyle() ButtonStyle {
+	if c == nil {
+		return ""
+	}
+	return c.ButtonStyle
+}
+
+func (c *CtaComponent) GetAction() *CtaAction {
+	if c == nil {
+		return nil
+	}
+	return c.Action
+}
+
+func (c *CtaComponent) GetStartIcon() *string {
+	if c == nil {
+		return nil
+	}
+	return c.StartIcon
+}
+
+func (c *CtaComponent) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
+	return c.extraProperties
+}
+
+func (c *CtaComponent) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetButtonText sets the ButtonText field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CtaComponent) SetButtonText(buttonText string) {
+	c.ButtonText = buttonText
+	c.require(ctaComponentFieldButtonText)
+}
+
+// SetButtonStyle sets the ButtonStyle field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CtaComponent) SetButtonStyle(buttonStyle ButtonStyle) {
+	c.ButtonStyle = buttonStyle
+	c.require(ctaComponentFieldButtonStyle)
+}
+
+// SetAction sets the Action field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CtaComponent) SetAction(action *CtaAction) {
+	c.Action = action
+	c.require(ctaComponentFieldAction)
+}
+
+// SetStartIcon sets the StartIcon field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CtaComponent) SetStartIcon(startIcon *string) {
+	c.StartIcon = startIcon
+	c.require(ctaComponentFieldStartIcon)
+}
+
+func (c *CtaComponent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CtaComponent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CtaComponent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CtaComponent) MarshalJSON() ([]byte, error) {
+	type embed CtaComponent
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (c *CtaComponent) String() string {
+	if c == nil {
+		return "<nil>"
+	}
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
 }
 
 type EmptyObject struct {
@@ -1047,6 +1313,264 @@ func (l *Links) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
+// Logo flare configuration for offer display
+var (
+	logoFlareFieldBorderColor = big.NewInt(1 << 0)
+	logoFlareFieldBadge       = big.NewInt(1 << 1)
+)
+
+type LogoFlare struct {
+	// Border color style for the logo flare
+	BorderColor LogoFlareBorderColor `json:"borderColor" url:"borderColor"`
+	// Optional badge to display on the logo
+	Badge *LogoFlareBadge `json:"badge,omitempty" url:"badge,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LogoFlare) GetBorderColor() LogoFlareBorderColor {
+	if l == nil {
+		return ""
+	}
+	return l.BorderColor
+}
+
+func (l *LogoFlare) GetBadge() *LogoFlareBadge {
+	if l == nil {
+		return nil
+	}
+	return l.Badge
+}
+
+func (l *LogoFlare) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
+	return l.extraProperties
+}
+
+func (l *LogoFlare) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetBorderColor sets the BorderColor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LogoFlare) SetBorderColor(borderColor LogoFlareBorderColor) {
+	l.BorderColor = borderColor
+	l.require(logoFlareFieldBorderColor)
+}
+
+// SetBadge sets the Badge field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LogoFlare) SetBadge(badge *LogoFlareBadge) {
+	l.Badge = badge
+	l.require(logoFlareFieldBadge)
+}
+
+func (l *LogoFlare) UnmarshalJSON(data []byte) error {
+	type unmarshaler LogoFlare
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LogoFlare(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LogoFlare) MarshalJSON() ([]byte, error) {
+	type embed LogoFlare
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*l),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (l *LogoFlare) String() string {
+	if l == nil {
+		return "<nil>"
+	}
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Badge configuration for logo flare
+var (
+	logoFlareBadgeFieldIcon     = big.NewInt(1 << 0)
+	logoFlareBadgeFieldPosition = big.NewInt(1 << 1)
+)
+
+type LogoFlareBadge struct {
+	// Icon identifier for the badge
+	Icon string `json:"icon" url:"icon"`
+	// Position of the badge on the logo
+	Position LogoFlareBadgePosition `json:"position" url:"position"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LogoFlareBadge) GetIcon() string {
+	if l == nil {
+		return ""
+	}
+	return l.Icon
+}
+
+func (l *LogoFlareBadge) GetPosition() LogoFlareBadgePosition {
+	if l == nil {
+		return ""
+	}
+	return l.Position
+}
+
+func (l *LogoFlareBadge) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
+	return l.extraProperties
+}
+
+func (l *LogoFlareBadge) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetIcon sets the Icon field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LogoFlareBadge) SetIcon(icon string) {
+	l.Icon = icon
+	l.require(logoFlareBadgeFieldIcon)
+}
+
+// SetPosition sets the Position field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LogoFlareBadge) SetPosition(position LogoFlareBadgePosition) {
+	l.Position = position
+	l.require(logoFlareBadgeFieldPosition)
+}
+
+func (l *LogoFlareBadge) UnmarshalJSON(data []byte) error {
+	type unmarshaler LogoFlareBadge
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LogoFlareBadge(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LogoFlareBadge) MarshalJSON() ([]byte, error) {
+	type embed LogoFlareBadge
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*l),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (l *LogoFlareBadge) String() string {
+	if l == nil {
+		return "<nil>"
+	}
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Available positions for the logo flare badge
+type LogoFlareBadgePosition string
+
+const (
+	LogoFlareBadgePositionTopRight    LogoFlareBadgePosition = "TOP_RIGHT"
+	LogoFlareBadgePositionTopLeft     LogoFlareBadgePosition = "TOP_LEFT"
+	LogoFlareBadgePositionBottomRight LogoFlareBadgePosition = "BOTTOM_RIGHT"
+	LogoFlareBadgePositionBottomLeft  LogoFlareBadgePosition = "BOTTOM_LEFT"
+)
+
+func NewLogoFlareBadgePositionFromString(s string) (LogoFlareBadgePosition, error) {
+	switch s {
+	case "TOP_RIGHT":
+		return LogoFlareBadgePositionTopRight, nil
+	case "TOP_LEFT":
+		return LogoFlareBadgePositionTopLeft, nil
+	case "BOTTOM_RIGHT":
+		return LogoFlareBadgePositionBottomRight, nil
+	case "BOTTOM_LEFT":
+		return LogoFlareBadgePositionBottomLeft, nil
+	}
+	var t LogoFlareBadgePosition
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (l LogoFlareBadgePosition) Ptr() *LogoFlareBadgePosition {
+	return &l
+}
+
+// Available border color options for logo flare
+type LogoFlareBorderColor string
+
+const (
+	LogoFlareBorderColorPrimary   LogoFlareBorderColor = "PRIMARY"
+	LogoFlareBorderColorSecondary LogoFlareBorderColor = "SECONDARY"
+)
+
+func NewLogoFlareBorderColorFromString(s string) (LogoFlareBorderColor, error) {
+	switch s {
+	case "PRIMARY":
+		return LogoFlareBorderColorPrimary, nil
+	case "SECONDARY":
+		return LogoFlareBorderColorSecondary, nil
+	}
+	var t LogoFlareBorderColor
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (l LogoFlareBorderColor) Ptr() *LogoFlareBorderColor {
+	return &l
+}
+
 // The unique identifier for a document in the database
 type MongoId = string
 
@@ -1087,8 +1611,1158 @@ func (n NotificationType) Ptr() *NotificationType {
 	return &n
 }
 
+// UI component data for rendering offer details
+var (
+	offerComponentsFieldShortDescription = big.NewInt(1 << 0)
+	offerComponentsFieldLongDescription  = big.NewInt(1 << 1)
+	offerComponentsFieldBaseReward       = big.NewInt(1 << 2)
+	offerComponentsFieldBoostedReward    = big.NewInt(1 << 3)
+	offerComponentsFieldCta              = big.NewInt(1 << 4)
+	offerComponentsFieldTags             = big.NewInt(1 << 5)
+	offerComponentsFieldDetailTags       = big.NewInt(1 << 6)
+	offerComponentsFieldLogoFlare        = big.NewInt(1 << 7)
+	offerComponentsFieldProgressBar      = big.NewInt(1 << 8)
+)
+
+type OfferComponents struct {
+	// Short description for the offer
+	ShortDescription *string `json:"shortDescription,omitempty" url:"shortDescription,omitempty"`
+	// Long description for the offer
+	LongDescription *string `json:"longDescription,omitempty" url:"longDescription,omitempty"`
+	// Formatted reward string
+	BaseReward *string `json:"baseReward,omitempty" url:"baseReward,omitempty"`
+	// Formatted boosted reward string
+	BoostedReward *string `json:"boostedReward,omitempty" url:"boostedReward,omitempty"`
+	// Call-to-action button component
+	Cta *CtaComponent `json:"cta,omitempty" url:"cta,omitempty"`
+	// Tags for the offer
+	Tags []string `json:"tags,omitempty" url:"tags,omitempty"`
+	// Detail tags for the offer
+	DetailTags []string `json:"detailTags,omitempty" url:"detailTags,omitempty"`
+	// Logo flare configuration for the offer
+	LogoFlare *LogoFlare `json:"logoFlare,omitempty" url:"logoFlare,omitempty"`
+	// Progress bar component for tracking offer redemptions
+	ProgressBar *ProgressBar `json:"progressBar,omitempty" url:"progressBar,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (o *OfferComponents) GetShortDescription() *string {
+	if o == nil {
+		return nil
+	}
+	return o.ShortDescription
+}
+
+func (o *OfferComponents) GetLongDescription() *string {
+	if o == nil {
+		return nil
+	}
+	return o.LongDescription
+}
+
+func (o *OfferComponents) GetBaseReward() *string {
+	if o == nil {
+		return nil
+	}
+	return o.BaseReward
+}
+
+func (o *OfferComponents) GetBoostedReward() *string {
+	if o == nil {
+		return nil
+	}
+	return o.BoostedReward
+}
+
+func (o *OfferComponents) GetCta() *CtaComponent {
+	if o == nil {
+		return nil
+	}
+	return o.Cta
+}
+
+func (o *OfferComponents) GetTags() []string {
+	if o == nil {
+		return nil
+	}
+	return o.Tags
+}
+
+func (o *OfferComponents) GetDetailTags() []string {
+	if o == nil {
+		return nil
+	}
+	return o.DetailTags
+}
+
+func (o *OfferComponents) GetLogoFlare() *LogoFlare {
+	if o == nil {
+		return nil
+	}
+	return o.LogoFlare
+}
+
+func (o *OfferComponents) GetProgressBar() *ProgressBar {
+	if o == nil {
+		return nil
+	}
+	return o.ProgressBar
+}
+
+func (o *OfferComponents) GetExtraProperties() map[string]interface{} {
+	if o == nil {
+		return nil
+	}
+	return o.extraProperties
+}
+
+func (o *OfferComponents) require(field *big.Int) {
+	if o.explicitFields == nil {
+		o.explicitFields = big.NewInt(0)
+	}
+	o.explicitFields.Or(o.explicitFields, field)
+}
+
+// SetShortDescription sets the ShortDescription field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *OfferComponents) SetShortDescription(shortDescription *string) {
+	o.ShortDescription = shortDescription
+	o.require(offerComponentsFieldShortDescription)
+}
+
+// SetLongDescription sets the LongDescription field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *OfferComponents) SetLongDescription(longDescription *string) {
+	o.LongDescription = longDescription
+	o.require(offerComponentsFieldLongDescription)
+}
+
+// SetBaseReward sets the BaseReward field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *OfferComponents) SetBaseReward(baseReward *string) {
+	o.BaseReward = baseReward
+	o.require(offerComponentsFieldBaseReward)
+}
+
+// SetBoostedReward sets the BoostedReward field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *OfferComponents) SetBoostedReward(boostedReward *string) {
+	o.BoostedReward = boostedReward
+	o.require(offerComponentsFieldBoostedReward)
+}
+
+// SetCta sets the Cta field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *OfferComponents) SetCta(cta *CtaComponent) {
+	o.Cta = cta
+	o.require(offerComponentsFieldCta)
+}
+
+// SetTags sets the Tags field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *OfferComponents) SetTags(tags []string) {
+	o.Tags = tags
+	o.require(offerComponentsFieldTags)
+}
+
+// SetDetailTags sets the DetailTags field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *OfferComponents) SetDetailTags(detailTags []string) {
+	o.DetailTags = detailTags
+	o.require(offerComponentsFieldDetailTags)
+}
+
+// SetLogoFlare sets the LogoFlare field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *OfferComponents) SetLogoFlare(logoFlare *LogoFlare) {
+	o.LogoFlare = logoFlare
+	o.require(offerComponentsFieldLogoFlare)
+}
+
+// SetProgressBar sets the ProgressBar field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *OfferComponents) SetProgressBar(progressBar *ProgressBar) {
+	o.ProgressBar = progressBar
+	o.require(offerComponentsFieldProgressBar)
+}
+
+func (o *OfferComponents) UnmarshalJSON(data []byte) error {
+	type unmarshaler OfferComponents
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OfferComponents(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+	o.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OfferComponents) MarshalJSON() ([]byte, error) {
+	type embed OfferComponents
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*o),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, o.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (o *OfferComponents) String() string {
+	if o == nil {
+		return "<nil>"
+	}
+	if len(o.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
 // Your issuer organization ID, provided by Kard
 type OrganizationId = string
+
+// Progress bar component for tracking offer redemption progress
+var (
+	progressBarFieldTotal           = big.NewInt(1 << 0)
+	progressBarFieldCurrentProgress = big.NewInt(1 << 1)
+	progressBarFieldLabel           = big.NewInt(1 << 2)
+	progressBarFieldSegmented       = big.NewInt(1 << 3)
+	progressBarFieldSegments        = big.NewInt(1 << 4)
+	progressBarFieldLabels          = big.NewInt(1 << 5)
+)
+
+type ProgressBar struct {
+	// Total number of redemptions allowed
+	Total int `json:"total" url:"total"`
+	// Number of redemptions the user has completed
+	CurrentProgress int `json:"currentProgress" url:"currentProgress"`
+	// Formatted label for the progress bar
+	Label string `json:"label" url:"label"`
+	// Whether the progress bar should be displayed as segmented
+	Segmented bool `json:"segmented" url:"segmented"`
+	// Segment configuration for the progress bar in different layouts
+	Segments *ProgressBarSegments `json:"segments,omitempty" url:"segments,omitempty"`
+	// Labels to render around the progress bar in different layouts
+	Labels *ProgressBarLabels `json:"labels" url:"labels"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *ProgressBar) GetTotal() int {
+	if p == nil {
+		return 0
+	}
+	return p.Total
+}
+
+func (p *ProgressBar) GetCurrentProgress() int {
+	if p == nil {
+		return 0
+	}
+	return p.CurrentProgress
+}
+
+func (p *ProgressBar) GetLabel() string {
+	if p == nil {
+		return ""
+	}
+	return p.Label
+}
+
+func (p *ProgressBar) GetSegmented() bool {
+	if p == nil {
+		return false
+	}
+	return p.Segmented
+}
+
+func (p *ProgressBar) GetSegments() *ProgressBarSegments {
+	if p == nil {
+		return nil
+	}
+	return p.Segments
+}
+
+func (p *ProgressBar) GetLabels() *ProgressBarLabels {
+	if p == nil {
+		return nil
+	}
+	return p.Labels
+}
+
+func (p *ProgressBar) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *ProgressBar) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetTotal sets the Total field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *ProgressBar) SetTotal(total int) {
+	p.Total = total
+	p.require(progressBarFieldTotal)
+}
+
+// SetCurrentProgress sets the CurrentProgress field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *ProgressBar) SetCurrentProgress(currentProgress int) {
+	p.CurrentProgress = currentProgress
+	p.require(progressBarFieldCurrentProgress)
+}
+
+// SetLabel sets the Label field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *ProgressBar) SetLabel(label string) {
+	p.Label = label
+	p.require(progressBarFieldLabel)
+}
+
+// SetSegmented sets the Segmented field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *ProgressBar) SetSegmented(segmented bool) {
+	p.Segmented = segmented
+	p.require(progressBarFieldSegmented)
+}
+
+// SetSegments sets the Segments field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *ProgressBar) SetSegments(segments *ProgressBarSegments) {
+	p.Segments = segments
+	p.require(progressBarFieldSegments)
+}
+
+// SetLabels sets the Labels field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *ProgressBar) SetLabels(labels *ProgressBarLabels) {
+	p.Labels = labels
+	p.require(progressBarFieldLabels)
+}
+
+func (p *ProgressBar) UnmarshalJSON(data []byte) error {
+	type unmarshaler ProgressBar
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = ProgressBar(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *ProgressBar) MarshalJSON() ([]byte, error) {
+	type embed ProgressBar
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *ProgressBar) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+// Left and right label configuration for a specific layout
+var (
+	progressBarLabelPairFieldLeft  = big.NewInt(1 << 0)
+	progressBarLabelPairFieldRight = big.NewInt(1 << 1)
+)
+
+type ProgressBarLabelPair struct {
+	// Text content for the left label
+	Left *string `json:"left,omitempty" url:"left,omitempty"`
+	// Text content for the right label
+	Right *string `json:"right,omitempty" url:"right,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *ProgressBarLabelPair) GetLeft() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Left
+}
+
+func (p *ProgressBarLabelPair) GetRight() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Right
+}
+
+func (p *ProgressBarLabelPair) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *ProgressBarLabelPair) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetLeft sets the Left field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *ProgressBarLabelPair) SetLeft(left *string) {
+	p.Left = left
+	p.require(progressBarLabelPairFieldLeft)
+}
+
+// SetRight sets the Right field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *ProgressBarLabelPair) SetRight(right *string) {
+	p.Right = right
+	p.require(progressBarLabelPairFieldRight)
+}
+
+func (p *ProgressBarLabelPair) UnmarshalJSON(data []byte) error {
+	type unmarshaler ProgressBarLabelPair
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = ProgressBarLabelPair(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *ProgressBarLabelPair) MarshalJSON() ([]byte, error) {
+	type embed ProgressBarLabelPair
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *ProgressBarLabelPair) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+// Labels to render around the progress bar in different layouts
+var (
+	progressBarLabelsFieldDetails = big.NewInt(1 << 0)
+	progressBarLabelsFieldDefault = big.NewInt(1 << 1)
+)
+
+type ProgressBarLabels struct {
+	// Label configuration for the details view
+	Details *ProgressBarLabelPair `json:"details,omitempty" url:"details,omitempty"`
+	// Label configuration for the default view
+	Default *ProgressBarLabelPair `json:"default" url:"default"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *ProgressBarLabels) GetDetails() *ProgressBarLabelPair {
+	if p == nil {
+		return nil
+	}
+	return p.Details
+}
+
+func (p *ProgressBarLabels) GetDefault() *ProgressBarLabelPair {
+	if p == nil {
+		return nil
+	}
+	return p.Default
+}
+
+func (p *ProgressBarLabels) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *ProgressBarLabels) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetDetails sets the Details field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *ProgressBarLabels) SetDetails(details *ProgressBarLabelPair) {
+	p.Details = details
+	p.require(progressBarLabelsFieldDetails)
+}
+
+// SetDefault sets the Default field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *ProgressBarLabels) SetDefault(default_ *ProgressBarLabelPair) {
+	p.Default = default_
+	p.require(progressBarLabelsFieldDefault)
+}
+
+func (p *ProgressBarLabels) UnmarshalJSON(data []byte) error {
+	type unmarshaler ProgressBarLabels
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = ProgressBarLabels(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *ProgressBarLabels) MarshalJSON() ([]byte, error) {
+	type embed ProgressBarLabels
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *ProgressBarLabels) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+// Segment configuration for a specific layout
+var (
+	progressBarSegmentFieldIcon      = big.NewInt(1 << 0)
+	progressBarSegmentFieldPosition  = big.NewInt(1 << 1)
+	progressBarSegmentFieldSeparator = big.NewInt(1 << 2)
+	progressBarSegmentFieldLabels    = big.NewInt(1 << 3)
+	progressBarSegmentFieldSelection = big.NewInt(1 << 4)
+)
+
+type ProgressBarSegment struct {
+	// SVG icon to use for each segment
+	Icon *string `json:"icon,omitempty" url:"icon,omitempty"`
+	// Position of the segment within the layout
+	Position ProgressBarSegmentPosition `json:"position" url:"position"`
+	// Separator style to render between segment nodes
+	Separator *ProgressBarSegmentSeparator `json:"separator,omitempty" url:"separator,omitempty"`
+	// Label configuration for each node in the segment
+	Labels []*ProgressBarSegmentLabel `json:"labels,omitempty" url:"labels,omitempty"`
+	// Which segment nodes the UI should render as selected based on currentProgress
+	Selection *ProgressBarSegmentSelection `json:"selection,omitempty" url:"selection,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *ProgressBarSegment) GetIcon() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Icon
+}
+
+func (p *ProgressBarSegment) GetPosition() ProgressBarSegmentPosition {
+	if p == nil {
+		return ""
+	}
+	return p.Position
+}
+
+func (p *ProgressBarSegment) GetSeparator() *ProgressBarSegmentSeparator {
+	if p == nil {
+		return nil
+	}
+	return p.Separator
+}
+
+func (p *ProgressBarSegment) GetLabels() []*ProgressBarSegmentLabel {
+	if p == nil {
+		return nil
+	}
+	return p.Labels
+}
+
+func (p *ProgressBarSegment) GetSelection() *ProgressBarSegmentSelection {
+	if p == nil {
+		return nil
+	}
+	return p.Selection
+}
+
+func (p *ProgressBarSegment) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *ProgressBarSegment) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetIcon sets the Icon field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *ProgressBarSegment) SetIcon(icon *string) {
+	p.Icon = icon
+	p.require(progressBarSegmentFieldIcon)
+}
+
+// SetPosition sets the Position field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *ProgressBarSegment) SetPosition(position ProgressBarSegmentPosition) {
+	p.Position = position
+	p.require(progressBarSegmentFieldPosition)
+}
+
+// SetSeparator sets the Separator field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *ProgressBarSegment) SetSeparator(separator *ProgressBarSegmentSeparator) {
+	p.Separator = separator
+	p.require(progressBarSegmentFieldSeparator)
+}
+
+// SetLabels sets the Labels field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *ProgressBarSegment) SetLabels(labels []*ProgressBarSegmentLabel) {
+	p.Labels = labels
+	p.require(progressBarSegmentFieldLabels)
+}
+
+// SetSelection sets the Selection field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *ProgressBarSegment) SetSelection(selection *ProgressBarSegmentSelection) {
+	p.Selection = selection
+	p.require(progressBarSegmentFieldSelection)
+}
+
+func (p *ProgressBarSegment) UnmarshalJSON(data []byte) error {
+	type unmarshaler ProgressBarSegment
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = ProgressBarSegment(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *ProgressBarSegment) MarshalJSON() ([]byte, error) {
+	type embed ProgressBarSegment
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *ProgressBarSegment) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+// Label configuration for a single node within a segment
+var (
+	progressBarSegmentLabelFieldTitle       = big.NewInt(1 << 0)
+	progressBarSegmentLabelFieldDescription = big.NewInt(1 << 1)
+)
+
+type ProgressBarSegmentLabel struct {
+	// Title text for the segment node
+	Title string `json:"title" url:"title"`
+	// Description text for the segment node
+	Description string `json:"description" url:"description"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *ProgressBarSegmentLabel) GetTitle() string {
+	if p == nil {
+		return ""
+	}
+	return p.Title
+}
+
+func (p *ProgressBarSegmentLabel) GetDescription() string {
+	if p == nil {
+		return ""
+	}
+	return p.Description
+}
+
+func (p *ProgressBarSegmentLabel) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *ProgressBarSegmentLabel) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetTitle sets the Title field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *ProgressBarSegmentLabel) SetTitle(title string) {
+	p.Title = title
+	p.require(progressBarSegmentLabelFieldTitle)
+}
+
+// SetDescription sets the Description field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *ProgressBarSegmentLabel) SetDescription(description string) {
+	p.Description = description
+	p.require(progressBarSegmentLabelFieldDescription)
+}
+
+func (p *ProgressBarSegmentLabel) UnmarshalJSON(data []byte) error {
+	type unmarshaler ProgressBarSegmentLabel
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = ProgressBarSegmentLabel(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *ProgressBarSegmentLabel) MarshalJSON() ([]byte, error) {
+	type embed ProgressBarSegmentLabel
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *ProgressBarSegmentLabel) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+// Supported segment positions
+type ProgressBarSegmentPosition string
+
+const (
+	ProgressBarSegmentPositionLeft      ProgressBarSegmentPosition = "LEFT"
+	ProgressBarSegmentPositionRight     ProgressBarSegmentPosition = "RIGHT"
+	ProgressBarSegmentPositionFullWidth ProgressBarSegmentPosition = "FULL_WIDTH"
+)
+
+func NewProgressBarSegmentPositionFromString(s string) (ProgressBarSegmentPosition, error) {
+	switch s {
+	case "LEFT":
+		return ProgressBarSegmentPositionLeft, nil
+	case "RIGHT":
+		return ProgressBarSegmentPositionRight, nil
+	case "FULL_WIDTH":
+		return ProgressBarSegmentPositionFullWidth, nil
+	}
+	var t ProgressBarSegmentPosition
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (p ProgressBarSegmentPosition) Ptr() *ProgressBarSegmentPosition {
+	return &p
+}
+
+// Fill state of a single segment node, expressed as completed of total.
+var (
+	progressBarSegmentProgressFieldCompleted = big.NewInt(1 << 0)
+	progressBarSegmentProgressFieldTotal     = big.NewInt(1 << 1)
+)
+
+type ProgressBarSegmentProgress struct {
+	// Units completed within the current segment.
+	Completed int `json:"completed" url:"completed"`
+	// Total units required to complete the current segment.
+	Total int `json:"total" url:"total"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *ProgressBarSegmentProgress) GetCompleted() int {
+	if p == nil {
+		return 0
+	}
+	return p.Completed
+}
+
+func (p *ProgressBarSegmentProgress) GetTotal() int {
+	if p == nil {
+		return 0
+	}
+	return p.Total
+}
+
+func (p *ProgressBarSegmentProgress) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *ProgressBarSegmentProgress) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetCompleted sets the Completed field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *ProgressBarSegmentProgress) SetCompleted(completed int) {
+	p.Completed = completed
+	p.require(progressBarSegmentProgressFieldCompleted)
+}
+
+// SetTotal sets the Total field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *ProgressBarSegmentProgress) SetTotal(total int) {
+	p.Total = total
+	p.require(progressBarSegmentProgressFieldTotal)
+}
+
+func (p *ProgressBarSegmentProgress) UnmarshalJSON(data []byte) error {
+	type unmarshaler ProgressBarSegmentProgress
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = ProgressBarSegmentProgress(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *ProgressBarSegmentProgress) MarshalJSON() ([]byte, error) {
+	type embed ProgressBarSegmentProgress
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *ProgressBarSegmentProgress) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+// Supported selection strategies for highlighting segment nodes.
+// - CURRENT: select only the segment at currentProgress
+// - CURRENT_AND_BELOW: select the segment at currentProgress and all segments below it
+type ProgressBarSegmentSelection string
+
+const (
+	ProgressBarSegmentSelectionCurrent         ProgressBarSegmentSelection = "CURRENT"
+	ProgressBarSegmentSelectionCurrentAndBelow ProgressBarSegmentSelection = "CURRENT_AND_BELOW"
+)
+
+func NewProgressBarSegmentSelectionFromString(s string) (ProgressBarSegmentSelection, error) {
+	switch s {
+	case "CURRENT":
+		return ProgressBarSegmentSelectionCurrent, nil
+	case "CURRENT_AND_BELOW":
+		return ProgressBarSegmentSelectionCurrentAndBelow, nil
+	}
+	var t ProgressBarSegmentSelection
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (p ProgressBarSegmentSelection) Ptr() *ProgressBarSegmentSelection {
+	return &p
+}
+
+// Supported separator styles between segment nodes
+type ProgressBarSegmentSeparator string
+
+const (
+	ProgressBarSegmentSeparatorLine ProgressBarSegmentSeparator = "LINE"
+)
+
+func NewProgressBarSegmentSeparatorFromString(s string) (ProgressBarSegmentSeparator, error) {
+	switch s {
+	case "LINE":
+		return ProgressBarSegmentSeparatorLine, nil
+	}
+	var t ProgressBarSegmentSeparator
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (p ProgressBarSegmentSeparator) Ptr() *ProgressBarSegmentSeparator {
+	return &p
+}
+
+// Segment configuration for the progress bar in different layouts
+var (
+	progressBarSegmentsFieldDetails  = big.NewInt(1 << 0)
+	progressBarSegmentsFieldDefault  = big.NewInt(1 << 1)
+	progressBarSegmentsFieldProgress = big.NewInt(1 << 2)
+)
+
+type ProgressBarSegments struct {
+	// Segment configuration for the details view
+	Details *ProgressBarSegment `json:"details,omitempty" url:"details,omitempty"`
+	// Segment configuration for the default view
+	Default *ProgressBarSegment `json:"default" url:"default"`
+	// Per-segment fill state: one entry per segment node, index-aligned with the nodes (length equals the progress bar total). Reached nodes report 1 of 1 and not-yet-reached nodes 0 of 1; for a punch-card offer the in-progress node reports qualifying-purchase progress toward the next reward (Q mod N of N).
+	Progress []*ProgressBarSegmentProgress `json:"progress" url:"progress"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *ProgressBarSegments) GetDetails() *ProgressBarSegment {
+	if p == nil {
+		return nil
+	}
+	return p.Details
+}
+
+func (p *ProgressBarSegments) GetDefault() *ProgressBarSegment {
+	if p == nil {
+		return nil
+	}
+	return p.Default
+}
+
+func (p *ProgressBarSegments) GetProgress() []*ProgressBarSegmentProgress {
+	if p == nil {
+		return nil
+	}
+	return p.Progress
+}
+
+func (p *ProgressBarSegments) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *ProgressBarSegments) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetDetails sets the Details field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *ProgressBarSegments) SetDetails(details *ProgressBarSegment) {
+	p.Details = details
+	p.require(progressBarSegmentsFieldDetails)
+}
+
+// SetDefault sets the Default field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *ProgressBarSegments) SetDefault(default_ *ProgressBarSegment) {
+	p.Default = default_
+	p.require(progressBarSegmentsFieldDefault)
+}
+
+// SetProgress sets the Progress field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *ProgressBarSegments) SetProgress(progress []*ProgressBarSegmentProgress) {
+	p.Progress = progress
+	p.require(progressBarSegmentsFieldProgress)
+}
+
+func (p *ProgressBarSegments) UnmarshalJSON(data []byte) error {
+	type unmarshaler ProgressBarSegments
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = ProgressBarSegments(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *ProgressBarSegments) MarshalJSON() ([]byte, error) {
+	type embed ProgressBarSegments
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *ProgressBarSegments) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
 
 // Purchase channel of offer
 type PurchaseChannel string

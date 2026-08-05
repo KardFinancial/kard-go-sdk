@@ -5,7 +5,7 @@ package kard
 import (
 	json "encoding/json"
 	fmt "fmt"
-	internal "github.com/KardFinancial/kard-go-sdk/v19/internal"
+	internal "github.com/KardFinancial/kard-go-sdk/v20/internal"
 	big "math/big"
 	time "time"
 )
@@ -3665,6 +3665,7 @@ var (
 	rewardedTransactionAttributesFieldPaidToIssuer             = big.NewInt(1 << 3)
 	rewardedTransactionAttributesFieldCommissionEarned         = big.NewInt(1 << 4)
 	rewardedTransactionAttributesFieldPayoutTimestamp          = big.NewInt(1 << 5)
+	rewardedTransactionAttributesFieldComponents               = big.NewInt(1 << 6)
 )
 
 type RewardedTransactionAttributes struct {
@@ -3679,6 +3680,8 @@ type RewardedTransactionAttributes struct {
 	CommissionEarned *CommissionEarnedDetails `json:"commissionEarned" url:"commissionEarned"`
 	// Timestamp representing the month when the transaction has been paid out to issuer
 	PayoutTimestamp *time.Time `json:"payoutTimestamp,omitempty" url:"payoutTimestamp,omitempty"`
+	// UI component data for the reward, built from the offer state persisted on the matched transaction (e.g. a progress bar for progressive and punch-card offers). Omitted when the reward carries no persisted state.
+	Components *OfferComponents `json:"components,omitempty" url:"components,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -3728,6 +3731,13 @@ func (r *RewardedTransactionAttributes) GetPayoutTimestamp() *time.Time {
 		return nil
 	}
 	return r.PayoutTimestamp
+}
+
+func (r *RewardedTransactionAttributes) GetComponents() *OfferComponents {
+	if r == nil {
+		return nil
+	}
+	return r.Components
 }
 
 func (r *RewardedTransactionAttributes) Status() string {
@@ -3788,6 +3798,13 @@ func (r *RewardedTransactionAttributes) SetCommissionEarned(commissionEarned *Co
 func (r *RewardedTransactionAttributes) SetPayoutTimestamp(payoutTimestamp *time.Time) {
 	r.PayoutTimestamp = payoutTimestamp
 	r.require(rewardedTransactionAttributesFieldPayoutTimestamp)
+}
+
+// SetComponents sets the Components field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RewardedTransactionAttributes) SetComponents(components *OfferComponents) {
+	r.Components = components
+	r.require(rewardedTransactionAttributesFieldComponents)
 }
 
 func (r *RewardedTransactionAttributes) UnmarshalJSON(data []byte) error {

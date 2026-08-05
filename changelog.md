@@ -1,3 +1,15 @@
+## v20.0.0 - 2026-08-05
+### Breaking Changes
+* **`OfferComponents`**, **`CtaAction`**, **`CtaComponent`**, **`ButtonStyle`** — removed from the `users` package; update all references to use the root `kardgosdk` package types (e.g. `*kardgosdk.OfferComponents`).
+* **`LogoFlare`**, **`LogoFlareBadge`**, **`LogoFlareBadgePosition`**, **`LogoFlareBorderColor`** — removed from the `users` package; update all references to use the root `kardgosdk` package types.
+* **`ProgressBar`** and all related progress bar types (`ProgressBarLabels`, `ProgressBarSegments`, etc.) — removed from the `users` package; update all references to use the root `kardgosdk` package types.
+* **`PlacementContentResponse`** — removed from the `users` package entirely; remove all references and usages.
+### Added
+* **`OfferComponents`**, **`CtaAction`**, **`CtaComponent`**, and **`ButtonStyle`** — new root-package types for composing and styling offer UI components including CTA buttons and their actions.
+* **`LogoFlare`**, **`LogoFlareBadge`**, **`LogoFlareBorderColor`**, and **`LogoFlareBadgePosition`** — new root-package types and enums for configuring logo border and badge decorations on offer cards.
+* **`ProgressBar`** and related types — new root-package types for rendering and tracking segmented offer redemption progress bars.
+* **`RewardedTransactionAttributes.Components`** — new optional `*OfferComponents` field (with getter and setter) carrying UI component data such as progress bars for progressive and punch-card offers.
+
 ## v19.0.0 - 2026-08-04
 ### Breaking Changes
 * **`ClawbackData`** — type and all its getter/setter methods have been removed; remove all references and usages.

@@ -5,7 +5,7 @@ package kard
 import (
 	json "encoding/json"
 	fmt "fmt"
-	internal "github.com/KardFinancial/kard-go-sdk/v20/internal"
+	internal "github.com/KardFinancial/kard-go-sdk/v21/internal"
 	big "math/big"
 )
 
@@ -26,7 +26,7 @@ type ExternalOrganizationAttributes struct {
 	// Rewards programs the organization is enrolled in
 	EnrolledRewards []EnrolledReward `json:"enrolledRewards" url:"enrolledRewards"`
 	// Card networks supported by the organization
-	CardNetworks []CardNetwork `json:"cardNetworks" url:"cardNetworks"`
+	CardNetworks []OrganizationCardNetwork `json:"cardNetworks" url:"cardNetworks"`
 	// Bank Identification Numbers for the organization
 	Bins []string `json:"bins" url:"bins"`
 	// Affiliate commission split percentage
@@ -57,7 +57,7 @@ func (e *ExternalOrganizationAttributes) GetEnrolledRewards() []EnrolledReward {
 	return e.EnrolledRewards
 }
 
-func (e *ExternalOrganizationAttributes) GetCardNetworks() []CardNetwork {
+func (e *ExternalOrganizationAttributes) GetCardNetworks() []OrganizationCardNetwork {
 	if e == nil {
 		return nil
 	}
@@ -122,7 +122,7 @@ func (e *ExternalOrganizationAttributes) SetEnrolledRewards(enrolledRewards []En
 
 // SetCardNetworks sets the CardNetworks field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (e *ExternalOrganizationAttributes) SetCardNetworks(cardNetworks []CardNetwork) {
+func (e *ExternalOrganizationAttributes) SetCardNetworks(cardNetworks []OrganizationCardNetwork) {
 	e.CardNetworks = cardNetworks
 	e.require(externalOrganizationAttributesFieldCardNetworks)
 }

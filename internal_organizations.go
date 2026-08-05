@@ -5,7 +5,7 @@ package kard
 import (
 	json "encoding/json"
 	fmt "fmt"
-	internal "github.com/KardFinancial/kard-go-sdk/v20/internal"
+	internal "github.com/KardFinancial/kard-go-sdk/v21/internal"
 	big "math/big"
 )
 
@@ -234,6 +234,35 @@ func NewEnrolledRewardFromString(s string) (EnrolledReward, error) {
 
 func (e EnrolledReward) Ptr() *EnrolledReward {
 	return &e
+}
+
+// Card networks supported by an organization. Deliberately not commons.CardNetwork: that type spells Amex `AMERICANEXPRESS`, which the organizations database rejects. The organizations.card_networks CHECK constraint permits `AMERICAN_EXPRESS` (canonical, and what this service writes) and `AMERICAN EXPRESS` (legacy, present in existing rows only). The name differs from commons.CardNetwork because a type may not shadow one from an imported file.
+type OrganizationCardNetwork string
+
+const (
+	OrganizationCardNetworkVisa            OrganizationCardNetwork = "VISA"
+	OrganizationCardNetworkMastercard      OrganizationCardNetwork = "MASTERCARD"
+	OrganizationCardNetworkAmericanExpress OrganizationCardNetwork = "AMERICAN_EXPRESS"
+	OrganizationCardNetworkDiscover        OrganizationCardNetwork = "DISCOVER"
+)
+
+func NewOrganizationCardNetworkFromString(s string) (OrganizationCardNetwork, error) {
+	switch s {
+	case "VISA":
+		return OrganizationCardNetworkVisa, nil
+	case "MASTERCARD":
+		return OrganizationCardNetworkMastercard, nil
+	case "AMERICAN_EXPRESS":
+		return OrganizationCardNetworkAmericanExpress, nil
+	case "DISCOVER":
+		return OrganizationCardNetworkDiscover, nil
+	}
+	var t OrganizationCardNetwork
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (o OrganizationCardNetwork) Ptr() *OrganizationCardNetwork {
+	return &o
 }
 
 // Pagination metadata for organization list responses

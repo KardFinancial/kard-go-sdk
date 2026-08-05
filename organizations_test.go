@@ -28,7 +28,7 @@ func TestSettersExternalOrganizationAttributes(t *testing.T) {
 
 	t.Run("SetCardNetworks", func(t *testing.T) {
 		obj := &ExternalOrganizationAttributes{}
-		var fernTestValueCardNetworks []CardNetwork
+		var fernTestValueCardNetworks []OrganizationCardNetwork
 		obj.SetCardNetworks(fernTestValueCardNetworks)
 		assert.Equal(t, fernTestValueCardNetworks, obj.CardNetworks)
 		assert.NotNil(t, obj.explicitFields)
@@ -129,7 +129,7 @@ func TestGettersExternalOrganizationAttributes(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &ExternalOrganizationAttributes{}
-		var expected []CardNetwork
+		var expected []OrganizationCardNetwork
 		obj.CardNetworks = expected
 
 		// Act & Assert
@@ -329,7 +329,7 @@ func TestSettersMarkExplicitExternalOrganizationAttributes(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &ExternalOrganizationAttributes{}
-		var fernTestValueCardNetworks []CardNetwork
+		var fernTestValueCardNetworks []OrganizationCardNetwork
 
 		// Act
 		obj.SetCardNetworks(fernTestValueCardNetworks)

@@ -1,3 +1,11 @@
+## v21.0.0 - 2026-08-05
+### Breaking Changes
+* **`ExternalOrganizationAttributes.CardNetworks`** — field type changed from `[]CardNetwork` to `[]OrganizationCardNetwork`; update all read and write sites to use the new type.
+* **`ExternalOrganizationAttributes.GetCardNetworks()`** — return type changed from `[]CardNetwork` to `[]OrganizationCardNetwork`; update all callers.
+* **`ExternalOrganizationAttributes.SetCardNetworks()`** — parameter type changed from `[]CardNetwork` to `[]OrganizationCardNetwork`; update all callers.
+### Added
+* **`OrganizationCardNetwork`** — new string enum type with constants `OrganizationCardNetworkVisa`, `OrganizationCardNetworkMastercard`, `OrganizationCardNetworkAmericanExpress`, and `OrganizationCardNetworkDiscover`, plus `NewOrganizationCardNetworkFromString()` constructor and `Ptr()` helper.
+
 ## v20.0.0 - 2026-08-05
 ### Breaking Changes
 * **`OfferComponents`**, **`CtaAction`**, **`CtaComponent`**, **`ButtonStyle`** — removed from the `users` package; update all references to use the root `kardgosdk` package types (e.g. `*kardgosdk.OfferComponents`).

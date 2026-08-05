@@ -604,6 +604,49 @@ func TestEnumEnrolledReward(t *testing.T) {
 	})
 }
 
+func TestEnumOrganizationCardNetwork(t *testing.T) {
+	t.Run("NewFromString_VISA", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewOrganizationCardNetworkFromString("VISA")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, OrganizationCardNetwork("VISA"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_MASTERCARD", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewOrganizationCardNetworkFromString("MASTERCARD")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, OrganizationCardNetwork("MASTERCARD"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_AMERICAN_EXPRESS", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewOrganizationCardNetworkFromString("AMERICAN_EXPRESS")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, OrganizationCardNetwork("AMERICAN_EXPRESS"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_DISCOVER", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewOrganizationCardNetworkFromString("DISCOVER")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, OrganizationCardNetwork("DISCOVER"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Invalid", func(t *testing.T) {
+		_, err := NewOrganizationCardNetworkFromString("invalid_value_that_does_not_exist")
+		assert.Error(t, err)
+	})
+
+	t.Run("Ptr", func(t *testing.T) {
+		val, err := NewOrganizationCardNetworkFromString("VISA")
+		assert.NoError(t, err)
+		ptr := val.Ptr()
+		assert.NotNil(t, ptr)
+		assert.Equal(t, val, *ptr)
+	})
+}
+
 func TestExtraPropertiesDeleteResourceData(t *testing.T) {
 	t.Run("GetExtraProperties", func(t *testing.T) {
 		t.Parallel()

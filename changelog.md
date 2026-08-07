@@ -1,3 +1,17 @@
+## v21.0.1 - 2026-08-07
+* chore: add godoc comments to GetLocationsByUserRequest filter fields
+* Improve developer experience by documenting the filter fields on
+* GetLocationsByUserRequest with precise behavioral descriptions. Also
+* update the Locations method godoc to remove outdated guidance about
+* field prioritization.
+* Key changes:
+* Add inline godoc comments to FilterCity, FilterZipCode, FilterState,
+* FilterLongitude, FilterLatitude, and FilterRadius explaining exact-match
+* vs. substring semantics and how radius search interacts with lat/long
+* Remove stale comment stating longitude/latitude are prioritized over
+* state, city, and zip code from the Locations client method
+* 🌿 Generated with Fern
+
 ## v21.0.0 - 2026-08-05
 ### Breaking Changes
 * **`ExternalOrganizationAttributes.CardNetworks`** — field type changed from `[]CardNetwork` to `[]OrganizationCardNetwork`; update all read and write sites to use the new type.

@@ -29,17 +29,23 @@ var (
 )
 
 type GetLocationsByUserRequest struct {
-	PageSize        *int                      `json:"-" url:"page[size],omitempty"`
-	PageAfter       *string                   `json:"-" url:"page[after],omitempty"`
-	PageBefore      *string                   `json:"-" url:"page[before],omitempty"`
-	FilterName      *string                   `json:"-" url:"filter[name],omitempty"`
-	FilterCity      *string                   `json:"-" url:"filter[city],omitempty"`
-	FilterZipCode   *string                   `json:"-" url:"filter[zipCode],omitempty"`
-	FilterState     *kardgosdk.State          `json:"-" url:"filter[state],omitempty"`
-	FilterCategory  *kardgosdk.CategoryOption `json:"-" url:"filter[category],omitempty"`
-	FilterLongitude *float64                  `json:"-" url:"filter[longitude],omitempty"`
-	FilterLatitude  *float64                  `json:"-" url:"filter[latitude],omitempty"`
-	FilterRadius    *int                      `json:"-" url:"filter[radius],omitempty"`
+	PageSize   *int    `json:"-" url:"page[size],omitempty"`
+	PageAfter  *string `json:"-" url:"page[after],omitempty"`
+	PageBefore *string `json:"-" url:"page[before],omitempty"`
+	FilterName *string `json:"-" url:"filter[name],omitempty"`
+	// Case-insensitive substring match on the location's city. Never defines the search area; applied as an additional constraint alongside a radius search when `filter[latitude]`/`filter[longitude]`/`filter[radius]` are also provided.
+	FilterCity *string `json:"-" url:"filter[city],omitempty"`
+	// Exact-match filter on the location's zip code. Never defines the search area; applied as an additional constraint alongside a radius search when `filter[latitude]`/`filter[longitude]`/`filter[radius]` are also provided.
+	FilterZipCode *string `json:"-" url:"filter[zipCode],omitempty"`
+	// Exact-match filter on the location's state. Never defines the search area; applied as an additional constraint alongside a radius search when `filter[latitude]`/`filter[longitude]`/`filter[radius]` are also provided.
+	FilterState    *kardgosdk.State          `json:"-" url:"filter[state],omitempty"`
+	FilterCategory *kardgosdk.CategoryOption `json:"-" url:"filter[category],omitempty"`
+	// Longitude of the point to search around. Must be provided together with `filter[latitude]`; combine with `filter[radius]` to run a radius search.
+	FilterLongitude *float64 `json:"-" url:"filter[longitude],omitempty"`
+	// Latitude of the point to search around. Must be provided together with `filter[longitude]`; combine with `filter[radius]` to run a radius search.
+	FilterLatitude *float64 `json:"-" url:"filter[latitude],omitempty"`
+	// Radius in miles to search around the point given by `filter[latitude]`/`filter[longitude]` (default 10, minimum 1). Has no effect unless both latitude and longitude are also provided — it is ignored when only `filter[zipCode]`, `filter[city]`, or `filter[state]` is used, without lat/long.
+	FilterRadius *int `json:"-" url:"filter[radius],omitempty"`
 	// If provided, response will be sorted by the specified fields
 	Sort []*LocationSortOptions `json:"-" url:"sort,omitempty"`
 	// CSV list of included resources in the response (e.g "offers,categories"). Allowed values are `offers` and `categories`.

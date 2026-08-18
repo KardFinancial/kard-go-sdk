@@ -5926,6 +5926,1008 @@ func TestEnumCommissionValueType(t *testing.T) {
 	})
 }
 
+func TestEnumCuisineOption(t *testing.T) {
+	t.Run("NewFromString_American_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("American Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("American Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Southern_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Southern Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Southern Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Cajun_&_Creole_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Cajun & Creole Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Cajun & Creole Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Southwestern_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Southwestern Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Southwestern Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_BBQ_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("BBQ Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("BBQ Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Steakhouse", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Steakhouse")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Steakhouse"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Burger_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Burger Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Burger Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Hot_Dog_Joint", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Hot Dog Joint")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Hot Dog Joint"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Wings_Joint", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Wings Joint")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Wings Joint"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Fried_Chicken_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Fried Chicken Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Fried Chicken Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Sandwich_Shop", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Sandwich Shop")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Sandwich Shop"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Deli", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Deli")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Deli"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Diner", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Diner")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Diner"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Hawaiian_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Hawaiian Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Hawaiian Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Canadian_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Canadian Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Canadian Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Mexican_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Mexican Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Mexican Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Taco_Shop", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Taco Shop")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Taco Shop"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Burrito_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Burrito Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Burrito Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Latin_American_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Latin American Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Latin American Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Caribbean_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Caribbean Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Caribbean Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Jamaican_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Jamaican Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Jamaican Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Cuban_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Cuban Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Cuban Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Puerto_Rican_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Puerto Rican Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Puerto Rican Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Brazilian_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Brazilian Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Brazilian Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Argentine_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Argentine Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Argentine Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Peruvian_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Peruvian Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Peruvian Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Colombian_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Colombian Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Colombian Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Venezuelan_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Venezuelan Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Venezuelan Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Salvadoran_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Salvadoran Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Salvadoran Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Honduran_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Honduran Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Honduran Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Italian_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Italian Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Italian Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Pizza_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Pizza Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Pizza Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Pasta_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Pasta Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Pasta Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_French_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("French Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("French Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Creperie", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Creperie")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Creperie"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Spanish_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Spanish Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Spanish Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Tapas_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Tapas Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Tapas Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Portuguese_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Portuguese Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Portuguese Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_German_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("German Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("German Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Austrian_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Austrian Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Austrian Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Swiss_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Swiss Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Swiss Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Fondue_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Fondue Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Fondue Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_British_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("British Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("British Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Fish_&_Chips_Shop", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Fish & Chips Shop")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Fish & Chips Shop"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Irish_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Irish Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Irish Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Belgian_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Belgian Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Belgian Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Dutch_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Dutch Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Dutch Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Scandinavian_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Scandinavian Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Scandinavian Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Eastern_European_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Eastern European Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Eastern European Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Polish_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Polish Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Polish Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Russian_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Russian Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Russian Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_European_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("European Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("European Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Mediterranean_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Mediterranean Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Mediterranean Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Greek_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Greek Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Greek Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Middle_Eastern_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Middle Eastern Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Middle Eastern Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Lebanese_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Lebanese Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Lebanese Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Israeli_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Israeli Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Israeli Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Jewish_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Jewish Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Jewish Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Turkish_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Turkish Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Turkish Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Persian_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Persian Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Persian Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Egyptian_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Egyptian Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Egyptian Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Moroccan_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Moroccan Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Moroccan Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Armenian_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Armenian Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Armenian Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Georgian_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Georgian Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Georgian Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Falafel_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Falafel Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Falafel Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Kebab_Shop", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Kebab Shop")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Kebab Shop"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_African_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("African Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("African Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Ethiopian_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Ethiopian Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Ethiopian Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Indian_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Indian Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Indian Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Pakistani_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Pakistani Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Pakistani Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Bangladeshi_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Bangladeshi Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Bangladeshi Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Sri_Lankan_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Sri Lankan Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Sri Lankan Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Nepalese_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Nepalese Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Nepalese Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Afghan_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Afghan Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Afghan Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Asian_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Asian Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Asian Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Chinese_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Chinese Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Chinese Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Taiwanese_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Taiwanese Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Taiwanese Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Hong_Kong_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Hong Kong Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Hong Kong Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Dim_Sum_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Dim Sum Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Dim Sum Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Hot_Pot_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Hot Pot Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Hot Pot Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Dumpling_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Dumpling Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Dumpling Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Noodle_Shop", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Noodle Shop")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Noodle Shop"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Japanese_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Japanese Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Japanese Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Sushi_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Sushi Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Sushi Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Ramen_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Ramen Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Ramen Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Yakitori_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Yakitori Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Yakitori Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Korean_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Korean Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Korean Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Mongolian_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Mongolian Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Mongolian Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Thai_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Thai Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Thai Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Vietnamese_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Vietnamese Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Vietnamese Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Filipino_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Filipino Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Filipino Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Malaysian_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Malaysian Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Malaysian Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Indonesian_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Indonesian Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Indonesian Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Singaporean_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Singaporean Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Singaporean Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Burmese_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Burmese Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Burmese Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Cambodian_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Cambodian Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Cambodian Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Australian_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Australian Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Australian Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Seafood_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Seafood Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Seafood Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Poke_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Poke Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Poke Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Salad_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Salad Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Salad Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Soup_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Soup Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Soup Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Breakfast_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Breakfast Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Breakfast Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Brunch_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Brunch Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Brunch Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Bagel_Shop", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Bagel Shop")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Bagel Shop"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Buffet", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Buffet")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Buffet"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Fast_Food_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Fast Food Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Fast Food Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Food_Truck", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Food Truck")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Food Truck"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Gastropub", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Gastropub")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Gastropub"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Bakery", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Bakery")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Bakery"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Cafe", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Cafe")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Cafe"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Bubble_Tea_Shop", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Bubble Tea Shop")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Bubble Tea Shop"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Juice_Bar", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Juice Bar")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Juice Bar"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Dessert_Shop", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Dessert Shop")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Dessert Shop"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Ice_Cream_Shop", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Ice Cream Shop")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Ice Cream Shop"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Doughnut_Shop", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Doughnut Shop")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Doughnut Shop"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Bar", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Bar")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Bar"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Sports_Bar", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Sports Bar")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Sports Bar"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Wine_Bar", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Wine Bar")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Wine Bar"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Winery", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Winery")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Winery"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Brewery", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Brewery")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Brewery"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Cocktail_Bar", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Cocktail Bar")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Cocktail Bar"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Distillery", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Distillery")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Distillery"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Nightclub", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Nightclub")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Nightclub"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Karaoke_Bar", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Karaoke Bar")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Karaoke Bar"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Comedy_Club", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Comedy Club")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Comedy Club"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Music_Venue", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Music Venue")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Music Venue"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Dance_Club", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Dance Club")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Dance Club"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Pool_Hall", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Pool Hall")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Pool Hall"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Casino", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Casino")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Casino"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Bowling_Alley", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Bowling Alley")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Bowling Alley"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Movie_Theater", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Movie Theater")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Movie Theater"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Museum", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Museum")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Museum"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Stadium", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Stadium")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Stadium"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Theme_Park", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Theme Park")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Theme Park"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Sports_&_Recreation", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Sports & Recreation")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Sports & Recreation"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Vegan_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Vegan Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Vegan Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Vegetarian_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Vegetarian Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Vegetarian Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Kosher_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Kosher Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Kosher Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Halal_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Halal Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Halal Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Gluten_Free_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Gluten Free Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Gluten Free Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Healthy_Restaurant", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCuisineOptionFromString("Healthy Restaurant")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CuisineOption("Healthy Restaurant"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Invalid", func(t *testing.T) {
+		_, err := NewCuisineOptionFromString("invalid_value_that_does_not_exist")
+		assert.Error(t, err)
+	})
+
+	t.Run("Ptr", func(t *testing.T) {
+		val, err := NewCuisineOptionFromString("American Restaurant")
+		assert.NoError(t, err)
+		ptr := val.Ptr()
+		assert.NotNil(t, ptr)
+		assert.Equal(t, val, *ptr)
+	})
+}
+
 func TestEnumEnrolledRewardsType(t *testing.T) {
 	t.Run("NewFromString_CARDLINKED", func(t *testing.T) {
 		t.Parallel()

@@ -434,6 +434,8 @@ var (
 )
 
 type Asset struct {
+	// What the asset shows. `IMG_VIEW` is the merchant logo, `BANNER_VIEW` a promotional
+	// banner, and `LOCATION_IMG_VIEW` a photo of the location. New values may be added over time.
 	Type string `json:"type" url:"type"`
 	// URL of the asset containing an attribution token
 	Url string `json:"url" url:"url"`
@@ -1831,6 +1833,9 @@ var (
 	locationAttributesFieldPhone          = big.NewInt(1 << 3)
 	locationAttributesFieldOperationHours = big.NewInt(1 << 4)
 	locationAttributesFieldPartnerIds     = big.NewInt(1 << 5)
+	locationAttributesFieldCuisine        = big.NewInt(1 << 6)
+	locationAttributesFieldRating         = big.NewInt(1 << 7)
+	locationAttributesFieldPriceLevel     = big.NewInt(1 << 8)
 )
 
 type LocationAttributes struct {
@@ -1841,6 +1846,12 @@ type LocationAttributes struct {
 	OperationHours *OperationHours             `json:"operationHours" url:"operationHours"`
 	// List of ids associated with the location from third party partners. Only applicable for LOCAL locations.
 	PartnerIds []*LocationPartnerId `json:"partnerIds" url:"partnerIds"`
+	// The kind of food or venue this location offers, for example "Pizza Restaurant".
+	Cuisine *kardgosdk.CuisineOption `json:"cuisine,omitempty" url:"cuisine,omitempty"`
+	// Customer rating for this location.
+	Rating *LocationRating `json:"rating,omitempty" url:"rating,omitempty"`
+	// Typical price range for this location, from 1 (least expensive) to 4 (most expensive).
+	PriceLevel *int `json:"priceLevel,omitempty" url:"priceLevel,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -1889,6 +1900,27 @@ func (l *LocationAttributes) GetPartnerIds() []*LocationPartnerId {
 		return nil
 	}
 	return l.PartnerIds
+}
+
+func (l *LocationAttributes) GetCuisine() *kardgosdk.CuisineOption {
+	if l == nil {
+		return nil
+	}
+	return l.Cuisine
+}
+
+func (l *LocationAttributes) GetRating() *LocationRating {
+	if l == nil {
+		return nil
+	}
+	return l.Rating
+}
+
+func (l *LocationAttributes) GetPriceLevel() *int {
+	if l == nil {
+		return nil
+	}
+	return l.PriceLevel
 }
 
 func (l *LocationAttributes) GetExtraProperties() map[string]interface{} {
@@ -1945,6 +1977,27 @@ func (l *LocationAttributes) SetOperationHours(operationHours *OperationHours) {
 func (l *LocationAttributes) SetPartnerIds(partnerIds []*LocationPartnerId) {
 	l.PartnerIds = partnerIds
 	l.require(locationAttributesFieldPartnerIds)
+}
+
+// SetCuisine sets the Cuisine field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LocationAttributes) SetCuisine(cuisine *kardgosdk.CuisineOption) {
+	l.Cuisine = cuisine
+	l.require(locationAttributesFieldCuisine)
+}
+
+// SetRating sets the Rating field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LocationAttributes) SetRating(rating *LocationRating) {
+	l.Rating = rating
+	l.require(locationAttributesFieldRating)
+}
+
+// SetPriceLevel sets the PriceLevel field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LocationAttributes) SetPriceLevel(priceLevel *int) {
+	l.PriceLevel = priceLevel
+	l.require(locationAttributesFieldPriceLevel)
 }
 
 func (l *LocationAttributes) UnmarshalJSON(data []byte) error {
@@ -2240,6 +2293,109 @@ func NewLocationPartnerIdTypeFromString(s string) (LocationPartnerIdType, error)
 
 func (l LocationPartnerIdType) Ptr() *LocationPartnerIdType {
 	return &l
+}
+
+// Customer rating for a location.
+var (
+	locationRatingFieldValue = big.NewInt(1 << 0)
+	locationRatingFieldCount = big.NewInt(1 << 1)
+)
+
+type LocationRating struct {
+	// Rating on a scale of 1 to 5.
+	Value float64 `json:"value" url:"value"`
+	// Number of ratings the score is based on. Null when a count is not available.
+	Count *int `json:"count,omitempty" url:"count,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LocationRating) GetValue() float64 {
+	if l == nil {
+		return 0
+	}
+	return l.Value
+}
+
+func (l *LocationRating) GetCount() *int {
+	if l == nil {
+		return nil
+	}
+	return l.Count
+}
+
+func (l *LocationRating) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
+	return l.extraProperties
+}
+
+func (l *LocationRating) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetValue sets the Value field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LocationRating) SetValue(value float64) {
+	l.Value = value
+	l.require(locationRatingFieldValue)
+}
+
+// SetCount sets the Count field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LocationRating) SetCount(count *int) {
+	l.Count = count
+	l.require(locationRatingFieldCount)
+}
+
+func (l *LocationRating) UnmarshalJSON(data []byte) error {
+	type unmarshaler LocationRating
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LocationRating(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LocationRating) MarshalJSON() ([]byte, error) {
+	type embed LocationRating
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*l),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (l *LocationRating) String() string {
+	if l == nil {
+		return "<nil>"
+	}
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
 }
 
 var (

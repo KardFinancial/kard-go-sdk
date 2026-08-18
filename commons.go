@@ -517,6 +517,446 @@ func (c *CtaComponent) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
+// The kind of food or venue a location offers, for example "Pizza Restaurant".
+type CuisineOption string
+
+const (
+	CuisineOptionAmerican        CuisineOption = "American Restaurant"
+	CuisineOptionSouthern        CuisineOption = "Southern Restaurant"
+	CuisineOptionCajunCreole     CuisineOption = "Cajun & Creole Restaurant"
+	CuisineOptionSouthwestern    CuisineOption = "Southwestern Restaurant"
+	CuisineOptionBbq             CuisineOption = "BBQ Restaurant"
+	CuisineOptionSteakhouse      CuisineOption = "Steakhouse"
+	CuisineOptionBurgers         CuisineOption = "Burger Restaurant"
+	CuisineOptionHotDogs         CuisineOption = "Hot Dog Joint"
+	CuisineOptionWings           CuisineOption = "Wings Joint"
+	CuisineOptionFriedChicken    CuisineOption = "Fried Chicken Restaurant"
+	CuisineOptionSandwiches      CuisineOption = "Sandwich Shop"
+	CuisineOptionDeli            CuisineOption = "Deli"
+	CuisineOptionDiner           CuisineOption = "Diner"
+	CuisineOptionHawaiian        CuisineOption = "Hawaiian Restaurant"
+	CuisineOptionCanadian        CuisineOption = "Canadian Restaurant"
+	CuisineOptionMexican         CuisineOption = "Mexican Restaurant"
+	CuisineOptionTacos           CuisineOption = "Taco Shop"
+	CuisineOptionBurritos        CuisineOption = "Burrito Restaurant"
+	CuisineOptionLatinAmerican   CuisineOption = "Latin American Restaurant"
+	CuisineOptionCaribbean       CuisineOption = "Caribbean Restaurant"
+	CuisineOptionJamaican        CuisineOption = "Jamaican Restaurant"
+	CuisineOptionCuban           CuisineOption = "Cuban Restaurant"
+	CuisineOptionPuertoRican     CuisineOption = "Puerto Rican Restaurant"
+	CuisineOptionBrazilian       CuisineOption = "Brazilian Restaurant"
+	CuisineOptionArgentine       CuisineOption = "Argentine Restaurant"
+	CuisineOptionPeruvian        CuisineOption = "Peruvian Restaurant"
+	CuisineOptionColombian       CuisineOption = "Colombian Restaurant"
+	CuisineOptionVenezuelan      CuisineOption = "Venezuelan Restaurant"
+	CuisineOptionSalvadoran      CuisineOption = "Salvadoran Restaurant"
+	CuisineOptionHonduran        CuisineOption = "Honduran Restaurant"
+	CuisineOptionItalian         CuisineOption = "Italian Restaurant"
+	CuisineOptionPizza           CuisineOption = "Pizza Restaurant"
+	CuisineOptionPasta           CuisineOption = "Pasta Restaurant"
+	CuisineOptionFrench          CuisineOption = "French Restaurant"
+	CuisineOptionCreperie        CuisineOption = "Creperie"
+	CuisineOptionSpanish         CuisineOption = "Spanish Restaurant"
+	CuisineOptionTapas           CuisineOption = "Tapas Restaurant"
+	CuisineOptionPortuguese      CuisineOption = "Portuguese Restaurant"
+	CuisineOptionGerman          CuisineOption = "German Restaurant"
+	CuisineOptionAustrian        CuisineOption = "Austrian Restaurant"
+	CuisineOptionSwiss           CuisineOption = "Swiss Restaurant"
+	CuisineOptionFondue          CuisineOption = "Fondue Restaurant"
+	CuisineOptionBritish         CuisineOption = "British Restaurant"
+	CuisineOptionFishAndChips    CuisineOption = "Fish & Chips Shop"
+	CuisineOptionIrish           CuisineOption = "Irish Restaurant"
+	CuisineOptionBelgian         CuisineOption = "Belgian Restaurant"
+	CuisineOptionDutch           CuisineOption = "Dutch Restaurant"
+	CuisineOptionScandinavian    CuisineOption = "Scandinavian Restaurant"
+	CuisineOptionEasternEuropean CuisineOption = "Eastern European Restaurant"
+	CuisineOptionPolish          CuisineOption = "Polish Restaurant"
+	CuisineOptionRussian         CuisineOption = "Russian Restaurant"
+	CuisineOptionEuropean        CuisineOption = "European Restaurant"
+	CuisineOptionMediterranean   CuisineOption = "Mediterranean Restaurant"
+	CuisineOptionGreek           CuisineOption = "Greek Restaurant"
+	CuisineOptionMiddleEastern   CuisineOption = "Middle Eastern Restaurant"
+	CuisineOptionLebanese        CuisineOption = "Lebanese Restaurant"
+	CuisineOptionIsraeli         CuisineOption = "Israeli Restaurant"
+	CuisineOptionJewish          CuisineOption = "Jewish Restaurant"
+	CuisineOptionTurkish         CuisineOption = "Turkish Restaurant"
+	CuisineOptionPersian         CuisineOption = "Persian Restaurant"
+	CuisineOptionEgyptian        CuisineOption = "Egyptian Restaurant"
+	CuisineOptionMoroccan        CuisineOption = "Moroccan Restaurant"
+	CuisineOptionArmenian        CuisineOption = "Armenian Restaurant"
+	CuisineOptionGeorgian        CuisineOption = "Georgian Restaurant"
+	CuisineOptionFalafel         CuisineOption = "Falafel Restaurant"
+	CuisineOptionKebab           CuisineOption = "Kebab Shop"
+	CuisineOptionAfrican         CuisineOption = "African Restaurant"
+	CuisineOptionEthiopian       CuisineOption = "Ethiopian Restaurant"
+	CuisineOptionIndian          CuisineOption = "Indian Restaurant"
+	CuisineOptionPakistani       CuisineOption = "Pakistani Restaurant"
+	CuisineOptionBangladeshi     CuisineOption = "Bangladeshi Restaurant"
+	CuisineOptionSriLankan       CuisineOption = "Sri Lankan Restaurant"
+	CuisineOptionNepalese        CuisineOption = "Nepalese Restaurant"
+	CuisineOptionAfghan          CuisineOption = "Afghan Restaurant"
+	CuisineOptionAsian           CuisineOption = "Asian Restaurant"
+	CuisineOptionChinese         CuisineOption = "Chinese Restaurant"
+	CuisineOptionTaiwanese       CuisineOption = "Taiwanese Restaurant"
+	CuisineOptionHongKong        CuisineOption = "Hong Kong Restaurant"
+	CuisineOptionDimSum          CuisineOption = "Dim Sum Restaurant"
+	CuisineOptionHotPot          CuisineOption = "Hot Pot Restaurant"
+	CuisineOptionDumplings       CuisineOption = "Dumpling Restaurant"
+	CuisineOptionNoodles         CuisineOption = "Noodle Shop"
+	CuisineOptionJapanese        CuisineOption = "Japanese Restaurant"
+	CuisineOptionSushi           CuisineOption = "Sushi Restaurant"
+	CuisineOptionRamen           CuisineOption = "Ramen Restaurant"
+	CuisineOptionYakitori        CuisineOption = "Yakitori Restaurant"
+	CuisineOptionKorean          CuisineOption = "Korean Restaurant"
+	CuisineOptionMongolian       CuisineOption = "Mongolian Restaurant"
+	CuisineOptionThai            CuisineOption = "Thai Restaurant"
+	CuisineOptionVietnamese      CuisineOption = "Vietnamese Restaurant"
+	CuisineOptionFilipino        CuisineOption = "Filipino Restaurant"
+	CuisineOptionMalaysian       CuisineOption = "Malaysian Restaurant"
+	CuisineOptionIndonesian      CuisineOption = "Indonesian Restaurant"
+	CuisineOptionSingaporean     CuisineOption = "Singaporean Restaurant"
+	CuisineOptionBurmese         CuisineOption = "Burmese Restaurant"
+	CuisineOptionCambodian       CuisineOption = "Cambodian Restaurant"
+	CuisineOptionAustralian      CuisineOption = "Australian Restaurant"
+	CuisineOptionSeafood         CuisineOption = "Seafood Restaurant"
+	CuisineOptionPoke            CuisineOption = "Poke Restaurant"
+	CuisineOptionSalads          CuisineOption = "Salad Restaurant"
+	CuisineOptionSoups           CuisineOption = "Soup Restaurant"
+	CuisineOptionBreakfast       CuisineOption = "Breakfast Restaurant"
+	CuisineOptionBrunch          CuisineOption = "Brunch Restaurant"
+	CuisineOptionBagels          CuisineOption = "Bagel Shop"
+	CuisineOptionBuffet          CuisineOption = "Buffet"
+	CuisineOptionFastFood        CuisineOption = "Fast Food Restaurant"
+	CuisineOptionFoodTruck       CuisineOption = "Food Truck"
+	CuisineOptionGastropub       CuisineOption = "Gastropub"
+	CuisineOptionBakery          CuisineOption = "Bakery"
+	CuisineOptionCafe            CuisineOption = "Cafe"
+	CuisineOptionBubbleTea       CuisineOption = "Bubble Tea Shop"
+	CuisineOptionJuiceBar        CuisineOption = "Juice Bar"
+	CuisineOptionDessert         CuisineOption = "Dessert Shop"
+	CuisineOptionIceCream        CuisineOption = "Ice Cream Shop"
+	CuisineOptionDoughnuts       CuisineOption = "Doughnut Shop"
+	CuisineOptionBar             CuisineOption = "Bar"
+	CuisineOptionSportsBar       CuisineOption = "Sports Bar"
+	CuisineOptionWineBar         CuisineOption = "Wine Bar"
+	CuisineOptionWinery          CuisineOption = "Winery"
+	CuisineOptionBrewery         CuisineOption = "Brewery"
+	CuisineOptionCocktailBar     CuisineOption = "Cocktail Bar"
+	CuisineOptionDistillery      CuisineOption = "Distillery"
+	CuisineOptionNightclub       CuisineOption = "Nightclub"
+	CuisineOptionKaraoke         CuisineOption = "Karaoke Bar"
+	CuisineOptionComedyClub      CuisineOption = "Comedy Club"
+	CuisineOptionMusicVenue      CuisineOption = "Music Venue"
+	CuisineOptionDanceClub       CuisineOption = "Dance Club"
+	CuisineOptionPoolHall        CuisineOption = "Pool Hall"
+	CuisineOptionCasino          CuisineOption = "Casino"
+	CuisineOptionBowling         CuisineOption = "Bowling Alley"
+	CuisineOptionMovieTheater    CuisineOption = "Movie Theater"
+	CuisineOptionMuseum          CuisineOption = "Museum"
+	CuisineOptionStadium         CuisineOption = "Stadium"
+	CuisineOptionThemePark       CuisineOption = "Theme Park"
+	CuisineOptionSportsRec       CuisineOption = "Sports & Recreation"
+	CuisineOptionVegan           CuisineOption = "Vegan Restaurant"
+	CuisineOptionVegetarian      CuisineOption = "Vegetarian Restaurant"
+	CuisineOptionKosher          CuisineOption = "Kosher Restaurant"
+	CuisineOptionHalal           CuisineOption = "Halal Restaurant"
+	CuisineOptionGlutenFree      CuisineOption = "Gluten Free Restaurant"
+	CuisineOptionHealthy         CuisineOption = "Healthy Restaurant"
+)
+
+func NewCuisineOptionFromString(s string) (CuisineOption, error) {
+	switch s {
+	case "American Restaurant":
+		return CuisineOptionAmerican, nil
+	case "Southern Restaurant":
+		return CuisineOptionSouthern, nil
+	case "Cajun & Creole Restaurant":
+		return CuisineOptionCajunCreole, nil
+	case "Southwestern Restaurant":
+		return CuisineOptionSouthwestern, nil
+	case "BBQ Restaurant":
+		return CuisineOptionBbq, nil
+	case "Steakhouse":
+		return CuisineOptionSteakhouse, nil
+	case "Burger Restaurant":
+		return CuisineOptionBurgers, nil
+	case "Hot Dog Joint":
+		return CuisineOptionHotDogs, nil
+	case "Wings Joint":
+		return CuisineOptionWings, nil
+	case "Fried Chicken Restaurant":
+		return CuisineOptionFriedChicken, nil
+	case "Sandwich Shop":
+		return CuisineOptionSandwiches, nil
+	case "Deli":
+		return CuisineOptionDeli, nil
+	case "Diner":
+		return CuisineOptionDiner, nil
+	case "Hawaiian Restaurant":
+		return CuisineOptionHawaiian, nil
+	case "Canadian Restaurant":
+		return CuisineOptionCanadian, nil
+	case "Mexican Restaurant":
+		return CuisineOptionMexican, nil
+	case "Taco Shop":
+		return CuisineOptionTacos, nil
+	case "Burrito Restaurant":
+		return CuisineOptionBurritos, nil
+	case "Latin American Restaurant":
+		return CuisineOptionLatinAmerican, nil
+	case "Caribbean Restaurant":
+		return CuisineOptionCaribbean, nil
+	case "Jamaican Restaurant":
+		return CuisineOptionJamaican, nil
+	case "Cuban Restaurant":
+		return CuisineOptionCuban, nil
+	case "Puerto Rican Restaurant":
+		return CuisineOptionPuertoRican, nil
+	case "Brazilian Restaurant":
+		return CuisineOptionBrazilian, nil
+	case "Argentine Restaurant":
+		return CuisineOptionArgentine, nil
+	case "Peruvian Restaurant":
+		return CuisineOptionPeruvian, nil
+	case "Colombian Restaurant":
+		return CuisineOptionColombian, nil
+	case "Venezuelan Restaurant":
+		return CuisineOptionVenezuelan, nil
+	case "Salvadoran Restaurant":
+		return CuisineOptionSalvadoran, nil
+	case "Honduran Restaurant":
+		return CuisineOptionHonduran, nil
+	case "Italian Restaurant":
+		return CuisineOptionItalian, nil
+	case "Pizza Restaurant":
+		return CuisineOptionPizza, nil
+	case "Pasta Restaurant":
+		return CuisineOptionPasta, nil
+	case "French Restaurant":
+		return CuisineOptionFrench, nil
+	case "Creperie":
+		return CuisineOptionCreperie, nil
+	case "Spanish Restaurant":
+		return CuisineOptionSpanish, nil
+	case "Tapas Restaurant":
+		return CuisineOptionTapas, nil
+	case "Portuguese Restaurant":
+		return CuisineOptionPortuguese, nil
+	case "German Restaurant":
+		return CuisineOptionGerman, nil
+	case "Austrian Restaurant":
+		return CuisineOptionAustrian, nil
+	case "Swiss Restaurant":
+		return CuisineOptionSwiss, nil
+	case "Fondue Restaurant":
+		return CuisineOptionFondue, nil
+	case "British Restaurant":
+		return CuisineOptionBritish, nil
+	case "Fish & Chips Shop":
+		return CuisineOptionFishAndChips, nil
+	case "Irish Restaurant":
+		return CuisineOptionIrish, nil
+	case "Belgian Restaurant":
+		return CuisineOptionBelgian, nil
+	case "Dutch Restaurant":
+		return CuisineOptionDutch, nil
+	case "Scandinavian Restaurant":
+		return CuisineOptionScandinavian, nil
+	case "Eastern European Restaurant":
+		return CuisineOptionEasternEuropean, nil
+	case "Polish Restaurant":
+		return CuisineOptionPolish, nil
+	case "Russian Restaurant":
+		return CuisineOptionRussian, nil
+	case "European Restaurant":
+		return CuisineOptionEuropean, nil
+	case "Mediterranean Restaurant":
+		return CuisineOptionMediterranean, nil
+	case "Greek Restaurant":
+		return CuisineOptionGreek, nil
+	case "Middle Eastern Restaurant":
+		return CuisineOptionMiddleEastern, nil
+	case "Lebanese Restaurant":
+		return CuisineOptionLebanese, nil
+	case "Israeli Restaurant":
+		return CuisineOptionIsraeli, nil
+	case "Jewish Restaurant":
+		return CuisineOptionJewish, nil
+	case "Turkish Restaurant":
+		return CuisineOptionTurkish, nil
+	case "Persian Restaurant":
+		return CuisineOptionPersian, nil
+	case "Egyptian Restaurant":
+		return CuisineOptionEgyptian, nil
+	case "Moroccan Restaurant":
+		return CuisineOptionMoroccan, nil
+	case "Armenian Restaurant":
+		return CuisineOptionArmenian, nil
+	case "Georgian Restaurant":
+		return CuisineOptionGeorgian, nil
+	case "Falafel Restaurant":
+		return CuisineOptionFalafel, nil
+	case "Kebab Shop":
+		return CuisineOptionKebab, nil
+	case "African Restaurant":
+		return CuisineOptionAfrican, nil
+	case "Ethiopian Restaurant":
+		return CuisineOptionEthiopian, nil
+	case "Indian Restaurant":
+		return CuisineOptionIndian, nil
+	case "Pakistani Restaurant":
+		return CuisineOptionPakistani, nil
+	case "Bangladeshi Restaurant":
+		return CuisineOptionBangladeshi, nil
+	case "Sri Lankan Restaurant":
+		return CuisineOptionSriLankan, nil
+	case "Nepalese Restaurant":
+		return CuisineOptionNepalese, nil
+	case "Afghan Restaurant":
+		return CuisineOptionAfghan, nil
+	case "Asian Restaurant":
+		return CuisineOptionAsian, nil
+	case "Chinese Restaurant":
+		return CuisineOptionChinese, nil
+	case "Taiwanese Restaurant":
+		return CuisineOptionTaiwanese, nil
+	case "Hong Kong Restaurant":
+		return CuisineOptionHongKong, nil
+	case "Dim Sum Restaurant":
+		return CuisineOptionDimSum, nil
+	case "Hot Pot Restaurant":
+		return CuisineOptionHotPot, nil
+	case "Dumpling Restaurant":
+		return CuisineOptionDumplings, nil
+	case "Noodle Shop":
+		return CuisineOptionNoodles, nil
+	case "Japanese Restaurant":
+		return CuisineOptionJapanese, nil
+	case "Sushi Restaurant":
+		return CuisineOptionSushi, nil
+	case "Ramen Restaurant":
+		return CuisineOptionRamen, nil
+	case "Yakitori Restaurant":
+		return CuisineOptionYakitori, nil
+	case "Korean Restaurant":
+		return CuisineOptionKorean, nil
+	case "Mongolian Restaurant":
+		return CuisineOptionMongolian, nil
+	case "Thai Restaurant":
+		return CuisineOptionThai, nil
+	case "Vietnamese Restaurant":
+		return CuisineOptionVietnamese, nil
+	case "Filipino Restaurant":
+		return CuisineOptionFilipino, nil
+	case "Malaysian Restaurant":
+		return CuisineOptionMalaysian, nil
+	case "Indonesian Restaurant":
+		return CuisineOptionIndonesian, nil
+	case "Singaporean Restaurant":
+		return CuisineOptionSingaporean, nil
+	case "Burmese Restaurant":
+		return CuisineOptionBurmese, nil
+	case "Cambodian Restaurant":
+		return CuisineOptionCambodian, nil
+	case "Australian Restaurant":
+		return CuisineOptionAustralian, nil
+	case "Seafood Restaurant":
+		return CuisineOptionSeafood, nil
+	case "Poke Restaurant":
+		return CuisineOptionPoke, nil
+	case "Salad Restaurant":
+		return CuisineOptionSalads, nil
+	case "Soup Restaurant":
+		return CuisineOptionSoups, nil
+	case "Breakfast Restaurant":
+		return CuisineOptionBreakfast, nil
+	case "Brunch Restaurant":
+		return CuisineOptionBrunch, nil
+	case "Bagel Shop":
+		return CuisineOptionBagels, nil
+	case "Buffet":
+		return CuisineOptionBuffet, nil
+	case "Fast Food Restaurant":
+		return CuisineOptionFastFood, nil
+	case "Food Truck":
+		return CuisineOptionFoodTruck, nil
+	case "Gastropub":
+		return CuisineOptionGastropub, nil
+	case "Bakery":
+		return CuisineOptionBakery, nil
+	case "Cafe":
+		return CuisineOptionCafe, nil
+	case "Bubble Tea Shop":
+		return CuisineOptionBubbleTea, nil
+	case "Juice Bar":
+		return CuisineOptionJuiceBar, nil
+	case "Dessert Shop":
+		return CuisineOptionDessert, nil
+	case "Ice Cream Shop":
+		return CuisineOptionIceCream, nil
+	case "Doughnut Shop":
+		return CuisineOptionDoughnuts, nil
+	case "Bar":
+		return CuisineOptionBar, nil
+	case "Sports Bar":
+		return CuisineOptionSportsBar, nil
+	case "Wine Bar":
+		return CuisineOptionWineBar, nil
+	case "Winery":
+		return CuisineOptionWinery, nil
+	case "Brewery":
+		return CuisineOptionBrewery, nil
+	case "Cocktail Bar":
+		return CuisineOptionCocktailBar, nil
+	case "Distillery":
+		return CuisineOptionDistillery, nil
+	case "Nightclub":
+		return CuisineOptionNightclub, nil
+	case "Karaoke Bar":
+		return CuisineOptionKaraoke, nil
+	case "Comedy Club":
+		return CuisineOptionComedyClub, nil
+	case "Music Venue":
+		return CuisineOptionMusicVenue, nil
+	case "Dance Club":
+		return CuisineOptionDanceClub, nil
+	case "Pool Hall":
+		return CuisineOptionPoolHall, nil
+	case "Casino":
+		return CuisineOptionCasino, nil
+	case "Bowling Alley":
+		return CuisineOptionBowling, nil
+	case "Movie Theater":
+		return CuisineOptionMovieTheater, nil
+	case "Museum":
+		return CuisineOptionMuseum, nil
+	case "Stadium":
+		return CuisineOptionStadium, nil
+	case "Theme Park":
+		return CuisineOptionThemePark, nil
+	case "Sports & Recreation":
+		return CuisineOptionSportsRec, nil
+	case "Vegan Restaurant":
+		return CuisineOptionVegan, nil
+	case "Vegetarian Restaurant":
+		return CuisineOptionVegetarian, nil
+	case "Kosher Restaurant":
+		return CuisineOptionKosher, nil
+	case "Halal Restaurant":
+		return CuisineOptionHalal, nil
+	case "Gluten Free Restaurant":
+		return CuisineOptionGlutenFree, nil
+	case "Healthy Restaurant":
+		return CuisineOptionHealthy, nil
+	}
+	var t CuisineOption
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (c CuisineOption) Ptr() *CuisineOption {
+	return &c
+}
+
 type EmptyObject struct {
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted

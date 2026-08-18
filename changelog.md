@@ -1,3 +1,9 @@
+## v21.1.0 - 2026-08-18
+### Added
+* **`CuisineOption`** — new string enum type in the root package with 130+ constants covering food, beverage, and entertainment venue categories (e.g. `CuisineOptionPizza`, `CuisineOptionSushi`, `CuisineOptionBrewery`), plus `NewCuisineOptionFromString()` constructor and `Ptr()` helper.
+* **`LocationRating`** — new struct in the `users` package representing a customer rating with a `Value float64` (1–5 scale) and optional `Count *int` (number of ratings), with full getter, setter, marshal, and unmarshal support.
+* **`LocationAttributes.Cuisine`**, **`LocationAttributes.Rating`**, and **`LocationAttributes.PriceLevel`** — three new optional fields on `LocationAttributes` exposing venue category, customer rating, and price level (1–4) respectively, each with typed getters and setters.
+
 ## v21.0.1 - 2026-08-07
 * chore: add godoc comments to GetLocationsByUserRequest filter fields
 * Improve developer experience by documenting the filter fields on

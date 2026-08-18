@@ -2836,6 +2836,30 @@ func TestSettersLocationAttributes(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
+	t.Run("SetCuisine", func(t *testing.T) {
+		obj := &LocationAttributes{}
+		var fernTestValueCuisine *kardgosdk.CuisineOption
+		obj.SetCuisine(fernTestValueCuisine)
+		assert.Equal(t, fernTestValueCuisine, obj.Cuisine)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
+	t.Run("SetRating", func(t *testing.T) {
+		obj := &LocationAttributes{}
+		var fernTestValueRating *LocationRating
+		obj.SetRating(fernTestValueRating)
+		assert.Equal(t, fernTestValueRating, obj.Rating)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
+	t.Run("SetPriceLevel", func(t *testing.T) {
+		obj := &LocationAttributes{}
+		var fernTestValuePriceLevel *int
+		obj.SetPriceLevel(fernTestValuePriceLevel)
+		assert.Equal(t, fernTestValuePriceLevel, obj.PriceLevel)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
 }
 
 func TestGettersLocationAttributes(t *testing.T) {
@@ -3017,6 +3041,105 @@ func TestGettersLocationAttributes(t *testing.T) {
 		_ = obj.GetPartnerIds() // Should return zero value
 	})
 
+	t.Run("GetCuisine", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &LocationAttributes{}
+		var expected *kardgosdk.CuisineOption
+		obj.Cuisine = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetCuisine(), "getter should return the property value")
+	})
+
+	t.Run("GetCuisine_NilValue", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &LocationAttributes{}
+		obj.Cuisine = nil
+
+		// Act & Assert
+		assert.Nil(t, obj.GetCuisine(), "getter should return nil when property is nil")
+	})
+
+	t.Run("GetCuisine_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *LocationAttributes
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetCuisine() // Should return zero value
+	})
+
+	t.Run("GetRating", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &LocationAttributes{}
+		var expected *LocationRating
+		obj.Rating = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetRating(), "getter should return the property value")
+	})
+
+	t.Run("GetRating_NilValue", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &LocationAttributes{}
+		obj.Rating = nil
+
+		// Act & Assert
+		assert.Nil(t, obj.GetRating(), "getter should return nil when property is nil")
+	})
+
+	t.Run("GetRating_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *LocationAttributes
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetRating() // Should return zero value
+	})
+
+	t.Run("GetPriceLevel", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &LocationAttributes{}
+		var expected *int
+		obj.PriceLevel = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetPriceLevel(), "getter should return the property value")
+	})
+
+	t.Run("GetPriceLevel_NilValue", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &LocationAttributes{}
+		obj.PriceLevel = nil
+
+		// Act & Assert
+		assert.Nil(t, obj.GetPriceLevel(), "getter should return nil when property is nil")
+	})
+
+	t.Run("GetPriceLevel_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *LocationAttributes
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetPriceLevel() // Should return zero value
+	})
+
 }
 
 func TestSettersMarkExplicitLocationAttributes(t *testing.T) {
@@ -3183,6 +3306,99 @@ func TestSettersMarkExplicitLocationAttributes(t *testing.T) {
 
 		// Act
 		obj.SetPartnerIds(fernTestValuePartnerIds)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+	t.Run("SetCuisine_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &LocationAttributes{}
+		var fernTestValueCuisine *kardgosdk.CuisineOption
+
+		// Act
+		obj.SetCuisine(fernTestValueCuisine)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+	t.Run("SetRating_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &LocationAttributes{}
+		var fernTestValueRating *LocationRating
+
+		// Act
+		obj.SetRating(fernTestValueRating)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+	t.Run("SetPriceLevel_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &LocationAttributes{}
+		var fernTestValuePriceLevel *int
+
+		// Act
+		obj.SetPriceLevel(fernTestValuePriceLevel)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -3531,6 +3747,149 @@ func TestSettersMarkExplicitLocationPartnerId(t *testing.T) {
 
 		// Act
 		obj.SetId(fernTestValueId)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+}
+
+func TestSettersLocationRating(t *testing.T) {
+	t.Run("SetValue", func(t *testing.T) {
+		obj := &LocationRating{}
+		var fernTestValueValue float64
+		obj.SetValue(fernTestValueValue)
+		assert.Equal(t, fernTestValueValue, obj.Value)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
+	t.Run("SetCount", func(t *testing.T) {
+		obj := &LocationRating{}
+		var fernTestValueCount *int
+		obj.SetCount(fernTestValueCount)
+		assert.Equal(t, fernTestValueCount, obj.Count)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
+}
+
+func TestGettersLocationRating(t *testing.T) {
+	t.Run("GetValue", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &LocationRating{}
+		var expected float64
+		obj.Value = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetValue(), "getter should return the property value")
+	})
+
+	t.Run("GetValue_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *LocationRating
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetValue() // Should return zero value
+	})
+
+	t.Run("GetCount", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &LocationRating{}
+		var expected *int
+		obj.Count = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetCount(), "getter should return the property value")
+	})
+
+	t.Run("GetCount_NilValue", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &LocationRating{}
+		obj.Count = nil
+
+		// Act & Assert
+		assert.Nil(t, obj.GetCount(), "getter should return nil when property is nil")
+	})
+
+	t.Run("GetCount_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *LocationRating
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetCount() // Should return zero value
+	})
+
+}
+
+func TestSettersMarkExplicitLocationRating(t *testing.T) {
+	t.Run("SetValue_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &LocationRating{}
+		var fernTestValueValue float64
+
+		// Act
+		obj.SetValue(fernTestValueValue)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+	t.Run("SetCount_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &LocationRating{}
+		var fernTestValueCount *int
+
+		// Act
+		obj.SetCount(fernTestValueCount)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -8824,6 +9183,39 @@ func TestJSONMarshalingLocationPartnerId(t *testing.T) {
 	})
 }
 
+func TestJSONMarshalingLocationRating(t *testing.T) {
+	t.Run("MarshalUnmarshal", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &LocationRating{}
+
+		// Act - Marshal to JSON
+		data, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed")
+		assert.NotNil(t, data, "marshaled data should not be nil")
+		assert.NotEmpty(t, data, "marshaled data should not be empty")
+
+		// Unmarshal back and verify round-trip
+		var unmarshaled LocationRating
+		err = json.Unmarshal(data, &unmarshaled)
+		assert.NoError(t, err, "round-trip unmarshal should succeed")
+	})
+
+	t.Run("UnmarshalInvalidJSON", func(t *testing.T) {
+		t.Parallel()
+		var obj LocationRating
+		err := json.Unmarshal([]byte(`{invalid json}`), &obj)
+		assert.Error(t, err, "unmarshaling invalid JSON should return an error")
+	})
+
+	t.Run("UnmarshalEmptyObject", func(t *testing.T) {
+		t.Parallel()
+		var obj LocationRating
+		err := json.Unmarshal([]byte(`{}`), &obj)
+		assert.NoError(t, err, "unmarshaling empty object should succeed")
+	})
+}
+
 func TestJSONMarshalingLocationRelationships(t *testing.T) {
 	t.Run("MarshalUnmarshal", func(t *testing.T) {
 		t.Parallel()
@@ -9531,6 +9923,22 @@ func TestStringLocationPartnerId(t *testing.T) {
 	t.Run("StringMethod_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *LocationPartnerId
+		result := obj.String()
+		assert.Equal(t, "<nil>", result, "String() should return <nil> for nil receiver")
+	})
+}
+
+func TestStringLocationRating(t *testing.T) {
+	t.Run("StringMethod", func(t *testing.T) {
+		t.Parallel()
+		obj := &LocationRating{}
+		result := obj.String()
+		assert.NotEmpty(t, result, "String() should return a non-empty representation")
+	})
+
+	t.Run("StringMethod_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *LocationRating
 		result := obj.String()
 		assert.Equal(t, "<nil>", result, "String() should return <nil> for nil receiver")
 	})
@@ -10331,6 +10739,29 @@ func TestExtraPropertiesLocationPartnerId(t *testing.T) {
 	t.Run("GetExtraProperties_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *LocationPartnerId
+		extraProps := obj.GetExtraProperties()
+		assert.Nil(t, extraProps, "nil receiver should return nil without panicking")
+	})
+}
+
+func TestExtraPropertiesLocationRating(t *testing.T) {
+	t.Run("GetExtraProperties", func(t *testing.T) {
+		t.Parallel()
+		obj := &LocationRating{}
+		// Should not panic when calling GetExtraProperties()
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("GetExtraProperties() panicked: %v", r)
+			}
+		}()
+		extraProps := obj.GetExtraProperties()
+		// Result can be nil or an empty/non-empty map
+		_ = extraProps
+	})
+
+	t.Run("GetExtraProperties_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *LocationRating
 		extraProps := obj.GetExtraProperties()
 		assert.Nil(t, extraProps, "nil receiver should return nil without panicking")
 	})

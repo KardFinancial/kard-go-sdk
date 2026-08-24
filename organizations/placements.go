@@ -115,13 +115,16 @@ func (l *ListPlacementsRequest) SetPageSize(pageSize *int) {
 // Attributes for a batch-activation placement. Slot detail is exposed via `relationships.slots` (resource identifiers) and the `batchActivationSlot` entries in `included`; request `?include=slots` (or a deeper path) to get the slot details.
 var (
 	batchActivationPlacementAttributesFieldName            = big.NewInt(1 << 0)
-	batchActivationPlacementAttributesFieldOrganizationId  = big.NewInt(1 << 1)
-	batchActivationPlacementAttributesFieldRefreshInterval = big.NewInt(1 << 2)
+	batchActivationPlacementAttributesFieldStatus          = big.NewInt(1 << 1)
+	batchActivationPlacementAttributesFieldOrganizationId  = big.NewInt(1 << 2)
+	batchActivationPlacementAttributesFieldRefreshInterval = big.NewInt(1 << 3)
 )
 
 type BatchActivationPlacementAttributes struct {
 	// Name of the placement
 	Name string `json:"name" url:"name"`
+	// Whether the placement serves content and fires scheduled deliveries. An INACTIVE placement keeps its configuration but serves empty content and skips scheduled deliveries.
+	Status PlacementStatus `json:"status" url:"status"`
 	// ID of the organization this placement belongs to
 	OrganizationId string `json:"organizationId" url:"organizationId"`
 	// ISO-8601 duration that controls how often the activation cohort refreshes (e.g. "P7D" for weekly).
@@ -139,6 +142,13 @@ func (b *BatchActivationPlacementAttributes) GetName() string {
 		return ""
 	}
 	return b.Name
+}
+
+func (b *BatchActivationPlacementAttributes) GetStatus() PlacementStatus {
+	if b == nil {
+		return ""
+	}
+	return b.Status
 }
 
 func (b *BatchActivationPlacementAttributes) GetOrganizationId() string {
@@ -174,6 +184,13 @@ func (b *BatchActivationPlacementAttributes) require(field *big.Int) {
 func (b *BatchActivationPlacementAttributes) SetName(name string) {
 	b.Name = name
 	b.require(batchActivationPlacementAttributesFieldName)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchActivationPlacementAttributes) SetStatus(status PlacementStatus) {
+	b.Status = status
+	b.require(batchActivationPlacementAttributesFieldStatus)
 }
 
 // SetOrganizationId sets the OrganizationId field and marks it as non-optional;
@@ -924,13 +941,16 @@ func (c *ContentStrategyInclusion) String() string {
 // Attributes for creating a batch-activation placement
 var (
 	createBatchActivationAttributesFieldName            = big.NewInt(1 << 0)
-	createBatchActivationAttributesFieldRefreshInterval = big.NewInt(1 << 1)
-	createBatchActivationAttributesFieldSlots           = big.NewInt(1 << 2)
+	createBatchActivationAttributesFieldStatus          = big.NewInt(1 << 1)
+	createBatchActivationAttributesFieldRefreshInterval = big.NewInt(1 << 2)
+	createBatchActivationAttributesFieldSlots           = big.NewInt(1 << 3)
 )
 
 type CreateBatchActivationAttributes struct {
 	// Name of the placement
 	Name string `json:"name" url:"name"`
+	// Placement status. Defaults to ACTIVE on create; when omitted on update, the current status is preserved.
+	Status *PlacementStatus `json:"status,omitempty" url:"status,omitempty"`
 	// ISO-8601 duration controlling how often the activation cohort refreshes
 	RefreshInterval string `json:"refreshInterval" url:"refreshInterval"`
 	// Slots that make up the activation cohort
@@ -948,6 +968,13 @@ func (c *CreateBatchActivationAttributes) GetName() string {
 		return ""
 	}
 	return c.Name
+}
+
+func (c *CreateBatchActivationAttributes) GetStatus() *PlacementStatus {
+	if c == nil {
+		return nil
+	}
+	return c.Status
 }
 
 func (c *CreateBatchActivationAttributes) GetRefreshInterval() string {
@@ -983,6 +1010,13 @@ func (c *CreateBatchActivationAttributes) require(field *big.Int) {
 func (c *CreateBatchActivationAttributes) SetName(name string) {
 	c.Name = name
 	c.require(createBatchActivationAttributesFieldName)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateBatchActivationAttributes) SetStatus(status *PlacementStatus) {
+	c.Status = status
+	c.require(createBatchActivationAttributesFieldStatus)
 }
 
 // SetRefreshInterval sets the RefreshInterval field and marks it as non-optional;
@@ -1250,14 +1284,17 @@ func (c *CreateBatchActivationSlot) String() string {
 // Attributes for creating an email placement
 var (
 	createEmailAttributesFieldName              = big.NewInt(1 << 0)
-	createEmailAttributesFieldAvailableSlots    = big.NewInt(1 << 1)
-	createEmailAttributesFieldCadence           = big.NewInt(1 << 2)
-	createEmailAttributesFieldContentStrategyId = big.NewInt(1 << 3)
+	createEmailAttributesFieldStatus            = big.NewInt(1 << 1)
+	createEmailAttributesFieldAvailableSlots    = big.NewInt(1 << 2)
+	createEmailAttributesFieldCadence           = big.NewInt(1 << 3)
+	createEmailAttributesFieldContentStrategyId = big.NewInt(1 << 4)
 )
 
 type CreateEmailAttributes struct {
 	// Name of the placement
 	Name string `json:"name" url:"name"`
+	// Placement status. Defaults to ACTIVE on create; when omitted on update, the current status is preserved.
+	Status *PlacementStatus `json:"status,omitempty" url:"status,omitempty"`
 	// Number of available slots (minimum 1)
 	AvailableSlots int `json:"availableSlots" url:"availableSlots"`
 	// Delivery cadence for the email
@@ -1277,6 +1314,13 @@ func (c *CreateEmailAttributes) GetName() string {
 		return ""
 	}
 	return c.Name
+}
+
+func (c *CreateEmailAttributes) GetStatus() *PlacementStatus {
+	if c == nil {
+		return nil
+	}
+	return c.Status
 }
 
 func (c *CreateEmailAttributes) GetAvailableSlots() int {
@@ -1319,6 +1363,13 @@ func (c *CreateEmailAttributes) require(field *big.Int) {
 func (c *CreateEmailAttributes) SetName(name string) {
 	c.Name = name
 	c.require(createEmailAttributesFieldName)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateEmailAttributes) SetStatus(status *PlacementStatus) {
+	c.Status = status
+	c.require(createEmailAttributesFieldStatus)
 }
 
 // SetAvailableSlots sets the AvailableSlots field and marks it as non-optional;
@@ -1472,13 +1523,16 @@ func (c *CreateEmailPlacementData) String() string {
 
 // Attributes for creating a group placement
 var (
-	createGroupAttributesFieldName  = big.NewInt(1 << 0)
-	createGroupAttributesFieldSlots = big.NewInt(1 << 1)
+	createGroupAttributesFieldName   = big.NewInt(1 << 0)
+	createGroupAttributesFieldStatus = big.NewInt(1 << 1)
+	createGroupAttributesFieldSlots  = big.NewInt(1 << 2)
 )
 
 type CreateGroupAttributes struct {
 	// Name of the placement
 	Name string `json:"name" url:"name"`
+	// Placement status. Defaults to ACTIVE on create; when omitted on update, the current status is preserved.
+	Status *PlacementStatus `json:"status,omitempty" url:"status,omitempty"`
 	// Slots that make up the group
 	Slots []*CreateBatchActivationSlot `json:"slots" url:"slots"`
 
@@ -1494,6 +1548,13 @@ func (c *CreateGroupAttributes) GetName() string {
 		return ""
 	}
 	return c.Name
+}
+
+func (c *CreateGroupAttributes) GetStatus() *PlacementStatus {
+	if c == nil {
+		return nil
+	}
+	return c.Status
 }
 
 func (c *CreateGroupAttributes) GetSlots() []*CreateBatchActivationSlot {
@@ -1522,6 +1583,13 @@ func (c *CreateGroupAttributes) require(field *big.Int) {
 func (c *CreateGroupAttributes) SetName(name string) {
 	c.Name = name
 	c.require(createGroupAttributesFieldName)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateGroupAttributes) SetStatus(status *PlacementStatus) {
+	c.Status = status
+	c.require(createGroupAttributesFieldStatus)
 }
 
 // SetSlots sets the Slots field and marks it as non-optional;
@@ -1938,13 +2006,16 @@ func (c *CreatePlacementRequestBody) String() string {
 // Attributes for creating a push-notification placement
 var (
 	createPushNotificationAttributesFieldName              = big.NewInt(1 << 0)
-	createPushNotificationAttributesFieldCadence           = big.NewInt(1 << 1)
-	createPushNotificationAttributesFieldContentStrategyId = big.NewInt(1 << 2)
+	createPushNotificationAttributesFieldStatus            = big.NewInt(1 << 1)
+	createPushNotificationAttributesFieldCadence           = big.NewInt(1 << 2)
+	createPushNotificationAttributesFieldContentStrategyId = big.NewInt(1 << 3)
 )
 
 type CreatePushNotificationAttributes struct {
 	// Name of the placement
 	Name string `json:"name" url:"name"`
+	// Placement status. Defaults to ACTIVE on create; when omitted on update, the current status is preserved.
+	Status *PlacementStatus `json:"status,omitempty" url:"status,omitempty"`
 	// Delivery cadence for the notification
 	Cadence *Cadence `json:"cadence" url:"cadence"`
 	// ID of the content strategy to link this placement to
@@ -1962,6 +2033,13 @@ func (c *CreatePushNotificationAttributes) GetName() string {
 		return ""
 	}
 	return c.Name
+}
+
+func (c *CreatePushNotificationAttributes) GetStatus() *PlacementStatus {
+	if c == nil {
+		return nil
+	}
+	return c.Status
 }
 
 func (c *CreatePushNotificationAttributes) GetCadence() *Cadence {
@@ -1997,6 +2075,13 @@ func (c *CreatePushNotificationAttributes) require(field *big.Int) {
 func (c *CreatePushNotificationAttributes) SetName(name string) {
 	c.Name = name
 	c.require(createPushNotificationAttributesFieldName)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreatePushNotificationAttributes) SetStatus(status *PlacementStatus) {
+	c.Status = status
+	c.require(createPushNotificationAttributesFieldStatus)
 }
 
 // SetCadence sets the Cadence field and marks it as non-optional;
@@ -2144,13 +2229,16 @@ func (c *CreatePushNotificationPlacementData) String() string {
 // Attributes for creating a standard placement
 var (
 	createStandardAttributesFieldName              = big.NewInt(1 << 0)
-	createStandardAttributesFieldAvailableSlots    = big.NewInt(1 << 1)
-	createStandardAttributesFieldContentStrategyId = big.NewInt(1 << 2)
+	createStandardAttributesFieldStatus            = big.NewInt(1 << 1)
+	createStandardAttributesFieldAvailableSlots    = big.NewInt(1 << 2)
+	createStandardAttributesFieldContentStrategyId = big.NewInt(1 << 3)
 )
 
 type CreateStandardAttributes struct {
 	// Name of the placement
 	Name string `json:"name" url:"name"`
+	// Placement status. Defaults to ACTIVE on create; when omitted on update, the current status is preserved.
+	Status *PlacementStatus `json:"status,omitempty" url:"status,omitempty"`
 	// Number of available slots (minimum 1)
 	AvailableSlots int `json:"availableSlots" url:"availableSlots"`
 	// ID of the content strategy to link this placement to
@@ -2168,6 +2256,13 @@ func (c *CreateStandardAttributes) GetName() string {
 		return ""
 	}
 	return c.Name
+}
+
+func (c *CreateStandardAttributes) GetStatus() *PlacementStatus {
+	if c == nil {
+		return nil
+	}
+	return c.Status
 }
 
 func (c *CreateStandardAttributes) GetAvailableSlots() int {
@@ -2203,6 +2298,13 @@ func (c *CreateStandardAttributes) require(field *big.Int) {
 func (c *CreateStandardAttributes) SetName(name string) {
 	c.Name = name
 	c.require(createStandardAttributesFieldName)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateStandardAttributes) SetStatus(status *PlacementStatus) {
+	c.Status = status
+	c.require(createStandardAttributesFieldStatus)
 }
 
 // SetAvailableSlots sets the AvailableSlots field and marks it as non-optional;
@@ -2388,15 +2490,18 @@ func (d DayOfWeek) Ptr() *DayOfWeek {
 // Attributes for an email placement
 var (
 	emailPlacementAttributesFieldName              = big.NewInt(1 << 0)
-	emailPlacementAttributesFieldOrganizationId    = big.NewInt(1 << 1)
-	emailPlacementAttributesFieldAvailableSlots    = big.NewInt(1 << 2)
-	emailPlacementAttributesFieldCadence           = big.NewInt(1 << 3)
-	emailPlacementAttributesFieldContentStrategyId = big.NewInt(1 << 4)
+	emailPlacementAttributesFieldStatus            = big.NewInt(1 << 1)
+	emailPlacementAttributesFieldOrganizationId    = big.NewInt(1 << 2)
+	emailPlacementAttributesFieldAvailableSlots    = big.NewInt(1 << 3)
+	emailPlacementAttributesFieldCadence           = big.NewInt(1 << 4)
+	emailPlacementAttributesFieldContentStrategyId = big.NewInt(1 << 5)
 )
 
 type EmailPlacementAttributes struct {
 	// Name of the placement
 	Name string `json:"name" url:"name"`
+	// Whether the placement serves content and fires scheduled deliveries. An INACTIVE placement keeps its configuration but serves empty content and skips scheduled deliveries.
+	Status PlacementStatus `json:"status" url:"status"`
 	// ID of the organization this placement belongs to
 	OrganizationId string `json:"organizationId" url:"organizationId"`
 	// Number of available slots
@@ -2418,6 +2523,13 @@ func (e *EmailPlacementAttributes) GetName() string {
 		return ""
 	}
 	return e.Name
+}
+
+func (e *EmailPlacementAttributes) GetStatus() PlacementStatus {
+	if e == nil {
+		return ""
+	}
+	return e.Status
 }
 
 func (e *EmailPlacementAttributes) GetOrganizationId() string {
@@ -2467,6 +2579,13 @@ func (e *EmailPlacementAttributes) require(field *big.Int) {
 func (e *EmailPlacementAttributes) SetName(name string) {
 	e.Name = name
 	e.require(emailPlacementAttributesFieldName)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EmailPlacementAttributes) SetStatus(status PlacementStatus) {
+	e.Status = status
+	e.require(emailPlacementAttributesFieldStatus)
 }
 
 // SetOrganizationId sets the OrganizationId field and marks it as non-optional;
@@ -2661,12 +2780,15 @@ func (e *EmailPlacementData) String() string {
 // Attributes for a group placement. A group is configured like a batch-activation placement but has no refreshInterval. Slot detail is exposed via `relationships.slots` (resource identifiers) and the `batchActivationSlot` entries in `included`; request `?include=slots` (or a deeper path) to get the slot details.
 var (
 	groupPlacementAttributesFieldName           = big.NewInt(1 << 0)
-	groupPlacementAttributesFieldOrganizationId = big.NewInt(1 << 1)
+	groupPlacementAttributesFieldStatus         = big.NewInt(1 << 1)
+	groupPlacementAttributesFieldOrganizationId = big.NewInt(1 << 2)
 )
 
 type GroupPlacementAttributes struct {
 	// Name of the placement
 	Name string `json:"name" url:"name"`
+	// Whether the placement serves content and fires scheduled deliveries. An INACTIVE placement keeps its configuration but serves empty content and skips scheduled deliveries.
+	Status PlacementStatus `json:"status" url:"status"`
 	// ID of the organization this placement belongs to
 	OrganizationId string `json:"organizationId" url:"organizationId"`
 
@@ -2682,6 +2804,13 @@ func (g *GroupPlacementAttributes) GetName() string {
 		return ""
 	}
 	return g.Name
+}
+
+func (g *GroupPlacementAttributes) GetStatus() PlacementStatus {
+	if g == nil {
+		return ""
+	}
+	return g.Status
 }
 
 func (g *GroupPlacementAttributes) GetOrganizationId() string {
@@ -2710,6 +2839,13 @@ func (g *GroupPlacementAttributes) require(field *big.Int) {
 func (g *GroupPlacementAttributes) SetName(name string) {
 	g.Name = name
 	g.require(groupPlacementAttributesFieldName)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GroupPlacementAttributes) SetStatus(status PlacementStatus) {
+	g.Status = status
+	g.require(groupPlacementAttributesFieldStatus)
 }
 
 // SetOrganizationId sets the OrganizationId field and marks it as non-optional;
@@ -3073,14 +3209,17 @@ func (i *IncludedResource) validate() error {
 // Attributes for a standard placement
 var (
 	placementAttributesFieldName              = big.NewInt(1 << 0)
-	placementAttributesFieldOrganizationId    = big.NewInt(1 << 1)
-	placementAttributesFieldAvailableSlots    = big.NewInt(1 << 2)
-	placementAttributesFieldContentStrategyId = big.NewInt(1 << 3)
+	placementAttributesFieldStatus            = big.NewInt(1 << 1)
+	placementAttributesFieldOrganizationId    = big.NewInt(1 << 2)
+	placementAttributesFieldAvailableSlots    = big.NewInt(1 << 3)
+	placementAttributesFieldContentStrategyId = big.NewInt(1 << 4)
 )
 
 type PlacementAttributes struct {
 	// Name of the placement
 	Name string `json:"name" url:"name"`
+	// Whether the placement serves content and fires scheduled deliveries. An INACTIVE placement keeps its configuration but serves empty content and skips scheduled deliveries.
+	Status PlacementStatus `json:"status" url:"status"`
 	// ID of the organization this placement belongs to
 	OrganizationId string `json:"organizationId" url:"organizationId"`
 	// Number of available slots
@@ -3100,6 +3239,13 @@ func (p *PlacementAttributes) GetName() string {
 		return ""
 	}
 	return p.Name
+}
+
+func (p *PlacementAttributes) GetStatus() PlacementStatus {
+	if p == nil {
+		return ""
+	}
+	return p.Status
 }
 
 func (p *PlacementAttributes) GetOrganizationId() string {
@@ -3142,6 +3288,13 @@ func (p *PlacementAttributes) require(field *big.Int) {
 func (p *PlacementAttributes) SetName(name string) {
 	p.Name = name
 	p.require(placementAttributesFieldName)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlacementAttributes) SetStatus(status PlacementStatus) {
+	p.Status = status
+	p.require(placementAttributesFieldStatus)
 }
 
 // SetOrganizationId sets the OrganizationId field and marks it as non-optional;
@@ -3841,6 +3994,29 @@ func (p *PlacementResource) String() string {
 	return fmt.Sprintf("%#v", p)
 }
 
+// Whether the placement serves content and fires scheduled deliveries. INACTIVE keeps the placement but serves empty content and skips scheduled deliveries.
+type PlacementStatus string
+
+const (
+	PlacementStatusActive   PlacementStatus = "ACTIVE"
+	PlacementStatusInactive PlacementStatus = "INACTIVE"
+)
+
+func NewPlacementStatusFromString(s string) (PlacementStatus, error) {
+	switch s {
+	case "ACTIVE":
+		return PlacementStatusActive, nil
+	case "INACTIVE":
+		return PlacementStatusInactive, nil
+	}
+	var t PlacementStatus
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (p PlacementStatus) Ptr() *PlacementStatus {
+	return &p
+}
+
 // Placement type discriminator used as a list filter
 type PlacementTypeFilter string
 
@@ -3876,14 +4052,17 @@ func (p PlacementTypeFilter) Ptr() *PlacementTypeFilter {
 // Attributes for a push-notification placement
 var (
 	pushNotificationPlacementAttributesFieldName              = big.NewInt(1 << 0)
-	pushNotificationPlacementAttributesFieldOrganizationId    = big.NewInt(1 << 1)
-	pushNotificationPlacementAttributesFieldCadence           = big.NewInt(1 << 2)
-	pushNotificationPlacementAttributesFieldContentStrategyId = big.NewInt(1 << 3)
+	pushNotificationPlacementAttributesFieldStatus            = big.NewInt(1 << 1)
+	pushNotificationPlacementAttributesFieldOrganizationId    = big.NewInt(1 << 2)
+	pushNotificationPlacementAttributesFieldCadence           = big.NewInt(1 << 3)
+	pushNotificationPlacementAttributesFieldContentStrategyId = big.NewInt(1 << 4)
 )
 
 type PushNotificationPlacementAttributes struct {
 	// Name of the placement
 	Name string `json:"name" url:"name"`
+	// Whether the placement serves content and fires scheduled deliveries. An INACTIVE placement keeps its configuration but serves empty content and skips scheduled deliveries.
+	Status PlacementStatus `json:"status" url:"status"`
 	// ID of the organization this placement belongs to
 	OrganizationId string `json:"organizationId" url:"organizationId"`
 	// Delivery cadence for the notification
@@ -3903,6 +4082,13 @@ func (p *PushNotificationPlacementAttributes) GetName() string {
 		return ""
 	}
 	return p.Name
+}
+
+func (p *PushNotificationPlacementAttributes) GetStatus() PlacementStatus {
+	if p == nil {
+		return ""
+	}
+	return p.Status
 }
 
 func (p *PushNotificationPlacementAttributes) GetOrganizationId() string {
@@ -3945,6 +4131,13 @@ func (p *PushNotificationPlacementAttributes) require(field *big.Int) {
 func (p *PushNotificationPlacementAttributes) SetName(name string) {
 	p.Name = name
 	p.require(pushNotificationPlacementAttributesFieldName)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PushNotificationPlacementAttributes) SetStatus(status PlacementStatus) {
+	p.Status = status
+	p.require(pushNotificationPlacementAttributesFieldStatus)
 }
 
 // SetOrganizationId sets the OrganizationId field and marks it as non-optional;
@@ -4493,13 +4686,16 @@ func (t *ToOneRelationship) String() string {
 // Attributes for updating a batch-activation placement. All fields are required.
 var (
 	updateBatchActivationAttributesFieldName            = big.NewInt(1 << 0)
-	updateBatchActivationAttributesFieldRefreshInterval = big.NewInt(1 << 1)
-	updateBatchActivationAttributesFieldSlots           = big.NewInt(1 << 2)
+	updateBatchActivationAttributesFieldStatus          = big.NewInt(1 << 1)
+	updateBatchActivationAttributesFieldRefreshInterval = big.NewInt(1 << 2)
+	updateBatchActivationAttributesFieldSlots           = big.NewInt(1 << 3)
 )
 
 type UpdateBatchActivationAttributes struct {
 	// Name of the placement
 	Name string `json:"name" url:"name"`
+	// Placement status. Defaults to ACTIVE on create; when omitted on update, the current status is preserved.
+	Status *PlacementStatus `json:"status,omitempty" url:"status,omitempty"`
 	// ISO-8601 duration controlling how often the activation cohort refreshes
 	RefreshInterval string `json:"refreshInterval" url:"refreshInterval"`
 	// Slots that make up the activation cohort. Slots present in the prior state but absent from this list are removed.
@@ -4517,6 +4713,13 @@ func (u *UpdateBatchActivationAttributes) GetName() string {
 		return ""
 	}
 	return u.Name
+}
+
+func (u *UpdateBatchActivationAttributes) GetStatus() *PlacementStatus {
+	if u == nil {
+		return nil
+	}
+	return u.Status
 }
 
 func (u *UpdateBatchActivationAttributes) GetRefreshInterval() string {
@@ -4552,6 +4755,13 @@ func (u *UpdateBatchActivationAttributes) require(field *big.Int) {
 func (u *UpdateBatchActivationAttributes) SetName(name string) {
 	u.Name = name
 	u.require(updateBatchActivationAttributesFieldName)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateBatchActivationAttributes) SetStatus(status *PlacementStatus) {
+	u.Status = status
+	u.require(updateBatchActivationAttributesFieldStatus)
 }
 
 // SetRefreshInterval sets the RefreshInterval field and marks it as non-optional;
@@ -4836,14 +5046,17 @@ func (u *UpdateBatchActivationSlot) String() string {
 // Attributes for updating an email placement. All fields are required.
 var (
 	updateEmailAttributesFieldName              = big.NewInt(1 << 0)
-	updateEmailAttributesFieldAvailableSlots    = big.NewInt(1 << 1)
-	updateEmailAttributesFieldCadence           = big.NewInt(1 << 2)
-	updateEmailAttributesFieldContentStrategyId = big.NewInt(1 << 3)
+	updateEmailAttributesFieldStatus            = big.NewInt(1 << 1)
+	updateEmailAttributesFieldAvailableSlots    = big.NewInt(1 << 2)
+	updateEmailAttributesFieldCadence           = big.NewInt(1 << 3)
+	updateEmailAttributesFieldContentStrategyId = big.NewInt(1 << 4)
 )
 
 type UpdateEmailAttributes struct {
 	// Name of the placement
 	Name string `json:"name" url:"name"`
+	// Placement status. Defaults to ACTIVE on create; when omitted on update, the current status is preserved.
+	Status *PlacementStatus `json:"status,omitempty" url:"status,omitempty"`
 	// Number of available slots (minimum 1)
 	AvailableSlots int `json:"availableSlots" url:"availableSlots"`
 	// Delivery cadence for the email
@@ -4863,6 +5076,13 @@ func (u *UpdateEmailAttributes) GetName() string {
 		return ""
 	}
 	return u.Name
+}
+
+func (u *UpdateEmailAttributes) GetStatus() *PlacementStatus {
+	if u == nil {
+		return nil
+	}
+	return u.Status
 }
 
 func (u *UpdateEmailAttributes) GetAvailableSlots() int {
@@ -4905,6 +5125,13 @@ func (u *UpdateEmailAttributes) require(field *big.Int) {
 func (u *UpdateEmailAttributes) SetName(name string) {
 	u.Name = name
 	u.require(updateEmailAttributesFieldName)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateEmailAttributes) SetStatus(status *PlacementStatus) {
+	u.Status = status
+	u.require(updateEmailAttributesFieldStatus)
 }
 
 // SetAvailableSlots sets the AvailableSlots field and marks it as non-optional;
@@ -5058,13 +5285,16 @@ func (u *UpdateEmailPlacementData) String() string {
 
 // Attributes for updating a group placement. All fields are required.
 var (
-	updateGroupAttributesFieldName  = big.NewInt(1 << 0)
-	updateGroupAttributesFieldSlots = big.NewInt(1 << 1)
+	updateGroupAttributesFieldName   = big.NewInt(1 << 0)
+	updateGroupAttributesFieldStatus = big.NewInt(1 << 1)
+	updateGroupAttributesFieldSlots  = big.NewInt(1 << 2)
 )
 
 type UpdateGroupAttributes struct {
 	// Name of the placement
 	Name string `json:"name" url:"name"`
+	// Placement status. Defaults to ACTIVE on create; when omitted on update, the current status is preserved.
+	Status *PlacementStatus `json:"status,omitempty" url:"status,omitempty"`
 	// Slots that make up the group. Slots present in the prior state but absent from this list are removed.
 	Slots []*UpdateBatchActivationSlot `json:"slots" url:"slots"`
 
@@ -5080,6 +5310,13 @@ func (u *UpdateGroupAttributes) GetName() string {
 		return ""
 	}
 	return u.Name
+}
+
+func (u *UpdateGroupAttributes) GetStatus() *PlacementStatus {
+	if u == nil {
+		return nil
+	}
+	return u.Status
 }
 
 func (u *UpdateGroupAttributes) GetSlots() []*UpdateBatchActivationSlot {
@@ -5108,6 +5345,13 @@ func (u *UpdateGroupAttributes) require(field *big.Int) {
 func (u *UpdateGroupAttributes) SetName(name string) {
 	u.Name = name
 	u.require(updateGroupAttributesFieldName)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateGroupAttributes) SetStatus(status *PlacementStatus) {
+	u.Status = status
+	u.require(updateGroupAttributesFieldStatus)
 }
 
 // SetSlots sets the Slots field and marks it as non-optional;
@@ -5524,13 +5768,16 @@ func (u *UpdatePlacementRequestBody) String() string {
 // Attributes for updating a push-notification placement. All fields are required.
 var (
 	updatePushNotificationAttributesFieldName              = big.NewInt(1 << 0)
-	updatePushNotificationAttributesFieldCadence           = big.NewInt(1 << 1)
-	updatePushNotificationAttributesFieldContentStrategyId = big.NewInt(1 << 2)
+	updatePushNotificationAttributesFieldStatus            = big.NewInt(1 << 1)
+	updatePushNotificationAttributesFieldCadence           = big.NewInt(1 << 2)
+	updatePushNotificationAttributesFieldContentStrategyId = big.NewInt(1 << 3)
 )
 
 type UpdatePushNotificationAttributes struct {
 	// Name of the placement
 	Name string `json:"name" url:"name"`
+	// Placement status. Defaults to ACTIVE on create; when omitted on update, the current status is preserved.
+	Status *PlacementStatus `json:"status,omitempty" url:"status,omitempty"`
 	// Delivery cadence for the notification
 	Cadence *Cadence `json:"cadence" url:"cadence"`
 	// ID of the content strategy to link this placement to. Omit to clear any existing link (PUT requires the full attribute set, so a missing value unlinks the placement).
@@ -5548,6 +5795,13 @@ func (u *UpdatePushNotificationAttributes) GetName() string {
 		return ""
 	}
 	return u.Name
+}
+
+func (u *UpdatePushNotificationAttributes) GetStatus() *PlacementStatus {
+	if u == nil {
+		return nil
+	}
+	return u.Status
 }
 
 func (u *UpdatePushNotificationAttributes) GetCadence() *Cadence {
@@ -5583,6 +5837,13 @@ func (u *UpdatePushNotificationAttributes) require(field *big.Int) {
 func (u *UpdatePushNotificationAttributes) SetName(name string) {
 	u.Name = name
 	u.require(updatePushNotificationAttributesFieldName)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdatePushNotificationAttributes) SetStatus(status *PlacementStatus) {
+	u.Status = status
+	u.require(updatePushNotificationAttributesFieldStatus)
 }
 
 // SetCadence sets the Cadence field and marks it as non-optional;
@@ -5730,13 +5991,16 @@ func (u *UpdatePushNotificationPlacementData) String() string {
 // Attributes for updating a standard placement. All fields are required.
 var (
 	updateStandardAttributesFieldName              = big.NewInt(1 << 0)
-	updateStandardAttributesFieldAvailableSlots    = big.NewInt(1 << 1)
-	updateStandardAttributesFieldContentStrategyId = big.NewInt(1 << 2)
+	updateStandardAttributesFieldStatus            = big.NewInt(1 << 1)
+	updateStandardAttributesFieldAvailableSlots    = big.NewInt(1 << 2)
+	updateStandardAttributesFieldContentStrategyId = big.NewInt(1 << 3)
 )
 
 type UpdateStandardAttributes struct {
 	// Name of the placement
 	Name string `json:"name" url:"name"`
+	// Placement status. Defaults to ACTIVE on create; when omitted on update, the current status is preserved.
+	Status *PlacementStatus `json:"status,omitempty" url:"status,omitempty"`
 	// Number of available slots (minimum 1)
 	AvailableSlots int `json:"availableSlots" url:"availableSlots"`
 	// ID of the content strategy to link this placement to. Omit to clear any existing link (PUT requires the full attribute set, so a missing value unlinks the placement).
@@ -5754,6 +6018,13 @@ func (u *UpdateStandardAttributes) GetName() string {
 		return ""
 	}
 	return u.Name
+}
+
+func (u *UpdateStandardAttributes) GetStatus() *PlacementStatus {
+	if u == nil {
+		return nil
+	}
+	return u.Status
 }
 
 func (u *UpdateStandardAttributes) GetAvailableSlots() int {
@@ -5789,6 +6060,13 @@ func (u *UpdateStandardAttributes) require(field *big.Int) {
 func (u *UpdateStandardAttributes) SetName(name string) {
 	u.Name = name
 	u.require(updateStandardAttributesFieldName)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateStandardAttributes) SetStatus(status *PlacementStatus) {
+	u.Status = status
+	u.require(updateStandardAttributesFieldStatus)
 }
 
 // SetAvailableSlots sets the AvailableSlots field and marks it as non-optional;

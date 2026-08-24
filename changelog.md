@@ -1,3 +1,9 @@
+## v21.2.0 - 2026-08-24
+### Added
+* **`PlacementStatus`** — new string enum type with constants `PlacementStatusActive` and `PlacementStatusInactive`, plus `NewPlacementStatusFromString()` constructor and `Ptr()` helper, representing whether a placement actively serves content.
+* **`Status` field on response attribute types** — `BatchActivationPlacementAttributes`, `EmailPlacementAttributes`, `GroupPlacementAttributes`, `PlacementAttributes`, and `PushNotificationPlacementAttributes` now expose a required `Status PlacementStatus` field with `GetStatus()` and `SetStatus()` accessors.
+* **`Status` field on create/update attribute types** — all `Create*Attributes` and `Update*Attributes` structs gain an optional `Status *PlacementStatus` field (omitted from the request when nil); defaults to `ACTIVE` on create and preserves the current value when omitted on update.
+
 ## v21.1.0 - 2026-08-18
 ### Added
 * **`CuisineOption`** — new string enum type in the root package with 130+ constants covering food, beverage, and entertainment venue categories (e.g. `CuisineOptionPizza`, `CuisineOptionSushi`, `CuisineOptionBrewery`), plus `NewCuisineOptionFromString()` constructor and `Ptr()` helper.

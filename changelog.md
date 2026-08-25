@@ -1,3 +1,12 @@
+## v22.0.0 - 2026-08-25
+### Breaking Changes
+* **`BatchActivationPlacementAttributes`** — `Status` field and `GetStatus()`/`SetStatus()` methods removed; callers that read or set placement status on this type must be updated.
+* **`GroupPlacementAttributes`** and **`PlacementAttributes`** — `Status` field and `GetStatus()`/`SetStatus()` methods removed; update any code that accessed placement status through these response types.
+* **`CreateBatchActivationAttributes`**, **`CreateGroupAttributes`**, and **`CreateStandardAttributes`** — optional `Status *PlacementStatus` field and its accessors removed; remove any `SetStatus` calls when constructing create requests.
+* **`UpdateBatchActivationAttributes`**, **`UpdateGroupAttributes`**, and **`UpdateStandardAttributes`** — optional `Status *PlacementStatus` field and its accessors removed; remove any `SetStatus` calls when constructing update requests.
+### Changed
+* **`PlacementStatus`**, **`EmailPlacementAttributes.Status`**, and **`PushNotificationPlacementAttributes.Status`** — documentation updated to clarify that `INACTIVE` pauses scheduled deliveries only and has no effect on content serving.
+
 ## v21.2.0 - 2026-08-24
 ### Added
 * **`PlacementStatus`** — new string enum type with constants `PlacementStatusActive` and `PlacementStatusInactive`, plus `NewPlacementStatusFromString()` constructor and `Ptr()` helper, representing whether a placement actively serves content.

@@ -3,9 +3,9 @@
 package users
 
 import (
-	kard "github.com/KardFinancial/kard-go-sdk/v21"
-	core "github.com/KardFinancial/kard-go-sdk/v21/core"
-	internal "github.com/KardFinancial/kard-go-sdk/v21/internal"
+	kard "github.com/KardFinancial/kard-go-sdk/v22"
+	core "github.com/KardFinancial/kard-go-sdk/v22/core"
+	internal "github.com/KardFinancial/kard-go-sdk/v22/internal"
 )
 
 var ErrorCodes internal.ErrorCodes = internal.ErrorCodes{

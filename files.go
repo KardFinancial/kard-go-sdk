@@ -5,7 +5,7 @@ package kard
 import (
 	json "encoding/json"
 	fmt "fmt"
-	internal "github.com/KardFinancial/kard-go-sdk/v22/internal"
+	internal "github.com/KardFinancial/kard-go-sdk/v23/internal"
 	big "math/big"
 )
 
@@ -355,7 +355,6 @@ type FileType string
 const (
 	FileTypeEarnedRewardApprovedDailyReconciliationFile FileType = "earnedRewardApprovedDailyReconciliationFile"
 	FileTypeEarnedRewardSettledDailyReconciliationFile  FileType = "earnedRewardSettledDailyReconciliationFile"
-	FileTypeValidatedTransactionDailyReconciliationFile FileType = "validatedTransactionDailyReconciliationFile"
 	FileTypeMonthlyReconciliationFile                   FileType = "monthlyReconciliationFile"
 )
 
@@ -365,8 +364,6 @@ func NewFileTypeFromString(s string) (FileType, error) {
 		return FileTypeEarnedRewardApprovedDailyReconciliationFile, nil
 	case "earnedRewardSettledDailyReconciliationFile":
 		return FileTypeEarnedRewardSettledDailyReconciliationFile, nil
-	case "validatedTransactionDailyReconciliationFile":
-		return FileTypeValidatedTransactionDailyReconciliationFile, nil
 	case "monthlyReconciliationFile":
 		return FileTypeMonthlyReconciliationFile, nil
 	}

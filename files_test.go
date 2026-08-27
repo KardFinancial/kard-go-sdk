@@ -1319,13 +1319,6 @@ func TestEnumFileType(t *testing.T) {
 		assert.Equal(t, FileType("earnedRewardSettledDailyReconciliationFile"), val, "enum value should match expected wire value")
 	})
 
-	t.Run("NewFromString_validatedTransactionDailyReconciliationFile", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewFileTypeFromString("validatedTransactionDailyReconciliationFile")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, FileType("validatedTransactionDailyReconciliationFile"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_monthlyReconciliationFile", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewFileTypeFromString("monthlyReconciliationFile")

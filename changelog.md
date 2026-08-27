@@ -1,3 +1,7 @@
+## v23.0.0 - 2026-08-27
+### Breaking Changes
+* **`FileTypeValidatedTransactionDailyReconciliationFile`** — the exported `FileType` constant and its corresponding `"validatedTransactionDailyReconciliationFile"` case in `NewFileTypeFromString` have been removed; update any code that references this constant or handles this file type string.
+
 ## v22.0.0 - 2026-08-25
 ### Breaking Changes
 * **`BatchActivationPlacementAttributes`** — `Status` field and `GetStatus()`/`SetStatus()` methods removed; callers that read or set placement status on this type must be updated.

@@ -10,10 +10,10 @@ import (
 	os "os"
 	testing "testing"
 
-	kard "github.com/KardFinancial/kard-go-sdk/v22"
-	client "github.com/KardFinancial/kard-go-sdk/v22/client"
-	option "github.com/KardFinancial/kard-go-sdk/v22/option"
-	users "github.com/KardFinancial/kard-go-sdk/v22/users"
+	kard "github.com/KardFinancial/kard-go-sdk/v23"
+	client "github.com/KardFinancial/kard-go-sdk/v23/client"
+	option "github.com/KardFinancial/kard-go-sdk/v23/option"
+	users "github.com/KardFinancial/kard-go-sdk/v23/users"
 	require "github.com/stretchr/testify/require"
 )
 

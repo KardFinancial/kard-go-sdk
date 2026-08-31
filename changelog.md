@@ -1,3 +1,11 @@
+## v24.0.0 - 2026-08-31
+### Breaking Changes
+* **`users.Client.Uploads`** — the `Uploads` field has been removed from the `users.Client` struct; remove any references to `client.Users.Uploads` and migrate upload operations to the bulk upload flow.
+* **`uploads.Client` / `uploads.RawClient`** — the entire `users/uploads` package has been deleted, including `NewClient()`, `NewRawClient()`, `Create()`, `CreatePart()`, and `Update()`; update import paths and migrate to the [Create Bulk Transactions Upload URL](/2024-10-01/api/transactions/create-bulk-transactions-upload-url) endpoint.
+* **`UploadPartMultiStatus`** — the exported error type and its `UnmarshalJSON`, `MarshalJSON`, and `Unwrap` methods have been deleted; replace type-assertions on this error with handling of raw `APIError` responses.
+* **`users.ErrorCodes`** — HTTP 207 and 409 error code handlers have been removed; callers that relied on typed error mappings must now handle raw `APIError` responses instead.
+* **Upload request/response types** — `CreateUploadPartDataUnion`, `CreateUploadPartMultiStatusResponse`, `CreateUploadRequestObject`, `CreateUploadResponseData`, `UpdateUploadRequestObject`, `UpdateUploadResponseData`, `StartHistoricalUploadNoData`, `HistoricalTransactionCompleteNoData`, and all related union/visitor types have been removed from the `users` package; remove all references to these types.
+
 ## v23.0.0 - 2026-08-27
 ### Breaking Changes
 * **`FileTypeValidatedTransactionDailyReconciliationFile`** — the exported `FileType` constant and its corresponding `"validatedTransactionDailyReconciliationFile"` case in `NewFileTypeFromString` have been removed; update any code that references this constant or handles this file type string.

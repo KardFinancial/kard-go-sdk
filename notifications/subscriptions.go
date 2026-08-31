@@ -5,8 +5,8 @@ package notifications
 import (
 	json "encoding/json"
 	fmt "fmt"
-	kardgosdk "github.com/KardFinancial/kard-go-sdk/v23"
-	internal "github.com/KardFinancial/kard-go-sdk/v23/internal"
+	kardgosdk "github.com/KardFinancial/kard-go-sdk/v24"
+	internal "github.com/KardFinancial/kard-go-sdk/v24/internal"
 	big "math/big"
 )
 

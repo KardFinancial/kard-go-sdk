@@ -3,9 +3,9 @@
 package users
 
 import (
-	kard "github.com/KardFinancial/kard-go-sdk/v23"
-	core "github.com/KardFinancial/kard-go-sdk/v23/core"
-	internal "github.com/KardFinancial/kard-go-sdk/v23/internal"
+	kard "github.com/KardFinancial/kard-go-sdk/v24"
+	core "github.com/KardFinancial/kard-go-sdk/v24/core"
+	internal "github.com/KardFinancial/kard-go-sdk/v24/internal"
 )
 
 var ErrorCodes internal.ErrorCodes = internal.ErrorCodes{
@@ -26,16 +26,6 @@ var ErrorCodes internal.ErrorCodes = internal.ErrorCodes{
 	},
 	404: func(apiError *core.APIError) error {
 		return &kard.DoesNotExistError{
-			APIError: apiError,
-		}
-	},
-	207: func(apiError *core.APIError) error {
-		return &UploadPartMultiStatus{
-			APIError: apiError,
-		}
-	},
-	409: func(apiError *core.APIError) error {
-		return &kard.ConflictError{
 			APIError: apiError,
 		}
 	},

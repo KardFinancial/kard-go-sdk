@@ -6,14 +6,13 @@ import (
 	context "context"
 	os "os"
 
-	kard "github.com/KardFinancial/kard-go-sdk/v23"
-	core "github.com/KardFinancial/kard-go-sdk/v23/core"
-	internal "github.com/KardFinancial/kard-go-sdk/v23/internal"
-	option "github.com/KardFinancial/kard-go-sdk/v23/option"
-	attributions "github.com/KardFinancial/kard-go-sdk/v23/users/attributions"
-	auth "github.com/KardFinancial/kard-go-sdk/v23/users/auth"
-	rewards "github.com/KardFinancial/kard-go-sdk/v23/users/rewards"
-	uploads "github.com/KardFinancial/kard-go-sdk/v23/users/uploads"
+	kard "github.com/KardFinancial/kard-go-sdk/v24"
+	core "github.com/KardFinancial/kard-go-sdk/v24/core"
+	internal "github.com/KardFinancial/kard-go-sdk/v24/internal"
+	option "github.com/KardFinancial/kard-go-sdk/v24/option"
+	attributions "github.com/KardFinancial/kard-go-sdk/v24/users/attributions"
+	auth "github.com/KardFinancial/kard-go-sdk/v24/users/auth"
+	rewards "github.com/KardFinancial/kard-go-sdk/v24/users/rewards"
 )
 
 type Client struct {
@@ -21,7 +20,6 @@ type Client struct {
 	Attributions    *attributions.Client
 	Auth            *auth.Client
 	Rewards         *rewards.Client
-	Uploads         *uploads.Client
 
 	options *core.RequestOptions
 	baseURL string
@@ -39,7 +37,6 @@ func NewClient(options *core.RequestOptions) *Client {
 		Attributions:    attributions.NewClient(options),
 		Auth:            auth.NewClient(options),
 		Rewards:         rewards.NewClient(options),
-		Uploads:         uploads.NewClient(options),
 		WithRawResponse: NewRawClient(options),
 		options:         options,
 		baseURL:         options.BaseURL,

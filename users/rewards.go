@@ -5,8 +5,8 @@ package users
 import (
 	json "encoding/json"
 	fmt "fmt"
-	kardgosdk "github.com/KardFinancial/kard-go-sdk/v24"
-	internal "github.com/KardFinancial/kard-go-sdk/v24/internal"
+	kardgosdk "github.com/KardFinancial/kard-go-sdk/v25"
+	internal "github.com/KardFinancial/kard-go-sdk/v25/internal"
 	big "math/big"
 	time "time"
 )
@@ -1850,8 +1850,8 @@ type LocationAttributes struct {
 	Cuisine *kardgosdk.CuisineOption `json:"cuisine,omitempty" url:"cuisine,omitempty"`
 	// Customer rating for this location.
 	Rating *LocationRating `json:"rating,omitempty" url:"rating,omitempty"`
-	// Typical price range for this location, from 1 (least expensive) to 4 (most expensive).
-	PriceLevel *int `json:"priceLevel,omitempty" url:"priceLevel,omitempty"`
+	// Typical price range for this location, rendered as dollar signs from "$" (least expensive) to "$$$$" (most expensive).
+	PriceLevel *string `json:"priceLevel,omitempty" url:"priceLevel,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -1916,7 +1916,7 @@ func (l *LocationAttributes) GetRating() *LocationRating {
 	return l.Rating
 }
 
-func (l *LocationAttributes) GetPriceLevel() *int {
+func (l *LocationAttributes) GetPriceLevel() *string {
 	if l == nil {
 		return nil
 	}
@@ -1995,7 +1995,7 @@ func (l *LocationAttributes) SetRating(rating *LocationRating) {
 
 // SetPriceLevel sets the PriceLevel field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (l *LocationAttributes) SetPriceLevel(priceLevel *int) {
+func (l *LocationAttributes) SetPriceLevel(priceLevel *string) {
 	l.PriceLevel = priceLevel
 	l.require(locationAttributesFieldPriceLevel)
 }
@@ -2302,7 +2302,7 @@ var (
 )
 
 type LocationRating struct {
-	// Rating on a scale of 1 to 5.
+	// Restaurant star rating. Rating is out of 5.
 	Value float64 `json:"value" url:"value"`
 	// Number of ratings the score is based on. Null when a count is not available.
 	Count *int `json:"count,omitempty" url:"count,omitempty"`

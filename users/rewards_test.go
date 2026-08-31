@@ -4,7 +4,7 @@ package users
 
 import (
 	json "encoding/json"
-	kardgosdk "github.com/KardFinancial/kard-go-sdk/v24"
+	kardgosdk "github.com/KardFinancial/kard-go-sdk/v25"
 	assert "github.com/stretchr/testify/assert"
 	require "github.com/stretchr/testify/require"
 	testing "testing"
@@ -2854,7 +2854,7 @@ func TestSettersLocationAttributes(t *testing.T) {
 
 	t.Run("SetPriceLevel", func(t *testing.T) {
 		obj := &LocationAttributes{}
-		var fernTestValuePriceLevel *int
+		var fernTestValuePriceLevel *string
 		obj.SetPriceLevel(fernTestValuePriceLevel)
 		assert.Equal(t, fernTestValuePriceLevel, obj.PriceLevel)
 		assert.NotNil(t, obj.explicitFields)
@@ -3111,7 +3111,7 @@ func TestGettersLocationAttributes(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &LocationAttributes{}
-		var expected *int
+		var expected *string
 		obj.PriceLevel = expected
 
 		// Act & Assert
@@ -3395,7 +3395,7 @@ func TestSettersMarkExplicitLocationAttributes(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &LocationAttributes{}
-		var fernTestValuePriceLevel *int
+		var fernTestValuePriceLevel *string
 
 		// Act
 		obj.SetPriceLevel(fernTestValuePriceLevel)

@@ -1,3 +1,9 @@
+## v25.0.0 - 2026-08-31
+### Breaking Changes
+* **`LocationAttributes.PriceLevel`** — type changed from `*int` to `*string`; price range is now expressed as dollar-sign strings (`"$"` through `"$$$$"`) instead of integers 1–4. Update all reads, writes, and `SetPriceLevel` calls to use `*string` values.
+* **`LocationAttributes.GetPriceLevel()`** — return type changed from `*int` to `*string`; update any code that dereferences or compares the returned value as an integer.
+* **`LocationAttributes.SetPriceLevel()`** — parameter type changed from `*int` to `*string`; pass a string pointer instead of an integer pointer when setting the price level.
+
 ## v24.0.0 - 2026-08-31
 ### Breaking Changes
 * **`users.Client.Uploads`** — the `Uploads` field has been removed from the `users.Client` struct; remove any references to `client.Users.Uploads` and migrate upload operations to the bulk upload flow.

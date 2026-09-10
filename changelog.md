@@ -1,3 +1,13 @@
+## v25.0.1 - 2026-09-10
+* chore: update Sort field documentation in GetLocationsByUserRequest
+* Improve the godoc comment on the `Sort` field of `GetLocationsByUserRequest`
+* to clarify the default sort behavior and how it interacts with latitude/longitude
+* filters. No functional or API surface changes are introduced.
+* Key changes:
+* Expanded the `Sort` field comment to document the default sort order (newest first, descending `createdDate`)
+* Clarified that when `filter[latitude]`/`filter[longitude]` are provided, results are ordered by ascending distance first, then newest first
+* 🌿 Generated with Fern
+
 ## v25.0.0 - 2026-08-31
 ### Breaking Changes
 * **`LocationAttributes.PriceLevel`** — type changed from `*int` to `*string`; price range is now expressed as dollar-sign strings (`"$"` through `"$$$$"`) instead of integers 1–4. Update all reads, writes, and `SetPriceLevel` calls to use `*string` values.

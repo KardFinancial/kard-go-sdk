@@ -46,7 +46,7 @@ type GetLocationsByUserRequest struct {
 	FilterLatitude *float64 `json:"-" url:"filter[latitude],omitempty"`
 	// Radius in miles to search around the point given by `filter[latitude]`/`filter[longitude]` (default 10, minimum 1). Has no effect unless both latitude and longitude are also provided — it is ignored when only `filter[zipCode]`, `filter[city]`, or `filter[state]` is used, without lat/long.
 	FilterRadius *int `json:"-" url:"filter[radius],omitempty"`
-	// If provided, response will be sorted by the specified fields
+	// If provided, response will be sorted by the specified fields. Defaults to newest first, equivalent to descending `createdDate`; when `filter[latitude]`/`filter[longitude]` are provided, locations are ordered by ascending distance from that point first, then newest first.
 	Sort []*LocationSortOptions `json:"-" url:"sort,omitempty"`
 	// CSV list of included resources in the response (e.g "offers,categories"). Allowed values are `offers` and `categories`.
 	Include []*string `json:"-" url:"include,omitempty"`

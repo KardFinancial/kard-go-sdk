@@ -2178,13 +2178,16 @@ func (c *CreatePushNotificationPlacementData) String() string {
 // Attributes for creating a standard placement
 var (
 	createStandardAttributesFieldName              = big.NewInt(1 << 0)
-	createStandardAttributesFieldAvailableSlots    = big.NewInt(1 << 1)
-	createStandardAttributesFieldContentStrategyId = big.NewInt(1 << 2)
+	createStandardAttributesFieldDisplayName       = big.NewInt(1 << 1)
+	createStandardAttributesFieldAvailableSlots    = big.NewInt(1 << 2)
+	createStandardAttributesFieldContentStrategyId = big.NewInt(1 << 3)
 )
 
 type CreateStandardAttributes struct {
 	// Name of the placement
 	Name string `json:"name" url:"name"`
+	// Cardholder-facing title for the section (minimum 1 character). Omit to let clients use their default label.
+	DisplayName *string `json:"displayName,omitempty" url:"displayName,omitempty"`
 	// Number of available slots (minimum 1)
 	AvailableSlots int `json:"availableSlots" url:"availableSlots"`
 	// ID of the content strategy to link this placement to
@@ -2202,6 +2205,13 @@ func (c *CreateStandardAttributes) GetName() string {
 		return ""
 	}
 	return c.Name
+}
+
+func (c *CreateStandardAttributes) GetDisplayName() *string {
+	if c == nil {
+		return nil
+	}
+	return c.DisplayName
 }
 
 func (c *CreateStandardAttributes) GetAvailableSlots() int {
@@ -2237,6 +2247,13 @@ func (c *CreateStandardAttributes) require(field *big.Int) {
 func (c *CreateStandardAttributes) SetName(name string) {
 	c.Name = name
 	c.require(createStandardAttributesFieldName)
+}
+
+// SetDisplayName sets the DisplayName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateStandardAttributes) SetDisplayName(displayName *string) {
+	c.DisplayName = displayName
+	c.require(createStandardAttributesFieldDisplayName)
 }
 
 // SetAvailableSlots sets the AvailableSlots field and marks it as non-optional;
@@ -3124,14 +3141,17 @@ func (i *IncludedResource) validate() error {
 // Attributes for a standard placement
 var (
 	placementAttributesFieldName              = big.NewInt(1 << 0)
-	placementAttributesFieldOrganizationId    = big.NewInt(1 << 1)
-	placementAttributesFieldAvailableSlots    = big.NewInt(1 << 2)
-	placementAttributesFieldContentStrategyId = big.NewInt(1 << 3)
+	placementAttributesFieldDisplayName       = big.NewInt(1 << 1)
+	placementAttributesFieldOrganizationId    = big.NewInt(1 << 2)
+	placementAttributesFieldAvailableSlots    = big.NewInt(1 << 3)
+	placementAttributesFieldContentStrategyId = big.NewInt(1 << 4)
 )
 
 type PlacementAttributes struct {
 	// Name of the placement
 	Name string `json:"name" url:"name"`
+	// Cardholder-facing title for the section, if one was set. When absent, clients fall back to their own default label.
+	DisplayName *string `json:"displayName,omitempty" url:"displayName,omitempty"`
 	// ID of the organization this placement belongs to
 	OrganizationId string `json:"organizationId" url:"organizationId"`
 	// Number of available slots
@@ -3151,6 +3171,13 @@ func (p *PlacementAttributes) GetName() string {
 		return ""
 	}
 	return p.Name
+}
+
+func (p *PlacementAttributes) GetDisplayName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.DisplayName
 }
 
 func (p *PlacementAttributes) GetOrganizationId() string {
@@ -3193,6 +3220,13 @@ func (p *PlacementAttributes) require(field *big.Int) {
 func (p *PlacementAttributes) SetName(name string) {
 	p.Name = name
 	p.require(placementAttributesFieldName)
+}
+
+// SetDisplayName sets the DisplayName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlacementAttributes) SetDisplayName(displayName *string) {
+	p.DisplayName = displayName
+	p.require(placementAttributesFieldDisplayName)
 }
 
 // SetOrganizationId sets the OrganizationId field and marks it as non-optional;
@@ -5855,13 +5889,16 @@ func (u *UpdatePushNotificationPlacementData) String() string {
 // Attributes for updating a standard placement. All fields are required.
 var (
 	updateStandardAttributesFieldName              = big.NewInt(1 << 0)
-	updateStandardAttributesFieldAvailableSlots    = big.NewInt(1 << 1)
-	updateStandardAttributesFieldContentStrategyId = big.NewInt(1 << 2)
+	updateStandardAttributesFieldDisplayName       = big.NewInt(1 << 1)
+	updateStandardAttributesFieldAvailableSlots    = big.NewInt(1 << 2)
+	updateStandardAttributesFieldContentStrategyId = big.NewInt(1 << 3)
 )
 
 type UpdateStandardAttributes struct {
 	// Name of the placement
 	Name string `json:"name" url:"name"`
+	// Cardholder-facing title for the section (minimum 1 character). Omit to clear it (PUT requires the full attribute set).
+	DisplayName *string `json:"displayName,omitempty" url:"displayName,omitempty"`
 	// Number of available slots (minimum 1)
 	AvailableSlots int `json:"availableSlots" url:"availableSlots"`
 	// ID of the content strategy to link this placement to. Omit to clear any existing link (PUT requires the full attribute set, so a missing value unlinks the placement).
@@ -5879,6 +5916,13 @@ func (u *UpdateStandardAttributes) GetName() string {
 		return ""
 	}
 	return u.Name
+}
+
+func (u *UpdateStandardAttributes) GetDisplayName() *string {
+	if u == nil {
+		return nil
+	}
+	return u.DisplayName
 }
 
 func (u *UpdateStandardAttributes) GetAvailableSlots() int {
@@ -5914,6 +5958,13 @@ func (u *UpdateStandardAttributes) require(field *big.Int) {
 func (u *UpdateStandardAttributes) SetName(name string) {
 	u.Name = name
 	u.require(updateStandardAttributesFieldName)
+}
+
+// SetDisplayName sets the DisplayName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateStandardAttributes) SetDisplayName(displayName *string) {
+	u.DisplayName = displayName
+	u.require(updateStandardAttributesFieldDisplayName)
 }
 
 // SetAvailableSlots sets the AvailableSlots field and marks it as non-optional;

@@ -1,15 +1,15 @@
 {
-  "cliVersion": "5.120.0",
+  "cliVersion": "5.123.0",
   "generatorName": "fernapi/fern-go-sdk",
   "generatorVersion": "1.40.1",
   "generatorConfig": {
     "packageName": "kard",
     "enableWireTests": true
   },
-  "originGitCommit": "f07a485b58ef9579879650c8c1dbe6206ef56fd9",
+  "originGitCommit": "ca5d4252b2106cc7f00fc3eb53504e3e63d1c1ad",
   "originGitCommitIsDirty": true,
   "invokedBy": "ci",
   "requestedVersion": "AUTO",
   "ciProvider": "unknown",
-  "sdkVersion": "v25.0.1"
+  "sdkVersion": "v25.1.0"
 }

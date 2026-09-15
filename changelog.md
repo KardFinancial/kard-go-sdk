@@ -1,3 +1,7 @@
+## v25.1.0 - 2026-09-15
+### Added
+* **`DisplayName`** optional field added to `CreateStandardAttributes`, `PlacementAttributes`, and `UpdateStandardAttributes`; use `GetDisplayName()` to read and `SetDisplayName()` to write the cardholder-facing section title for a placement.
+
 ## v25.0.1 - 2026-09-10
 * chore: update Sort field documentation in GetLocationsByUserRequest
 * Improve the godoc comment on the `Sort` field of `GetLocationsByUserRequest`

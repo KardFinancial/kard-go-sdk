@@ -1,3 +1,8 @@
+## v26.0.0 - 2026-09-21
+### Breaking Changes
+* **`RewardNotificationAttributes`** — the exported struct and all its associated methods (`GetMessage`, `GetName`, `GetAttributionUrl`, `GetSurveyUrl`, `GetCardProductId`, `GetTransactionTimestamp`, `GetTransactionId`, `GetTransactionAmountInCents`, and all `Set*` variants) have been removed. Remove any references to this type and its methods from your code.
+* **`EarnedRewardNotificationAttributes.UserReward`** and **`EarnedRewardSettledAttributes.UserReward`** — the `UserReward` field JSON tag no longer uses `omitempty`; the field is now always included in serialized output even when `nil`. Update any JSON parsing or comparison logic that relied on this field being absent when nil.
+
 ## v25.1.0 - 2026-09-15
 ### Added
 * **`DisplayName`** optional field added to `CreateStandardAttributes`, `PlacementAttributes`, and `UpdateStandardAttributes`; use `GetDisplayName()` to read and `SetDisplayName()` to write the cardholder-facing section title for a placement.

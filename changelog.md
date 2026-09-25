@@ -1,3 +1,7 @@
+## v26.1.0 - 2026-09-25
+### Added
+* **`RejectedReasonMaxRedemptionLimitReached`** — new `RejectedReason` constant (`"MAX_REDEMPTION_LIMIT_REACHED"`) added to represent cases where a user has reached the maximum redemption limit for a reward.
+
 ## v26.0.0 - 2026-09-21
 ### Breaking Changes
 * **`RewardNotificationAttributes`** — the exported struct and all its associated methods (`GetMessage`, `GetName`, `GetAttributionUrl`, `GetSurveyUrl`, `GetCardProductId`, `GetTransactionTimestamp`, `GetTransactionId`, `GetTransactionAmountInCents`, and all `Set*` variants) have been removed. Remove any references to this type and its methods from your code.

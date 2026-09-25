@@ -3231,16 +3231,19 @@ func (p PurchaseChannel) Ptr() *PurchaseChannel {
 type RejectedReason string
 
 const (
-	RejectedReasonAggregatorCardOverlap    RejectedReason = "AGGREGATOR_CARD_OVERLAP"
-	RejectedReasonSettlementRejected       RejectedReason = "SETTLEMENT_REJECTED"
-	RejectedReasonUserNotEnrolled          RejectedReason = "USER_NOT_ENROLLED"
-	RejectedReasonUserNotInAudienceSegment RejectedReason = "USER_NOT_IN_AUDIENCE_SEGMENT"
+	RejectedReasonAggregatorCardOverlap     RejectedReason = "AGGREGATOR_CARD_OVERLAP"
+	RejectedReasonMaxRedemptionLimitReached RejectedReason = "MAX_REDEMPTION_LIMIT_REACHED"
+	RejectedReasonSettlementRejected        RejectedReason = "SETTLEMENT_REJECTED"
+	RejectedReasonUserNotEnrolled           RejectedReason = "USER_NOT_ENROLLED"
+	RejectedReasonUserNotInAudienceSegment  RejectedReason = "USER_NOT_IN_AUDIENCE_SEGMENT"
 )
 
 func NewRejectedReasonFromString(s string) (RejectedReason, error) {
 	switch s {
 	case "AGGREGATOR_CARD_OVERLAP":
 		return RejectedReasonAggregatorCardOverlap, nil
+	case "MAX_REDEMPTION_LIMIT_REACHED":
+		return RejectedReasonMaxRedemptionLimitReached, nil
 	case "SETTLEMENT_REJECTED":
 		return RejectedReasonSettlementRejected, nil
 	case "USER_NOT_ENROLLED":

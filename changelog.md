@@ -1,3 +1,16 @@
+## v26.1.1 - 2026-10-06
+* chore: update child organization name validation docs
+* Update the godoc comments and method documentation to reflect the
+* revised name validation rules for child organizations: names now require
+* at least two letters or numbers (previously at least one letter) and may
+* contain letters, numbers, and spaces (previously letters and spaces only).
+* Key changes:
+* `ChildOrganizationAttributes.Name` field comment updated to reflect new validation rules
+* `CreateChildAttributes.Name` field comment updated to reflect new validation rules
+* `UpdateChildAttributes.Name` field comment updated to reflect new validation rules
+* `Client.Create` method godoc updated to match new name requirements
+* 🌿 Generated with Fern
+
 ## v26.1.0 - 2026-09-25
 ### Added
 * **`RejectedReasonMaxRedemptionLimitReached`** — new `RejectedReason` constant (`"MAX_REDEMPTION_LIMIT_REACHED"`) added to represent cases where a user has reached the maximum redemption limit for a reward.

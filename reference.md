@@ -78,7 +78,7 @@ client.Auth.GetToken(
 <dd>
 
 Retrieves metadata for files associated with a specific issuer/organization.
-This endpoint supports pagination and sorting options to efficiently navigate 
+This endpoint supports pagination and sorting options to efficiently navigate
 through potentially large sets of file metadata.
 <b>Required scopes:</b> `files.read`
 </dd>
@@ -573,7 +573,7 @@ client.Organizations.Children.List(
 <dl>
 <dd>
 
-Create a child organization by cloning the parent and overriding specified fields. An 8-digit numeric ID is generated automatically. The name is required, must contain at least one letter, and may contain only letters and spaces.
+Create a child organization by cloning the parent and overriding specified fields. An 8-digit numeric ID is generated automatically. The name is required, must contain at least two letters or numbers, and may contain only letters, numbers, and spaces.
 </dd>
 </dl>
 </dd>

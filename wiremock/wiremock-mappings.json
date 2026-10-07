@@ -936,7 +936,7 @@
       },
       "response": {
         "status": 200,
-        "body": "{\n  \"data\": {\n    \"type\": \"user\",\n    \"id\": \"1234567890\",\n    \"attributes\": {\n      \"zipCode\": \"11238\",\n      \"enrolledRewards\": [\n        \"CARDLINKED\"\n      ],\n      \"email\": \"user@example.com\",\n      \"hashedEmail\": \"a94a8fe5ccb19ba61c4c0873d391e987982fbbd3e2d8a5b76e45a1d4c4e2e3a1\",\n      \"phoneNumber\": \"+14155552671\",\n      \"birthYear\": \"1990\",\n      \"historicalTransactionsSent\": true\n    }\n  }\n}",
+        "body": "{\n  \"data\": {\n    \"type\": \"user\",\n    \"id\": \"1234567890\",\n    \"attributes\": {\n      \"zipCode\": \"11238\",\n      \"enrolledRewards\": [\n        \"CARDLINKED\"\n      ],\n      \"email\": \"user@example.com\",\n      \"hashedEmail\": \"a94a8fe5ccb19ba61c4c0873d391e987982fbbd3e2d8a5b76e45a1d4c4e2e3a1\",\n      \"phoneNumber\": \"+14155552671\",\n      \"birthYear\": \"1990\",\n      \"historicalTransactionsSent\": true,\n      \"phoneNumbers\": [\n        {\n          \"number\": \"+14155552671\",\n          \"type\": \"MOBILE\"\n        },\n        {\n          \"number\": \"+12125550188\",\n          \"type\": \"HOME\"\n        }\n      ],\n      \"postalCodes\": [\n        {\n          \"code\": \"11238\",\n          \"type\": \"PHYSICAL\"\n        },\n        {\n          \"code\": \"10028\",\n          \"type\": \"BILLING\"\n        }\n      ]\n    }\n  }\n}",
         "headers": {
           "Content-Type": "application/json"
         }
@@ -1004,7 +1004,7 @@
       },
       "response": {
         "status": 200,
-        "body": "{\n  \"data\": {\n    \"type\": \"user\",\n    \"id\": \"1234567890\",\n    \"attributes\": {\n      \"zipCode\": \"11238\",\n      \"enrolledRewards\": [\n        \"CARDLINKED\"\n      ],\n      \"email\": \"user@example.com\",\n      \"hashedEmail\": \"a94a8fe5ccb19ba61c4c0873d391e987982fbbd3e2d8a5b76e45a1d4c4e2e3a1\",\n      \"phoneNumber\": \"+14155552671\",\n      \"birthYear\": \"1990\",\n      \"historicalTransactionsSent\": true\n    }\n  }\n}",
+        "body": "{\n  \"data\": {\n    \"type\": \"user\",\n    \"id\": \"1234567890\",\n    \"attributes\": {\n      \"zipCode\": \"11238\",\n      \"enrolledRewards\": [\n        \"CARDLINKED\"\n      ],\n      \"email\": \"user@example.com\",\n      \"hashedEmail\": \"a94a8fe5ccb19ba61c4c0873d391e987982fbbd3e2d8a5b76e45a1d4c4e2e3a1\",\n      \"phoneNumber\": \"+14155552671\",\n      \"birthYear\": \"1990\",\n      \"historicalTransactionsSent\": true,\n      \"phoneNumbers\": [\n        {\n          \"number\": \"+14155552671\",\n          \"type\": \"MOBILE\"\n        },\n        {\n          \"number\": \"+12125550188\",\n          \"type\": \"HOME\"\n        }\n      ],\n      \"postalCodes\": [\n        {\n          \"code\": \"11238\",\n          \"type\": \"PHYSICAL\"\n        },\n        {\n          \"code\": \"10028\",\n          \"type\": \"BILLING\"\n        }\n      ]\n    }\n  }\n}",
         "headers": {
           "Content-Type": "application/json"
         }

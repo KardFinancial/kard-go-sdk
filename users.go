@@ -278,6 +278,263 @@ func (d *DeleteUserResponseObject) String() string {
 }
 
 var (
+	phoneNumberFieldNumber = big.NewInt(1 << 0)
+	phoneNumberFieldType   = big.NewInt(1 << 1)
+)
+
+type PhoneNumber struct {
+	// Phone number in E.164 format
+	Number string `json:"number" url:"number"`
+	// Kind of phone number. Inferred when omitted.
+	Type *PhoneNumberType `json:"type,omitempty" url:"type,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PhoneNumber) GetNumber() string {
+	if p == nil {
+		return ""
+	}
+	return p.Number
+}
+
+func (p *PhoneNumber) GetType() *PhoneNumberType {
+	if p == nil {
+		return nil
+	}
+	return p.Type
+}
+
+func (p *PhoneNumber) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *PhoneNumber) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetNumber sets the Number field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PhoneNumber) SetNumber(number string) {
+	p.Number = number
+	p.require(phoneNumberFieldNumber)
+}
+
+// SetType sets the Type field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PhoneNumber) SetType(type_ *PhoneNumberType) {
+	p.Type = type_
+	p.require(phoneNumberFieldType)
+}
+
+func (p *PhoneNumber) UnmarshalJSON(data []byte) error {
+	type unmarshaler PhoneNumber
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PhoneNumber(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PhoneNumber) MarshalJSON() ([]byte, error) {
+	type embed PhoneNumber
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *PhoneNumber) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PhoneNumberType string
+
+const (
+	PhoneNumberTypeMobile PhoneNumberType = "MOBILE"
+	PhoneNumberTypeHome   PhoneNumberType = "HOME"
+	PhoneNumberTypeWork   PhoneNumberType = "WORK"
+	PhoneNumberTypeOther  PhoneNumberType = "OTHER"
+)
+
+func NewPhoneNumberTypeFromString(s string) (PhoneNumberType, error) {
+	switch s {
+	case "MOBILE":
+		return PhoneNumberTypeMobile, nil
+	case "HOME":
+		return PhoneNumberTypeHome, nil
+	case "WORK":
+		return PhoneNumberTypeWork, nil
+	case "OTHER":
+		return PhoneNumberTypeOther, nil
+	}
+	var t PhoneNumberType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (p PhoneNumberType) Ptr() *PhoneNumberType {
+	return &p
+}
+
+var (
+	postalCodeFieldCode = big.NewInt(1 << 0)
+	postalCodeFieldType = big.NewInt(1 << 1)
+)
+
+type PostalCode struct {
+	// 5-digit postal code
+	Code string `json:"code" url:"code"`
+	// Kind of postal code. Inferred when omitted.
+	Type *PostalCodeType `json:"type,omitempty" url:"type,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PostalCode) GetCode() string {
+	if p == nil {
+		return ""
+	}
+	return p.Code
+}
+
+func (p *PostalCode) GetType() *PostalCodeType {
+	if p == nil {
+		return nil
+	}
+	return p.Type
+}
+
+func (p *PostalCode) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *PostalCode) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetCode sets the Code field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PostalCode) SetCode(code string) {
+	p.Code = code
+	p.require(postalCodeFieldCode)
+}
+
+// SetType sets the Type field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PostalCode) SetType(type_ *PostalCodeType) {
+	p.Type = type_
+	p.require(postalCodeFieldType)
+}
+
+func (p *PostalCode) UnmarshalJSON(data []byte) error {
+	type unmarshaler PostalCode
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PostalCode(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PostalCode) MarshalJSON() ([]byte, error) {
+	type embed PostalCode
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *PostalCode) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PostalCodeType string
+
+const (
+	PostalCodeTypePhysical PostalCodeType = "PHYSICAL"
+	PostalCodeTypeBilling  PostalCodeType = "BILLING"
+	PostalCodeTypeOther    PostalCodeType = "OTHER"
+)
+
+func NewPostalCodeTypeFromString(s string) (PostalCodeType, error) {
+	switch s {
+	case "PHYSICAL":
+		return PostalCodeTypePhysical, nil
+	case "BILLING":
+		return PostalCodeTypeBilling, nil
+	case "OTHER":
+		return PostalCodeTypeOther, nil
+	}
+	var t PostalCodeType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (p PostalCodeType) Ptr() *PostalCodeType {
+	return &p
+}
+
+var (
 	updateUserObjectFieldData = big.NewInt(1 << 0)
 )
 
@@ -369,6 +626,8 @@ var (
 	updateUserRequestAttributesFieldPhoneNumber                = big.NewInt(1 << 4)
 	updateUserRequestAttributesFieldBirthYear                  = big.NewInt(1 << 5)
 	updateUserRequestAttributesFieldHistoricalTransactionsSent = big.NewInt(1 << 6)
+	updateUserRequestAttributesFieldPhoneNumbers               = big.NewInt(1 << 7)
+	updateUserRequestAttributesFieldPostalCodes                = big.NewInt(1 << 8)
 )
 
 type UpdateUserRequestAttributes struct {
@@ -386,6 +645,10 @@ type UpdateUserRequestAttributes struct {
 	BirthYear *string `json:"birthYear,omitempty" url:"birthYear,omitempty"`
 	// Set to `true` to confirm that historical transactions have been sent for this user. This is a one-way flag: once `true` it cannot be set back to `false`, and a request attempting to do so is rejected.
 	HistoricalTransactionsSent *bool `json:"historicalTransactionsSent,omitempty" url:"historicalTransactionsSent,omitempty"`
+	// Phone numbers of user, up to 10. Sending the list replaces every number on file.
+	PhoneNumbers []*PhoneNumber `json:"phoneNumbers,omitempty" url:"phoneNumbers,omitempty"`
+	// Postal codes of user, up to 10. Sending the list replaces every postal code on file.
+	PostalCodes []*PostalCode `json:"postalCodes,omitempty" url:"postalCodes,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -441,6 +704,20 @@ func (u *UpdateUserRequestAttributes) GetHistoricalTransactionsSent() *bool {
 		return nil
 	}
 	return u.HistoricalTransactionsSent
+}
+
+func (u *UpdateUserRequestAttributes) GetPhoneNumbers() []*PhoneNumber {
+	if u == nil {
+		return nil
+	}
+	return u.PhoneNumbers
+}
+
+func (u *UpdateUserRequestAttributes) GetPostalCodes() []*PostalCode {
+	if u == nil {
+		return nil
+	}
+	return u.PostalCodes
 }
 
 func (u *UpdateUserRequestAttributes) GetExtraProperties() map[string]interface{} {
@@ -504,6 +781,20 @@ func (u *UpdateUserRequestAttributes) SetBirthYear(birthYear *string) {
 func (u *UpdateUserRequestAttributes) SetHistoricalTransactionsSent(historicalTransactionsSent *bool) {
 	u.HistoricalTransactionsSent = historicalTransactionsSent
 	u.require(updateUserRequestAttributesFieldHistoricalTransactionsSent)
+}
+
+// SetPhoneNumbers sets the PhoneNumbers field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateUserRequestAttributes) SetPhoneNumbers(phoneNumbers []*PhoneNumber) {
+	u.PhoneNumbers = phoneNumbers
+	u.require(updateUserRequestAttributesFieldPhoneNumbers)
+}
+
+// SetPostalCodes sets the PostalCodes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateUserRequestAttributes) SetPostalCodes(postalCodes []*PostalCode) {
+	u.PostalCodes = postalCodes
+	u.require(updateUserRequestAttributesFieldPostalCodes)
 }
 
 func (u *UpdateUserRequestAttributes) UnmarshalJSON(data []byte) error {
@@ -749,6 +1040,8 @@ var (
 	userRequestAttributesFieldPhoneNumber                = big.NewInt(1 << 4)
 	userRequestAttributesFieldBirthYear                  = big.NewInt(1 << 5)
 	userRequestAttributesFieldHistoricalTransactionsSent = big.NewInt(1 << 6)
+	userRequestAttributesFieldPhoneNumbers               = big.NewInt(1 << 7)
+	userRequestAttributesFieldPostalCodes                = big.NewInt(1 << 8)
 )
 
 type UserRequestAttributes struct {
@@ -766,6 +1059,10 @@ type UserRequestAttributes struct {
 	BirthYear *string `json:"birthYear,omitempty" url:"birthYear,omitempty"`
 	// Indicates whether historical transactions have been sent for this user
 	HistoricalTransactionsSent *bool `json:"historicalTransactionsSent,omitempty" url:"historicalTransactionsSent,omitempty"`
+	// Phone numbers of user, up to 10. Sending the list replaces every number on file.
+	PhoneNumbers []*PhoneNumber `json:"phoneNumbers,omitempty" url:"phoneNumbers,omitempty"`
+	// Postal codes of user, up to 10. Sending the list replaces every postal code on file.
+	PostalCodes []*PostalCode `json:"postalCodes,omitempty" url:"postalCodes,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -821,6 +1118,20 @@ func (u *UserRequestAttributes) GetHistoricalTransactionsSent() *bool {
 		return nil
 	}
 	return u.HistoricalTransactionsSent
+}
+
+func (u *UserRequestAttributes) GetPhoneNumbers() []*PhoneNumber {
+	if u == nil {
+		return nil
+	}
+	return u.PhoneNumbers
+}
+
+func (u *UserRequestAttributes) GetPostalCodes() []*PostalCode {
+	if u == nil {
+		return nil
+	}
+	return u.PostalCodes
 }
 
 func (u *UserRequestAttributes) GetExtraProperties() map[string]interface{} {
@@ -884,6 +1195,20 @@ func (u *UserRequestAttributes) SetBirthYear(birthYear *string) {
 func (u *UserRequestAttributes) SetHistoricalTransactionsSent(historicalTransactionsSent *bool) {
 	u.HistoricalTransactionsSent = historicalTransactionsSent
 	u.require(userRequestAttributesFieldHistoricalTransactionsSent)
+}
+
+// SetPhoneNumbers sets the PhoneNumbers field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UserRequestAttributes) SetPhoneNumbers(phoneNumbers []*PhoneNumber) {
+	u.PhoneNumbers = phoneNumbers
+	u.require(userRequestAttributesFieldPhoneNumbers)
+}
+
+// SetPostalCodes sets the PostalCodes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UserRequestAttributes) SetPostalCodes(postalCodes []*PostalCode) {
+	u.PostalCodes = postalCodes
+	u.require(userRequestAttributesFieldPostalCodes)
 }
 
 func (u *UserRequestAttributes) UnmarshalJSON(data []byte) error {

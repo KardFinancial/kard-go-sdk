@@ -1,3 +1,10 @@
+## v26.2.0 - 2026-10-07
+### Added
+* **`PhoneNumber`** — new struct representing a phone number in E.164 format with an optional `PhoneNumberType` (`MOBILE`, `HOME`, `WORK`, `OTHER`); includes full getter, setter, marshal, and unmarshal support.
+* **`PostalCode`** — new struct representing a 5-digit postal code with an optional `PostalCodeType` (`PHYSICAL`, `BILLING`, `OTHER`); includes full getter, setter, marshal, and unmarshal support.
+* **`UserRequestAttributes.PhoneNumbers`** and **`UserRequestAttributes.PostalCodes`** — new optional list fields (up to 10 entries each) for supplying phone numbers and postal codes when creating a user; sending the list replaces all values on file.
+* **`UpdateUserRequestAttributes.PhoneNumbers`** and **`UpdateUserRequestAttributes.PostalCodes`** — same optional list fields available on the update request attributes type.
+
 ## v26.1.1 - 2026-10-06
 * chore: update child organization name validation docs
 * Update the godoc comments and method documentation to reflect the

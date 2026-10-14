@@ -100,6 +100,8 @@ var (
 	fileMetadataAttributeFieldSentAt       = big.NewInt(1 << 1)
 	fileMetadataAttributeFieldLastModified = big.NewInt(1 << 2)
 	fileMetadataAttributeFieldDownloadUrl  = big.NewInt(1 << 3)
+	fileMetadataAttributeFieldPeriodStart  = big.NewInt(1 << 4)
+	fileMetadataAttributeFieldPeriodEnd    = big.NewInt(1 << 5)
 )
 
 type FileMetadataAttribute struct {
@@ -111,6 +113,10 @@ type FileMetadataAttribute struct {
 	LastModified string `json:"lastModified" url:"lastModified"`
 	// Temporary URL that provides direct access to download the file for 30 minutes.
 	DownloadUrl string `json:"downloadUrl" url:"downloadUrl"`
+	// Start of the reporting period, inclusive (RFC 3339, UTC). Present only when a period was informed at upload.
+	PeriodStart *string `json:"periodStart,omitempty" url:"periodStart,omitempty"`
+	// End of the reporting period, inclusive (RFC 3339, UTC). Present only when a period was informed at upload.
+	PeriodEnd *string `json:"periodEnd,omitempty" url:"periodEnd,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -145,6 +151,20 @@ func (f *FileMetadataAttribute) GetDownloadUrl() string {
 		return ""
 	}
 	return f.DownloadUrl
+}
+
+func (f *FileMetadataAttribute) GetPeriodStart() *string {
+	if f == nil {
+		return nil
+	}
+	return f.PeriodStart
+}
+
+func (f *FileMetadataAttribute) GetPeriodEnd() *string {
+	if f == nil {
+		return nil
+	}
+	return f.PeriodEnd
 }
 
 func (f *FileMetadataAttribute) GetExtraProperties() map[string]interface{} {
@@ -187,6 +207,20 @@ func (f *FileMetadataAttribute) SetLastModified(lastModified string) {
 func (f *FileMetadataAttribute) SetDownloadUrl(downloadUrl string) {
 	f.DownloadUrl = downloadUrl
 	f.require(fileMetadataAttributeFieldDownloadUrl)
+}
+
+// SetPeriodStart sets the PeriodStart field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (f *FileMetadataAttribute) SetPeriodStart(periodStart *string) {
+	f.PeriodStart = periodStart
+	f.require(fileMetadataAttributeFieldPeriodStart)
+}
+
+// SetPeriodEnd sets the PeriodEnd field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (f *FileMetadataAttribute) SetPeriodEnd(periodEnd *string) {
+	f.PeriodEnd = periodEnd
+	f.require(fileMetadataAttributeFieldPeriodEnd)
 }
 
 func (f *FileMetadataAttribute) UnmarshalJSON(data []byte) error {

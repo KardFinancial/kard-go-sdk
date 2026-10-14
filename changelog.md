@@ -1,3 +1,9 @@
+## v26.3.0 - 2026-10-14
+### Added
+* **`FileMetadataAttribute.PeriodStart`** and **`FileMetadataAttribute.PeriodEnd`** — new optional `*string` fields representing the inclusive start and end of a reporting period (RFC 3339, UTC); present only when a period was supplied at file upload time.
+* **`FileMetadataAttribute.GetPeriodStart()`** and **`FileMetadataAttribute.GetPeriodEnd()`** — new accessor methods for the reporting period fields.
+* **`FileMetadataAttribute.SetPeriodStart()`** and **`FileMetadataAttribute.SetPeriodEnd()`** — new setter methods that mark the period fields as explicitly set, ensuring they are included during serialization even when empty or null.
+
 ## v26.2.0 - 2026-10-07
 ### Added
 * **`PhoneNumber`** — new struct representing a phone number in E.164 format with an optional `PhoneNumberType` (`MOBILE`, `HOME`, `WORK`, `OTHER`); includes full getter, setter, marshal, and unmarshal support.

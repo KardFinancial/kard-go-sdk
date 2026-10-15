@@ -5,7 +5,7 @@ package kard
 import (
 	json "encoding/json"
 	fmt "fmt"
-	internal "github.com/KardFinancial/kard-go-sdk/v26/internal"
+	internal "github.com/KardFinancial/kard-go-sdk/v27/internal"
 	big "math/big"
 )
 
@@ -2024,6 +2024,7 @@ const (
 	NotificationTypeFileProcessingResult           NotificationType = "fileProcessingResult"
 	NotificationTypePushNotificationPlacementFile  NotificationType = "pushNotificationPlacementFile"
 	NotificationTypeEmailNotificationPlacementFile NotificationType = "emailNotificationPlacementFile"
+	NotificationTypePayoutReconciliationFile       NotificationType = "payoutReconciliationFile"
 )
 
 func NewNotificationTypeFromString(s string) (NotificationType, error) {
@@ -2042,6 +2043,8 @@ func NewNotificationTypeFromString(s string) (NotificationType, error) {
 		return NotificationTypePushNotificationPlacementFile, nil
 	case "emailNotificationPlacementFile":
 		return NotificationTypeEmailNotificationPlacementFile, nil
+	case "payoutReconciliationFile":
+		return NotificationTypePayoutReconciliationFile, nil
 	}
 	var t NotificationType
 	return "", fmt.Errorf("%s is not a valid %T", s, t)

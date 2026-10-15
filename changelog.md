@@ -1,3 +1,11 @@
+## v27.0.0 - 2026-10-15
+### Breaking Changes
+* **`NotificationDataUnionVisitor`** — a new required method `VisitPayoutReconciliationFile(*PayoutReconciliationFileData) error` has been added to the interface; all existing implementations must add this method to continue compiling.
+### Added
+* **`NotificationTypePayoutReconciliationFile`** — new `NotificationType` constant (`"payoutReconciliationFile"`) for payout reconciliation file notifications.
+* **`PayoutReconciliationFileData`**, **`PayoutReconciliationFileAttributes`**, and **`PayoutReconciliationFileRelationships`** — new structs representing the payout reconciliation file notification payload, with full getter, setter, marshal, and unmarshal support.
+* **`NotificationDataUnion.PayoutReconciliationFile`** field and **`GetPayoutReconciliationFile()`** accessor — allow reading the new union variant from a received notification.
+
 ## v26.3.0 - 2026-10-14
 ### Added
 * **`FileMetadataAttribute.PeriodStart`** and **`FileMetadataAttribute.PeriodEnd`** — new optional `*string` fields representing the inclusive start and end of a reporting period (RFC 3339, UTC); present only when a period was supplied at file upload time.

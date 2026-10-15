@@ -5,7 +5,7 @@ package kard
 import (
 	json "encoding/json"
 	fmt "fmt"
-	internal "github.com/KardFinancial/kard-go-sdk/v26/internal"
+	internal "github.com/KardFinancial/kard-go-sdk/v27/internal"
 	big "math/big"
 	time "time"
 )
@@ -2151,6 +2151,7 @@ type NotificationDataUnion struct {
 	FileProcessingResult           *FileResultData
 	PushNotificationPlacementFile  *PushNotificationPlacementFileData
 	EmailNotificationPlacementFile *EmailNotificationPlacementFileData
+	PayoutReconciliationFile       *PayoutReconciliationFileData
 }
 
 func (n *NotificationDataUnion) GetType() string {
@@ -2209,6 +2210,13 @@ func (n *NotificationDataUnion) GetEmailNotificationPlacementFile() *EmailNotifi
 	return n.EmailNotificationPlacementFile
 }
 
+func (n *NotificationDataUnion) GetPayoutReconciliationFile() *PayoutReconciliationFileData {
+	if n == nil {
+		return nil
+	}
+	return n.PayoutReconciliationFile
+}
+
 func (n *NotificationDataUnion) UnmarshalJSON(data []byte) error {
 	var unmarshaler struct {
 		Type string `json:"type"`
@@ -2263,6 +2271,12 @@ func (n *NotificationDataUnion) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		n.EmailNotificationPlacementFile = value
+	case "payoutReconciliationFile":
+		value := new(PayoutReconciliationFileData)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		n.PayoutReconciliationFile = value
 	}
 	return nil
 }
@@ -2292,6 +2306,9 @@ func (n NotificationDataUnion) MarshalJSON() ([]byte, error) {
 	if n.EmailNotificationPlacementFile != nil {
 		return internal.MarshalJSONWithExtraProperty(n.EmailNotificationPlacementFile, "type", "emailNotificationPlacementFile")
 	}
+	if n.PayoutReconciliationFile != nil {
+		return internal.MarshalJSONWithExtraProperty(n.PayoutReconciliationFile, "type", "payoutReconciliationFile")
+	}
 	return nil, fmt.Errorf("type %T does not define a non-empty union type", n)
 }
 
@@ -2303,6 +2320,7 @@ type NotificationDataUnionVisitor interface {
 	VisitFileProcessingResult(*FileResultData) error
 	VisitPushNotificationPlacementFile(*PushNotificationPlacementFileData) error
 	VisitEmailNotificationPlacementFile(*EmailNotificationPlacementFileData) error
+	VisitPayoutReconciliationFile(*PayoutReconciliationFileData) error
 }
 
 func (n *NotificationDataUnion) Accept(visitor NotificationDataUnionVisitor) error {
@@ -2326,6 +2344,9 @@ func (n *NotificationDataUnion) Accept(visitor NotificationDataUnionVisitor) err
 	}
 	if n.EmailNotificationPlacementFile != nil {
 		return visitor.VisitEmailNotificationPlacementFile(n.EmailNotificationPlacementFile)
+	}
+	if n.PayoutReconciliationFile != nil {
+		return visitor.VisitPayoutReconciliationFile(n.PayoutReconciliationFile)
 	}
 	return fmt.Errorf("type %T does not define a non-empty union type", n)
 }
@@ -2355,6 +2376,9 @@ func (n *NotificationDataUnion) validate() error {
 	}
 	if n.EmailNotificationPlacementFile != nil {
 		fields = append(fields, "emailNotificationPlacementFile")
+	}
+	if n.PayoutReconciliationFile != nil {
+		fields = append(fields, "payoutReconciliationFile")
 	}
 	if len(fields) == 0 {
 		if n.Type != "" {
@@ -2593,6 +2617,354 @@ func (n *NotificationPayload) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", n)
+}
+
+var (
+	payoutReconciliationFileAttributesFieldFileName    = big.NewInt(1 << 0)
+	payoutReconciliationFileAttributesFieldPeriodStart = big.NewInt(1 << 1)
+	payoutReconciliationFileAttributesFieldPeriodEnd   = big.NewInt(1 << 2)
+	payoutReconciliationFileAttributesFieldDownloadUrl = big.NewInt(1 << 3)
+	payoutReconciliationFileAttributesFieldExpiresIn   = big.NewInt(1 << 4)
+)
+
+type PayoutReconciliationFileAttributes struct {
+	FileName    string `json:"fileName" url:"fileName"`
+	PeriodStart string `json:"periodStart" url:"periodStart"`
+	PeriodEnd   string `json:"periodEnd" url:"periodEnd"`
+	DownloadUrl string `json:"downloadUrl" url:"downloadUrl"`
+	ExpiresIn   int    `json:"expiresIn" url:"expiresIn"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PayoutReconciliationFileAttributes) GetFileName() string {
+	if p == nil {
+		return ""
+	}
+	return p.FileName
+}
+
+func (p *PayoutReconciliationFileAttributes) GetPeriodStart() string {
+	if p == nil {
+		return ""
+	}
+	return p.PeriodStart
+}
+
+func (p *PayoutReconciliationFileAttributes) GetPeriodEnd() string {
+	if p == nil {
+		return ""
+	}
+	return p.PeriodEnd
+}
+
+func (p *PayoutReconciliationFileAttributes) GetDownloadUrl() string {
+	if p == nil {
+		return ""
+	}
+	return p.DownloadUrl
+}
+
+func (p *PayoutReconciliationFileAttributes) GetExpiresIn() int {
+	if p == nil {
+		return 0
+	}
+	return p.ExpiresIn
+}
+
+func (p *PayoutReconciliationFileAttributes) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *PayoutReconciliationFileAttributes) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetFileName sets the FileName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PayoutReconciliationFileAttributes) SetFileName(fileName string) {
+	p.FileName = fileName
+	p.require(payoutReconciliationFileAttributesFieldFileName)
+}
+
+// SetPeriodStart sets the PeriodStart field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PayoutReconciliationFileAttributes) SetPeriodStart(periodStart string) {
+	p.PeriodStart = periodStart
+	p.require(payoutReconciliationFileAttributesFieldPeriodStart)
+}
+
+// SetPeriodEnd sets the PeriodEnd field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PayoutReconciliationFileAttributes) SetPeriodEnd(periodEnd string) {
+	p.PeriodEnd = periodEnd
+	p.require(payoutReconciliationFileAttributesFieldPeriodEnd)
+}
+
+// SetDownloadUrl sets the DownloadUrl field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PayoutReconciliationFileAttributes) SetDownloadUrl(downloadUrl string) {
+	p.DownloadUrl = downloadUrl
+	p.require(payoutReconciliationFileAttributesFieldDownloadUrl)
+}
+
+// SetExpiresIn sets the ExpiresIn field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PayoutReconciliationFileAttributes) SetExpiresIn(expiresIn int) {
+	p.ExpiresIn = expiresIn
+	p.require(payoutReconciliationFileAttributesFieldExpiresIn)
+}
+
+func (p *PayoutReconciliationFileAttributes) UnmarshalJSON(data []byte) error {
+	type unmarshaler PayoutReconciliationFileAttributes
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PayoutReconciliationFileAttributes(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PayoutReconciliationFileAttributes) MarshalJSON() ([]byte, error) {
+	type embed PayoutReconciliationFileAttributes
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *PayoutReconciliationFileAttributes) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+var (
+	payoutReconciliationFileDataFieldId            = big.NewInt(1 << 0)
+	payoutReconciliationFileDataFieldAttributes    = big.NewInt(1 << 1)
+	payoutReconciliationFileDataFieldRelationships = big.NewInt(1 << 2)
+)
+
+type PayoutReconciliationFileData struct {
+	Id            string                                 `json:"id" url:"id"`
+	Attributes    *PayoutReconciliationFileAttributes    `json:"attributes" url:"attributes"`
+	Relationships *PayoutReconciliationFileRelationships `json:"relationships" url:"relationships"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PayoutReconciliationFileData) GetId() string {
+	if p == nil {
+		return ""
+	}
+	return p.Id
+}
+
+func (p *PayoutReconciliationFileData) GetAttributes() *PayoutReconciliationFileAttributes {
+	if p == nil {
+		return nil
+	}
+	return p.Attributes
+}
+
+func (p *PayoutReconciliationFileData) GetRelationships() *PayoutReconciliationFileRelationships {
+	if p == nil {
+		return nil
+	}
+	return p.Relationships
+}
+
+func (p *PayoutReconciliationFileData) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *PayoutReconciliationFileData) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetId sets the Id field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PayoutReconciliationFileData) SetId(id string) {
+	p.Id = id
+	p.require(payoutReconciliationFileDataFieldId)
+}
+
+// SetAttributes sets the Attributes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PayoutReconciliationFileData) SetAttributes(attributes *PayoutReconciliationFileAttributes) {
+	p.Attributes = attributes
+	p.require(payoutReconciliationFileDataFieldAttributes)
+}
+
+// SetRelationships sets the Relationships field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PayoutReconciliationFileData) SetRelationships(relationships *PayoutReconciliationFileRelationships) {
+	p.Relationships = relationships
+	p.require(payoutReconciliationFileDataFieldRelationships)
+}
+
+func (p *PayoutReconciliationFileData) UnmarshalJSON(data []byte) error {
+	type unmarshaler PayoutReconciliationFileData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PayoutReconciliationFileData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PayoutReconciliationFileData) MarshalJSON() ([]byte, error) {
+	type embed PayoutReconciliationFileData
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *PayoutReconciliationFileData) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+var (
+	payoutReconciliationFileRelationshipsFieldFile = big.NewInt(1 << 0)
+)
+
+type PayoutReconciliationFileRelationships struct {
+	File *RelationshipSingle `json:"file" url:"file"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PayoutReconciliationFileRelationships) GetFile() *RelationshipSingle {
+	if p == nil {
+		return nil
+	}
+	return p.File
+}
+
+func (p *PayoutReconciliationFileRelationships) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *PayoutReconciliationFileRelationships) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetFile sets the File field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PayoutReconciliationFileRelationships) SetFile(file *RelationshipSingle) {
+	p.File = file
+	p.require(payoutReconciliationFileRelationshipsFieldFile)
+}
+
+func (p *PayoutReconciliationFileRelationships) UnmarshalJSON(data []byte) error {
+	type unmarshaler PayoutReconciliationFileRelationships
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PayoutReconciliationFileRelationships(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PayoutReconciliationFileRelationships) MarshalJSON() ([]byte, error) {
+	type embed PayoutReconciliationFileRelationships
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *PayoutReconciliationFileRelationships) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
 }
 
 var (

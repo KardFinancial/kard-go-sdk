@@ -1,3 +1,20 @@
+## v27.0.1 - 2026-10-15
+* chore: update PlacementContent doc to reflect email/push offer behavior
+* The godoc comment for the `PlacementContent` method has been updated to
+* reflect that email and push-notification placements now return
+* `standardOffer` resources as a preview of a send (up to `availableSlots`
+* offers for email and up to one offer for push), rather than responding
+* with a `400`. This is a documentation-only change with no API surface
+* modifications.
+* Key changes:
+* Removed the statement that email and push-notification placements
+* respond with a `400` error
+* Added clarification that email and push placements return
+* `standardOffer` resources as a send preview
+* Documented the slot limits: up to `availableSlots` offers for email
+* and up to one offer for push
+* 🌿 Generated with Fern
+
 ## v27.0.0 - 2026-10-15
 ### Breaking Changes
 * **`NotificationDataUnionVisitor`** — a new required method `VisitPayoutReconciliationFile(*PayoutReconciliationFileData) error` has been added to the interface; all existing implementations must add this method to continue compiling.

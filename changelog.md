@@ -1,3 +1,13 @@
+## v27.1.1 - 2026-10-16
+* chore: clarify DayOfMonth behavior for months with fewer days
+* Update the godoc comment on the `Cadence.DayOfMonth` field to document
+* that when a day value of 29–31 is specified and the target month does
+* not have that many days, delivery falls on the last day of that month.
+* Key changes:
+* Extended the `DayOfMonth` field comment to note end-of-month fallback
+* behavior for days 29–31 in shorter months
+* 🌿 Generated with Fern
+
 ## v27.1.0 - 2026-10-16
 ### Added
 * **`WeekOfMonth`** — new enum type (`"FIRST"` / `"LAST"`) representing which occurrence of a `dayOfWeek` in the month to deliver on; construct via `NewWeekOfMonthFromString` or the `WeekOfMonthFirst`/`WeekOfMonthLast` constants.

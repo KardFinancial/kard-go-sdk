@@ -674,7 +674,7 @@ type Cadence struct {
 	TimeOfDay *string `json:"timeOfDay,omitempty" url:"timeOfDay,omitempty"`
 	// Day of the week to deliver (used when frequency is WEEKLY, defaults to MON)
 	DayOfWeek *DayOfWeek `json:"dayOfWeek,omitempty" url:"dayOfWeek,omitempty"`
-	// Day of the month to deliver, 1-31 (used when frequency is MONTHLY, defaults to 1)
+	// Day of the month to deliver, 1-31 (used when frequency is MONTHLY, defaults to 1). For 29-31, months without that day deliver on their last day.
 	DayOfMonth *int `json:"dayOfMonth,omitempty" url:"dayOfMonth,omitempty"`
 	// Deliver on the first or last dayOfWeek of the month. Requires frequency MONTHLY and dayOfWeek, and cannot be combined with dayOfMonth.
 	WeekOfMonth *WeekOfMonth `json:"weekOfMonth,omitempty" url:"weekOfMonth,omitempty"`

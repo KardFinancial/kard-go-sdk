@@ -8,6 +8,7 @@ import (
 	kardgosdk "github.com/KardFinancial/kard-go-sdk/v27"
 	internal "github.com/KardFinancial/kard-go-sdk/v27/internal"
 	big "math/big"
+	time "time"
 )
 
 var (
@@ -659,10 +660,11 @@ func (b *BatchActivationSlotRelationships) String() string {
 
 // Cadence schedule for push notification and email placements
 var (
-	cadenceFieldFrequency  = big.NewInt(1 << 0)
-	cadenceFieldTimeOfDay  = big.NewInt(1 << 1)
-	cadenceFieldDayOfWeek  = big.NewInt(1 << 2)
-	cadenceFieldDayOfMonth = big.NewInt(1 << 3)
+	cadenceFieldFrequency   = big.NewInt(1 << 0)
+	cadenceFieldTimeOfDay   = big.NewInt(1 << 1)
+	cadenceFieldDayOfWeek   = big.NewInt(1 << 2)
+	cadenceFieldDayOfMonth  = big.NewInt(1 << 3)
+	cadenceFieldWeekOfMonth = big.NewInt(1 << 4)
 )
 
 type Cadence struct {
@@ -674,6 +676,8 @@ type Cadence struct {
 	DayOfWeek *DayOfWeek `json:"dayOfWeek,omitempty" url:"dayOfWeek,omitempty"`
 	// Day of the month to deliver, 1-31 (used when frequency is MONTHLY, defaults to 1)
 	DayOfMonth *int `json:"dayOfMonth,omitempty" url:"dayOfMonth,omitempty"`
+	// Deliver on the first or last dayOfWeek of the month. Requires frequency MONTHLY and dayOfWeek, and cannot be combined with dayOfMonth.
+	WeekOfMonth *WeekOfMonth `json:"weekOfMonth,omitempty" url:"weekOfMonth,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -708,6 +712,13 @@ func (c *Cadence) GetDayOfMonth() *int {
 		return nil
 	}
 	return c.DayOfMonth
+}
+
+func (c *Cadence) GetWeekOfMonth() *WeekOfMonth {
+	if c == nil {
+		return nil
+	}
+	return c.WeekOfMonth
 }
 
 func (c *Cadence) GetExtraProperties() map[string]interface{} {
@@ -750,6 +761,13 @@ func (c *Cadence) SetDayOfWeek(dayOfWeek *DayOfWeek) {
 func (c *Cadence) SetDayOfMonth(dayOfMonth *int) {
 	c.DayOfMonth = dayOfMonth
 	c.require(cadenceFieldDayOfMonth)
+}
+
+// SetWeekOfMonth sets the WeekOfMonth field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Cadence) SetWeekOfMonth(weekOfMonth *WeekOfMonth) {
+	c.WeekOfMonth = weekOfMonth
+	c.require(cadenceFieldWeekOfMonth)
 }
 
 func (c *Cadence) UnmarshalJSON(data []byte) error {
@@ -2398,7 +2416,7 @@ func (c *CreateStandardPlacementData) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Day of the week (used when frequency is WEEKLY)
+// Day of the week (used when frequency is WEEKLY, or with weekOfMonth)
 type DayOfWeek string
 
 const (
@@ -2444,6 +2462,7 @@ var (
 	emailPlacementAttributesFieldAvailableSlots    = big.NewInt(1 << 3)
 	emailPlacementAttributesFieldCadence           = big.NewInt(1 << 4)
 	emailPlacementAttributesFieldContentStrategyId = big.NewInt(1 << 5)
+	emailPlacementAttributesFieldCreatedAt         = big.NewInt(1 << 6)
 )
 
 type EmailPlacementAttributes struct {
@@ -2459,6 +2478,8 @@ type EmailPlacementAttributes struct {
 	Cadence *Cadence `json:"cadence" url:"cadence"`
 	// ID of the content strategy linked to this placement, if any. Retained alongside `relationships.contentStrategy` for backward compatibility.
 	ContentStrategyId *string `json:"contentStrategyId,omitempty" url:"contentStrategyId,omitempty"`
+	// When the placement was created
+	CreatedAt time.Time `json:"createdAt" url:"createdAt"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -2507,6 +2528,13 @@ func (e *EmailPlacementAttributes) GetContentStrategyId() *string {
 		return nil
 	}
 	return e.ContentStrategyId
+}
+
+func (e *EmailPlacementAttributes) GetCreatedAt() time.Time {
+	if e == nil {
+		return time.Time{}
+	}
+	return e.CreatedAt
 }
 
 func (e *EmailPlacementAttributes) GetExtraProperties() map[string]interface{} {
@@ -2565,13 +2593,26 @@ func (e *EmailPlacementAttributes) SetContentStrategyId(contentStrategyId *strin
 	e.require(emailPlacementAttributesFieldContentStrategyId)
 }
 
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EmailPlacementAttributes) SetCreatedAt(createdAt time.Time) {
+	e.CreatedAt = createdAt
+	e.require(emailPlacementAttributesFieldCreatedAt)
+}
+
 func (e *EmailPlacementAttributes) UnmarshalJSON(data []byte) error {
-	type unmarshaler EmailPlacementAttributes
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
+	type embed EmailPlacementAttributes
+	var unmarshaler = struct {
+		embed
+		CreatedAt *internal.DateTime `json:"createdAt"`
+	}{
+		embed: embed(*e),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*e = EmailPlacementAttributes(value)
+	*e = EmailPlacementAttributes(unmarshaler.embed)
+	e.CreatedAt = unmarshaler.CreatedAt.Time()
 	extraProperties, err := internal.ExtractExtraProperties(data, *e)
 	if err != nil {
 		return err
@@ -2585,8 +2626,10 @@ func (e *EmailPlacementAttributes) MarshalJSON() ([]byte, error) {
 	type embed EmailPlacementAttributes
 	var marshaler = struct {
 		embed
+		CreatedAt *internal.DateTime `json:"createdAt"`
 	}{
-		embed: embed(*e),
+		embed:     embed(*e),
+		CreatedAt: internal.NewDateTime(e.CreatedAt),
 	}
 	explicitMarshaler := internal.HandleExplicitFields(marshaler, e.explicitFields)
 	return json.Marshal(explicitMarshaler)
@@ -3988,6 +4031,7 @@ var (
 	pushNotificationPlacementAttributesFieldOrganizationId    = big.NewInt(1 << 2)
 	pushNotificationPlacementAttributesFieldCadence           = big.NewInt(1 << 3)
 	pushNotificationPlacementAttributesFieldContentStrategyId = big.NewInt(1 << 4)
+	pushNotificationPlacementAttributesFieldCreatedAt         = big.NewInt(1 << 5)
 )
 
 type PushNotificationPlacementAttributes struct {
@@ -4001,6 +4045,8 @@ type PushNotificationPlacementAttributes struct {
 	Cadence *Cadence `json:"cadence" url:"cadence"`
 	// ID of the content strategy linked to this placement, if any. Retained alongside `relationships.contentStrategy` for backward compatibility.
 	ContentStrategyId *string `json:"contentStrategyId,omitempty" url:"contentStrategyId,omitempty"`
+	// When the placement was created
+	CreatedAt time.Time `json:"createdAt" url:"createdAt"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -4042,6 +4088,13 @@ func (p *PushNotificationPlacementAttributes) GetContentStrategyId() *string {
 		return nil
 	}
 	return p.ContentStrategyId
+}
+
+func (p *PushNotificationPlacementAttributes) GetCreatedAt() time.Time {
+	if p == nil {
+		return time.Time{}
+	}
+	return p.CreatedAt
 }
 
 func (p *PushNotificationPlacementAttributes) GetExtraProperties() map[string]interface{} {
@@ -4093,13 +4146,26 @@ func (p *PushNotificationPlacementAttributes) SetContentStrategyId(contentStrate
 	p.require(pushNotificationPlacementAttributesFieldContentStrategyId)
 }
 
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PushNotificationPlacementAttributes) SetCreatedAt(createdAt time.Time) {
+	p.CreatedAt = createdAt
+	p.require(pushNotificationPlacementAttributesFieldCreatedAt)
+}
+
 func (p *PushNotificationPlacementAttributes) UnmarshalJSON(data []byte) error {
-	type unmarshaler PushNotificationPlacementAttributes
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
+	type embed PushNotificationPlacementAttributes
+	var unmarshaler = struct {
+		embed
+		CreatedAt *internal.DateTime `json:"createdAt"`
+	}{
+		embed: embed(*p),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*p = PushNotificationPlacementAttributes(value)
+	*p = PushNotificationPlacementAttributes(unmarshaler.embed)
+	p.CreatedAt = unmarshaler.CreatedAt.Time()
 	extraProperties, err := internal.ExtractExtraProperties(data, *p)
 	if err != nil {
 		return err
@@ -4113,8 +4179,10 @@ func (p *PushNotificationPlacementAttributes) MarshalJSON() ([]byte, error) {
 	type embed PushNotificationPlacementAttributes
 	var marshaler = struct {
 		embed
+		CreatedAt *internal.DateTime `json:"createdAt"`
 	}{
-		embed: embed(*p),
+		embed:     embed(*p),
+		CreatedAt: internal.NewDateTime(p.CreatedAt),
 	}
 	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
 	return json.Marshal(explicitMarshaler)
@@ -6107,4 +6175,27 @@ func (u *UpdateStandardPlacementData) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", u)
+}
+
+// Which occurrence of dayOfWeek in the month to deliver on
+type WeekOfMonth string
+
+const (
+	WeekOfMonthFirst WeekOfMonth = "FIRST"
+	WeekOfMonthLast  WeekOfMonth = "LAST"
+)
+
+func NewWeekOfMonthFromString(s string) (WeekOfMonth, error) {
+	switch s {
+	case "FIRST":
+		return WeekOfMonthFirst, nil
+	case "LAST":
+		return WeekOfMonthLast, nil
+	}
+	var t WeekOfMonth
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (w WeekOfMonth) Ptr() *WeekOfMonth {
+	return &w
 }

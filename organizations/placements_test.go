@@ -8,6 +8,7 @@ import (
 	assert "github.com/stretchr/testify/assert"
 	require "github.com/stretchr/testify/require"
 	testing "testing"
+	time "time"
 )
 
 func TestSettersGetPlacementRequest(t *testing.T) {
@@ -1177,6 +1178,14 @@ func TestSettersCadence(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
+	t.Run("SetWeekOfMonth", func(t *testing.T) {
+		obj := &Cadence{}
+		var fernTestValueWeekOfMonth *WeekOfMonth
+		obj.SetWeekOfMonth(fernTestValueWeekOfMonth)
+		assert.Equal(t, fernTestValueWeekOfMonth, obj.WeekOfMonth)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
 }
 
 func TestGettersCadence(t *testing.T) {
@@ -1302,6 +1311,39 @@ func TestGettersCadence(t *testing.T) {
 		_ = obj.GetDayOfMonth() // Should return zero value
 	})
 
+	t.Run("GetWeekOfMonth", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &Cadence{}
+		var expected *WeekOfMonth
+		obj.WeekOfMonth = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetWeekOfMonth(), "getter should return the property value")
+	})
+
+	t.Run("GetWeekOfMonth_NilValue", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &Cadence{}
+		obj.WeekOfMonth = nil
+
+		// Act & Assert
+		assert.Nil(t, obj.GetWeekOfMonth(), "getter should return nil when property is nil")
+	})
+
+	t.Run("GetWeekOfMonth_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *Cadence
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetWeekOfMonth() // Should return zero value
+	})
+
 }
 
 func TestSettersMarkExplicitCadence(t *testing.T) {
@@ -1406,6 +1448,37 @@ func TestSettersMarkExplicitCadence(t *testing.T) {
 
 		// Act
 		obj.SetDayOfMonth(fernTestValueDayOfMonth)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+	t.Run("SetWeekOfMonth_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &Cadence{}
+		var fernTestValueWeekOfMonth *WeekOfMonth
+
+		// Act
+		obj.SetWeekOfMonth(fernTestValueWeekOfMonth)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -3766,6 +3839,14 @@ func TestSettersEmailPlacementAttributes(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
+	t.Run("SetCreatedAt", func(t *testing.T) {
+		obj := &EmailPlacementAttributes{}
+		var fernTestValueCreatedAt time.Time
+		obj.SetCreatedAt(fernTestValueCreatedAt)
+		assert.Equal(t, fernTestValueCreatedAt, obj.CreatedAt)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
 }
 
 func TestGettersEmailPlacementAttributes(t *testing.T) {
@@ -3925,6 +4006,29 @@ func TestGettersEmailPlacementAttributes(t *testing.T) {
 			}
 		}()
 		_ = obj.GetContentStrategyId() // Should return zero value
+	})
+
+	t.Run("GetCreatedAt", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &EmailPlacementAttributes{}
+		var expected time.Time
+		obj.CreatedAt = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetCreatedAt(), "getter should return the property value")
+	})
+
+	t.Run("GetCreatedAt_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *EmailPlacementAttributes
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetCreatedAt() // Should return zero value
 	})
 
 }
@@ -4093,6 +4197,37 @@ func TestSettersMarkExplicitEmailPlacementAttributes(t *testing.T) {
 
 		// Act
 		obj.SetContentStrategyId(fernTestValueContentStrategyId)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+	t.Run("SetCreatedAt_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &EmailPlacementAttributes{}
+		var fernTestValueCreatedAt time.Time
+
+		// Act
+		obj.SetCreatedAt(fernTestValueCreatedAt)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -6189,6 +6324,14 @@ func TestSettersPushNotificationPlacementAttributes(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
+	t.Run("SetCreatedAt", func(t *testing.T) {
+		obj := &PushNotificationPlacementAttributes{}
+		var fernTestValueCreatedAt time.Time
+		obj.SetCreatedAt(fernTestValueCreatedAt)
+		assert.Equal(t, fernTestValueCreatedAt, obj.CreatedAt)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
 }
 
 func TestGettersPushNotificationPlacementAttributes(t *testing.T) {
@@ -6327,6 +6470,29 @@ func TestGettersPushNotificationPlacementAttributes(t *testing.T) {
 		_ = obj.GetContentStrategyId() // Should return zero value
 	})
 
+	t.Run("GetCreatedAt", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &PushNotificationPlacementAttributes{}
+		var expected time.Time
+		obj.CreatedAt = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetCreatedAt(), "getter should return the property value")
+	})
+
+	t.Run("GetCreatedAt_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *PushNotificationPlacementAttributes
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetCreatedAt() // Should return zero value
+	})
+
 }
 
 func TestSettersMarkExplicitPushNotificationPlacementAttributes(t *testing.T) {
@@ -6462,6 +6628,37 @@ func TestSettersMarkExplicitPushNotificationPlacementAttributes(t *testing.T) {
 
 		// Act
 		obj.SetContentStrategyId(fernTestValueContentStrategyId)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+	t.Run("SetCreatedAt_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &PushNotificationPlacementAttributes{}
+		var fernTestValueCreatedAt time.Time
+
+		// Act
+		obj.SetCreatedAt(fernTestValueCreatedAt)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -11719,6 +11916,35 @@ func TestEnumPlacementTypeFilter(t *testing.T) {
 
 	t.Run("Ptr", func(t *testing.T) {
 		val, err := NewPlacementTypeFilterFromString("placement")
+		assert.NoError(t, err)
+		ptr := val.Ptr()
+		assert.NotNil(t, ptr)
+		assert.Equal(t, val, *ptr)
+	})
+}
+
+func TestEnumWeekOfMonth(t *testing.T) {
+	t.Run("NewFromString_FIRST", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewWeekOfMonthFromString("FIRST")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, WeekOfMonth("FIRST"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_LAST", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewWeekOfMonthFromString("LAST")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, WeekOfMonth("LAST"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Invalid", func(t *testing.T) {
+		_, err := NewWeekOfMonthFromString("invalid_value_that_does_not_exist")
+		assert.Error(t, err)
+	})
+
+	t.Run("Ptr", func(t *testing.T) {
+		val, err := NewWeekOfMonthFromString("FIRST")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)

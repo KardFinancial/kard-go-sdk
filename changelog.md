@@ -1,3 +1,10 @@
+## v27.1.0 - 2026-10-16
+### Added
+* **`WeekOfMonth`** — new enum type (`"FIRST"` / `"LAST"`) representing which occurrence of a `dayOfWeek` in the month to deliver on; construct via `NewWeekOfMonthFromString` or the `WeekOfMonthFirst`/`WeekOfMonthLast` constants.
+* **`Cadence.WeekOfMonth`** field with **`GetWeekOfMonth()`** and **`SetWeekOfMonth()`** — enables monthly cadence scheduling by the first or last occurrence of a given weekday, requires `frequency: MONTHLY` and `dayOfWeek`, and cannot be combined with `dayOfMonth`.
+* **`EmailPlacementAttributes.CreatedAt`** (`time.Time`) field with **`GetCreatedAt()`** and **`SetCreatedAt()`** — exposes the timestamp at which an email placement was created, with full JSON marshal/unmarshal support.
+* **`PushNotificationPlacementAttributes.CreatedAt`** (`time.Time`) field with **`GetCreatedAt()`** and **`SetCreatedAt()`** — exposes the timestamp at which a push notification placement was created, with full JSON marshal/unmarshal support.
+
 ## v27.0.1 - 2026-10-15
 * chore: update PlacementContent doc to reflect email/push offer behavior
 * The godoc comment for the `PlacementContent` method has been updated to
